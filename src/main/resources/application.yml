@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/replace_db  # Replace with your PostgreSQL URL
+    driver-class-name: org.postgresql.Driver
+    username: ????  # Replace with your PostgreSQL username
+    password: ????  # Replace with your PostgreSQL password
+  jpa:
+    hibernate:
+      ddl-auto: none # Important: Use a proper DDL strategy for production! (e.g., validate, update)
+
+jwt:
+  secret: ????
+  expiration: 86400000 # Example: 1 day (in milliseconds)
+
+server:
+  servlet:
+    context-path: /api/v1
+
+  port: 8080 # Choose your port

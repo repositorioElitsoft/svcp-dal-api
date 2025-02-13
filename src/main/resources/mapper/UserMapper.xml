@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.UserMapper"> <!-- Interface (clase)  Mapper de MyBatis-->
+
+
+    <!-- Default and standard way myBatis map database query results to entities, can hanldler nested
+    objects too-->
+    <resultMap id="userResultMap" type="com.elitsoft.servicampo.domain.entity.User">
+        <id property="id" column="id" />
+        <result property="nombre" column="nombre" />
+        <result property="clave" column="clave" />
+        <collection property="roles" ofType="com.elitsoft.servicampo.domain.entity.Roles">
+            <id property="id" column="id"/>
+            <result property="nombre" column="nombre"/>
+            <result property="usuarioId" column="usuario_id"/>
+        </collection>
+
+    </resultMap>
+
+    <!-- Sentencia SQL de Filtrar por clave-->
+    <select id="findByUsername" parameterType="string" resultMap="userResultMap">
+        SELECT u.id, u.nombre, u.clave, r.id, r.nombre, r.usuario_id
+        FROM users u, roles r
+        WHERE u.id = r.usuario_id
+          and u.nombre = #{username}
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="userResultMap">
+        SELECT u.id, u.nombre, u.clave, r.id, r.nombre, r.usuario_id
+        FROM users u, roles r
+        WHERE u.id = r.usuario_id
+        and u.id = #{id}
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (id, username, password)  VALUES (#{id}, #{username}, #{password})
+    </insert>
+
+    <!-- Sentencia SQL de Actulizar-->
+    <insert id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.User">
+        UPDATE users
+        SET  password =  #{password}
+        where id = #{id}
+    </insert>
+
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.CarritoArticuloMapper"> <!-- Interface (clase)  Mapper de MyBatis-->
+
+  <!-- 1. Custom Result Maps (Most Common and Recommended):
+    <resultMap id="cartItemDtoResultMap" type="com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto">
+        <result property="productId" column="product_id" />
+        <result property="quantity" column="quantity" />
+    </resultMap>
+
+    <select id="getCartItemDtos" resultMap="cartItemDtoResultMap">
+        SELECT product_id, quantity  FROM cart_item
+    </select>
+    -->
+
+    <!-- Default and standard way myBatis map database query results to entities, can hanldler nested
+    objects too-->
+    <resultMap id="carritoArticuloResultMap" type="com.elitsoft.servicampo.domain.entity.CarritoArticulo">
+        <id property="id" column="id" />
+        <result property="productId" column="product_id" />
+        <result property="quantity" column="quantity" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Filtrar por clave-->
+    <select id="encontrarPorClave" parameterType="long" resultMap="carritoArticuloResultMap">
+        SELECT id, product_id, quantity
+        FROM cart_item  WHERE id = #{id}
+    </select>
+
+    <!-- Sentencia SQL obtiene todos los articulos-->
+    <select id="obtenerTodos" resultMap="carritoArticuloResultMap">
+        SELECT id, product_id, quantity
+        FROM cart_item
+    </select>
+
+
+    <!-- DOES NOT WORK:
+
+    "ERROR: syntax error at or near "."", when using inline queries with constructor expressions in MyBatis with PostgreSQL is
+    because PostgreSQL's SQL syntax for constructor expressions is slightly different from some other databases.  PostgreSQL
+    doesn't directly support the new com.example.MyClass(...) syntax within a SELECT statement.-
+
+    <select id="selectAllCartItems" resultType="com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto">
+        SELECT new com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto(product_id, quantity)
+        FROM cart_item
+    </select>
+  -->
+
+    <!-- Using Aliases and a Separate SELECT (Recommended): -->
+    <select id="obtenerTodosDto" resultType="com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto">
+        SELECT product_id AS productId, quantity AS quantity  FROM cart_item
+    </select>
+
+    <!-- Using a Subquery (Less Recommended), less efficient and less readable so it is not recommended. :-->
+    <select id="getCartItemDtosSubquery" resultType="com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto">
+        SELECT new com.elitsoft.servicampo.domain.dto.CartItemDto(productId, quantity)
+        FROM (SELECT product_id AS productId, quantity AS quantity FROM cart_item) AS subquery
+    </select>
+
+    <!--  Using a View (Database Level):
+    Run script on database
+    CREATE VIEW cart_item_dto_view AS
+    SELECT product_id, quantity
+    FROM cart_item;
+    -->
+    <select id="SelectCartItemDtosFromView" resultType="com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto">
+        SELECT *  FROM cart_item_dto_view
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.CarritoArticulo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cart_item (product_id, quantity)  VALUES (#{productId}, #{quantity})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.CarritoArticulo">
+        UPDATE cart_item  SET product_id = #{productId}, quantity = #{quantity}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM cart_item  WHERE id = #{id}
+    </delete>
+
+</mapper>
