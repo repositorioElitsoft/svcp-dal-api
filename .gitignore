@@ -1,0 +1,93 @@
+# Maven
+/target/
+**/target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Spring Boot
+**/application.properties
+**/application.yml
+
+# Dependency directories
+**/.mvn/
+**/.gradle/
+
+# Build output
+**/build/
+**/dist/
+
+# Local development
+**/.env
+**/.env.local
+
+# VSCode
+.vscode/
+
+# Eclipse
+.settings/
+.classpath
+.project
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Temp files
+*.tmp
+*.temp
+
+# Others
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.pid
+*.seed
+*.log
+*.sql
+*.h2.db
+*.cache
+*.orig
+*.rej
+*.swo
+*.swp
+*.vi
+*~
+*.bak
+*.classpath
+*.factorypath
+*.project
+*.settings
+*.springBeans
+*.sts4-cache
