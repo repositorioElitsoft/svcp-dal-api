@@ -48,6 +48,7 @@ public class SecurityConfig {
                 ) // Correct Exception Handling
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/actuator/**").permitAll()  // Actuator first!
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
