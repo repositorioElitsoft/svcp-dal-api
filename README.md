@@ -56,6 +56,7 @@ Before running the project, ensure you have the following installed:
 The project is organized into the following structure:
 
 
+```bash
 src/main/java
 ├── com.elitsoft.servicampo
 │ ├── config # Configuration classes (e.g., SecurityConfig, MyBatisConfig)
@@ -79,7 +80,7 @@ src/main/resources
 ├── mappers # MyBatis XML files for SQL queries and CRUD
 ├── application.yml # Application configuration
 ├── logback-spring.xml # Logback configuration
-
+```
 
 ### Explanation of Key Directories:
 - **`config`**: Contains configuration classes for Spring Boot, MyBatis, and Spring Security.
