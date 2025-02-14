@@ -53,38 +53,56 @@ Before running the project, ensure you have the following installed:
 
 ## Project Structure
 
-└── src
-    ├── main
-    │  ├── java
-    │  │  └── com
-    │  │      └── elitsoft
-    │  │          └── servicampo		 # Proyect Name
-    │  │              ├── config		 # Configuration classes (e.g., SecurityConfig, MyBatisConfig)
-    │  │              ├── controller     # REST controllers
-    │  │              │  ├── core
-    │  │              │  └── mobile
-    │  │              ├── domain
-    │  │              │  ├── dto         # Data Transfer Objects (DTOs)
-    │  │              │  │  ├── core
-    │  │              │  │  └── mobile
-    │  │              │  └── entity      # Database entities
-    │  │              ├── exceptions 	 # Custom exceptions
-    │  │              ├── mapper 		 # MyBatis mappers (repositories)
-    │  │              ├── mapstruct      # MapStruct mappers
-    │  │              ├── security 		 # Spring Security and JWT-related classes
-    │  │              ├── service		 # Business logic and service layer
-    │  │              │  ├── core
-    │  │              │  └── mobile
-    │  │              └── utils
-    │  └── resources
-    │      └── mappers					# MyBatis .xml files with CRUD sentences (SQL)
-       └── test
-        └── java
-            └── com
-                └── elitsoft
-                    └── servicampo		# Proyect Name
+The project is organized into the following structure:
 
 
+src/main/java
+├── com.elitsoft.servicampo
+│ ├── config # Configuration classes (e.g., SecurityConfig, MyBatisConfig)
+│ ├── controller # REST controllers
+│ │ ├── core # Controllers for core functionality
+│ │ └── mobile # Controllers for mobile-specific functionality
+│ ├── domain # Domain layer (entities and DTOs)
+│ │ ├── dto # Data Transfer Objects (DTOs)
+│ │ │ ├── core # Core DTOs
+│ │ │ └── mobile # Mobile-specific DTOs
+│ │ └── entity # Database entities
+│ ├── exception # Custom exceptions
+│ ├── mapstruct # MapStruct mappers for object mapping
+│ ├── mapper # MyBatis mappers (repositories) for database operations
+│ ├── security # Spring Security and JWT-related classes
+│ ├── service # Business logic and service layer
+│ │ ├── core # Services for core functionality
+│ │ └── mobile # Services for mobile-specific functionality
+│ └── util # Utility classes
+src/main/resources
+├── mappers # MyBatis XML files for SQL queries and CRUD
+├── application.yml # Application configuration
+├── logback-spring.xml # Logback configuration
+
+
+### Explanation of Key Directories:
+- **`config`**: Contains configuration classes for Spring Boot, MyBatis, and Spring Security.
+- **`controller`**: Houses REST controllers that handle incoming HTTP requests.
+  - **`core`**: Controllers for core functionality.
+  - **`mobile`**: Controllers for mobile-specific functionality.
+- **`domain`**: Contains the domain layer, including entities and DTOs.
+  - **`dto`**: Data Transfer Objects (DTOs) for request/response payloads.
+    - **`core`**: Core DTOs for core functionality.
+    - **`mobile`**: Mobile-specific DTOs for mobile functionality.
+  - **`entity`**: Database entities mapped to PostgreSQL tables.
+- **`exception`**: Custom exception classes for error handling.
+- **`mapstruct`**: MapStruct interfaces for object mapping between entities and DTOs.
+- **`mapper`**: MyBatis mapper interfaces and XML files for database operations.
+- **`security`**: Contains Spring Security configurations, JWT utilities, and authentication logic.
+- **`service`**: Implements the business logic and service layer.
+  - **`core`**: Services for core functionality.
+  - **`mobile`**: Services for mobile-specific functionality.
+- **`util`**: Utility classes and helper methods.
+
+- **`mappers`**: Contains MyBatis `.xml` files with SQL queries for database operations.
+- **`application.yml`**: Configuration file for Spring Boot (database, server, etc.).
+- **`logback-spring.xml`**: Logback configuration for logging.
 
 
 
