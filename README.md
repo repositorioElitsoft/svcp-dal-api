@@ -1,109 +1,122 @@
 # SVCP Data Access Layer API (svcp-dal-api)
 
-This is a Spring Boot-based RESTful API that serves as data access layer project. 
-It integrates with PostgreSQL for data storage, uses MyBatis for ORM, and implements security using Spring Security and JWT (JSON Web Tokens). 
-The project also includes OpenAPI for API documentation, Lombok for reducing boilerplate code, MapStruct for object mapping, and Logback for logging.
+Esta es una API RESTful basada en Spring Boot que sirve como la capa de acceso a datos del proyecto.
+Se integra con PostgreSQL para el almacenamiento de datos, utiliza MyBatis como ORM e implementa seguridad mediante Spring Security y JWT (JSON Web Tokens).
 
-## Technologies Used
+El proyecto también incluye OpenAPI para la documentación de la API, Lombok para reducir el código repetitivo, MapStruct para el mapeo de objetos, Logback para 
+el registro de logs (logging) y Spring Boot Actuator para la supervisión y gestión de la aplicación.
 
-- **Spring Boot**: Core framework for building the application.
-- **Spring Security**: Security framework for authentication and authorization.
-- **JWT (JSON Web Tokens)**: Token-based authentication for securing endpoints.
-- **PostgreSQL**: Relational database for data storage.
-- **MyBatis**: Object-Relational Mapping (ORM) framework for database interactions.
-- **Maven**: Build automation and dependency management.
-- **Lombok**: Library to reduce boilerplate code (e.g., getters, setters).
-- **MapStruct**: Object mapping library for converting DTOs to entities and vice versa.
-- **Logback**: Logging framework for application logging.
-- **OpenAPI (Swagger)**: API documentation and testing.
-- **Java 21**: Programming language used for development.
+## Tecnologías Utilizadas
+
+- **Spring Boot**: Marco principal para construir la aplicación.
+- **Spring Security**: Marco de seguridad para autenticación y autorización.
+- **Spring Boot Actuator**: Proporciona funciones listas para producción para supervisar y gestionar la aplicación.
+- **JWT (JSON Web Tokens)**: Autenticación basada en tokens para asegurar los endpoints.
+- **PostgreSQL**: Base de datos relacional para el almacenamiento de datos.
+- **MyBatis**: Marco de Mapeo Objeto-Relacional (ORM) para interacciones con la base de datos.
+- **Lombok**: Biblioteca para reducir el código repetitivo (por ejemplo, getters, setters).
+- **MapStruct**:  Biblioteca de mapeo de objetos para convertir DTOs en entidades y viceversa.
+- **Logback**: Marco de registro de logs (logging) para la aplicación.
+- **OpenAPI (Swagger)**: Documentación y pruebas de la API.
+- **Maven**: Automatización de la construcción y gestión de dependencias.
+- **Java 21**: Lenguaje de programación utilizado para el desarrollo.
 
 
 ## Features
 
-- RESTful API endpoints for CRUD operations.
-- Secure endpoints using JWT-based authentication.
-- Database integration with PostgreSQL using MyBatis.
-- OpenAPI documentation for easy API exploration.
-- Logging with Logback for better debugging and monitoring.
-- Object mapping with MapStruct for clean and efficient code.
-- Lombok for reducing boilerplate code.
+- Endpoints RESTful para operaciones CRUD.
+- Endpoints seguros utilizando autenticación basada en JWT.
+- Integración con PostgreSQL usando MyBatis.
+- Documentación OpenAPI para una fácil exploración de la API.
+- Registro de logs con Logback para una mejor depuración y monitoreo.
+- Mapeo de objetos con MapStruct para un código limpio y eficiente.
+- Lombok para reducir el código repetitivo.
+- Spring Boot Actuator para verificaciones de salud, métricas y monitoreo.
 
-## Prerequisites
+## Requisitos Previos
 
-Before running the project, ensure you have the following installed:
+Antes de ejecutar el proyecto, asegúrate de tener instalado lo siguiente:
 
-- **Java 21**: JDK 21 or higher.
-- **Maven**: Apache Maven 3.6.x or higher.
-- **PostgreSQL**: PostgreSQL 12 or higher.
-- **Docker** (optional): For running PostgreSQL in a container.
+- **Java 21**: JDK 21 o superior.
+- **Maven**: Apache Maven 3.6.x o superior.
+- **PostgreSQL**: PostgreSQL 12 o superior.
+- **Docker** Docker (opcional): Para ejecutar PostgreSQL en un contenedor.
 
-## Build the Project
+## Construir el Proyecto
  
  	mvn clean install
 
-## Run the Application
+## Ejecutar la Aplicación
   
 	mvn spring-boot:run
 
-## Access OpenAPI Documentation
+## Acceder a la Documentación de OpenAPI
 
 	http://localhost:8080/swagger-ui.html
 
+## Acceder a los Endpoints de Actuator
 
-## Project Structure
+Spring Boot Actuator proporciona varios endpoints para supervisar y gestionar la aplicación. Por defecto, están disponibles bajo la ruta ```/actuator``` Por ejemplo:
 
-The project is organized into the following structure:
+- Verificación de salud: ```http://localhost:8080/actuator/health```
+
+- Métricas:  ```http://localhost:8080/actuator/metrics ```
+
+- Detalles del entorno:  ```http://localhost:8080/actuator/env ```
+
+## Estructura del Proyecto
+
+El proyecto está organizado en la siguiente estructura:
 
 
 ```bash
 src/main/java
 ├── com.elitsoft.servicampo
-│ ├── config # Configuration classes (e.g., SecurityConfig, MyBatisConfig)
-│ ├── controller # REST controllers
-│ │ ├── core # Controllers for core functionality
-│ │ └── mobile # Controllers for mobile-specific functionality
-│ ├── domain # Domain layer (entities and DTOs)
-│ │ ├── dto # Data Transfer Objects (DTOs)
-│ │ │ ├── core # Core DTOs
-│ │ │ └── mobile # Mobile-specific DTOs
-│ │ └── entity # Database entities
-│ ├── exception # Custom exceptions
-│ ├── mapstruct # MapStruct mappers for object mapping
-│ ├── mapper # MyBatis mappers (repositories) for database operations
-│ ├── security # Spring Security and JWT-related classes
-│ ├── service # Business logic and service layer
-│ │ ├── core # Services for core functionality
-│ │ └── mobile # Services for mobile-specific functionality
-│ └── util # Utility classes
+│  ├── config # Clases de configuración (por ejemplo, SecurityConfig, MyBatisConfig)
+│  ├── controller # Controladores REST
+│  │ ├── core # Controladores para la funcionalidad principal
+│  │ └── mobile # Controladores para la funcionalidad específica de móviles
+│  ├── domain # Capa del dominio (entidades y DTOs)
+│  │ ├── dto # Objetos de Transferencia de Datos (DTOs)
+│  │ │ ├── core # DTOs principales
+│  │ │ └── mobile # DTOs específicos para móviles
+│  │ └── entity # Entidades de la base de datos
+│  ├── exception # Excepciones personalizadas
+│  ├── mapstruct # Mapeadores de MapStruct para el mapeo de objetos
+│  ├── mapper # Mapeadores de MyBatis (repositorios) para operaciones de base de datos
+│  ├── security # Clases relacionadas con Spring Security y JWT
+│  ├── service # Lógica de negocio y capa de servicios
+│  │ ├── core # Servicios para la funcionalidad principal
+│  │ └── mobile # Servicios para la funcionalidad específica de móviles
+│  └── util # Clases de utilidad
 src/main/resources
-├── mappers # MyBatis XML files for SQL queries and CRUD
-├── application.yml # Application configuration
-├── logback-spring.xml # Logback configuration
+├── mappers # Archivos XML de MyBatis para consultas SQL y operaciones CRUD
+├── application.yml # Configuración de la aplicación
+├── logback-spring.xml # Configuración de Logback
 ```
 
-### Explanation of Key Directories:
-- **`config`**: Contains configuration classes for Spring Boot, MyBatis, and Spring Security.
-- **`controller`**: Houses REST controllers that handle incoming HTTP requests.
-  - **`core`**: Controllers for core functionality.
-  - **`mobile`**: Controllers for mobile-specific functionality.
-- **`domain`**: Contains the domain layer, including entities and DTOs.
-  - **`dto`**: Data Transfer Objects (DTOs) for request/response payloads.
-    - **`core`**: Core DTOs for core functionality.
-    - **`mobile`**: Mobile-specific DTOs for mobile functionality.
-  - **`entity`**: Database entities mapped to PostgreSQL tables.
-- **`exception`**: Custom exception classes for error handling.
-- **`mapstruct`**: MapStruct interfaces for object mapping between entities and DTOs.
-- **`mapper`**: MyBatis mapper interfaces and XML files for database operations.
-- **`security`**: Contains Spring Security configurations, JWT utilities, and authentication logic.
-- **`service`**: Implements the business logic and service layer.
-  - **`core`**: Services for core functionality.
-  - **`mobile`**: Services for mobile-specific functionality.
-- **`util`**: Utility classes and helper methods.
+### Explicación de los Directorios Clave:
+- **`config`**: Contiene clases de configuración para Spring Boot, MyBatis y Spring Security.
+- **`controller`**: Alberga los controladores REST que manejan las solicitudes HTTP entrantes.
+  - **`core`**: Controladores para la funcionalidad principal.
+  - **`mobile`**: Controladores para la funcionalidad específica de móviles.
+- **`domain`**: Contiene la capa del dominio, incluyendo entidades y DTOs.
+  - **`dto`**: Objetos de Transferencia de Datos (DTOs) para los payloads de solicitud/respuesta.
+    - **`core`**: DTOs principales para la funcionalidad central.
+    - **`mobile`**: DTOs específicos para la funcionalidad móvil.
+  - **`entity`**: Entidades de la base de datos mapeadas a tablas de PostgreSQL.
+- **`exception`**: Clases de excepciones personalizadas para el manejo de errores.
+- **`mapstruct`**: Interfaces de MapStruct para el mapeo de objetos entre entidades y DTOs.
+- **`mapper`**: Interfaces de mapeo de MyBatis y archivos XML para operaciones de base de datos.
+- **`security`**: Contiene configuraciones de Spring Security, utilidades de JWT y lógica de autenticación.
+- **`service`**:  Implementa la lógica de negocio y la capa de servicios.
+  - **`core`**: Servicios para la funcionalidad principal.
+  - **`mobile`**: Servicios para la funcionalidad específica de móviles.
+- **`util`**: Clases de utilidad y métodos auxiliares.
 
-- **`mappers`**: Contains MyBatis `.xml` files with SQL queries for database operations.
-- **`application.yml`**: Configuration file for Spring Boot (database, server, etc.).
-- **`logback-spring.xml`**: Logback configuration for logging.
+- **`mappers`**: Contiene archivos `.xml` de MyBatis con consultas SQL para operaciones de base de datos.
+- **`application.yml`**: Archivo de configuración para Spring Boot (base de datos, servidor, etc.).
+- **`logback-spring.xml`**: Configuración de Logback para el registro de logs (logging).
 
 
 
