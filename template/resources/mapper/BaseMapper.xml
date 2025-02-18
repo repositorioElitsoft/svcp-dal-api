@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.#app_name#.mapper.#Base#Mapper">
+
+    <resultMap id="#base#ResultMap" type="com.elitsoft.#app_name#.domain.entity.#Base#">
+        <id property="id" column="id" />
+        <result property="productId" column="product_id" />
+        <result property="quantity" column="quantity" />
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="#base#ResultMap">
+        SELECT id, product_id, quantity  FROM #base#
+        WHERE id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="#base#ResultMap">
+        SELECT id, product_id, quantity  FROM #base#
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO #base# (product_id, quantity)  VALUES (#{productId}, #{quantity})  
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#">
+        UPDATE #base#
+        SET product_id = #{productId}, quantity = #{quantity}  WHERE id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM #base#
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
