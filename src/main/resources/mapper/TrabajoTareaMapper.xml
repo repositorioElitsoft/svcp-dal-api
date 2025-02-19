@@ -6,8 +6,8 @@
         <id property="trabajoId" column="trbj_id"/>
         <id property="tareaId" column="tras_id"/>
         <result property="ordenEjecucionTarea" column="trtr_secuencia"/>
-        <association property="trabajo" column="trbj_id" javaType="com.elitsoft.servicampo.domain.entity.Trabajo" select="com.elitsoft.servicampo.mapper.TrabajoMapper.encontrarPorClave"/>
-        <association property="tarea" column="tras_id" javaType="com.elitsoft.servicampo.domain.entity.Tarea" select="com.elitsoft.servicampo.mapper.TareaMapper.encontrarPorClave"/>
+        <association property="trabajo" fetchType="lazy" column="trbj_id" javaType="com.elitsoft.servicampo.domain.entity.Trabajo" select="com.elitsoft.servicampo.mapper.TrabajoMapper.encontrarPorClave"/>
+        <association property="tarea" fetchType="lazy" column="tras_id" javaType="com.elitsoft.servicampo.domain.entity.Tarea" select="com.elitsoft.servicampo.mapper.TareaMapper.encontrarPorClave"/>
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="map" resultMap="trabajoTareaResultMap">

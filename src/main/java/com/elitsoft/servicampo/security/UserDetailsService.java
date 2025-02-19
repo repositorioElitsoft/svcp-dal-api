@@ -1,7 +1,7 @@
 package com.elitsoft.servicampo.security;
 
-import com.elitsoft.servicampo.domain.entity.User;
-import com.elitsoft.servicampo.mapper.UserMapper;
+import com.elitsoft.servicampo.domain.entity.Empleado;
+import com.elitsoft.servicampo.mapper.EmpleadoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,24 +13,24 @@ public class UserDetailsService implements org.springframework.security.core.use
 
 
     @Autowired
-    private UserMapper userMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private EmpleadoMapper empleadoMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userMapper.findByUsername(username); // Fetch user from MyBatis
-        if (user == null) {
+        Empleado empleado = empleadoMapper.encontrarPorNombre(username); // Fetch user from MyBatis
+        if (empleado == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return UserPrincipal.create(user); // Convert to UserPrincipal
+        return UserPrincipal.create(empleado); // Convert to UserPrincipal
     }
 
     public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
-        User user = userMapper.findById(id) ; // Fetch user from MyBatis
-        if (user == null) {
+        Empleado empleado = empleadoMapper.encontrarPorClave(id) ; // Fetch user from MyBatis
+        if (empleado == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return UserPrincipal.create(user); // Convert to UserPrincipal
+        return UserPrincipal.create(empleado); // Convert to UserPrincipal
     }
 
 

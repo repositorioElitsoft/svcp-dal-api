@@ -1,14 +1,14 @@
 package com.elitsoft.servicampo.security;
 
-import com.elitsoft.servicampo.domain.entity.User;
+import com.elitsoft.servicampo.domain.entity.Empleado;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
+
 
 public class UserPrincipal implements UserDetails {
 
@@ -25,16 +25,15 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(User user) {  // Static factory method (Good Practice)
-        List<GrantedAuthority> authorities = user.getRoles().stream() // Assuming your User entity has a getRoles() method
-                .map(role -> new SimpleGrantedAuthority(role.getNombre().toString())) // Convert roles to GrantedAuthorities
-                .collect(Collectors.toList());
+    public static UserPrincipal create(Empleado empleado) {  // Static factory method (Good Practice)
+        GrantedAuthority authority = new SimpleGrantedAuthority(empleado.getRole().getNombreRol());
 
         return new UserPrincipal(
-                user.getId(),
-                user.getNombre(),
-                user.getClave(),
-                authorities
+                empleado.getId(),
+                empleado.getNombre(),
+                empleado.getContrasena() ,
+                Collections.singletonList(authority)
+
         );
     }
 

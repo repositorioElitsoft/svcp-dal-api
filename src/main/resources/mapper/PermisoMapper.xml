@@ -5,8 +5,8 @@
     <resultMap id="permisoResultMap" type="com.elitsoft.servicampo.domain.entity.Permiso">
         <id property="id" column="prms_id"/>
         <result property="nombre" column="prms_dsc"/>
-        <association property="modulo" column="mdls_id" javaType="com.elitsoft.servicampo.domain.entity.Modulo" select="com.elitsoft.servicampo.mapper.ModuloMapper.encontrarPorClave"/>
-        <association property="role" column="rles_id" javaType="com.elitsoft.servicampo.domain.entity.Role" select="com.elitsoft.servicampo.mapper.RoleMapper.encontrarPorClave"/>
+        <association property="modulo" fetchType="lazy" column="mdls_id" javaType="com.elitsoft.servicampo.domain.entity.Modulo" select="com.elitsoft.servicampo.mapper.ModuloMapper.encontrarPorClave"/>
+        <association property="role" fetchType="lazy" column="rles_id" javaType="com.elitsoft.servicampo.domain.entity.Role" select="com.elitsoft.servicampo.mapper.RoleMapper.encontrarPorClave"/>
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="permisoResultMap">

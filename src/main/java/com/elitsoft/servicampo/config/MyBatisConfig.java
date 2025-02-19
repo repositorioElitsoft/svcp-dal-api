@@ -22,6 +22,11 @@ public class MyBatisConfig {
     @Value("${mybatis.schema}")
     private String schema;
 
+    /**
+     * @param dataSource
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();

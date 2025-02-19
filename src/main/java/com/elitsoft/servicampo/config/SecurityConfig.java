@@ -48,9 +48,9 @@ public class SecurityConfig {
                 ) // Correct Exception Handling
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        //.requestMatchers("/actuator/**").permitAll()  // Actuator first!
-                        .requestMatchers("/**").permitAll()  // Acceso Publico a Todo, no pide JWT
-                        //.requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()  // Actuator first!
+                        //.requestMatchers("/**").permitAll()  // Acceso Publico a Todo, no pide JWT
+                        .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

@@ -40,6 +40,13 @@ public interface EmpleadoMapper {
     Empleado encontrarPorClave(Long id);
 
     /**
+     * Encuentra un Empleado en la base de datos por su nombre.
+     * @param username del Empleado a encontrar.
+     * @return El objecto Empleado encontrado, o null si no es encontrado.
+     */
+    Empleado encontrarPorNombre(String username);
+
+    /**
      * Obtiene todos los Empleados desde la base de datos.
      * @return Una lista de todos los objetos Empleado.
      */

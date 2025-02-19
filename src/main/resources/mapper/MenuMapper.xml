@@ -6,7 +6,7 @@
         <id property="id" column="mnus_id"/>
         <result property="nombre" column="mnus_nom"/>
         <result property="icono" column="mnus_icono"/>
-        <collection property="modulo" ofType="com.elitsoft.servicampo.domain.entity.Modulo" column="mnus_id" select="selectModulosByMenuId"/>
+        <collection property="modulo" fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.Modulo" column="mnus_id" select="selectModulosByMenuId"/>
 
     </resultMap>
 

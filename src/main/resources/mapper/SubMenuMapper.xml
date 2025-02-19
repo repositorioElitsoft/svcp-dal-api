@@ -5,8 +5,8 @@
     <resultMap id="subMenuResultMap" type="com.elitsoft.servicampo.domain.entity.SubMenu">
         <id property="id" column="sbmn_id"/>
         <result property="nombre" column="sbmn_nom"/>
-        <association property="menu" column="mnus_id" javaType="com.elitsoft.servicampo.domain.entity.Menu" select="com.elitsoft.servicampo.mapper.MenuMapper.encontrarPorClave"/>
-        <collection property="modulo" ofType="com.elitsoft.servicampo.domain.entity.Modulo" column="sbmn_id" select="selectModulosBySubMenuId"/>
+        <association property="menu" fetchType="lazy" column="mnus_id" javaType="com.elitsoft.servicampo.domain.entity.Menu" select="com.elitsoft.servicampo.mapper.MenuMapper.encontrarPorClave"/>
+        <collection property="modulo" fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.Modulo" column="sbmn_id" select="selectModulosBySubMenuId"/>
 
     </resultMap>
 

@@ -5,7 +5,7 @@
     <resultMap id="roleResultMap" type="com.elitsoft.servicampo.domain.entity.Role">
         <id property="id" column="rles_id"/>
         <result property="nombreRol" column="rles_nom"/>
-        <collection property="permisos" ofType="com.elitsoft.servicampo.domain.entity.Permiso" column="rles_id" select="selectPermisosByRoleId"/>
+        <collection property="permisos" fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.Permiso" column="rles_id" select="selectPermisosByRoleId"/>
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="roleResultMap">

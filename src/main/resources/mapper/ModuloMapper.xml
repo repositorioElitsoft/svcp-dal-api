@@ -6,9 +6,9 @@
         <id property="id" column="mdls_id"/>
         <result property="nombreModulo" column="mdls_nom_modulo"/>
         <result property="nombreFormulario" column="mdls_nom_formulario"/>
-        <association property="menu" column="mnus_id" javaType="com.elitsoft.servicampo.domain.entity.Menu" select="com.elitsoft.servicampo.mapper.MenuMapper.encontrarPorClave"/>
-        <association property="submenu" column="sbmn_id" javaType="com.elitsoft.servicampo.domain.entity.SubMenu" select="com.elitsoft.servicampo.mapper.SubMenuMapper.encontrarPorClave"/>
-        <association property="estructuraFormulario" column="stfm_id" javaType="com.elitsoft.servicampo.domain.entity.EstructuraFormulario" select="com.elitsoft.servicampo.mapper.EstructuraFormularioMapper.encontrarPorClave"/>
+        <association property="menu" fetchType="lazy" column="mnus_id" javaType="com.elitsoft.servicampo.domain.entity.Menu" select="com.elitsoft.servicampo.mapper.MenuMapper.encontrarPorClave"/>
+        <association property="submenu" fetchType="lazy" column="sbmn_id" javaType="com.elitsoft.servicampo.domain.entity.SubMenu" select="com.elitsoft.servicampo.mapper.SubMenuMapper.encontrarPorClave"/>
+        <association property="estructuraFormulario" fetchType="lazy" column="stfm_id" javaType="com.elitsoft.servicampo.domain.entity.EstructuraFormulario" select="com.elitsoft.servicampo.mapper.EstructuraFormularioMapper.encontrarPorClave"/>
 
     </resultMap>
 

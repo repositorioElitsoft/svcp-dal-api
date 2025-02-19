@@ -5,7 +5,7 @@
     <resultMap id="trabajoResultMap" type="com.elitsoft.servicampo.domain.entity.Trabajo">
         <id property="id" column="trbj_id"/>
         <result property="descripcionTrabajo" column="trbj_dsc"/>
-        <collection property="trabajoTareas" ofType="com.elitsoft.servicampo.domain.entity.TrabajoTarea" column="trbj_id" select="selectTrabajoTareasByTrabajoId"/>
+        <collection property="trabajoTareas" fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.TrabajoTarea" column="trbj_id" select="selectTrabajoTareasByTrabajoId"/>
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMap">

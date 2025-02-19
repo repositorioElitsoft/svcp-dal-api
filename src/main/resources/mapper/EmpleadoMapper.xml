@@ -16,14 +16,22 @@
         <result property="rutDv" column="empl_rut_dv"/>
         <result property="contrasena" column="empl_contrasena"/>
         <result property="nombreUsuario" column="empl_nombre_usuario"/>
-        <association property="tipoEmpleado" column="tpem_id" javaType="com.elitsoft.servicampo.domain.entity.TipoEmpleado" select="com.elitsoft.servicampo.mapper.TipoEmpleadoMapper.encontrarPorClave"/>
-        <association property="role" column="rles_id" javaType="com.elitsoft.servicampo.domain.entity.Role" select="com.elitsoft.servicampo.mapper.RoleMapper.encontrarPorClave"/>
-        <association property="estado" column="estd_id" javaType="com.elitsoft.servicampo.domain.entity.Estado" select="com.elitsoft.servicampo.mapper.EstadoMapper.encontrarPorClave"/>
+        <association property="tipoEmpleado" column="tpem_id" fetchType="lazy" javaType="com.elitsoft.servicampo.domain.entity.TipoEmpleado" select="com.elitsoft.servicampo.mapper.TipoEmpleadoMapper.encontrarPorClave"/>
+        <association property="role" column="rles_id"  fetchType="lazy"  javaType="com.elitsoft.servicampo.domain.entity.Role" select="com.elitsoft.servicampo.mapper.RoleMapper.encontrarPorClave"/>
+        <association property="estado" column="estd_id"  fetchType="lazy"  javaType="com.elitsoft.servicampo.domain.entity.Estado" select="com.elitsoft.servicampo.mapper.EstadoMapper.encontrarPorClave"/>
 
     </resultMap>
 
+
     <select id="encontrarPorClave" parameterType="long" resultMap="empleadoResultMap">
-        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM ${schema}empleados WHERE empl_id = #{id}
+        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id
+        FROM ${schema}empleados WHERE empl_id = #{id}
+    </select>
+
+    <!-- Sentencia SQL de Filtrar por clave-->
+    <select id="encontrarPorNombre" parameterType="string" resultMap="empleadoResultMap">
+        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id
+        FROM ${schema}empleados WHERE empl_nombre_usuario =  #{username}
     </select>
 
     <select id="obtenerTodos" resultMap="empleadoResultMap">
