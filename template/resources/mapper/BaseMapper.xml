@@ -9,28 +9,28 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="#base#ResultMap">
-        SELECT id, product_id, quantity  FROM #base#
+        SELECT id, product_id, quantity  FROM ${schema}#base#
         WHERE id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="#base#ResultMap">
-        SELECT id, product_id, quantity  FROM #base#
+        SELECT id, product_id, quantity  FROM ${schema}#base#
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO #base# (product_id, quantity)  VALUES (#{productId}, #{quantity})  
+        INSERT INTO ${schema}#base# (product_id, quantity)  VALUES (#{productId}, #{quantity})  
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#">
-        UPDATE #base#
+        UPDATE ${schema}#base#
         SET product_id = #{productId}, quantity = #{quantity}  WHERE id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM #base#
+        DELETE FROM ${schema}#base#
         WHERE id = #{id}
     </delete>
 

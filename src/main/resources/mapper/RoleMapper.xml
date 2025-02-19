@@ -9,30 +9,30 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="roleResultMap">
-        SELECT rles_id, rles_nom FROM roles WHERE rles_id = #{id}
+        SELECT rles_id, rles_nom FROM ${schema}roles WHERE rles_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="roleResultMap">
-        SELECT rles_id, rles_nom FROM roles
+        SELECT rles_id, rles_nom FROM ${schema}roles
     </select>
 
     <select id="selectPermisosByRoleId" parameterType="long" resultMap="com.elitsoft.servicampo.mapper.PermisoMapper.permisoResultMap">
-        SELECT * FROM permisos WHERE rles_id = #{rles_id}
+        SELECT * FROM ${schema}permisos WHERE rles_id = #{rles_id}
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Role">
-        INSERT INTO roles (rles_id, rles_nom) VALUES (#{id}, #{nombreRol})
+        INSERT INTO ${schema}roles (rles_id, rles_nom) VALUES (#{id}, #{nombreRol})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Role">
-        UPDATE roles SET rles_nom = #{nombreRol} WHERE rles_id = #{id}
+        UPDATE ${schema}roles SET rles_nom = #{nombreRol} WHERE rles_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM roles WHERE rles_id = #{id}
+        DELETE FROM ${schema}roles WHERE rles_id = #{id}
     </delete>
 
 </mapper>

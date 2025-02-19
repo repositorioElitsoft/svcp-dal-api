@@ -23,27 +23,27 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="empleadoResultMap">
-        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM empleados WHERE empl_id = #{id}
+        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM ${schema}empleados WHERE empl_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="empleadoResultMap">
-        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM empleados
+        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM ${schema}empleados
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Empleado">
-        INSERT INTO empleados (empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id)
+        INSERT INTO ${schema}empleados (empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id)
                       VALUES (#{id}, #{nombre}, #{apellidoPaterno}, #{apellidoMaterno}, #{imagenPerfil}, #{telefonoFijo}, #{telefonoMovil}, #{fechaNacimiento}, #{email}, #{rut}, #{rutDv}, #{contrasena}, #{nombreUsuario}, #{tipoEmpleado.id}, #{role.id}, #{estado.id})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Empleado">
-        UPDATE empleados SET empl_nombre = #{nombre}, empl_apellido_paterno = #{apellidoPaterno}, empl_apellido_materno = #{apellidoMaterno}, empl_imagen_perfil = #{imagenPerfil}, empl_fono_fijo = #{telefonoFijo}, empl_fono_movil = #{telefonoMovil}, empl_fecha_nacimiento = #{fechaNacimiento}, empl_email = #{email}, empl_rut = #{rut}, empl_rut_dv = #{rutDv}, empl_contrasena = #{contrasena}, empl_nombre_usuario = #{nombreUsuario}, tpem_id = #{tipoEmpleado.id}, rles_id = #{role.id}, estd_id = #{estado.id} WHERE empl_id = #{id}
+        UPDATE ${schema}empleados SET empl_nombre = #{nombre}, empl_apellido_paterno = #{apellidoPaterno}, empl_apellido_materno = #{apellidoMaterno}, empl_imagen_perfil = #{imagenPerfil}, empl_fono_fijo = #{telefonoFijo}, empl_fono_movil = #{telefonoMovil}, empl_fecha_nacimiento = #{fechaNacimiento}, empl_email = #{email}, empl_rut = #{rut}, empl_rut_dv = #{rutDv}, empl_contrasena = #{contrasena}, empl_nombre_usuario = #{nombreUsuario}, tpem_id = #{tipoEmpleado.id}, rles_id = #{role.id}, estd_id = #{estado.id} WHERE empl_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM empleados WHERE empl_id = #{id}
+        DELETE FROM ${schema}empleados WHERE empl_id = #{id}
     </delete>
 
 </mapper>

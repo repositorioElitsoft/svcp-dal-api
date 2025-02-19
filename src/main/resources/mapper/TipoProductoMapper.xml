@@ -8,26 +8,26 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="tipoProductoResultMap">
-        SELECT tppr_id, tppr_dsc FROM tipos_productos WHERE tppr_id = #{id}
+        SELECT tppr_id, tppr_dsc FROM ${schema}tipos_productos WHERE tppr_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="tipoProductoResultMap">
-        SELECT tppr_id, tppr_dsc FROM tipos_productos
+        SELECT tppr_id, tppr_dsc FROM ${schema}tipos_productos
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProducto">
-        INSERT INTO tipos_productos (tppr_id, tppr_dsc) VALUES (#{id}, #{descripcionTipoProducto})
+        INSERT INTO ${schema}tipos_productos (tppr_id, tppr_dsc) VALUES (#{id}, #{descripcionTipoProducto})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProducto">
-        UPDATE tipos_productos SET tppr_dsc = #{descripcionTipoProducto} WHERE tppr_id = #{id}
+        UPDATE ${schema}tipos_productos SET tppr_dsc = #{descripcionTipoProducto} WHERE tppr_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM tipos_productos WHERE tppr_id = #{id}
+        DELETE FROM ${schema}tipos_productos WHERE tppr_id = #{id}
     </delete>
 
 </mapper>

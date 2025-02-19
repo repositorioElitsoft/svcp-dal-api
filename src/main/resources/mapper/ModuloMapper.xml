@@ -13,26 +13,26 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="moduloResultMap">
-        SELECT mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id FROM modulos WHERE mdls_id = #{id}
+        SELECT mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id FROM ${schema}modulos WHERE mdls_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="moduloResultMap">
-        SELECT mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id FROM modulos
+        SELECT mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id FROM ${schema}modulos
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Modulo">
-        INSERT INTO modulos (mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id) VALUES (#{id}, #{nombreModulo}, #{nombreFormulario}, #{menu.id}, #{submenu.id}, #{estructuraFormulario.id})
+        INSERT INTO ${schema}modulos (mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id) VALUES (#{id}, #{nombreModulo}, #{nombreFormulario}, #{menu.id}, #{submenu.id}, #{estructuraFormulario.id})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Modulo">
-        UPDATE modulos SET mdls_nom_modulo = #{nombreModulo}, mdls_nom_formulario = #{nombreFormulario}, mnus_id = #{menu.id}, sbmn_id = #{submenu.id}, stfm_id = #{estructuraFormulario.id} WHERE mdls_id = #{id}
+        UPDATE ${schema}modulos SET mdls_nom_modulo = #{nombreModulo}, mdls_nom_formulario = #{nombreFormulario}, mnus_id = #{menu.id}, sbmn_id = #{submenu.id}, stfm_id = #{estructuraFormulario.id} WHERE mdls_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM modulos WHERE mdls_id = #{id}
+        DELETE FROM ${schema}modulos WHERE mdls_id = #{id}
     </delete>
 
 </mapper>

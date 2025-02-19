@@ -9,30 +9,30 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMap">
-        SELECT trbj_id, trbj_dsc FROM trabajos WHERE trbj_id = #{id}
+        SELECT trbj_id, trbj_dsc FROM ${schema}trabajos WHERE trbj_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="trabajoResultMap">
-        SELECT trbj_id, trbj_dsc FROM trabajos
+        SELECT trbj_id, trbj_dsc FROM ${schema}trabajos
     </select>
 
     <select id="selectTrabajoTareasByTrabajoId" parameterType="long" resultMap="com.elitsoft.servicampo.mapper.TrabajoTareaMapper.trabajoTareaResultMap">
-        SELECT * FROM trabajos_tareas WHERE trbj_id = #{trbj_id}
+        SELECT * FROM ${schema}trabajos_tareas WHERE trbj_id = #{trbj_id}
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Trabajo">
-        INSERT INTO trabajos (trbj_id, trbj_dsc) VALUES (#{id}, #{descripcionTrabajo})
+        INSERT INTO ${schema}trabajos (trbj_id, trbj_dsc) VALUES (#{id}, #{descripcionTrabajo})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Trabajo">
-        UPDATE trabajos SET trbj_dsc = #{descripcionTrabajo} WHERE trbj_id = #{id}
+        UPDATE ${schema}trabajos SET trbj_dsc = #{descripcionTrabajo} WHERE trbj_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM trabajos WHERE trbj_id = #{id}
+        DELETE FROM ${schema}trabajos WHERE trbj_id = #{id}
     </delete>
 
 </mapper>

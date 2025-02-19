@@ -11,26 +11,26 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="map" resultMap="trabajoTareaResultMap">
-        SELECT trbj_id, tras_id, trtr_secuencia FROM trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+        SELECT trbj_id, tras_id, trtr_secuencia FROM ${schema}trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
     </select>
 
     <select id="obtenerTodos" resultMap="trabajoTareaResultMap">
-        SELECT trbj_id, tras_id, trtr_secuencia FROM trabajos_tareas
+        SELECT trbj_id, tras_id, trtr_secuencia FROM ${schema}trabajos_tareas
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
-        INSERT INTO trabajos_tareas (trbj_id, tras_id, trtr_secuencia) VALUES (#{trabajoId}, #{tareaId}, #{ordenEjecucionTarea})
+        INSERT INTO ${schema}trabajos_tareas (trbj_id, tras_id, trtr_secuencia) VALUES (#{trabajoId}, #{tareaId}, #{ordenEjecucionTarea})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
-        UPDATE trabajos_tareas SET trtr_secuencia = #{ordenEjecucionTarea} WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+        UPDATE ${schema}trabajos_tareas SET trtr_secuencia = #{ordenEjecucionTarea} WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="map">
-        DELETE FROM trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+        DELETE FROM ${schema}trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
     </delete>
 
 </mapper>

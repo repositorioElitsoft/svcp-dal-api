@@ -8,26 +8,26 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="zonaResultMap">
-        SELECT znas_id, znas_dsc FROM zonas WHERE znas_id = #{id}
+        SELECT znas_id, znas_dsc FROM ${schema}zonas WHERE znas_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="zonaResultMap">
-        SELECT znas_id, znas_dsc FROM zonas
+        SELECT znas_id, znas_dsc FROM ${schema}zonas
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
-        INSERT INTO zonas (znas_id, znas_dsc) VALUES (#{id}, #{descripcionZona})
+        INSERT INTO ${schema}zonas (znas_id, znas_dsc) VALUES (#{id}, #{descripcionZona})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
-        UPDATE zonas SET znas_dsc = #{descripcionZona} WHERE znas_id = #{id}
+        UPDATE ${schema}zonas SET znas_dsc = #{descripcionZona} WHERE znas_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM zonas WHERE znas_id = #{id}
+        DELETE FROM ${schema}zonas WHERE znas_id = #{id}
     </delete>
 
 </mapper>

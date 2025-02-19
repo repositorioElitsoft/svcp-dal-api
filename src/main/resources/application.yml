@@ -8,6 +8,9 @@ spring:
     hibernate:
       ddl-auto: none # Important: Use a proper DDL strategy for production! (e.g., validate, update)
 
+mybatis:
+  schema: dev_v2
+  
 jwt:
   secret: ????
   expiration: 86400000 # Example: 1 day (in milliseconds)

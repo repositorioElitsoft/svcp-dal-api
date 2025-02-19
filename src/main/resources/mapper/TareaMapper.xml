@@ -8,26 +8,26 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="tareaResultMap">
-        SELECT tras_id, tras_dsc FROM tareas WHERE tras_id = #{id}
+        SELECT tras_id, tras_dsc FROM ${schema}tareas WHERE tras_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="tareaResultMap">
-        SELECT tras_id, tras_dsc FROM tareas
+        SELECT tras_id, tras_dsc FROM ${schema}tareas
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Tarea">
-        INSERT INTO tareas (tras_id, tras_dsc) VALUES (#{id}, #{descripcionTarea})
+        INSERT INTO ${schema}tareas (tras_id, tras_dsc) VALUES (#{id}, #{descripcionTarea})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Tarea">
-        UPDATE tareas SET tras_dsc = #{descripcionTarea} WHERE tras_id = #{id}
+        UPDATE ${schema}tareas SET tras_dsc = #{descripcionTarea} WHERE tras_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM tareas WHERE tras_id = #{id}
+        DELETE FROM ${schema}tareas WHERE tras_id = #{id}
     </delete>
 
 </mapper>

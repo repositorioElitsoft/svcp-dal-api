@@ -11,30 +11,30 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="subMenuResultMap">
-        SELECT sbmn_id, sbmn_nom, mnus_id FROM submenus WHERE sbmn_id = #{id}
+        SELECT sbmn_id, sbmn_nom, mnus_id FROM ${schema}submenus WHERE sbmn_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="subMenuResultMap">
-        SELECT sbmn_id, sbmn_nom, mnus_id FROM submenus
+        SELECT sbmn_id, sbmn_nom, mnus_id FROM ${schema}submenus
     </select>
 
     <select id="selectModulosBySubMenuId" parameterType="long" resultMap="com.elitsoft.servicampo.mapper.ModuloMapper.moduloResultMap">
-        SELECT * FROM modulos WHERE sbmn_id = #{sbmn_id}
+        SELECT * FROM ${schema}modulos WHERE sbmn_id = #{sbmn_id}
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.SubMenu">
-        INSERT INTO submenus (sbmn_id, sbmn_nom, mnus_id) VALUES (#{id}, #{nombre}, #{menu.id})
+        INSERT INTO ${schema}submenus (sbmn_id, sbmn_nom, mnus_id) VALUES (#{id}, #{nombre}, #{menu.id})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.SubMenu">
-        UPDATE submenus SET sbmn_nom = #{nombre}, mnus_id = #{menu.id} WHERE sbmn_id = #{id}
+        UPDATE ${schema}submenus SET sbmn_nom = #{nombre}, mnus_id = #{menu.id} WHERE sbmn_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM submenus WHERE sbmn_id = #{id}
+        DELETE FROM ${schema}submenus WHERE sbmn_id = #{id}
     </delete>
 
 </mapper>

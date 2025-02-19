@@ -8,26 +8,26 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="estadoResultMap">
-        SELECT estd_id, estd_dsc FROM estados WHERE estd_id = #{id}
+        SELECT estd_id, estd_dsc FROM ${schema}estados WHERE estd_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="estadoResultMap">
-        SELECT estd_id, estd_dsc FROM estados
+        SELECT estd_id, estd_dsc FROM ${schema}estados
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Estado" useGeneratedKeys="true" keyProperty="id" keyColumn="estd_id">
-        INSERT INTO estados (estd_dsc) VALUES (#{descripcionEstado})
+        INSERT INTO ${schema}estados (estd_dsc) VALUES (#{descripcionEstado})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Estado">
-        UPDATE estados SET estd_dsc = #{descripcionEstado} WHERE estd_id = #{id}
+        UPDATE ${schema}estados SET estd_dsc = #{descripcionEstado} WHERE estd_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM estados WHERE estd_id = #{id}
+        DELETE FROM ${schema}estados WHERE estd_id = #{id}
     </delete>
 
 </mapper>

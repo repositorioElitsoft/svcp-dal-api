@@ -10,26 +10,26 @@
     </resultMap>
 
     <select id="encontrarPorClave" parameterType="long" resultMap="permisoResultMap">
-        SELECT prms_id, prms_dsc, mdls_id, rles_id FROM permisos WHERE prms_id = #{id}
+        SELECT prms_id, prms_dsc, mdls_id, rles_id FROM ${schema}permisos WHERE prms_id = #{id}
     </select>
 
     <select id="obtenerTodos" resultMap="permisoResultMap">
-        SELECT prms_id, prms_dsc, mdls_id, rles_id FROM permisos
+        SELECT prms_id, prms_dsc, mdls_id, rles_id FROM ${schema}permisos
     </select>
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Permiso">
-        INSERT INTO permisos (prms_id, prms_dsc, mdls_id, rles_id) VALUES (#{id}, #{nombre}, #{modulo.id}, #{role.id})
+        INSERT INTO ${schema}permisos (prms_id, prms_dsc, mdls_id, rles_id) VALUES (#{id}, #{nombre}, #{modulo.id}, #{role.id})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Permiso">
-        UPDATE permisos SET prms_dsc = #{nombre}, mdls_id = #{modulo.id}, rles_id = #{role.id} WHERE prms_id = #{id}
+        UPDATE ${schema}permisos SET prms_dsc = #{nombre}, mdls_id = #{modulo.id}, rles_id = #{role.id} WHERE prms_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM permisos WHERE prms_id = #{id}
+        DELETE FROM ${schema}permisos WHERE prms_id = #{id}
     </delete>
 
 </mapper>
