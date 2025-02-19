@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TareaMapper">
+
+    <resultMap id="tareaResultMap" type="com.elitsoft.servicampo.domain.entity.Tarea">
+        <id property="id" column="tras_id"/>
+        <result property="descripcionTarea" column="tras_dsc"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="tareaResultMap">
+        SELECT tras_id, tras_dsc FROM tareas WHERE tras_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="tareaResultMap">
+        SELECT tras_id, tras_dsc FROM tareas
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Tarea">
+        INSERT INTO tareas (tras_id, tras_dsc) VALUES (#{id}, #{descripcionTarea})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Tarea">
+        UPDATE tareas SET tras_dsc = #{descripcionTarea} WHERE tras_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM tareas WHERE tras_id = #{id}
+    </delete>
+
+</mapper>

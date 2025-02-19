@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.EmpleadoMapper">
+
+    <resultMap id="empleadoResultMap" type="com.elitsoft.servicampo.domain.entity.Empleado">
+        <id property="id" column="empl_id"/>
+        <result property="nombre" column="empl_nombre"/>
+        <result property="apellidoPaterno" column="empl_apellido_paterno"/>
+        <result property="apellidoMaterno" column="empl_apellido_materno"/>
+        <result property="imagenPerfil" column="empl_imagen_perfil"/>
+        <result property="telefonoFijo" column="empl_fono_fijo"/>
+        <result property="telefonoMovil" column="empl_fono_movil"/>
+        <result property="fechaNacimiento" column="empl_fecha_nacimiento"/>
+        <result property="email" column="empl_email"/>
+        <result property="rut" column="empl_rut"/>
+        <result property="rutDv" column="empl_rut_dv"/>
+        <result property="contrasena" column="empl_contrasena"/>
+        <result property="nombreUsuario" column="empl_nombre_usuario"/>
+        <association property="tipoEmpleado" column="tpem_id" javaType="com.elitsoft.servicampo.domain.entity.TipoEmpleado" select="com.elitsoft.servicampo.mapper.TipoEmpleadoMapper.encontrarPorClave"/>
+        <association property="role" column="rles_id" javaType="com.elitsoft.servicampo.domain.entity.Role" select="com.elitsoft.servicampo.mapper.RoleMapper.encontrarPorClave"/>
+        <association property="estado" column="estd_id" javaType="com.elitsoft.servicampo.domain.entity.Estado" select="com.elitsoft.servicampo.mapper.EstadoMapper.encontrarPorClave"/>
+
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="empleadoResultMap">
+        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM empleados WHERE empl_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="empleadoResultMap">
+        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM empleados
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Empleado">
+        INSERT INTO empleados (empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id)
+                      VALUES (#{id}, #{nombre}, #{apellidoPaterno}, #{apellidoMaterno}, #{imagenPerfil}, #{telefonoFijo}, #{telefonoMovil}, #{fechaNacimiento}, #{email}, #{rut}, #{rutDv}, #{contrasena}, #{nombreUsuario}, #{tipoEmpleado.id}, #{role.id}, #{estado.id})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Empleado">
+        UPDATE empleados SET empl_nombre = #{nombre}, empl_apellido_paterno = #{apellidoPaterno}, empl_apellido_materno = #{apellidoMaterno}, empl_imagen_perfil = #{imagenPerfil}, empl_fono_fijo = #{telefonoFijo}, empl_fono_movil = #{telefonoMovil}, empl_fecha_nacimiento = #{fechaNacimiento}, empl_email = #{email}, empl_rut = #{rut}, empl_rut_dv = #{rutDv}, empl_contrasena = #{contrasena}, empl_nombre_usuario = #{nombreUsuario}, tpem_id = #{tipoEmpleado.id}, rles_id = #{role.id}, estd_id = #{estado.id} WHERE empl_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM empleados WHERE empl_id = #{id}
+    </delete>
+
+</mapper>

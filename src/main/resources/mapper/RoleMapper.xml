@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.RoleMapper">
+
+    <resultMap id="roleResultMap" type="com.elitsoft.servicampo.domain.entity.Role">
+        <id property="id" column="rles_id"/>
+        <result property="nombreRol" column="rles_nom"/>
+        <collection property="permisos" ofType="com.elitsoft.servicampo.domain.entity.Permiso" column="rles_id" select="selectPermisosByRoleId"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="roleResultMap">
+        SELECT rles_id, rles_nom FROM roles WHERE rles_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="roleResultMap">
+        SELECT rles_id, rles_nom FROM roles
+    </select>
+
+    <select id="selectPermisosByRoleId" parameterType="long" resultMap="com.elitsoft.servicampo.mapper.PermisoMapper.permisoResultMap">
+        SELECT * FROM permisos WHERE rles_id = #{rles_id}
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Role">
+        INSERT INTO roles (rles_id, rles_nom) VALUES (#{id}, #{nombreRol})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Role">
+        UPDATE roles SET rles_nom = #{nombreRol} WHERE rles_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM roles WHERE rles_id = #{id}
+    </delete>
+
+</mapper>

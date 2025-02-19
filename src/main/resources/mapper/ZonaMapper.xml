@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ZonaMapper">
+
+    <resultMap id="zonaResultMap" type="com.elitsoft.servicampo.domain.entity.Zona">
+        <id property="id" column="znas_id"/>
+        <result property="descripcionZona" column="znas_dsc"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="zonaResultMap">
+        SELECT znas_id, znas_dsc FROM zonas WHERE znas_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="zonaResultMap">
+        SELECT znas_id, znas_dsc FROM zonas
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
+        INSERT INTO zonas (znas_id, znas_dsc) VALUES (#{id}, #{descripcionZona})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
+        UPDATE zonas SET znas_dsc = #{descripcionZona} WHERE znas_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
+        UPDATE zonas SET znas_dsc = #{descripcionZona} WHERE znas_id = #{id}
+    </update>
+
+</mapper>

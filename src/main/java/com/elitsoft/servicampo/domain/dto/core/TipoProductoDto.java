@@ -1,0 +1,16 @@
+package com.elitsoft.servicampo.domain.dto.core;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TipoProductoDto {
+
+    private Long id;
+    private String descripcionTipoProducto;
+}

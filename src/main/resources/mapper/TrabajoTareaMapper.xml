@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TrabajoTareaMapper">
+
+    <resultMap id="trabajotareaResultMap" type="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
+        <id property="trabajoId" column="trbj_id"/>
+        <id property="tareaId" column="tras_id"/>
+        <result property="ordenEjecucionTarea" column="trtr_secuencia"/>
+        <association property="trabajo" column="trbj_id" javaType="com.elitsoft.servicampo.domain.entity.Trabajo" select="com.elitsoft.servicampo.mapper.TrabajoMapper.encontrarPorClave"/>
+        <association property="tarea" column="tras_id" javaType="com.elitsoft.servicampo.domain.entity.Tarea" select="com.elitsoft.servicampo.mapper.TareaMapper.encontrarPorClave"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="map" resultMap="trabajoTareaResultMap">
+        SELECT trbj_id, tras_id, trtr_secuencia FROM trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+    </select>
+
+    <select id="obtenerTodos" resultMap="trabajoTareaResultMap">
+        SELECT trbj_id, tras_id, trtr_secuencia FROM trabajos_tareas
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
+        INSERT INTO trabajos_tareas (trbj_id, tras_id, trtr_secuencia) VALUES (#{trabajoId}, #{tareaId}, #{ordenEjecucionTarea})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
+        UPDATE trabajos_tareas SET trtr_secuencia = #{ordenEjecucionTarea} WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="map">
+        DELETE FROM trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+    </delete>
+
+</mapper>

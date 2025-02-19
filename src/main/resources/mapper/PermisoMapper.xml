@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.PermisoMapper">
+
+    <resultMap id="permisoResultMap" type="com.elitsoft.servicampo.domain.entity.Permiso">
+        <id property="id" column="prms_id"/>
+        <result property="nombre" column="prms_dsc"/>
+        <association property="modulo" column="mdls_id" javaType="com.elitsoft.servicampo.domain.entity.Modulo" select="com.elitsoft.servicampo.mapper.ModuloMapper.encontrarPorClave"/>
+        <association property="role" column="rles_id" javaType="com.elitsoft.servicampo.domain.entity.Role" select="com.elitsoft.servicampo.mapper.RoleMapper.encontrarPorClave"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="permisoResultMap">
+        SELECT prms_id, prms_dsc, mdls_id, rles_id FROM permisos WHERE prms_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="permisoResultMap">
+        SELECT prms_id, prms_dsc, mdls_id, rles_id FROM permisos
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Permiso">
+        INSERT INTO permisos (prms_id, prms_dsc, mdls_id, rles_id) VALUES (#{id}, #{nombre}, #{modulo.id}, #{role.id})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Permiso">
+        UPDATE permisos SET prms_dsc = #{nombre}, mdls_id = #{modulo.id}, rles_id = #{role.id} WHERE prms_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM permisos WHERE prms_id = #{id}
+    </delete>
+
+</mapper>

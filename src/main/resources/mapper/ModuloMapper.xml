@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ModuloMapper">
+
+    <resultMap id="moduloResultMap" type="com.elitsoft.servicampo.domain.entity.Modulo">
+        <id property="id" column="mdls_id"/>
+        <result property="nombreModulo" column="mdls_nom_modulo"/>
+        <result property="nombreFormulario" column="mdls_nom_formulario"/>
+        <association property="menu" column="mnus_id" javaType="com.elitsoft.servicampo.domain.entity.Menu" select="com.elitsoft.servicampo.mapper.MenuMapper.encontrarPorClave"/>
+        <association property="submenu" column="sbmn_id" javaType="com.elitsoft.servicampo.domain.entity.SubMenu" select="com.elitsoft.servicampo.mapper.SubMenuMapper.encontrarPorClave"/>
+        <association property="estructuraFormulario" column="stfm_id" javaType="com.elitsoft.servicampo.domain.entity.EstructuraFormulario" select="com.elitsoft.servicampo.mapper.EstructuraFormularioMapper.encontrarPorClave"/>
+
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="moduloResultMap">
+        SELECT mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id FROM modulos WHERE mdls_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="moduloResultMap">
+        SELECT mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id FROM modulos
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Modulo">
+        INSERT INTO modulos (mdls_id, mdls_nom_modulo, mdls_nom_formulario, mnus_id, sbmn_id, stfm_id) VALUES (#{id}, #{nombreModulo}, #{nombreFormulario}, #{menu.id}, #{submenu.id}, #{estructuraFormulario.id})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Modulo">
+        UPDATE modulos SET mdls_nom_modulo = #{nombreModulo}, mdls_nom_formulario = #{nombreFormulario}, mnus_id = #{menu.id}, sbmn_id = #{submenu.id}, stfm_id = #{estructuraFormulario.id} WHERE mdls_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM modulos WHERE mdls_id = #{id}
+    </delete>
+
+</mapper>

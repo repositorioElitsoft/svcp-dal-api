@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TrabajoMapper">
+
+    <resultMap id="trabajoResultMap" type="com.elitsoft.servicampo.domain.entity.Trabajo">
+        <id property="id" column="trbj_id"/>
+        <result property="descripcionTrabajo" column="trbj_dsc"/>
+        <collection property="trabajoTareas" ofType="com.elitsoft.servicampo.domain.entity.TrabajoTarea" column="trbj_id" select="selectTrabajoTareasByTrabajoId"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMap">
+        SELECT trbj_id, trbj_dsc FROM trabajos WHERE trbj_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="trabajoResultMap">
+        SELECT trbj_id, trbj_dsc FROM trabajos
+    </select>
+
+    <select id="selectTrabajoTareasByTrabajoId" parameterType="long" resultMap="com.elitsoft.servicampo.mapper.TrabajoTareaMapper.trabajoTareaResultMap">
+        SELECT * FROM trabajos_tareas WHERE trbj_id = #{trbj_id}
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Trabajo">
+        INSERT INTO trabajos (trbj_id, trbj_dsc) VALUES (#{id}, #{descripcionTrabajo})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Trabajo">
+        UPDATE trabajos SET trbj_dsc = #{descripcionTrabajo} WHERE trbj_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM trabajos WHERE trbj_id = #{id}
+    </delete>
+
+</mapper>

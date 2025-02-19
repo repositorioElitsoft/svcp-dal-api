@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.MenuMapper">
+
+    <resultMap id="menuResultMap" type="com.elitsoft.servicampo.domain.entity.Menu">
+        <id property="id" column="mnus_id"/>
+        <result property="nombre" column="mnus_nom"/>
+        <result property="icono" column="mnus_icono"/>
+        <collection property="modulo" ofType="com.elitsoft.servicampo.domain.entity.Modulo" column="mnus_id" select="selectModulosByMenuId"/>
+
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="menuResultMap">
+        SELECT mnus_id, mnus_nom, mnus_icono FROM menus WHERE mnus_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="menuResultMap">
+        SELECT mnus_id, mnus_nom, mnus_icono FROM menus
+    </select>
+
+    <select id="selectModulosByMenuId" parameterType="long" resultMap="com.elitsoft.servicampo.mapper.ModuloMapper.moduloResultMap">
+        SELECT * FROM modulos WHERE mnus_id = #{mnus_id}
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Menu">
+        INSERT INTO menus (mnus_id, mnus_nom, mnus_icono) VALUES (#{id}, #{nombre}, #{icono})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Menu">
+        UPDATE menus SET mnus_nom = #{nombre}, mnus_icono = #{icono} WHERE mnus_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM menus WHERE mnus_id = #{id}
+    </delete>
+
+</mapper>

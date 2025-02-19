@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TipoProductoMapper">
+
+    <resultMap id="tipoProductoResultMap" type="com.elitsoft.servicampo.domain.entity.TipoProducto">
+        <id property="id" column="tppr_id"/>
+        <result property="descripcionTipoProducto" column="tppr_dsc"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="tipoProductoResultMap">
+        SELECT tppr_id, tppr_dsc FROM tipos_productos WHERE tppr_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="tipoProductoResultMap">
+        SELECT tppr_id, tppr_dsc FROM tipos_productos
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProducto">
+        INSERT INTO tipos_productos (tppr_id, tppr_dsc) VALUES (#{id}, #{descripcionTipoProducto})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProducto">
+        UPDATE tipos_productos SET tppr_dsc = #{descripcionTipoProducto} WHERE tppr_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM tipos_productos WHERE tppr_id = #{id}
+    </delete>
+
+</mapper>

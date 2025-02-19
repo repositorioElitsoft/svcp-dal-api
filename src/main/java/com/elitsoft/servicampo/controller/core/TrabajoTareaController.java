@@ -1,0 +1,129 @@
+package com.elitsoft.servicampo.controller.core;
+
+import com.elitsoft.servicampo.domain.dto.core.TrabajoTareaDto;
+import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.service.core.TrabajoTareaService;
+import com.elitsoft.servicampo.utils.Constantes;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * Gestiona las peticiones y respuestas http relativas a TrabajoTarea
+ */
+@RestController
+@RequestMapping("/trabajotarea")
+public class TrabajoTareaController {
+
+    @Autowired
+    private TrabajoTareaService trabajotareaService;
+
+    private static final Logger logeador = LoggerFactory.getLogger(TrabajoTareaController.class);
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega un trabajotarea", description = "Agrega un nuevo trabajotarea al carrito de compras")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "TrabajoTarea agregado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> agregar(@RequestBody TrabajoTareaDto trabajotareaDto) {
+        logeador.debug("agregar() trabajotarea");
+
+        try {
+            trabajotareaService.agregar(trabajotareaDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (BaseDatosException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+    }
+
+    @PutMapping(value = "/{trabajoId}/{tareaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Actualiza un trabajotarea", description = "Actualiza un trabajotarea")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "TrabajoTarea actualizado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "TrabajoTarea no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> actualizar(@PathVariable Long trabajoId, @PathVariable Long tareaId, @RequestBody TrabajoTareaDto trabajotareaDto) {
+        logeador.debug("actualizar() trabajotarea");
+
+        try {
+            trabajotareaService.actualizar(trabajoId, tareaId, trabajotareaDto);
+            return ResponseEntity.noContent().build();
+        } catch (TrabajoTareaNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.TRABAJOTAREA_NO_ENCONTRADO_MENSAGE);
+        } catch (BaseDatosException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Elimina un trabajotarea", description = "Elimina un trabajotarea")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "TrabajoTarea eliminado exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> eliminar(@PathVariable Long trabajoId, @PathVariable Long tareaId) {
+        logeador.debug("eliminar() trabajotarea: {}, {}", trabajoId,tareaId );
+
+        try {
+            trabajotareaService.eliminar(trabajoId, tareaId);
+        } catch (TrabajoTareaNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.TRABAJOTAREA_NO_ENCONTRADO_MENSAGE);
+        } catch (BaseDatosException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Encuentra un trabajotarea", description = "Encuentra un trabajotarea por su clave")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "TrabajoTarea encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "TrabajoTarea no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<TrabajoTareaDto> encontrarPorClave(@PathVariable Long trabajoId, @PathVariable Long tareaId) {
+        logeador.debug("encontrarPorClave(): {}, {}", trabajoId,tareaId );
+
+        try {
+            TrabajoTareaDto trabajotareaDto = trabajotareaService.encontrarPorClave(trabajoId, tareaId );
+            return ResponseEntity.ok(trabajotareaDto);
+        } catch (BaseDatosException e) {
+            return ResponseEntity.internalServerError().build();
+        } catch (TrabajoTareaNoEncontradoException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Obtiene todos  los trabajotarea", description = "Obtiene todos los trabajotarea")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "TrabajoTareas obtenidos exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<List<TrabajoTareaDto>> obtenerTodos() {
+        logeador.debug("obtenerTodos()");
+
+        List<TrabajoTareaDto> trabajotareas = null;
+
+        try {
+            trabajotareas = trabajotareaService.obtenerTodos();
+        } catch (BaseDatosException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        return ResponseEntity.ok(trabajotareas);
+    }
+}

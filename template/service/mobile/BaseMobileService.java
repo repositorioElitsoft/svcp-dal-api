@@ -20,13 +20,13 @@ import java.util.List;
 public class #Base#MobileService {
 
     @Autowired
-    private #Base#Mapper #base#Mapper;
+    private #Base#Mapper #base#Mapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
-    private #Base#Service #base#Service;
+    private #Base#Service #base#Service; //Logica de Negocio del Core Service
 
     @Autowired
-    private #Base#MapStruct mapper;
+    private #Base#MapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
 
     private static final Logger logeador = LoggerFactory.getLogger(#Base#MobileService.class);
 

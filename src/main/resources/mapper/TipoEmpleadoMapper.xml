@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TipoEmpleadoMapper">
+
+    <resultMap id="tipoEmpleadoResultMap" type="com.elitsoft.servicampo.domain.entity.TipoEmpleado">
+        <id property="id" column="tpem_id"/>
+        <result property="descripcionTipoEmpleado" column="tpem_dsc"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="tipoEmpleadoResultMap">
+        SELECT tpem_id, tpem_dsc FROM tipos_empleados WHERE tpem_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="tipoEmpleadoResultMap">
+        SELECT tpem_id, tpem_dsc FROM tipos_empleados
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TipoEmpleado">
+        INSERT INTO tipos_empleados (tpem_id, tpem_dsc) VALUES (#{id}, #{descripcionTipoEmpleado})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TipoEmpleado">
+        UPDATE tipos_empleados SET tpem_dsc = #{descripcionTipoEmpleado} WHERE tpem_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM tipos_empleados WHERE tpem_id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.EstructuraFormularioMapper">
+
+    <resultMap id="estructuraFormularioResultMap" type="com.elitsoft.servicampo.domain.entity.EstructuraFormulario">
+        <id property="id" column="stfm_id"/>
+        <result property="path" column="stfm_path"/>
+        <result property="nombreFormulario" column="stfm_nom_formulario"/>
+        <result property="table" column="stfm_nom_tabla"/>
+        <result property="campo" column="stfm_nom_campo"/>
+        <result property="maxLong" column="stfm_max_long"/>
+        <result property="tipoCampo" column="stfm_tpo_dto_campo"/>
+        <result property="titulo" column="stfm_tit_nom_campo"/>
+        <result property="boton" column="stfm_tit_nom_tabla"/>
+        <result property="largo" column="stfm_largo_campo"/>
+        <result property="editar" column="stfm_editar_campo"/>
+        <result property="visible" column="stfm_visible_campo"/>
+        <result property="orden" column="stfm_orden_campo"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="estructuraFormularioResultMap">
+        SELECT stfm_id, stfm_path, stfm_nom_formulario, stfm_nom_tabla, stfm_nom_campo, stfm_max_long, stfm_tpo_dto_campo, stfm_tit_nom_campo, stfm_tit_nom_tabla, stfm_largo_campo, stfm_editar_campo, stfm_visible_campo, stfm_orden_campo FROM estructura_formularios WHERE stfm_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="estructuraFormularioResultMap">
+        SELECT stfm_id, stfm_path, stfm_nom_formulario, stfm_nom_tabla, stfm_nom_campo, stfm_max_long, stfm_tpo_dto_campo, stfm_tit_nom_campo, stfm_tit_nom_tabla, stfm_largo_campo, stfm_editar_campo, stfm_visible_campo, stfm_orden_campo FROM estructura_formularios
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.EstructuraFormulario">
+        INSERT INTO estructura_formularios (stfm_id, stfm_path, stfm_nom_formulario, stfm_nom_tabla, stfm_nom_campo, stfm_max_long, stfm_tpo_dto_campo, stfm_tit_nom_campo, stfm_tit_nom_tabla, stfm_largo_campo, stfm_editar_campo, stfm_visible_campo, stfm_orden_campo) VALUES (#{id}, #{path}, #{nombreFormulario}, #{table}, #{campo}, #{maxLong}, #{tipoCampo}, #{titulo}, #{boton}, #{largo}, #{editar}, #{visible}, #{orden})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.EstructuraFormulario">
+        UPDATE estructura_formularios SET stfm_path = #{path}, stfm_nom_formulario = #{nombreFormulario}, stfm_nom_tabla = #{table}, stfm_nom_campo = #{campo}, stfm_max_long = #{maxLong}, stfm_tpo_dto_campo = #{tipoCampo}, stfm_tit_nom_campo = #{titulo}, stfm_tit_nom_tabla = #{boton}, stfm_largo_campo = #{largo}, stfm_editar_campo = #{editar}, stfm_visible_campo = #{visible}, stfm_orden_campo = #{orden} WHERE stfm_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM estructura_formularios WHERE stfm_id = #{id}
+    </delete>
+
+</mapper>

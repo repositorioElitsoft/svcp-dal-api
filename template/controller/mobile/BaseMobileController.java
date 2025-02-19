@@ -66,7 +66,6 @@ public class #Base#MobileController {
             logeador.error(Constantes.#BASE#_NO_ENCONTRADO_MENSAGE + ": {}", id);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.#BASE#_NO_ENCONTRADO_MENSAGE);
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -82,11 +81,9 @@ public class #Base#MobileController {
 
         try {
             #base#MobileService.eliminar(id);
-        } catch (#Base#NoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.#BASE#_NO_ENCONTRADO_MENSAGE + ": {}", id);
+        } catch (#Base#NoEncontradoException e) { 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.#BASE#_NO_ENCONTRADO_MENSAGE);
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
 
@@ -111,9 +108,8 @@ public class #Base#MobileController {
                 return ResponseEntity.notFound().build();
             }
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
-        } catch (#Base#NoEncontradoException e) { // Corrected Exception Name
+        } catch (#Base#NoEncontradoException e) {
             logeador.error(Constantes.#BASE#_NO_ENCONTRADO_MENSAGE + ": {}", id);
             return ResponseEntity.notFound().build();
         }
