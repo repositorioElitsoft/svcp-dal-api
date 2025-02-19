@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.elitsoft.servicampo.mapper.TrabajoTareaMapper">
 
-    <resultMap id="trabajotareaResultMap" type="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
+    <resultMap id="trabajoTareaResultMap" type="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
         <id property="trabajoId" column="trbj_id"/>
         <id property="tareaId" column="tras_id"/>
         <result property="ordenEjecucionTarea" column="trtr_secuencia"/>

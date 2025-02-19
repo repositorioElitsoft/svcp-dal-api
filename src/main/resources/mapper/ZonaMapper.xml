@@ -26,8 +26,8 @@
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
-    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
-        UPDATE zonas SET znas_dsc = #{descripcionZona} WHERE znas_id = #{id}
-    </update>
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM zonas WHERE znas_id = #{id}
+    </delete>
 
 </mapper>
