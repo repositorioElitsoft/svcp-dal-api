@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ClasificacionClienteMapper">
+
+    <resultMap id="clasificacionClienteResultMap" type="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
+        <id property="id" column="clcl_id"/>
+        <result property="clasificacionClienteDesc" column="clcl_dsc"/>
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="clasificacionClienteResultMap">
+        SELECT clcl_id, clcl_dsc FROM ${schema}clasificaciones_clientes WHERE clcl_id = #{id}
+    </select>
+
+    <select id="obtenerTodos" resultMap="clasificacionClienteResultMap">
+        SELECT clcl_id, clcl_dsc FROM ${schema}clasificaciones_clientes
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
+        INSERT INTO clasificaciones_clientes (clcl_id, clcl_dsc) VALUES (#{id}, #{clasificacionClienteDesc})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
+        UPDATE clasificaciones_clientes SET clcl_dsc = #{clasificacionClienteDesc} WHERE clcl_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM clasificaciones_clientes WHERE clcl_id = #{id}
+    </delete>
+
+</mapper>

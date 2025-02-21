@@ -103,4 +103,10 @@ public class Constantes {
     public static final String TRABAJOTAREA_ELIMINAR_EXECPTION = "Error eliminando TRABAJOTAREA";
     public static final String TRABAJOTAREA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TRABAJOTAREA por clave :";
     public static final String TRABAJOTAREA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TRABAJOTAREA";
+    public static final String CLASIFICACIONCLIENTE_NO_ENCONTRADO_MENSAGE = "CLASIFICACIONCLIENTE no  encontrado";
+    public static final String CLASIFICACIONCLIENTE_AGREGAR_EXECPTION = "Error agregando CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_ACTUALIZAR_EXECPTION = "Error actualizando CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_ELIMINAR_EXECPTION = "Error eliminando CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando CLASIFICACIONCLIENTE por clave :";
+    public static final String CLASIFICACIONCLIENTE_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los CLASIFICACIONCLIENTE";
 }

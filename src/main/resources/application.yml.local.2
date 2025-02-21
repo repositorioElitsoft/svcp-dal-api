@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://35.192.106.73:5432/servicampo_db  # Replace with your PostgreSQL URL
+    driver-class-name: org.postgresql.Driver
+    username: servi  # Replace with your PostgreSQL username
+    password: JG4n0Lvn0$Zfp2Zf  # Replace with your PostgreSQL password
+  jpa:
+    hibernate:
+      ddl-auto: none # Important: Use a proper DDL strategy for production! (e.g., validate, update)
+
+mybatis:
+  schema: dev_v2
+#management:
+#  security:
+#    enabled: false
+
+jwt:
+  secret: QUw0Pga3sWOcRrr8Cqnm4GTMxyxK5fyBYI7qgGFB8FV+iHHMY+lK/8CPAfe6G7cOjtOtsvQLb0Om12vvq/4bBg==
+  expiration: 86400000 # Example: 1 day (in milliseconds)
+
+server:
+  servlet:
+    context-path: /api/v1
+
+  port: 8080 # Choose your port
+
