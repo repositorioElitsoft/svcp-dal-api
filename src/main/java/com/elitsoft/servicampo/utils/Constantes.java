@@ -91,6 +91,7 @@ public class Constantes {
     public static final String TAREA_ELIMINAR_EXECPTION = "Error eliminando TAREA";
     public static final String TAREA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TAREA por clave :";
     public static final String TAREA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TAREA";
+    public static final String TAREA_FILTRAR_EXECPTION = "Error Filtrando todos los TAREA";
     public static final String TRABAJO_NO_ENCONTRADO_MENSAGE = "TRABAJO no  encontrado";
     public static final String TRABAJO_AGREGAR_EXECPTION = "Error agregando TRABAJO";
     public static final String TRABAJO_ACTUALIZAR_EXECPTION = "Error actualizando TRABAJO";

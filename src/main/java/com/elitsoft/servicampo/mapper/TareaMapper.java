@@ -1,7 +1,9 @@
 package com.elitsoft.servicampo.mapper;
 
+import com.elitsoft.servicampo.filtro.TareaFiltro;
 import com.elitsoft.servicampo.domain.entity.Tarea;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -44,5 +46,26 @@ public interface TareaMapper {
      * @return Una lista de todos los objetos Tarea.
      */
     List<Tarea> obtenerTodos();
+
+
+    /**
+     * @param filtro
+     * @param campoOrden
+     * @param direccionOrden
+     * @param limite
+     * @param desplazamiento
+     * @return
+     */
+    List<Tarea> filtrarTareas(@Param("filtro") TareaFiltro filtro,
+                           @Param("campoOrden") String campoOrden,
+                           @Param("direccionOrden") String direccionOrden,
+                           @Param("limite") int limite,
+                           @Param("desplazamiento") int desplazamiento);
+
+    /**
+     * @param criteria
+     * @return
+     */
+    int contarFiltroTareas(@Param("filtro") TareaFiltro criteria);
 
 }

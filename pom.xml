@@ -57,18 +57,19 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- mybatis spring boot starter -->
+		<!-- spring-boot-data-webmvc
 		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>3.0.4</version>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-rest-webmvc</artifactId>
+			<version>3.4.2</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
+					<groupId>org.springframework.hateoas</groupId>
+					<artifactId>spring-hateoas</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
+		-->
 
 		<!-- spring-boot-actuator -->
 		<dependency>
@@ -96,6 +97,19 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.5</version> <scope>runtime</scope>
+		</dependency>
+
+		<!-- mybatis spring boot starter -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>3.0.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!--postgresql -->
@@ -143,6 +157,12 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.2.0</version>
 		</dependency>
+
+		<!--spring data commons-->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>3.4.2</version> </dependency>
 
 	</dependencies>
 

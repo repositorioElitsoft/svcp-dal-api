@@ -36,8 +36,8 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/> </root>
 
-    <!-- Para mostrar las sentencias sql ejecutadas por mybatis incluyendo parametros : DEBUG y TRACE -->
-    <logger name="com.elitsoft.servicampo.mapper" level="INFO" additivity="false">
+    <!-- Para mostrar las sentencias sql ejecutadas por mybatis incluyendo parametros : INFO, DEBUG y TRACE -->
+    <logger name="com.elitsoft.servicampo.mapper" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 

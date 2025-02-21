@@ -15,6 +15,38 @@
         SELECT tras_id, tras_dsc FROM ${schema}tareas
     </select>
 
+    <select id="filtrarTareas" resultMap="tareaResultMap">
+        SELECT * FROM ${schema}tareas
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null and filtro.id != ''">
+                    AND tras_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
+                    AND tras_dsc LIKE #{filtro.descripcionTarea}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            ORDER BY ${campoOrden} ${direccionOrden}
+        </if>
+        LIMIT #{limite} OFFSET #{desplazamiento}
+    </select>
+
+    <select id="contarFiltroTareas" resultType="int">
+        SELECT COUNT(*) FROM ${schema}tareas
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null and filtro.id != ''">
+                    AND tras_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
+                    AND tras_dsc LIKE #{filtro.descripcionTarea}
+                </if>
+            </if>
+        </where>
+    </select>
+
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Tarea">
         INSERT INTO ${schema}tareas (tras_id, tras_dsc) VALUES (#{id}, #{descripcionTarea})

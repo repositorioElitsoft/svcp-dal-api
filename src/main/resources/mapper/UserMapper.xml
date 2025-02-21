@@ -32,6 +32,44 @@
         and u.id = #{id}
     </select>
 
+    <select id="selectUsers" resultType="com.elitsoft.servicampo.domain.entity.User">
+        SELECT * FROM users
+        <where>
+            <if test="criteria != null">
+                <if test="criteria.nombre != null and criteria.nombre != ''">
+                    AND nombre LIKE #{criteria.nombre}
+                </if>
+                <if test="criteria.correo != null and criteria.correo != ''">
+                    AND correo LIKE #{criteria.correo}
+                </if>
+                <if test="criteria.role != null and criteria.role != ''">
+                    AND role = #{criteria.role}
+                </if>
+            </if>
+        </where>
+        <if test="sortField != null and sortField != ''">
+            ORDER BY ${sortField} ${sortDirection}
+        </if>
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countUsers" resultType="int">
+        SELECT COUNT(*) FROM users
+        <where>
+            <if test="criteria != null">
+                <if test="criteria.nombre != null and criteria.nombre != ''">
+                    AND nombre LIKE #{criteria.nombre}
+                </if>
+                <if test="criteria.correo != null and criteria.correo != ''">
+                    AND correo LIKE #{criteria.correo}
+                </if>
+                <if test="criteria.role != null and criteria.role != ''">
+                    AND role = #{criteria.role}
+                </if>
+            </if>
+        </where>
+    </select>
+
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.User" useGeneratedKeys="true" keyProperty="id">
