@@ -17,17 +17,17 @@
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
-        INSERT INTO clasificaciones_clientes (clcl_id, clcl_dsc) VALUES (#{id}, #{clasificacionClienteDesc})
+        INSERT INTO ${schema}clasificaciones_clientes (clcl_id, clcl_dsc) VALUES (#{id}, #{clasificacionClienteDesc})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
-        UPDATE clasificaciones_clientes SET clcl_dsc = #{clasificacionClienteDesc} WHERE clcl_id = #{id}
+        UPDATE c${schema}lasificaciones_clientes SET clcl_dsc = #{clasificacionClienteDesc} WHERE clcl_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM clasificaciones_clientes WHERE clcl_id = #{id}
+        DELETE FROM ${schema}clasificaciones_clientes WHERE clcl_id = #{id}
     </delete>
 
 </mapper>

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
-import com.elitsoft.servicampo.filtro.TareaFiltro;
+import com.elitsoft.servicampo.filter.TareaFiltro;
 import com.elitsoft.servicampo.domain.entity.Tarea;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.mapper.TareaMapper;

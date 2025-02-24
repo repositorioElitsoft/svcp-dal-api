@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapper;
 
-import com.elitsoft.servicampo.filtro.TareaFiltro;
+import com.elitsoft.servicampo.filter.TareaFiltro;
 import com.elitsoft.servicampo.domain.entity.Tarea;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -91,7 +91,7 @@ public class Constantes {
     public static final String TAREA_ELIMINAR_EXECPTION = "Error eliminando TAREA";
     public static final String TAREA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TAREA por clave :";
     public static final String TAREA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TAREA";
-    public static final String TAREA_FILTRAR_EXECPTION = "Error Filtrando todos los TAREA";
+    public static final String TAREA_FILTRAR_EXECPTION = "Error Filtrando  TAREA";
     public static final String TRABAJO_NO_ENCONTRADO_MENSAGE = "TRABAJO no  encontrado";
     public static final String TRABAJO_AGREGAR_EXECPTION = "Error agregando TRABAJO";
     public static final String TRABAJO_ACTUALIZAR_EXECPTION = "Error actualizando TRABAJO";
@@ -110,4 +110,16 @@ public class Constantes {
     public static final String CLASIFICACIONCLIENTE_ELIMINAR_EXECPTION = "Error eliminando CLASIFICACIONCLIENTE";
     public static final String CLASIFICACIONCLIENTE_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando CLASIFICACIONCLIENTE por clave :";
     public static final String CLASIFICACIONCLIENTE_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los CLASIFICACIONCLIENTE";
+
+
+    public static final String DEMO_ENTRADA_INVALIDA_MENSAGE = "Entrada de demo invalida.";
+    public static final String DEMO_DUPLICADO_MENSAGE = "Recurso  demo ya existe.";
+    public static final String DEMO_NO_ENCONTRADO_MENSAGE = "Recurso DEMO no  encontrado";
+    public static final String DEMO_AGREGAR_MENSAJE = "Error Interno agregando Recurso DEMO";
+    public static final String DEMO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos DEMO";
+    public static final String DEMO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso DEMO";
+    public static final String DEMO_ELIMINAR_MENSAJE = "Error eliminando Recurso DEMO";
+    public static final String DEMO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DEMO por clave :";
+    public static final String DEMO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DEMO";
+    public static final String DEMO_FILTRAR_MENSAJE = "Error filtrando DEMO";
 }

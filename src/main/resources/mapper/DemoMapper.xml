@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.DemoMapper">
+
+    <resultMap id="demoResultMap" type="com.elitsoft.servicampo.domain.entity.Demo">
+        <id property="dmoId" column="dmo_id" />
+        <result property="dmoNom" column="dmo_nom" />
+        <result property="dmoCorreo" column="dmo_correo" />
+        <result property="dmoStatus" column="dmo_status" />
+    </resultMap>
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="demoResultMap">
+        SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
+        FROM ${schema}demo
+        WHERE dmo_id = #{dmoId}
+    </select>
+
+    <select id="obtenerTodos" resultMap="demoResultMap">
+        SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
+        FROM ${schema}demo
+    </select>
+
+    <select id="filtrar" resultMap="demoResultMap">
+        SELECT * FROM ${schema}demo
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.dmoId != null">
+                    AND dmo_id = #{filtro.dmoId}
+                </if>
+                <if test="filtro.dmoNom != null and filtro.dmoNom != ''">
+                    AND LOWER(dmo_nom) LIKE '%' || LOWER(#{filtro.dmoNom}) || '%'
+                </if>
+                <if test="filtro.dmoCorreo != null and filtro.dmoCorreo != ''">
+                    AND LOWER(dmo_correo) LIKE '%' || LOWER(#{filtro.dmoCorreo}) || '%'
+                </if>
+                <if test="filtro.dmoStatus != null">
+                    AND dmo_status = #{filtro.dmoStatus}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'dmoId'">ORDER BY dmo_id ${direccionOrden}</when>
+                <when test="campoOrden == 'dmoNom'">ORDER BY dmo_nom ${direccionOrden}</when>
+                <when test="campoOrden == 'dmoCorreo'">ORDER BY dmo_correo ${direccionOrden}</when>
+                <when test="campoOrden == 'dmoStatus'">ORDER BY dmo_status ${direccionOrden}</when>
+                <otherwise>ORDER BY dmo_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}demo
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.dmoId != null">
+                    AND dmo_id = #{filtro.dmoId}
+                </if>
+                <if test="filtro.dmoNom != null and filtro.dmoNom != ''">
+                    AND LOWER(dmo_nom) LIKE '%' || LOWER(#{filtro.dmoNom}) || '%'
+                </if>
+                <if test="filtro.dmoCorreo != null and filtro.dmoCorreo != ''">
+                    AND LOWER(dmo_correo) LIKE '%' || LOWER(#{filtro.dmoCorreo}) || '%'
+                </if>
+                <if test="filtro.dmoStatus != null">
+                    AND dmo_status = #{filtro.dmoStatus}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Demo">
+        INSERT INTO ${schema}demo (dmo_id, dmo_nom, dmo_correo, dmo_status )  VALUES (#{dmoId}, #{dmoNom}, #{dmoCorreo}, #{dmoStatus} )
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Demo">
+        UPDATE ${schema}demo
+        SET  dmo_nom = #{dmoNom}, dmo_correo = #{dmoCorreo}, dmo_status = #{dmoStatus}
+        WHERE dmo_id = #{dmoId}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}demo
+        WHERE dmo_id = #{dmoId}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}demo (dmo_id, dmo_nom, dmo_correo, dmo_status ) VALUES
+        <foreach item="demo" collection="demoLote" separator=",">
+            (#{demo.dmoId}, #{demo.dmoNom}, #{demo.dmoCorreo}, #{demo.dmoStatus} )
+        </foreach>
+    </insert>
+
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='demo' collection='demoLote' separator=';'>
+            UPDATE ${schema}demo
+            SET dmo_nom = #{demo.dmoNom}, dmo_correo = #{demo.dmoCorreo}, dmo_status =  #{demo.dmoStatus}
+            WHERE dmo_id = #{demo.dmoId}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}demo WHERE dmo_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

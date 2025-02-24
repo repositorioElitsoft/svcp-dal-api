@@ -19,6 +19,11 @@ logs/
 # Spring Boot
 **/application.properties
 **/application.yml
+**/application.yml.local
+**/application.yml.bkp
+**/application.yml_bkp
+**/application.yml.dev
+**/application.yml_dev
 
 # Dependency directories
 **/.mvn/

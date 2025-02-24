@@ -1,4 +1,4 @@
-package com.elitsoft.servicampo.filtro;
+package com.elitsoft.servicampo.filter;
 
 import lombok.Data;
 
