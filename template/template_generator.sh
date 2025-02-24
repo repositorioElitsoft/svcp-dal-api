@@ -16,6 +16,12 @@ app_name_lower=$(echo "$app_name" | tr '[:upper:]' '[:lower:]')
 # Ask for the entity name (e.g., "Client").
 read -p "Enter the entity name (e.g., Client): " entity_name
 
+# Validation for empty entity name
+if [[ -z "$entity_name" ]]; then
+    echo "Entity name was empty, program exited."
+    exit 1
+fi
+
 # Convert entity name to lowercase.
 entity_name_lower=$(echo "$entity_name" | tr '[:upper:]' '[:lower:]')
 
@@ -28,30 +34,38 @@ dest_resource_dir="../src/main/resources/mapper"
 
 # Create the destination directories if they don't exist.
 mkdir -p "$dest_java_dir/controller/core"
+mkdir -p "$dest_java_dir/controller/core/filter/entity"
 mkdir -p "$dest_java_dir/controller/mobile"
+mkdir -p "$dest_java_dir/controller/mobile/filter/entity"
 mkdir -p "$dest_java_dir/domain/dto/core"
 mkdir -p "$dest_java_dir/domain/dto/mobile"
 mkdir -p "$dest_java_dir/domain/entity"
-mkdir -p "$dest_java_dir/exceptions"
+mkdir -p "$dest_java_dir/filter"
 mkdir -p "$dest_java_dir/mapper"
 mkdir -p "$dest_java_dir/mapstruct"
 mkdir -p "$dest_java_dir/security"
 mkdir -p "$dest_java_dir/service/core"
+mkdir -p "$dest_java_dir/service/core/filter/entity"
 mkdir -p "$dest_java_dir/service/mobile"
+mkdir -p "$dest_java_dir/service/mobile/filter/entity"
 mkdir -p "$dest_java_dir/utils"
 mkdir -p "$dest_resource_dir"
 
 files=(
     "controller/core/BaseController.java $dest_java_dir/controller/core/${entity_name}Controller.java 1"
+    "controller/core/filter/entity/BaseFiltroController.java $dest_java_dir/controller/core/filter/entity/${entity_name}FiltroController.java 1"
     "controller/mobile/BaseMobileController.java $dest_java_dir/controller/mobile/${entity_name}MobileController.java 1"
+    "controller/mobile/filter/entity/BaseFiltroMobileController.java $dest_java_dir/controller/mobile/filter/entity/${entity_name}FiltroMobileController.java 1"
     "domain/dto/core/BaseDto.java $dest_java_dir/domain/dto/core/${entity_name}Dto.java 1"
     "domain/dto/mobile/BaseMobileDto.java $dest_java_dir/domain/dto/mobile/${entity_name}MobileDto.java 1"
     "domain/entity/Base.java $dest_java_dir/domain/entity/${entity_name}.java 1"
-    "exceptions/BaseNoEncontradoException.java $dest_java_dir/exceptions/${entity_name}NoEncontradoException.java 1"
+    "filter/BaseFiltro.java $dest_java_dir/filter/${entity_name}Filtro.java 1"
     "mapper/BaseMapper.java $dest_java_dir/mapper/${entity_name}Mapper.java 1"
     "mapstruct/BaseMapStruct.java $dest_java_dir/mapstruct/${entity_name}MapStruct.java 1"
     "service/core/BaseService.java $dest_java_dir/service/core/${entity_name}Service.java 1"
+    "service/core/filter/entity/BaseFiltroService.java $dest_java_dir/service/core/filter/entity/${entity_name}FiltroService.java 1"
     "service/mobile/BaseMobileService.java $dest_java_dir/service/mobile/${entity_name}MobileService.java 1"
+    "service/mobile/filter/entity/BaseFiltroMobileService.java $dest_java_dir/service/mobile/filter/entity/${entity_name}FiltroMobileService.java 1"
     "resources/mapper/BaseMapper.xml $dest_resource_dir/${entity_name}Mapper.xml 1"
 )
 

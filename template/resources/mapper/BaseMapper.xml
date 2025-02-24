@@ -3,35 +3,119 @@
 <mapper namespace="com.elitsoft.#app_name#.mapper.#Base#Mapper">
 
     <resultMap id="#base#ResultMap" type="com.elitsoft.#app_name#.domain.entity.#Base#">
-        <id property="id" column="id" />
-        <result property="productId" column="product_id" />
-        <result property="quantity" column="quantity" />
-    </resultMap>
+        <id property="dmoId" column="dmo_id" />
+        <result property="dmoNom" column="dmo_nom" />
+        <result property="dmoCorreo" column="dmo_correo" />
+        <result property="dmoStatus" column="dmo_status" />
+        </resultMap>
 
+    <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="#base#ResultMap">
-        SELECT id, product_id, quantity  FROM ${schema}#base#
-        WHERE id = #{id}
+        SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
+        FROM ${schema}#base#
+        WHERE dmo_id = #{dmoId}
     </select>
 
+   <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="#base#ResultMap">
-        SELECT id, product_id, quantity  FROM ${schema}#base#
+        SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
+        FROM ${schema}#base#
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="#base#ResultMap">
+        SELECT * FROM ${schema}#base#
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.dmoId != null">
+                    AND dmo_id = #{filtro.dmoId}
+                </if>
+                <if test="filtro.dmoNom != null and filtro.dmoNom != ''">
+                    AND LOWER(dmo_nom) LIKE '%' || LOWER(#{filtro.dmoNom}) || '%'
+                </if>
+                <if test="filtro.dmoCorreo != null and filtro.dmoCorreo != ''">
+                    AND LOWER(dmo_correo) LIKE '%' || LOWER(#{filtro.dmoCorreo}) || '%'
+                </if>
+                <if test="filtro.dmoStatus != null">
+                    AND dmo_status = #{filtro.dmoStatus}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'dmoId'">ORDER BY dmo_id ${direccionOrden}</when>
+                <when test="campoOrden == 'dmoNom'">ORDER BY dmo_nom ${direccionOrden}</when>
+                <when test="campoOrden == 'dmoCorreo'">ORDER BY dmo_correo ${direccionOrden}</when>
+                <when test="campoOrden == 'dmoStatus'">ORDER BY dmo_status ${direccionOrden}</when>
+                <otherwise>ORDER BY dmo_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}#base#
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.dmoId != null">
+                    AND dmo_id = #{filtro.dmoId}
+                </if>
+                <if test="filtro.dmoNom != null and filtro.dmoNom != ''">
+                    AND LOWER(dmo_nom) LIKE '%' || LOWER(#{filtro.dmoNom}) || '%'
+                </if>
+                <if test="filtro.dmoCorreo != null and filtro.dmoCorreo != ''">
+                    AND LOWER(dmo_correo) LIKE '%' || LOWER(#{filtro.dmoCorreo}) || '%'
+                </if>
+                <if test="filtro.dmoStatus != null">
+                    AND dmo_status = #{filtro.dmoStatus}
+                </if>
+            </if>
+        </where>
     </select>
 
     <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO ${schema}#base# (product_id, quantity)  VALUES (#{productId}, #{quantity})  
-    </insert>
+    <insert id="agregar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#">
+        INSERT INTO ${schema}#base# (dmo_id, dmo_nom, dmo_correo, dmo_status )  VALUES (#{dmoId}, #{dmoNom}, #{dmoCorreo}, #{dmoStatus} )
+        </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#">
         UPDATE ${schema}#base#
-        SET product_id = #{productId}, quantity = #{quantity}  WHERE id = #{id}
-    </update>
+        SET  dmo_nom = #{dmoNom}, dmo_correo = #{dmoCorreo}, dmo_status = #{dmoStatus}
+        WHERE dmo_id = #{dmoId}
+        </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
         DELETE FROM ${schema}#base#
-        WHERE id = #{id}
+        WHERE dmo_id = #{dmoId}
     </delete>
 
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}#base# (dmo_id, dmo_nom, dmo_correo, dmo_status ) VALUES
+        <foreach item="#base#" collection="#base#Lote" separator=",">
+            (#{#base#.dmoId}, #{#base#.dmoNom}, #{#base#.dmoCorreo}, #{#base#.dmoStatus} )
+        </foreach>
+        </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='#base#' collection='#base#Lote' separator=';'>
+            UPDATE ${schema}#base#
+            SET dmo_nom = #{#base#.dmoNom}, dmo_correo = #{#base#.dmoCorreo}, dmo_status =  #{#base#.dmoStatus}
+            WHERE dmo_id = #{#base#.dmoId}
+        </foreach>
+        </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}#base# WHERE dmo_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

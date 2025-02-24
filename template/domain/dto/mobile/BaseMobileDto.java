@@ -7,16 +7,9 @@ import lombok.Setter;
 @Setter
 public class #Base#MobileDto {
 
-    private Long productId;
-    private int quantity;
-
-
-    @Override
-    public String toString() {
-        return "#Base#Dto{" +
-                "productId=" + productId +
-                ", quantity=" + quantity +
-                '}';
-    }
+    private Long dmoId;
+    private String dmoNom;
+    private String dmoCorreo;
+    private int dmoStatus;
 
 }

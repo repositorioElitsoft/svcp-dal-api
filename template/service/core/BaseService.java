@@ -6,12 +6,13 @@ import com.elitsoft.#app_name#.exceptions.*;
 import com.elitsoft.#app_name#.mapper.#Base#Mapper;
 import com.elitsoft.#app_name#.mapstruct.#Base#MapStruct;
 import com.elitsoft.#app_name#.utils.Constantes;
+import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,7 +20,6 @@ import java.util.List;
  * Clase de Servicio para la entidad #Base#.
  */
 @Service
-@Transactional
 public class #Base#Service {
 
     @Autowired
@@ -28,82 +28,173 @@ public class #Base#Service {
     @Autowired
     private #Base#MapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
 
-    private static final Logger logeador = LoggerFactory.getLogger(#Base#Service.class);
+    private static final Logger logeador = LoggerFactory.getLogger(#Base#Service.class); //Logback
 
     /**
      * Agrega un nuevo #Base#.
-     * @param #base#Dto El #Base# DTO.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param #base#Dto el #Base# DTO.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     * @throws RecursoDuplicadoException si el recurso #base# ya existe.
      */
-    public void agregar(#Base#Dto #base#Dto) throws BaseDatosException {
+    public void agregar(#Base#Dto #base#Dto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() #base#");
 
+        //  Valida Entrada
+        if (#base#Dto == null || #base#Dto.getId() == null) {
+            logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE + ": {}", ((#base#Dto != null) ? #base#Dto.toString() : null  ));
+            throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+        }
 
         try {
             #Base# #base# = mapper.toEntity(#base#Dto);
             Long nuevoId = #base#Mapper.agregar(#base#);
             logeador.info("#Base# agregado exitosamente id: {}", nuevoId);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.#BASE#_AGREGAR_EXECPTION + ": {}", #base#Dto.toString(), e);
-            throw new BaseDatosException(Constantes.#BASE#_AGREGAR_EXECPTION, e);
+        }
+        catch (DuplicateKeyException e) {
+            logeador.error(Constantes.#BASE#_DUPLICADO_MENSAGE + ": {}", #base#Dto.getId());
+            throw new RecursoDuplicadoException(Constantes.#BASE#_DUPLICADO_MENSAGE);
+        }
+        catch (DataAccessException e) {
+            logeador.error(Constantes.#BASE#_AGREGAR_MENSAJE + ": {}", #base#Dto.toString(), e);
+            throw new BaseDatosException(Constantes.#BASE#_AGREGAR_MENSAJE, e);
+        }
+    }
+
+    /**
+     * Agrega Lote nuevos #Base#.
+     * @param #base#LoteDto lista de #Base# DTO a agregar.
+     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     * @throws RecursoDuplicadoException si el recurso #base# ya existe.
+     */
+    public void agregarLote(List<#Base#Dto> #base#LoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregarLote() #base#");
+
+        //  Valida Entrada
+        if (#base#LoteDto.isEmpty()) {
+            logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+        }
+        try {
+            List<#Base#> #base#Lote = mapper.toEntityList(#base#LoteDto);
+
+            int registrosAgregados =  #base#Mapper.agregarLote(#base#Lote);
+            logeador.info("Lote #Base# agregados exitosamente,  registros agregados: {}", registrosAgregados);
+        } catch (DuplicateKeyException e) {
+            logeador.error(Constantes.#BASE#_DUPLICADO_MENSAGE);
+            throw new RecursoDuplicadoException(Constantes.#BASE#_DUPLICADO_MENSAGE);
+        } catch (DataAccessException | BindingException e) {
+            logeador.error(Constantes.#BASE#_AGREGAR_LOTE_MENSAJE, e);
+            throw new BaseDatosException(Constantes.#BASE#_AGREGAR_LOTE_MENSAJE, e);
         }
     }
 
     /**
      * Actualiza un #Base# existente.
-     * @param id La Clave de #Base# a actualizar.
-     * @param #base#Dto El #Base# DTO con informacion actualizada.
-     * @throws #Base#NoEncontradoException Si #Base# no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param id la clave de #Base# a actualizar.
+     * @param #base#Dto el #Base# DTO con informacion actualizada.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si #Base# no es encontrado.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
      */
-    public void actualizar(Long id, #Base#Dto #base#Dto) throws #Base#NoEncontradoException, BaseDatosException {
+    public void actualizar(Long id, #Base#Dto #base#Dto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() #base#");
 
-        try {
-            #Base#Dto #base#DtoEncontrado = this.encontrarPorClave(id); // Verifica si existe
+        //  Valida Entrada
+        if (id == null || #base#Dto == null || #base#Dto.getId() == null) {
+            logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE + ": {}", ((#base#Dto != null) ? #base#Dto.toString() : null  ));
+            throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+        }
 
+        try {
+            #Base#Dto #base#DtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             #Base# #base# = mapper.toEntity(#base#Dto);
             #base#.setId(id);
             int registrosActualizados = #base#Mapper.actualizar(#base#);
             logeador.info("#base# actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
-        } catch (#Base#NoEncontradoException e) {
-            throw e;
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.#BASE#_ACTUALIZAR_EXECPTION + ": id={} {}", id, #base#Dto.toString(), e);
-            throw new BaseDatosException(Constantes.#BASE#_ACTUALIZAR_EXECPTION, e);
+        } catch (DataAccessException | BindingException e) {
+            logeador.error(Constantes.#BASE#_ACTUALIZAR_MENSAJE + ": id={} {}", id, #base#Dto.toString(), e);
+            throw new BaseDatosException(Constantes.#BASE#_ACTUALIZAR_MENSAJE, e);
+        }
+    }
+
+   /**
+     * Actualiza Lote de #Base# existentes.
+     * @param #base#LoteDto lista de #Base# DTO con datos a actualizar.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     */
+    public void actualizarLote(List<#Base#Dto> #base#LoteDto) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("actualizarLote() #base#");
+
+        //  Valida Entrada
+        if (#base#LoteDto.isEmpty()) {
+            logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        try {
+            List<#Base#> #base#Lote = mapper.toEntityList(#base#LoteDto);
+            int registrosActualizados = #base#Mapper.actualizarLote(#base#Lote);
+            logeador.info("Lote #base# actualizados exitosamente, registros actualizados: {}", registrosActualizados);
+        } catch (DataAccessException | BindingException e) {
+            logeador.error(Constantes.#BASE#_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(Constantes.#BASE#_ACTUALIZAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina #Base# por Clave.
-     * @param id La Clave de #Base# a eliminar.
-     * @throws #Base#NoEncontradoException Si el #Base# no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param id la clave de #Base# a eliminar.
+     * @throws RecursoNoEncontradoException si el #Base# no es encontrado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id) throws #Base#NoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() #base#: {}", id);
 
         try {
             #Base#Dto #base#Dto = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = #base#Mapper.eliminar(id);
             logeador.info("#base# eliminado: {}, registros eliminados: {}", id, registrosEliminados);
-        } catch (#Base#NoEncontradoException e) {
-            throw e;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.#BASE#_ELIMINAR_EXECPTION + ": {}", id, e);
-            throw new BaseDatosException(Constantes.#BASE#_ELIMINAR_EXECPTION, e);
+            logeador.error(Constantes.#BASE#_ELIMINAR_MENSAJE + ": {}", id, e);
+            throw new BaseDatosException(Constantes.#BASE#_ELIMINAR_MENSAJE, e);
+        }
+    }
+
+    /**
+     * Elimina Lote #Base# por Clave.
+     * @param idLote lista de claves de #Base# a eliminar.
+     * @throws EntradaInvalidadException si la lista  #Base# esta vacia.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("eliminarLote()");
+
+        //  Valida Entrada
+        if (idLote.isEmpty()) {
+            logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        try {
+            int registrosEliminados = #base#Mapper.eliminarLote(idLote);
+            logeador.info("Lote #base# eliminados exitosamente, registros eliminados: {}", registrosEliminados);
+        } catch (DataAccessException | BindingException e) {
+            logeador.error(Constantes.#BASE#_ELIMINAR_MENSAJE,  e);
+            throw new BaseDatosException(Constantes.#BASE#_ELIMINAR_MENSAJE, e);
+        }
     }
 
     /**
      * Encuentra un #Base# por Clave.
-     * @param id La Clave #Base# a encontrar.
-     * @return El #Base# DTO encontrado, o null si no es encontrado.
-     * @throws BaseDatosException Si Ocurre un error de base de datos.
-     * @throws #Base#NoEncontradoException Si #Base# no es encontrado.
+     * @param id la clave #Base# a encontrar.
+     * @return el #Base# DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si #Base# no es encontrado.
      */
-    public #Base#Dto encontrarPorClave(Long id) throws BaseDatosException, #Base#NoEncontradoException {
+    public #Base#Dto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
@@ -113,20 +204,20 @@ public class #Base#Service {
                 logeador.info("#base# encontrado por clave : {}", id);
             } else {
                 logeador.info("#base# clave:{} no encontrado", id);
-                throw new #Base#NoEncontradoException(Constantes.#BASE#_NO_ENCONTRADO_MENSAGE);
+                throw new RecursoNoEncontradoException(Constantes.#BASE#_NO_ENCONTRADO_MENSAGE);
             }
 
             return #base#Dto;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.#BASE#_ENCONTRAR_POR_CLAVE_EXECPTION + " {}", id, e);
-            throw new BaseDatosException(Constantes.#BASE#_ENCONTRAR_POR_CLAVE_EXECPTION, e);
+            logeador.error(Constantes.#BASE#_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
+            throw new BaseDatosException(Constantes.#BASE#_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
     /**
      * Obtiene todos los #Base#s.
-     * @return Una lista de todos #Base# DTOs.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @return una lista de todos #Base# DTOs.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
     public List<#Base#Dto> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
@@ -136,8 +227,8 @@ public class #Base#Service {
             logeador.info("#base#s obtenidos");
             return #base#List;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.#BASE#_OBTENER_TODOS_EXECPTION, e);
-            throw new BaseDatosException(Constantes.#BASE#_OBTENER_TODOS_EXECPTION, e);
+            logeador.error(Constantes.#BASE#_OBTENER_TODOS_MENSAJE, e);
+            throw new BaseDatosException(Constantes.#BASE#_OBTENER_TODOS_MENSAJE, e);
         }
     }
 }

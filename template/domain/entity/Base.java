@@ -10,17 +10,11 @@ import lombok.Setter;
 @Getter
 public class #Base# {
 
-    private Long id;
-    private Long productId;
-    private int quantity;
+    private Long dmoId;
+    private String dmoNom;
+    private String dmoCorreo;
+    private int dmoStatus;
 
 
-    @Override
-    public String toString() {
-        return "#Base#{" +
-                "id=" + id +
-                ", productId=" + productId +
-                ", quantity=" + quantity +
-                '}';
-    }
+
 }

@@ -2,7 +2,9 @@ package com.elitsoft.#app_name#.service.mobile;
 
 import com.elitsoft.#app_name#.domain.dto.core.#Base#Dto;
 import com.elitsoft.#app_name#.exceptions.BaseDatosException;
-import com.elitsoft.#app_name#.exceptions.#Base#NoEncontradoException;
+import com.elitsoft.#app_name#.exceptions.EntradaInvalidadException;
+import com.elitsoft.#app_name#.exceptions.RecursoDuplicadoException;
+import com.elitsoft.#app_name#.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.#app_name#.mapper.#Base#Mapper;
 import com.elitsoft.#app_name#.mapstruct.#Base#MapStruct;
 import com.elitsoft.#app_name#.service.core.#Base#Service;
@@ -28,57 +30,99 @@ public class #Base#MobileService {
     @Autowired
     private #Base#MapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
 
-    private static final Logger logeador = LoggerFactory.getLogger(#Base#MobileService.class);
+    private static final Logger logeador = LoggerFactory.getLogger(#Base#MobileService.class); //Logback
 
     /**
      * Agrega un nuevo #Base#.
-     * @param #base#Dto El #Base# DTO.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param #base#Dto el #Base# DTO.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     * @throws RecursoDuplicadoException si el recurso #base# ya existe.
      */
-    public void agregar(#Base#Dto #base#Dto) throws BaseDatosException {
+    public void agregar(#Base#Dto #base#Dto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() #base#");
+
         #base#Service.agregar(#base#Dto);
     }
 
     /**
-     * Actualiza un #Base# existente.
-     * @param id La Clave de #Base# a actualizar.
-     * @param #base#Dto El #Base# DTO con informacion actualizada.
-     * @throws #Base#NoEncontradoException Si #Base# no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * Agrega Lote nuevos #Base#.
+     * @param #base#LoteDto lista de #Base# DTO a agregar.
+     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     * @throws RecursoDuplicadoException si el recurso #base# ya existe.
      */
-    public void actualizar(Long id, #Base#Dto #base#Dto) throws BaseDatosException, #Base#NoEncontradoException {
+    public void agregarLote(List<#Base#Dto> #base#LoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregarLote() #base#");
+
+        #base#Service.agregarLote(#base#LoteDto);
+    }
+
+    /**
+     * Actualiza un #Base# existente.
+     * @param id la Clave de #Base# a actualizar.
+     * @param #base#Dto el #Base# DTO con informacion actualizada.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si #Base# no es encontrado.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     */
+    public void actualizar(Long id, #Base#Dto #base#Dto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() #base#");
+
         #base#Service.actualizar(id, #base#Dto);
     }
 
     /**
-     * Elimina #Base# por Clave.
-     * @param id La Clave de #Base# a eliminar.
-     * @throws #Base#NoEncontradoException Si el #Base# no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * Actualiza Lote de #Base# existentes.
+     * @param #base#LoteDto lista de #Base# DTO con datos a actualizar.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
      */
-    public void eliminar(Long id) throws BaseDatosException, #Base#NoEncontradoException {
+    public void actualizarLote(List<#Base#Dto> #base#LoteDto) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("actualizarLote() #base#");
+
+        #base#Service.actualizarLote(#base#LoteDto);
+    }
+
+    /**
+     * Elimina #Base# por Clave.
+     * @param id la clave de #Base# a eliminar.
+     * @throws RecursoNoEncontradoException si el #Base# no es encontrado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() #base#: {}", id);
         #base#Service.eliminar(id);
     }
 
     /**
-     * Encuentra un #Base# por Clave.
-     * @param id La Clave #Base# a encontrar.
-     * @return El #Base# DTO encontrado, o null si no es encontrado.
-     * @throws BaseDatosException Si Ocurre un error de base de datos.
-     * @throws #Base#NoEncontradoException Si #Base# no es encontrado.
+     * Elimina Lote #Base# por Clave.
+     * @param idLote lista de claves de #Base# a eliminar.
+     * @throws EntradaInvalidadException si la lista  #Base# esta vacia.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public #Base#Dto encontrarPorClave(Long id) throws BaseDatosException, #Base#NoEncontradoException {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("eliminarLote()");
+
+        #base#Service.eliminarLote(idLote);
+    }
+
+    /**
+     * Encuentra un #Base# por Clave.
+     * @param id la clave #Base# a encontrar.
+     * @return el #Base# DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si #Base# no es encontrado.
+     */
+    public #Base#Dto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return #base#Service.encontrarPorClave(id);
     }
 
     /**
      * Obtiene todos los #Base#s.
-     * @return Una lista de todos #Base# DTOs.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @return lista de todos #Base# DTOs.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
     public List<#Base#Dto> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
