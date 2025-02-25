@@ -35,33 +35,17 @@ public class ClasificacionClienteMobileService {
     /**
      * Agrega un nuevo ClasificacionCliente.
      * @param clasificacionclienteDto el ClasificacionCliente DTO.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
-     * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
-     */
-    public void agregar(ClasificacionClienteDto clasificacionclienteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
-        logeador.debug("agregar() clasificacioncliente");
-
-        clasificacionclienteService.agregar(clasificacionclienteDto);
-    }
-
-    /**
-     * Agrega un nuevo ClasificacionCliente.
-     * @param clasificacionclienteDto el ClasificacionCliente DTO.
      * @return el ClasificacionCliente DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
      */
-    /*
     public ClasificacionClienteDto agregar(ClasificacionClienteDto clasificacionclienteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() clasificacioncliente");
 
         return clasificacionclienteService.agregar(clasificacionclienteDto);
     }
-    *?
 
-     */
     /**
      * Agrega Lote nuevos ClasificacionCliente.
      * @param clasificacionclienteLoteDto lista de ClasificacionCliente DTO a agregar.

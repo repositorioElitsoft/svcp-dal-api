@@ -13,19 +13,14 @@ import java.util.List;
 @Mapper
 public interface ClasificacionClienteMapper {
 
-    /**
-     * Agrega un ClasificacionCliente a la base de datos.
-     * @param clasificacionCliente La entidad ClasificacionCliente a agregar.
-     * @return La clave generada del nuevo registro de ClasificacionCliente.
-     */
-    Long agregar(ClasificacionCliente clasificacionCliente);
+
 
     /**
      * Agrega un ClasificacionCliente a la base de datos.
      * @param clasificacioncliente La entidad ClasificacionCliente a agregar.
      * @return ClasificacionCliente con campo autogenerado.
      */
-    // ClasificacionCliente agregar(ClasificacionCliente clasificacioncliente);
+     ClasificacionCliente agregar(ClasificacionCliente clasificacioncliente);
 
     /**
      * Agrega Lote ClasificacionCliente a la base de datos.

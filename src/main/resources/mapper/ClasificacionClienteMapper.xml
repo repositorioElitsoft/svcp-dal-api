@@ -22,7 +22,7 @@
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="clasificacionClienteResultMap">
-        SELECT * FROM ${schema}clasificacioncliente
+        SELECT * FROM ${schema}clasificaciones_clientes
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
@@ -47,7 +47,7 @@
 
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
-        SELECT COUNT(*) FROM ${schema}clasificacioncliente
+        SELECT COUNT(*) FROM ${schema}clasificaciones_clientes
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
@@ -60,18 +60,14 @@
         </where>
     </select>
 
-    <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
-        INSERT INTO ${schema}clasificaciones_clientes (clcl_id, clcl_dsc) VALUES (#{id}, #{clasificacionClienteDesc})
-    </insert>
 
-    <!-- Sentencia SQL de Insertar con campo Auto Incrementado
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
       <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente" affectData="true" flushCache="true">
-        INSERT INTO ${schema}clasificacioncliente (clcl_id, clcl_dsc)
+        INSERT INTO ${schema}clasificaciones_clientes (clcl_id, clcl_dsc)
         VALUES (#{id}, #{clasificacionClienteDesc})
         returning clcl_id as id, clcl_dsc as clasificacionClienteDesc
     </select>
-    -->
+
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
@@ -88,7 +84,7 @@
 
     <!-- Sentencia SQL de Insertar LOTE-->
     <insert id="agregarLote" parameterType="java.util.List" >
-        INSERT INTO ${schema}clasificacioncliente (clcl_id, clcl_dsc) VALUES
+        INSERT INTO ${schema}clasificaciones_clientes (clcl_id, clcl_dsc) VALUES
         <foreach item="clasificacionCliente" collection="clasificacionClienteLote" separator=",">
             (#{clasificacionCliente.id}, #{clasificacionCliente.clasificacionClienteDesc} )
         </foreach>
@@ -97,7 +93,7 @@
     <!-- Sentencia SQL de Actualizar LOTE-->
     <update id="actualizarLote" parameterType="java.util.List" >
         <foreach item='clasificacionCliente' collection='clasificacionClienteLote' separator=';'>
-            UPDATE ${schema}clasificacioncliente
+            UPDATE ${schema}clasificaciones_clientes
             SET clcl_dsc = #{clasificacionCliente.clasificacionClienteDesc}
             WHERE clcl_id = #{clasificacionCliente.id}
         </foreach>
@@ -105,7 +101,7 @@
 
     <!-- Sentencia SQL de Eliminar LOTE-->
     <delete id="eliminarLote" parameterType="java.util.List" >
-        DELETE FROM ${schema}clasificacioncliente WHERE clcl_id IN
+        DELETE FROM ${schema}clasificaciones_clientes WHERE clcl_id IN
         <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
             #{id}
         </foreach>

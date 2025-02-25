@@ -29,34 +29,7 @@ public class ClasificacionClienteMobileController {
 
     private static final Logger logeador = LoggerFactory.getLogger(ClasificacionClienteMobileController.class); //Logback
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega un clasificacioncliente", description = "Agrega un nuevo clasificacioncliente")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "ClasificacionCliente agregado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "ClasificacionCliente ya Existe"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
-    })
-    public ResponseEntity<String> agregar(@RequestBody ClasificacionClienteDto clasificacionclienteDto) {
-        logeador.debug("agregar() clasificacioncliente");
 
-        try {
-            clasificacionclienteMobileService.agregar(clasificacionclienteDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
-        }
-        catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
-        }
-        catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
-        }
-        catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
-        }
-
-    }
-
-    /*
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un clasificacioncliente", description = "Agrega un nuevo clasificacioncliente")
     @ApiResponses(value = {
@@ -82,7 +55,6 @@ public class ClasificacionClienteMobileController {
         }
 
     }
-     */
 
     @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega lista de clasificacioncliente", description = "Agrega una lista de nuevos clasificacioncliente")

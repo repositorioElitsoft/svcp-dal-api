@@ -1,7 +1,6 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
 import com.elitsoft.servicampo.domain.dto.core.SectorDto;
-import com.elitsoft.servicampo.domain.entity.Sector;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.SectorFiltro;
 import com.elitsoft.servicampo.mapper.SectorMapper;
@@ -30,7 +29,7 @@ public class SectorFiltroService {
     /** Ejecuta filtro dinamico y paginacion para Sector
      * @param filtro clase que tiene los atributos a filtrar
      * @param paginado clase que tiene los atributos de paginacion
-     * @return List<Sector> lista de entidades Sector
+     * @return List<SectorDto> lista de entidades Sector
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
     public List<SectorDto> filtrar(SectorFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
@@ -40,7 +39,6 @@ public class SectorFiltroService {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
 
             return mapper.toDtoList(sectorMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
-
         }  catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}",Constantes.SECTOR_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.SECTOR_FILTRAR_MENSAJE, e);

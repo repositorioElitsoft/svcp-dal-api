@@ -1,9 +1,10 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.entity.ClasificacionCliente;
+import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDto;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.ClasificacionClienteFiltro;
 import com.elitsoft.servicampo.mapper.ClasificacionClienteMapper;
+import com.elitsoft.servicampo.mapstruct. ClasificacionClienteMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
 import com.elitsoft.servicampo.utils.PagingAndSorting;
 import org.slf4j.Logger;
@@ -20,20 +21,24 @@ public class ClasificacionClienteFiltroService {
     @Autowired
     private ClasificacionClienteMapper clasificacionclienteMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
+    @Autowired
+    private ClasificacionClienteMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
+
     private static final Logger logeador = LoggerFactory.getLogger(ClasificacionClienteFiltroService.class); //Logback
 
     /** Ejecuta filtro dinamico y paginacion para ClasificacionCliente
      * @param filtro clase que tiene los atributos a filtrar
      * @param paginado clase que tiene los atributos de paginacion
-     * @return List<ClasificacionCliente> lista de entidades ClasificacionCliente
+     * @return List<ClasificacionClienteDto> lista de entidades ClasificacionCliente
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<ClasificacionCliente> filtrar(ClasificacionClienteFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<ClasificacionClienteDto> filtrar(ClasificacionClienteFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
-            return clasificacionclienteMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento);
+            
+            return mapper.toDtoList(clasificacionclienteMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
         }  catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}",Constantes.CLASIFICACIONCLIENTE_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_FILTRAR_MENSAJE, e);

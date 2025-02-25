@@ -33,43 +33,11 @@ public class ClasificacionClienteService {
     /**
      * Agrega un nuevo ClasificacionCliente.
      * @param clasificacionclienteDto el ClasificacionCliente DTO.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
-     * @throws RecursoDuplicadoException si el recurso clasificacioncliente ya existe.
-     */
-    public void agregar(ClasificacionClienteDto clasificacionclienteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
-        logeador.debug("agregar() clasificacioncliente");
-
-        //  Valida Entrada
-        if (clasificacionclienteDto == null || clasificacionclienteDto.getId() == null) {
-            logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}", ((clasificacionclienteDto != null) ? clasificacionclienteDto.toString() : null  ));
-            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-        }
-
-        try {
-            ClasificacionCliente clasificacioncliente = mapper.toEntity(clasificacionclienteDto);
-            Long nuevoId = clasificacionclienteMapper.agregar(clasificacioncliente);
-            logeador.info("ClasificacionCliente agregado exitosamente id: {}", nuevoId);
-        }
-        catch (DuplicateKeyException e) {
-            logeador.error(Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE + ": {}", clasificacionclienteDto.getId());
-            throw new RecursoDuplicadoException(Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE);
-        }
-        catch (DataAccessException e) {
-            logeador.error(Constantes.CLASIFICACIONCLIENTE_AGREGAR_MENSAJE + ": {}", clasificacionclienteDto.toString(), e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_AGREGAR_MENSAJE, e);
-        }
-    }
-
-    /**
-     * Agrega un nuevo ClasificacionCliente.
-     * @param clasificacionclienteDto el ClasificacionCliente DTO.
      * @return el ClasificacionCliente DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
      */
-    /*
     public ClasificacionClienteDto agregar(ClasificacionClienteDto clasificacionclienteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() ClasificacionCliente");
 
@@ -80,10 +48,10 @@ public class ClasificacionClienteService {
         }
 
         try {
-            ClasificacionCliente clasificacioncliente = mapper.toEntity(clasificacionclienteDto);
-            clasificacioncliente = clasificacionclienteMapper.agregar(clasificacioncliente);
-            logeador.info("ClasificacionCliente agregado exitosamente id: {}", clasificacioncliente.getId());
-            return mapper.toDto(clasificacioncliente);
+            ClasificacionCliente clasificacionCliente = mapper.toEntity(clasificacionclienteDto);
+            clasificacionCliente = clasificacionclienteMapper.agregar(clasificacionCliente);
+            logeador.info("ClasificacionCliente agregado exitosamente id: {}", clasificacionCliente.getId());
+            return mapper.toDto(clasificacionCliente);
         }
         catch (DuplicateKeyException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE + ": {}", clasificacionclienteDto.getId());
@@ -94,7 +62,7 @@ public class ClasificacionClienteService {
             throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_AGREGAR_MENSAJE, e);
         }
     }
-     */
+
 
     /**
      * Agrega Lote nuevos ClasificacionCliente.
