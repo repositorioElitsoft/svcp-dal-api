@@ -62,6 +62,39 @@ public class #Base#Service {
     }
 
     /**
+     * Agrega un nuevo #Base#.
+     * @param #base#Dto el #Base# DTO.
+     * @return el #Base# DTO agregado con campo auto generado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     * @throws RecursoDuplicadoException si el recurso #Base# ya existe.
+     */
+    public #Base#Dto agregar(#Base#Dto #base#Dto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregar() #Base#");
+
+        //  Valida Entrada
+        if (#base#Dto == null) {
+            logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        try {
+            #Base# #base# = mapper.toEntity(#base#Dto);
+            #base# = #base#Mapper.agregar(#base#);
+            logeador.info("#Base# agregado exitosamente id: {}", #base#.getId());
+            return mapper.toDto(#base#);
+        }
+        catch (DuplicateKeyException e) {
+            logeador.error(Constantes.#BASE#_DUPLICADO_MENSAGE + ": {}", #base#Dto.getId());
+            throw new RecursoDuplicadoException(Constantes.#BASE#_DUPLICADO_MENSAGE);
+        }
+        catch (DataAccessException e) {
+            logeador.error(Constantes.#BASE#_AGREGAR_MENSAJE + ": {}", #base#Dto.toString(), e);
+            throw new BaseDatosException(Constantes.#BASE#_AGREGAR_MENSAJE, e);
+        }
+    }
+
+    /**
      * Agrega Lote nuevos #Base#.
      * @param #base#LoteDto lista de #Base# DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.

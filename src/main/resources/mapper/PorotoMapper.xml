@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.PorotoMapper">
+
+    <resultMap id="porotoResultMap" type="com.elitsoft.servicampo.domain.entity.Poroto">
+        <id property="prtoId" column="prto_id" />
+        <result property="prtoNombre" column="prto_nombre" />
+        <result property="prtTipo" column="prto_tipo" />
+        <result property="prtoColor" column="prto_color" />
+        </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="porotoResultMap">
+        SELECT prto_id, prto_nombre, prto_tipo, prto_color
+        FROM ${schema}poroto
+        WHERE prto_id = #{prtoId}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="porotoResultMap">
+        SELECT prto_id, prto_nombre, prto_tipo, prto_color
+        FROM ${schema}poroto
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="porotoResultMap">
+        SELECT * FROM ${schema}poroto
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.prtoId != null">
+                    AND prto_id = #{filtro.prtoId}
+                </if>
+                <if test="filtro.prtoNombre != null and filtro.prtoNombre != ''">
+                    AND LOWER(prto_nombre) LIKE '%' || LOWER(#{filtro.prtoNombre}) || '%'
+                </if>
+                <if test="filtro.prtTipo != null and filtro.prtTipo != ''">
+                    AND LOWER(prto_tipo) LIKE '%' || LOWER(#{filtro.prtTipo}) || '%'
+                </if>
+                <if test="filtro.prtoColor != null and filtro.prtoColor != ''">
+                    AND LOWER(prto_color) LIKE '%' || LOWER(#{filtro.prtoColor}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'prtoId'">ORDER BY prto_id ${direccionOrden}</when>
+                <when test="campoOrden == 'prtoNombre'">ORDER BY prto_nombre ${direccionOrden}</when>
+                <when test="campoOrden == 'prtTipo'">ORDER BY prto_tipo ${direccionOrden}</when>
+                <when test="campoOrden == 'prtoColor'">ORDER BY prto_color ${direccionOrden}</when>
+                <otherwise>ORDER BY prto_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}poroto
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.prtoId != null">
+                    AND prto_id = #{filtro.prtoId}
+                </if>
+                <if test="filtro.prtoNombre != null and filtro.prtoNombre != ''">
+                    AND LOWER(prto_nombre) LIKE '%' || LOWER(#{filtro.prtoNombre}) || '%'
+                </if>
+                <if test="filtro.prtTipo != null and filtro.prtTipo != ''">
+                    AND LOWER(prto_tipo) LIKE '%' || LOWER(#{filtro.prtTipo}) || '%'
+                </if>
+                <if test="filtro.prtoColor != null and filtro.prtoColor != ''">
+                    AND LOWER(prto_color) LIKE '%' || LOWER(#{filtro.prtoColor}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado -->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Poroto" affectData="true" flushCache="true">
+        INSERT INTO ${schema}poroto (prto_nombre, prto_tipo, prto_color)
+        VALUES (#{prtoNombre}, #{prtTipo}, #{prtoColor})
+        returning prto_id as prtoId, prto_nombre as prtoNombre, prto_tipo as prtTipo, prto_color as prtoColor
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Poroto">
+        UPDATE ${schema}poroto
+        SET  prto_nombre = #{prtoNombre}, prto_tipo = #{prtTipo}, prto_color = #{prtoColor}
+        WHERE prto_id = #{prtoId}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}poroto
+        WHERE prto_id = #{prtoId}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}poroto (prto_id, prto_nombre, prto_tipo, prto_color )VALUES
+        <foreach item="poroto" collection="porotoLote" separator=",">
+            (#{poroto.prtoId}, #{poroto.prtoNombre}, #{poroto.prtTipo}, #{poroto.prtoColor} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='poroto' collection='porotoLote' separator=';'>
+            UPDATE ${schema}poroto
+            SET prto_nombre =  #{poroto.prtoNombre}, prto_tipo = #{poroto.prtTipo} ,prto_color = #{poroto.prtoColor}
+            WHERE prto_id = #{poroto.prtoId}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}poroto WHERE prto_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

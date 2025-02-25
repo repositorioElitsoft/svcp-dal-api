@@ -36,7 +36,7 @@ public interface DemoMapper {
 
     /**
      * Actualiza Lote Demo a la base de datos.
-     * @param demoLote Lista entidad Demo a agregar.
+     * @param demoLote Lista entidad Demo a actualizar.
      * @return int cantidad de registros actualizados.
      */
     int actualizarLote(List<Demo> demoLote);
@@ -70,7 +70,7 @@ public interface DemoMapper {
     Demo encontrarPorClave(Long id);
 
     /**
-     * Obtiene todos los Demos desde la base de datos.
+     * Obtiene todos los Demo desde la base de datos.
      * @return List<Demo> Una lista de todos los entidades Demo.
      */
     List<Demo> obtenerTodos();

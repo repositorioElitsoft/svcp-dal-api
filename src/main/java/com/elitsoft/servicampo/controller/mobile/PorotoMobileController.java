@@ -1,9 +1,9 @@
-package com.elitsoft.#app_name#.controller.mobile;
+package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.#app_name#.domain.dto.core.#Base#Dto;
-import com.elitsoft.#app_name#.exceptions.*;
-import com.elitsoft.#app_name#.service.mobile.#Base#MobileService;
-import com.elitsoft.#app_name#.utils.Constantes;
+import com.elitsoft.servicampo.domain.dto.core.PorotoDto;
+import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.service.mobile.PorotoMobileService;
+import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,57 +18,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Gestiona las peticiones y respuestas http relativas a #Base# para la version mobile
+ * Gestiona las peticiones y respuestas http relativas a Poroto para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/#base#")
-public class #Base#MobileController {
+@RequestMapping("/mobile/poroto")
+public class PorotoMobileController {
 
     @Autowired
-    private #Base#MobileService #base#MobileService;
+    private PorotoMobileService porotoMobileService;
 
-    private static final Logger logeador = LoggerFactory.getLogger(#Base#MobileController.class); //Logback
+    private static final Logger logeador = LoggerFactory.getLogger(PorotoMobileController.class); //Logback
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega un #base#", description = "Agrega un nuevo #base#")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "#Base# agregado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
-    })
-    public ResponseEntity<String> agregar(@RequestBody #Base#Dto #base#Dto) {
-        logeador.debug("agregar() #base#");
-
-        try {
-            #base#MobileService.agregar(#base#Dto);
-            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
-        }
-        catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
-        }
-        catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
-        }
-        catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
-        }
-
-    }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega un #base#", description = "Agrega un nuevo #base#")
+    @Operation(summary = "Agrega un poroto", description = "Agrega un nuevo poroto")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "#Base# agregado exitosamente"),
+            @ApiResponse(responseCode = "201", description = "Poroto agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
+            @ApiResponse(responseCode = "409", description = "Poroto ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<#Base#Dto> agregar(@RequestBody #Base#Dto #base#Dto) {
-        logeador.debug("agregar() #base#");
+    public ResponseEntity<PorotoDto> agregar(@RequestBody PorotoDto porotoDto) {
+        logeador.debug("agregar() poroto");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(#base#MobileService.agregar(#base#Dto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(porotoMobileService.agregar(porotoDto)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -83,18 +57,18 @@ public class #Base#MobileController {
     }
 
     @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega lista de #base#", description = "Agrega una lista de nuevos #base#")
+    @Operation(summary = "Agrega lista de poroto", description = "Agrega una lista de nuevos poroto")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Lista #Base# agregados exitosamente"),
+            @ApiResponse(responseCode = "201", description = "Lista Poroto agregados exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
+            @ApiResponse(responseCode = "409", description = "Poroto ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<#Base#Dto> #base#sDto) {
-        logeador.debug("agregarLote() #base#");
+    public ResponseEntity<String> agregarLote(@RequestBody List<PorotoDto> porotosDto) {
+        logeador.debug("agregarLote() poroto");
 
         try {
-            #base#MobileService.agregarLote(#base#sDto);
+            porotoMobileService.agregarLote(porotosDto);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -110,18 +84,18 @@ public class #Base#MobileController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Actualiza un #base#", description = "Actualiza un #base#")
+    @Operation(summary = "Actualiza un poroto", description = "Actualiza un poroto")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "#Base# actualizado exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Poroto actualizado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
+            @ApiResponse(responseCode = "404", description = "Poroto no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody #Base#Dto #base#Dto) {
-        logeador.debug("actualizar() #base#");
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PorotoDto porotoDto) {
+        logeador.debug("actualizar() poroto");
 
         try {
-            #base#MobileService.actualizar(id, #base#Dto);
+            porotoMobileService.actualizar(id, porotoDto);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -135,17 +109,17 @@ public class #Base#MobileController {
     }
 
     @PutMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Actualiza lista de #base#", description = "Actualiza una lista de #base#")
+    @Operation(summary = "Actualiza lista de poroto", description = "Actualiza una lista de poroto")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Lote #Base# actualizados exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Lote Poroto actualizados exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<#Base#Dto> #base#LoteDto) {
-        logeador.debug("actualizarLote() #base#");
+    public ResponseEntity<String> actualizarLote(@RequestBody List<PorotoDto> porotoLoteDto) {
+        logeador.debug("actualizarLote() poroto");
 
         try {
-            #base#MobileService.actualizarLote(#base#LoteDto);
+            porotoMobileService.actualizarLote(porotoLoteDto);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -157,18 +131,18 @@ public class #Base#MobileController {
     }
 
     @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Elimina un #base#", description = "Elimina un #base#")
+    @Operation(summary = "Elimina un poroto", description = "Elimina un poroto")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "#Base# eliminado exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Poroto eliminado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
+            @ApiResponse(responseCode = "404", description = "Poroto no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
-        logeador.debug("eliminar() #base#: {}", id);
+        logeador.debug("eliminar() poroto: {}", id);
 
         try {
-            #base#MobileService.eliminar(id);
+            porotoMobileService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -182,17 +156,17 @@ public class #Base#MobileController {
     }
 
     @DeleteMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Elimina Lista de #base#", description = "Elimina una Lista de #base#")
+    @Operation(summary = "Elimina Lista de poroto", description = "Elimina una Lista de poroto")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Lista #Base# eliminados exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Lista Poroto eliminados exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminarLote(@RequestBody List<Long> idLote) {
-        logeador.debug("eliminarLote() #base#");
+        logeador.debug("eliminarLote() poroto");
 
         try {
-            #base#MobileService.eliminarLote(idLote);
+            porotoMobileService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -204,18 +178,18 @@ public class #Base#MobileController {
     }
 
     @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Encuentra un #base#", description = "Encuentra un #base# por su clave")
+    @Operation(summary = "Encuentra un poroto", description = "Encuentra un poroto por su clave")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "#Base# encontrado exitosamente"),
-            @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
+            @ApiResponse(responseCode = "200", description = "Poroto encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Poroto no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<#Base#Dto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<PorotoDto> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            #Base#Dto #base#Dto = #base#MobileService.encontrarPorClave(id);
-            return ResponseEntity.ok(#base#Dto);  // Retorna  200 OK
+            PorotoDto porotoDto = porotoMobileService.encontrarPorClave(id);
+            return ResponseEntity.ok(porotoDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         } catch (RecursoNoEncontradoException e) {
@@ -224,19 +198,19 @@ public class #Base#MobileController {
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Obtiene todos  los #base#", description = "Obtiene todos los #base#")
+    @Operation(summary = "Obtiene todos  los poroto", description = "Obtiene todos los poroto")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "#Base#s obtenidos exitosamente"),
+            @ApiResponse(responseCode = "200", description = "Porotos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<#Base#Dto>> obtenerTodos() {
+    public ResponseEntity<List<PorotoDto>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<#Base#Dto> #base#s = null;
+        List<PorotoDto> porotos = null;
 
         try {
-            #base#s = #base#MobileService.obtenerTodos();
-             return ResponseEntity.ok(#base#s); // Retorna  200 OK
+            porotos = porotoMobileService.obtenerTodos();
+             return ResponseEntity.ok(porotos); // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }

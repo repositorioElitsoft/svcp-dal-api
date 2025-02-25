@@ -79,14 +79,21 @@
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#">
         INSERT INTO ${schema}#base# (dmo_id, dmo_nom, dmo_correo, dmo_status )  VALUES (#{dmoId}, #{dmoNom}, #{dmoCorreo}, #{dmoStatus} )
-        </insert>
+    </insert>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.#Base#" affectData="true" flushCache="true">
+        INSERT INTO ${schema}#base# (nombre, color)
+        VALUES (#{dmoNom}, #{dmoCorreo}, #{dmoStatus})
+        returning dmo_id as dmoId, dmo_nom as dmoNom, dmo_correo as dmoCorreo, dmo_status as dmoStatus
+    </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.#app_name#.domain.entity.#Base#">
         UPDATE ${schema}#base#
         SET  dmo_nom = #{dmoNom}, dmo_correo = #{dmoCorreo}, dmo_status = #{dmoStatus}
         WHERE dmo_id = #{dmoId}
-        </update>
+    </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
@@ -100,7 +107,7 @@
         <foreach item="#base#" collection="#base#Lote" separator=",">
             (#{#base#.dmoId}, #{#base#.dmoNom}, #{#base#.dmoCorreo}, #{#base#.dmoStatus} )
         </foreach>
-        </insert>
+    </insert>
 
     <!-- Sentencia SQL de Actualizar LOTE-->
     <update id="actualizarLote" parameterType="java.util.List" >
@@ -109,7 +116,7 @@
             SET dmo_nom = #{#base#.dmoNom}, dmo_correo = #{#base#.dmoCorreo}, dmo_status =  #{#base#.dmoStatus}
             WHERE dmo_id = #{#base#.dmoId}
         </foreach>
-        </update>
+    </update>
 
     <!-- Sentencia SQL de Eliminar LOTE-->
     <delete id="eliminarLote" parameterType="java.util.List" >

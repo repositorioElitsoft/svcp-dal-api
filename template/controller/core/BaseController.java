@@ -56,6 +56,32 @@ public class #Base#Controller {
 
     }
 
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega un #base#", description = "Agrega un nuevo #base#")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "#Base# agregado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<#Base#Dto> agregar(@RequestBody #Base#Dto #base#Dto) {
+        logeador.debug("agregar() #base#");
+
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(#base#Service.agregar(#base#Dto)); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
     @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega lista de #base#", description = "Agrega una lista de nuevos #base#")
     @ApiResponses(value = {

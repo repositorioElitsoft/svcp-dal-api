@@ -21,6 +21,13 @@ public interface #Base#Mapper {
     Long agregar(#Base# #base#);
 
     /**
+     * Agrega un #Base# a la base de datos.
+     * @param #base# La entidad #Base# a agregar.
+     * @return #Base# con campo autogenerado.
+     */
+    #Base# agregar(#Base# #base#);
+
+    /**
      * Agrega Lote #Base# a la base de datos.
      * @param #base#Lote Lista entidad #Base# a agregar.
      * @return int cantidad de registros agregados

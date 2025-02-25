@@ -122,4 +122,15 @@ public class Constantes {
     public static final String DEMO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DEMO por clave :";
     public static final String DEMO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DEMO";
     public static final String DEMO_FILTRAR_MENSAJE = "Error filtrando DEMO";
+    
+    public static final String POROTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de POROTO invalida.";
+    public static final String POROTO_DUPLICADO_MENSAGE = "Recurso  POROTO ya existe.";
+    public static final String POROTO_NO_ENCONTRADO_MENSAGE = "Recurso POROTO no  encontrado";
+    public static final String POROTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso POROTO";
+    public static final String POROTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos POROTO";
+    public static final String POROTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso POROTO";
+    public static final String POROTO_ELIMINAR_MENSAJE = "Error eliminando Recurso POROTO";
+    public static final String POROTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso POROTO por clave :";
+    public static final String POROTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos POROTO";
+    public static final String POROTO_FILTRAR_MENSAJE = "Error filtrando POROTO";
 }

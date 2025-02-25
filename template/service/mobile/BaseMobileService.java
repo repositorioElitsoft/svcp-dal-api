@@ -37,7 +37,7 @@ public class #Base#MobileService {
      * @param #base#Dto el #Base# DTO.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
-     * @throws RecursoDuplicadoException si el recurso #base# ya existe.
+     * @throws RecursoDuplicadoException si el recurso #Base# ya existe.
      */
     public void agregar(#Base#Dto #base#Dto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() #base#");
@@ -46,11 +46,25 @@ public class #Base#MobileService {
     }
 
     /**
+     * Agrega un nuevo #Base#.
+     * @param #base#Dto el #Base# DTO.
+     * @return el #Base# DTO agregado con campo auto generado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
+     * @throws RecursoDuplicadoException si el recurso #Base# ya existe.
+     */
+    public #Base#Dto agregar(#Base#Dto #base#Dto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregar() #base#");
+
+        return #base#Service.agregar(#base#Dto);
+    }
+
+    /**
      * Agrega Lote nuevos #Base#.
      * @param #base#LoteDto lista de #Base# DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
-     * @throws RecursoDuplicadoException si el recurso #base# ya existe.
+     * @throws RecursoDuplicadoException si el recurso #Base# ya existe.
      */
     public void agregarLote(List<#Base#Dto> #base#LoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() #base#");
