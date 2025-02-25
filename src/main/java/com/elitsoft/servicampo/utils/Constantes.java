@@ -104,6 +104,7 @@ public class Constantes {
     public static final String TRABAJOTAREA_ELIMINAR_EXECPTION = "Error eliminando TRABAJOTAREA";
     public static final String TRABAJOTAREA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TRABAJOTAREA por clave :";
     public static final String TRABAJOTAREA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TRABAJOTAREA";
+
     public static final String CLASIFICACIONCLIENTE_NO_ENCONTRADO_MENSAGE = "CLASIFICACIONCLIENTE no  encontrado";
     public static final String CLASIFICACIONCLIENTE_AGREGAR_EXECPTION = "Error agregando CLASIFICACIONCLIENTE";
     public static final String CLASIFICACIONCLIENTE_ACTUALIZAR_EXECPTION = "Error actualizando CLASIFICACIONCLIENTE";
@@ -122,7 +123,7 @@ public class Constantes {
     public static final String DEMO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DEMO por clave :";
     public static final String DEMO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DEMO";
     public static final String DEMO_FILTRAR_MENSAJE = "Error filtrando DEMO";
-    
+
     public static final String POROTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de POROTO invalida.";
     public static final String POROTO_DUPLICADO_MENSAGE = "Recurso  POROTO ya existe.";
     public static final String POROTO_NO_ENCONTRADO_MENSAGE = "Recurso POROTO no  encontrado";
@@ -133,4 +134,16 @@ public class Constantes {
     public static final String POROTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso POROTO por clave :";
     public static final String POROTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos POROTO";
     public static final String POROTO_FILTRAR_MENSAJE = "Error filtrando POROTO";
+
+    public static final String SECTOR_ENTRADA_INVALIDA_MENSAGE = "Entrada de SECTOR invalida.";
+    public static final String SECTOR_DUPLICADO_MENSAGE = "Recurso  SECTOR ya existe.";
+    public static final String SECTOR_NO_ENCONTRADO_MENSAGE = "Recurso SECTOR no  encontrado";
+    public static final String SECTOR_AGREGAR_MENSAJE = "Error Interno agregando Recurso SECTOR";
+    public static final String SECTOR_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SECTOR";
+    public static final String SECTOR_ACTUALIZAR_MENSAJE = "Error actualizando Recurso SECTOR";
+    public static final String SECTOR_ELIMINAR_MENSAJE = "Error eliminando Recurso SECTOR";
+    public static final String SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso SECTOR por clave :";
+    public static final String SECTOR_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SECTOR";
+    public static final String SECTOR_FILTRAR_MENSAJE = "Error filtrando SECTOR";
+
 }

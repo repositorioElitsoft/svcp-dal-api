@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.SectorMapper">
+
+    <resultMap id="sectorResultMap" type="com.elitsoft.servicampo.domain.entity.Sector">
+        <id property="id" column="sctr_id" />
+        <result property="descripcionSector" column="sctr_dsc" />
+        <association property="zona" column="znas_id" fetchType="lazy"  javaType="com.elitsoft.servicampo.domain.entity.Zona" select="com.elitsoft.servicampo.mapper.ZonaMapper.encontrarPorClave"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="sectorResultMap">
+        SELECT sctr_id, sctr_dsc, znas_id
+        FROM ${schema}sectores
+        WHERE sctr_id = #{id}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="sectorResultMap">
+        SELECT sctr_id, sctr_dsc, znas_id
+        FROM ${schema}sectores
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="sectorResultMap">
+        SELECT * FROM ${schema}sectores
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND sctr_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
+                    AND LOWER(sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
+                </if>
+                <if test="filtro.zona != null and filtro.zona.id != null">
+                    AND znas_id = #{filtro.zona.id}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY sctr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionSector'">ORDER BY sctr_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'zona.id'">ORDER BY znas_id ${direccionOrden}</when>
+                <otherwise>ORDER BY sctr_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}sectores
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND sctr_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
+                    AND LOWER(sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
+                </if>
+                <if test="filtro.zona != null and filtro.zona.id != null">
+                    AND znas_id = #{filtro.zona.id}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Sector">
+        INSERT INTO ${schema}sectores (sctr_id, sctr_dsc, znas_id) VALUES (#{id}, #{descripcionSector}, #{zona.id})
+    </insert>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado
+    <select id="agregarReturning" resultType="com.elitsoft.servicampo.domain.entity.Sector" affectData="true" flushCache="true">
+        INSERT INTO ${schema}sectores (sctr_dsc, znas_id)
+        VALUES (#{descripcionSector}, #{zona.id})
+        returning sctr_id as id, sctr_dsc as descripcionSector, znas_id as zonaId
+    </select>
+    -->
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Sector">
+        UPDATE ${schema}sectores
+        SET sctr_dsc = #{descripcionSector}, znas_id = #{zona.id}
+        WHERE sctr_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}sectores
+        WHERE sctr_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}sectores (sctr_id, sctr_dsc, znas_id) VALUES
+        <foreach item="sector" collection="sectorLote" separator=",">
+            (#{sector.id}, #{sector.descripcionSector}, #{sector.zona.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='sector' collection='sectorLote' separator=';'>
+            UPDATE ${schema}sectores
+            SET sctr_dsc = #{sector.descripcionSector}, znas_id = #{sector.zona.id}
+            WHERE sctr_id = #{sector.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}sectores WHERE sctr_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
