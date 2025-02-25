@@ -7,12 +7,57 @@
         <result property="clasificacionClienteDesc" column="clcl_dsc"/>
     </resultMap>
 
+    <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="clasificacionClienteResultMap">
-        SELECT clcl_id, clcl_dsc FROM ${schema}clasificaciones_clientes WHERE clcl_id = #{id}
+        SELECT clcl_id, clcl_dsc
+        FROM ${schema}clasificaciones_clientes
+        WHERE clcl_id = #{id}
     </select>
 
+   <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="clasificacionClienteResultMap">
-        SELECT clcl_id, clcl_dsc FROM ${schema}clasificaciones_clientes
+        SELECT clcl_id, clcl_dsc
+        FROM ${schema}clasificaciones_clientes
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="clasificacionClienteResultMap">
+        SELECT * FROM ${schema}clasificacioncliente
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND clcl_id = #{filtro.id}
+                </if>
+                <if test="filtro.clasificacionClienteDesc != null and filtro.clasificacionClienteDesc != ''">
+                    AND LOWER(clcl_dsc) LIKE '%' || LOWER(#{filtro.clasificacionClienteDesc}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY clcl_id ${direccionOrden}</when>
+                <when test="campoOrden == 'clasificacionClienteDesc'">ORDER BY clcl_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY clcl_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}clasificacioncliente
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND clcl_id = #{filtro.id}
+                </if>
+                <if test="filtro.clasificacionClienteDesc != null and filtro.clasificacionClienteDesc != ''">
+                    AND LOWER(clcl_dsc) LIKE '%' || LOWER(#{filtro.clasificacionClienteDesc}) || '%'
+                </if>
+            </if>
+        </where>
     </select>
 
     <!-- Sentencia SQL de Insertar-->
@@ -20,14 +65,49 @@
         INSERT INTO ${schema}clasificaciones_clientes (clcl_id, clcl_dsc) VALUES (#{id}, #{clasificacionClienteDesc})
     </insert>
 
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente" affectData="true" flushCache="true">
+        INSERT INTO ${schema}clasificacioncliente (clcl_id, clcl_dsc)
+        VALUES (#{id}, #{clasificacionClienteDesc})
+        returning clcl_id as id, clcl_dsc as clasificacionClienteDesc
+    </select>
+    -->
+
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente">
-        UPDATE c${schema}lasificaciones_clientes SET clcl_dsc = #{clasificacionClienteDesc} WHERE clcl_id = #{id}
+        UPDATE ${schema}clasificaciones_clientes
+        SET clcl_dsc = #{clasificacionClienteDesc}
+        WHERE clcl_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM ${schema}clasificaciones_clientes WHERE clcl_id = #{id}
+        DELETE FROM ${schema}clasificaciones_clientes
+        WHERE clcl_id = #{id}
     </delete>
 
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}clasificacioncliente (clcl_id, clcl_dsc) VALUES
+        <foreach item="clasificacionCliente" collection="clasificacionClienteLote" separator=",">
+            (#{clasificacionCliente.id}, #{clasificacionCliente.clasificacionClienteDesc} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='clasificacionCliente' collection='clasificacionClienteLote' separator=';'>
+            UPDATE ${schema}clasificacioncliente
+            SET clcl_dsc = #{clasificacionCliente.clasificacionClienteDesc}
+            WHERE clcl_id = #{clasificacionCliente.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}clasificacioncliente WHERE clcl_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

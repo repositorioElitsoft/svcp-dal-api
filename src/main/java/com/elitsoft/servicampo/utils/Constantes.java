@@ -105,12 +105,16 @@ public class Constantes {
     public static final String TRABAJOTAREA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TRABAJOTAREA por clave :";
     public static final String TRABAJOTAREA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TRABAJOTAREA";
 
-    public static final String CLASIFICACIONCLIENTE_NO_ENCONTRADO_MENSAGE = "CLASIFICACIONCLIENTE no  encontrado";
-    public static final String CLASIFICACIONCLIENTE_AGREGAR_EXECPTION = "Error agregando CLASIFICACIONCLIENTE";
-    public static final String CLASIFICACIONCLIENTE_ACTUALIZAR_EXECPTION = "Error actualizando CLASIFICACIONCLIENTE";
-    public static final String CLASIFICACIONCLIENTE_ELIMINAR_EXECPTION = "Error eliminando CLASIFICACIONCLIENTE";
-    public static final String CLASIFICACIONCLIENTE_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando CLASIFICACIONCLIENTE por clave :";
-    public static final String CLASIFICACIONCLIENTE_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de CLASIFICACIONCLIENTE invalida.";
+    public static final String CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE = "Recurso  CLASIFICACIONCLIENTE ya existe.";
+    public static final String CLASIFICACIONCLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso CLASIFICACIONCLIENTE no  encontrado";
+    public static final String CLASIFICACIONCLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CLASIFICACIONCLIENTE por clave :";
+    public static final String CLASIFICACIONCLIENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CLASIFICACIONCLIENTE";
+    public static final String CLASIFICACIONCLIENTE_FILTRAR_MENSAJE = "Error filtrando CLASIFICACIONCLIENTE";
 
 
     public static final String DEMO_ENTRADA_INVALIDA_MENSAGE = "Entrada de demo invalida.";
