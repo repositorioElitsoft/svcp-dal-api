@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class #Base# {
+public class #Base# implements Serializable {
 
     private Long dmoId;
     private String dmoNom;

@@ -1,6 +1,6 @@
 package com.elitsoft.#app_name#.service.core.filter.entity;
 
-import com.elitsoft.#app_name#.domain.entity.#Base#;
+import com.elitsoft.#app_name#.domain.dto.core.#Base#Dto;
 import com.elitsoft.#app_name#.exceptions.BaseDatosException;
 import com.elitsoft.#app_name#.filter.#Base#Filtro;
 import com.elitsoft.#app_name#.mapper.#Base#Mapper;
@@ -20,20 +20,24 @@ public class #Base#FiltroService {
     @Autowired
     private #Base#Mapper #base#Mapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
+    @Autowired
+    private #Base#MapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
+
     private static final Logger logeador = LoggerFactory.getLogger(#Base#FiltroService.class); //Logback
 
     /** Ejecuta filtro dinamico y paginacion para #Base#
      * @param filtro clase que tiene los atributos a filtrar
      * @param paginado clase que tiene los atributos de paginacion
-     * @return List<#Base#> lista de entidades #Base#
+     * @return List<#Base#Dto> lista de entidades #Base#
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<#Base#> filtrar(#Base#Filtro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<#Base#Dto> filtrar(#Base#Filtro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
-            return #base#Mapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento);
+            
+            return mapper.toDtoList(#base#Mapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
         }  catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}",Constantes.#BASE#_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.#BASE#_FILTRAR_MENSAJE, e);
