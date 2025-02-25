@@ -4,10 +4,15 @@ import com.elitsoft.servicampo.domain.entity.Zona;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class SectorDto {
+public class SectorDto  implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 5346232492548509729L;
     private Long id;
     private String descripcionSector;
     private Zona zona;

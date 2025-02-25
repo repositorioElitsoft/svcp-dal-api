@@ -32,8 +32,8 @@
                 <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
                     AND LOWER(sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
                 </if>
-                <if test="filtro.zona != null and filtro.zona.id != null">
-                    AND znas_id = #{filtro.zona.id}
+                <if test="filtro.zonaId != null">
+                    AND znas_id = #{filtro.zonaId}
                 </if>
             </if>
         </where>
@@ -41,7 +41,7 @@
             <choose>
                 <when test="campoOrden == 'id'">ORDER BY sctr_id ${direccionOrden}</when>
                 <when test="campoOrden == 'descripcionSector'">ORDER BY sctr_dsc ${direccionOrden}</when>
-                <when test="campoOrden == 'zona.id'">ORDER BY znas_id ${direccionOrden}</when>
+                <when test="campoOrden == 'zonaId'">ORDER BY znas_id ${direccionOrden}</when>
                 <otherwise>ORDER BY sctr_id ASC</otherwise>
             </choose>
         </if>
@@ -61,27 +61,22 @@
                 <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
                     AND LOWER(sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
                 </if>
-                <if test="filtro.zona != null and filtro.zona.id != null">
-                    AND znas_id = #{filtro.zona.id}
+                <if test="filtro.zonaId != null">
+                    AND znas_id = #{filtro.zonaId}
                 </if>
             </if>
         </where>
     </select>
 
-    <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Sector">
-        INSERT INTO ${schema}sectores (sctr_id, sctr_dsc, znas_id) VALUES (#{id}, #{descripcionSector}, #{zona.id})
-    </insert>
 
-    <!-- Sentencia SQL de Insertar con campo Auto Incrementado
-    <select id="agregarReturning" resultType="com.elitsoft.servicampo.domain.entity.Sector" affectData="true" flushCache="true">
-        INSERT INTO ${schema}sectores (sctr_dsc, znas_id)
-        VALUES (#{descripcionSector}, #{zona.id})
-        returning sctr_id as id, sctr_dsc as descripcionSector, znas_id as zonaId
-    </select>
-    -->
+    <!--  Sentencia SQL de Insertar con campo Auto Incrementado -->
+   <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Sector" affectData="true" flushCache="true">
+       INSERT INTO ${schema}sectores (sctr_dsc, znas_id)
+       VALUES (#{descripcionSector}, #{zona.id})
+       returning sctr_id as id, sctr_dsc as descripcionSector, znas_id as zonaId
+   </select>
 
-    <!-- Sentencia SQL de Actualizar-->
+   <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Sector">
         UPDATE ${schema}sectores
         SET sctr_dsc = #{descripcionSector}, znas_id = #{zona.id}

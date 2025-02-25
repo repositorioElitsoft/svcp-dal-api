@@ -29,34 +29,7 @@ public class SectorMobileController {
 
     private static final Logger logeador = LoggerFactory.getLogger(SectorMobileController.class); //Logback
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega un sector", description = "Agrega un nuevo sector")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Sector agregado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "Sector ya Existe"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
-    })
-    public ResponseEntity<String> agregar(@RequestBody SectorDto sectorDto) {
-        logeador.debug("agregar() sector");
 
-        try {
-            sectorMobileService.agregar(sectorDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
-        }
-        catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
-        }
-        catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
-        }
-        catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
-        }
-
-    }
-
-    /*
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un sector", description = "Agrega un nuevo sector")
     @ApiResponses(value = {
@@ -82,7 +55,7 @@ public class SectorMobileController {
         }
 
     }
-   */
+
 
     @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega lista de sector", description = "Agrega una lista de nuevos sector")

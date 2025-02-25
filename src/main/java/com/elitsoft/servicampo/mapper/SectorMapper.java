@@ -13,19 +13,13 @@ import java.util.List;
 @Mapper
 public interface SectorMapper {
 
-    /**
-     * Agrega un Sector a la base de datos.
-     * @param sector La entidad Sector a agregar.
-     * @return La clave generada del nuevo registro de Sector.
-     */
-    Long agregar(Sector sector);
 
     /**
      * Agrega un Sector a la base de datos.
      * @param sector La entidad Sector a agregar.
      * @return Sector con campo autogenerado.
      */
-    // Sector agregar(Sector sector);
+     Sector agregar(Sector sector);
 
     /**
      * Agrega Lote Sector a la base de datos.

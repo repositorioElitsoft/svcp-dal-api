@@ -1,8 +1,13 @@
 package com.elitsoft.servicampo.utils;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
-public class PagedResponse<T> {
+public class PagedResponse<T>  implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 7906598161522352924L;
+
     private List<T> content;
     private long totalElements;
     private int totalPages;

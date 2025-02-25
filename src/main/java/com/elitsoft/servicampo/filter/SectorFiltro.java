@@ -8,6 +8,6 @@ public class SectorFiltro {
 
     private Long id;
     private String descripcionSector;
-    private Zona zona;
+    private Long zonaId;
 
 }

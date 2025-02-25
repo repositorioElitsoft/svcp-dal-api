@@ -30,36 +30,6 @@ public class SectorService {
 
     private static final Logger logeador = LoggerFactory.getLogger(SectorService.class); //Logback
 
-    /**
-     * Agrega un nuevo Sector.
-     * @param sectorDto el Sector DTO.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     * @throws EntradaInvalidadException si la entrada Sector tiene errores.
-     * @throws RecursoDuplicadoException si el recurso sector ya existe.
-     */
-    public void agregar(SectorDto sectorDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
-        logeador.debug("agregar() sector");
-
-        //  Valida Entrada
-        if (sectorDto == null || sectorDto.getId() == null) {
-            logeador.error(Constantes.SECTOR_ENTRADA_INVALIDA_MENSAGE + ": {}", ((sectorDto != null) ? sectorDto.toString() : null  ));
-            throw new EntradaInvalidadException(Constantes.SECTOR_ENTRADA_INVALIDA_MENSAGE);
-        }
-
-        try {
-            Sector sector = mapper.toEntity(sectorDto);
-            Long nuevoId = sectorMapper.agregar(sector);
-            logeador.info("Sector agregado exitosamente id: {}", nuevoId);
-        }
-        catch (DuplicateKeyException e) {
-            logeador.error(Constantes.SECTOR_DUPLICADO_MENSAGE + ": {}", sectorDto.getId());
-            throw new RecursoDuplicadoException(Constantes.SECTOR_DUPLICADO_MENSAGE);
-        }
-        catch (DataAccessException e) {
-            logeador.error(Constantes.SECTOR_AGREGAR_MENSAJE + ": {}", sectorDto.toString(), e);
-            throw new BaseDatosException(Constantes.SECTOR_AGREGAR_MENSAJE, e);
-        }
-    }
 
     /**
      * Agrega un nuevo Sector.
@@ -69,7 +39,6 @@ public class SectorService {
      * @throws EntradaInvalidadException si la entrada Sector tiene errores.
      * @throws RecursoDuplicadoException si el recurso Sector ya existe.
      */
-    /*
     public SectorDto agregar(SectorDto sectorDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Sector");
 
@@ -94,7 +63,7 @@ public class SectorService {
             throw new BaseDatosException(Constantes.SECTOR_AGREGAR_MENSAJE, e);
         }
     }
-    */
+
 
     /**
      * Agrega Lote nuevos Sector.

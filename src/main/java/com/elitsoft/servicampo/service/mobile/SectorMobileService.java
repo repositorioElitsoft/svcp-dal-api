@@ -32,18 +32,6 @@ public class SectorMobileService {
 
     private static final Logger logeador = LoggerFactory.getLogger(SectorMobileService.class); //Logback
 
-    /**
-     * Agrega un nuevo Sector.
-     * @param sectorDto el Sector DTO.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     * @throws EntradaInvalidadException si la entrada Sector tiene errores.
-     * @throws RecursoDuplicadoException si el recurso Sector ya existe.
-     */
-    public void agregar(SectorDto sectorDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
-        logeador.debug("agregar() sector");
-
-        sectorService.agregar(sectorDto);
-    }
 
     /**
      * Agrega un nuevo Sector.
@@ -53,13 +41,12 @@ public class SectorMobileService {
      * @throws EntradaInvalidadException si la entrada Sector tiene errores.
      * @throws RecursoDuplicadoException si el recurso Sector ya existe.
      */
-    /*
+
     public SectorDto agregar(SectorDto sectorDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() sector");
 
         return sectorService.agregar(sectorDto);
     }
-    */
 
     /**
      * Agrega Lote nuevos Sector.

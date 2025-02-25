@@ -1,9 +1,11 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
+import com.elitsoft.servicampo.domain.dto.core.SectorDto;
 import com.elitsoft.servicampo.domain.entity.Sector;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.SectorFiltro;
 import com.elitsoft.servicampo.mapper.SectorMapper;
+import com.elitsoft.servicampo.mapstruct.SectorMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
 import com.elitsoft.servicampo.utils.PagingAndSorting;
 import org.slf4j.Logger;
@@ -20,6 +22,9 @@ public class SectorFiltroService {
     @Autowired
     private SectorMapper sectorMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
+    @Autowired
+    private SectorMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
+
     private static final Logger logeador = LoggerFactory.getLogger(SectorFiltroService.class); //Logback
 
     /** Ejecuta filtro dinamico y paginacion para Sector
@@ -28,12 +33,14 @@ public class SectorFiltroService {
      * @return List<Sector> lista de entidades Sector
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<Sector> filtrar(SectorFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<SectorDto> filtrar(SectorFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
-            return sectorMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento);
+
+            return mapper.toDtoList(sectorMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
+
         }  catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}",Constantes.SECTOR_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.SECTOR_FILTRAR_MENSAJE, e);
