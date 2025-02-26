@@ -24,12 +24,18 @@ public class Constantes {
     public static final String EMPLEADO_ELIMINAR_EXECPTION = "Error eliminando EMPLEADO";
     public static final String EMPLEADO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando EMPLEADO por clave :";
     public static final String EMPLEADO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los EMPLEADO";
-    public static final String TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE = "TIPOEMPLEADO no  encontrado";
-    public static final String TIPOEMPLEADO_AGREGAR_EXECPTION = "Error agregando TIPOEMPLEADO";
-    public static final String TIPOEMPLEADO_ACTUALIZAR_EXECPTION = "Error actualizando TIPOEMPLEADO";
-    public static final String TIPOEMPLEADO_ELIMINAR_EXECPTION = "Error eliminando TIPOEMPLEADO";
-    public static final String TIPOEMPLEADO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TIPOEMPLEADO por clave :";
-    public static final String TIPOEMPLEADO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TIPOEMPLEADO";
+
+    public static final String TIPOEMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOEMPLEADO invalida.";
+    public static final String TIPOEMPLEADO_DUPLICADO_MENSAGE = "Recurso  TIPOEMPLEADO ya existe.";
+    public static final String TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE = "Recurso TIPOEMPLEADO no  encontrado";
+    public static final String TIPOEMPLEADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOEMPLEADO";
+    public static final String TIPOEMPLEADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOEMPLEADO";
+    public static final String TIPOEMPLEADO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPOEMPLEADO";
+    public static final String TIPOEMPLEADO_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPOEMPLEADO";
+    public static final String TIPOEMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOEMPLEADO por clave :";
+    public static final String TIPOEMPLEADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOEMPLEADO";
+    public static final String TIPOEMPLEADO_FILTRAR_MENSAJE = "Error filtrando TIPOEMPLEADO";
+
     public static final String ROLE_NO_ENCONTRADO_MENSAGE = "ROLE no  encontrado";
     public static final String ROLE_AGREGAR_EXECPTION = "Error agregando ROLE";
     public static final String ROLE_ACTUALIZAR_EXECPTION = "Error actualizando ROLE";
@@ -73,12 +79,19 @@ public class Constantes {
     public static final String ESTRUCTURAFORMULARIO_ELIMINAR_EXECPTION = "Error eliminando ESTRUCTURAFORMULARIO";
     public static final String ESTRUCTURAFORMULARIO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando ESTRUCTURAFORMULARIO por clave :";
     public static final String ESTRUCTURAFORMULARIO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los ESTRUCTURAFORMULARIO";
-    public static final String ZONA_NO_ENCONTRADO_MENSAGE = "ZONA no  encontrado";
-    public static final String ZONA_AGREGAR_EXECPTION = "Error agregando ZONA";
-    public static final String ZONA_ACTUALIZAR_EXECPTION = "Error actualizando ZONA";
-    public static final String ZONA_ELIMINAR_EXECPTION = "Error eliminando ZONA";
-    public static final String ZONA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando ZONA por clave :";
-    public static final String ZONA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los ZONA";
+
+
+    public static final String ZONA_ENTRADA_INVALIDA_MENSAGE = "Entrada de ZONA invalida.";
+    public static final String ZONA_DUPLICADO_MENSAGE = "Recurso  ZONA ya existe.";
+    public static final String ZONA_NO_ENCONTRADO_MENSAGE = "Recurso ZONA no  encontrado";
+    public static final String ZONA_AGREGAR_MENSAJE = "Error Interno agregando Recurso ZONA";
+    public static final String ZONA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ZONA";
+    public static final String ZONA_ACTUALIZAR_MENSAJE = "Error actualizando Recurso ZONA";
+    public static final String ZONA_ELIMINAR_MENSAJE = "Error eliminando Recurso ZONA";
+    public static final String ZONA_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso ZONA por clave :";
+    public static final String ZONA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ZONA";
+    public static final String ZONA_FILTRAR_MENSAJE = "Error filtrando ZONA";
+
     public static final String TIPOPRODUCTO_NO_ENCONTRADO_MENSAGE = "TIPOPRODUCTO no  encontrado";
     public static final String TIPOPRODUCTO_AGREGAR_EXECPTION = "Error agregando TIPOPRODUCTO";
     public static final String TIPOPRODUCTO_ACTUALIZAR_EXECPTION = "Error actualizando TIPOPRODUCTO";
@@ -149,5 +162,6 @@ public class Constantes {
     public static final String SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso SECTOR por clave :";
     public static final String SECTOR_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SECTOR";
     public static final String SECTOR_FILTRAR_MENSAJE = "Error filtrando SECTOR";
+
 
 }

@@ -7,18 +7,63 @@
         <result property="descripcionZona" column="znas_dsc"/>
     </resultMap>
 
+    <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="zonaResultMap">
         SELECT znas_id, znas_dsc FROM ${schema}zonas WHERE znas_id = #{id}
     </select>
 
+   <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="zonaResultMap">
         SELECT znas_id, znas_dsc FROM ${schema}zonas
     </select>
 
-    <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
-        INSERT INTO ${schema}zonas (znas_id, znas_dsc) VALUES (#{id}, #{descripcionZona})
-    </insert>
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="zonaResultMap">
+        SELECT * FROM ${schema}zonas
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND znas_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionZona != null and filtro.descripcionZona != ''">
+                    AND LOWER(znas_dsc) LIKE '%' || LOWER(#{filtro.descripcionZona}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY znas_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionZona'">ORDER BY znas_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY znas_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}zonas
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND znas_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionZona != null and filtro.descripcionZona != ''">
+                    AND LOWER(znas_dsc) LIKE '%' || LOWER(#{filtro.descripcionZona}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Zona" affectData="true" flushCache="true">
+        INSERT INTO ${schema}zonas  (znas_dsc)
+        VALUES (#{descripcionZona})
+        returning znas_id as id, znas_dsc as descripcionZona
+    </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Zona">
@@ -30,4 +75,28 @@
         DELETE FROM ${schema}zonas WHERE znas_id = #{id}
     </delete>
 
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}zonas (znas_dsc) VALUES
+        <foreach item="zona" collection="zonaLote" separator=",">
+            (#{zona.descripcionZona})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='zona' collection='zonaLote' separator=';'>
+            UPDATE ${schema}zonas
+            SET znas_dsc = #{zona.descripcionZona}
+            WHERE znas_id = #{zona.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}zonas WHERE znas_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

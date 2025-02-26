@@ -1,0 +1,64 @@
+package com.elitsoft.servicampo.service.core.filter.entity;
+
+import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.filter.ZonaFiltro;
+import com.elitsoft.servicampo.mapper.ZonaMapper;
+import com.elitsoft.servicampo.mapstruct.ZonaMapStruct;
+import com.elitsoft.servicampo.utils.Constantes;
+import com.elitsoft.servicampo.utils.PagingAndSorting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ZonaFiltroService {
+
+    @Autowired
+    private ZonaMapper zonaMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
+
+    @Autowired
+    private ZonaMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
+
+    private static final Logger logeador = LoggerFactory.getLogger(ZonaFiltroService.class); //Logback
+
+    /** Ejecuta filtro dinamico y paginacion para Zona
+     * @param filtro clase que tiene los atributos a filtrar
+     * @param paginado clase que tiene los atributos de paginacion
+     * @return List<ZonaDto> lista de entidades Zona
+     * @throws BaseDatosException si la entrada LotePaginado tiene errores.
+     */
+    public List<ZonaDto> filtrar(ZonaFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+        logeador.debug("filtrar()");
+
+        try {
+            int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
+            
+            return mapper.toDtoList(zonaMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
+        }  catch (DataAccessException e) {
+            logeador.error("{}, {}, {}, {}",Constantes.ZONA_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
+            throw new BaseDatosException(Constantes.ZONA_FILTRAR_MENSAJE, e);
+        }
+
+    }
+
+    /**
+     * Cuenta los registros que coinciden con el filtro dinamico para Zona
+     * @param filtro clase que tiene los atributos a filtrar
+     * @return int cantidad de registros que retorna el filtro
+     */
+    public int contarFiltrar(ZonaFiltro filtro) throws BaseDatosException {
+        logeador.debug("contarFiltrar()");
+
+        try {
+            return zonaMapper.contarFiltrar(filtro);
+        }  catch (DataAccessException e) {
+            logeador.error("{}, {}, {}",Constantes.ZONA_FILTRAR_MENSAJE,  filtro.toString(), e, e);
+            throw new BaseDatosException(Constantes.ZONA_FILTRAR_MENSAJE, e);
+        }
+    }
+}

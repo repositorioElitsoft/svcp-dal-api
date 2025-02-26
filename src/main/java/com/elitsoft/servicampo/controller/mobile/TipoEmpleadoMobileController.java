@@ -27,24 +27,57 @@ public class TipoEmpleadoMobileController {
     @Autowired
     private TipoEmpleadoMobileService tipoempleadoMobileService;
 
-    private static final Logger logeador = LoggerFactory.getLogger(TipoEmpleadoMobileController.class);
+    private static final Logger logeador = LoggerFactory.getLogger(TipoEmpleadoMobileController.class); //Logback
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un tipoempleado", description = "Agrega un nuevo tipoempleado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "TipoEmpleado agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "TipoEmpleado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody TipoEmpleadoDto tipoempleadoDto) {
+    public ResponseEntity<TipoEmpleadoDto> agregar(@RequestBody TipoEmpleadoDto tipoempleadoDto) {
         logeador.debug("agregar() tipoempleado");
 
         try {
-            tipoempleadoMobileService.agregar(tipoempleadoDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(tipoempleadoMobileService.agregar(tipoempleadoDto)); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
+    @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega lista de tipoempleado", description = "Agrega una lista de nuevos tipoempleado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Lista TipoEmpleado agregados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "TipoEmpleado ya Existe"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> agregarLote(@RequestBody List<TipoEmpleadoDto> tipoempleadosDto) {
+        logeador.debug("agregarLote() tipoempleado");
+
+        try {
+            tipoempleadoMobileService.agregarLote(tipoempleadosDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
 
     }
@@ -53,6 +86,7 @@ public class TipoEmpleadoMobileController {
     @Operation(summary = "Actualiza un tipoempleado", description = "Actualiza un tipoempleado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "TipoEmpleado actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "TipoEmpleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
@@ -61,13 +95,37 @@ public class TipoEmpleadoMobileController {
 
         try {
             tipoempleadoMobileService.actualizar(id, tipoempleadoDto);
-            return ResponseEntity.noContent().build();
-        } catch (TipoEmpleadoNoEncontradoException e) {
-            logeador.error(Constantes.TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @PutMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Actualiza lista de tipoempleado", description = "Actualiza una lista de tipoempleado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lote TipoEmpleado actualizados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoEmpleadoDto> tipoempleadoLoteDto) {
+        logeador.debug("actualizarLote() tipoempleado");
+
+        try {
+            tipoempleadoMobileService.actualizarLote(tipoempleadoLoteDto);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
     }
 
@@ -75,6 +133,8 @@ public class TipoEmpleadoMobileController {
     @Operation(summary = "Elimina un tipoempleado", description = "Elimina un tipoempleado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "TipoEmpleado eliminado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "404", description = "TipoEmpleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
@@ -82,15 +142,38 @@ public class TipoEmpleadoMobileController {
 
         try {
             tipoempleadoMobileService.eliminar(id);
-        } catch (TipoEmpleadoNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE);
-        } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
 
-        return ResponseEntity.noContent().build();
+    @DeleteMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Elimina Lista de tipoempleado", description = "Elimina una Lista de tipoempleado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lista TipoEmpleado eliminados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> eliminarLote(@RequestBody List<Long> idLote) {
+        logeador.debug("eliminarLote() tipoempleado");
+
+        try {
+            tipoempleadoMobileService.eliminarLote(idLote);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
     }
 
     @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -105,19 +188,12 @@ public class TipoEmpleadoMobileController {
 
         try {
             TipoEmpleadoDto tipoempleadoDto = tipoempleadoMobileService.encontrarPorClave(id);
-            if (tipoempleadoDto != null) {
-                return ResponseEntity.ok(tipoempleadoDto);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return ResponseEntity.ok(tipoempleadoDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
-        } catch (TipoEmpleadoNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.notFound().build(); // Retorna  404 Not Found
         }
-
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -133,11 +209,10 @@ public class TipoEmpleadoMobileController {
 
         try {
             tipoempleados = tipoempleadoMobileService.obtenerTodos();
+             return ResponseEntity.ok(tipoempleados); // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
-
-        return ResponseEntity.ok(tipoempleados);
+       
     }
 }

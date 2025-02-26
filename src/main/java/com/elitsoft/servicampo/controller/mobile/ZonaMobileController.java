@@ -27,24 +27,57 @@ public class ZonaMobileController {
     @Autowired
     private ZonaMobileService zonaMobileService;
 
-    private static final Logger logeador = LoggerFactory.getLogger(ZonaMobileController.class);
+    private static final Logger logeador = LoggerFactory.getLogger(ZonaMobileController.class); //Logback
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un zona", description = "Agrega un nuevo zona")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Zona agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "Zona ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody ZonaDto zonaDto) {
+    public ResponseEntity<ZonaDto> agregar(@RequestBody ZonaDto zonaDto) {
         logeador.debug("agregar() zona");
 
         try {
-            zonaMobileService.agregar(zonaDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(zonaMobileService.agregar(zonaDto)); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
+    @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega lista de zona", description = "Agrega una lista de nuevos zona")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Lista Zona agregados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "Zona ya Existe"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> agregarLote(@RequestBody List<ZonaDto> zonasDto) {
+        logeador.debug("agregarLote() zona");
+
+        try {
+            zonaMobileService.agregarLote(zonasDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
 
     }
@@ -53,6 +86,7 @@ public class ZonaMobileController {
     @Operation(summary = "Actualiza un zona", description = "Actualiza un zona")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Zona actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "Zona no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
@@ -61,13 +95,37 @@ public class ZonaMobileController {
 
         try {
             zonaMobileService.actualizar(id, zonaDto);
-            return ResponseEntity.noContent().build();
-        } catch (ZonaNoEncontradoException e) {
-            logeador.error(Constantes.ZONA_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.ZONA_NO_ENCONTRADO_MENSAGE);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @PutMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Actualiza lista de zona", description = "Actualiza una lista de zona")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lote Zona actualizados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> actualizarLote(@RequestBody List<ZonaDto> zonaLoteDto) {
+        logeador.debug("actualizarLote() zona");
+
+        try {
+            zonaMobileService.actualizarLote(zonaLoteDto);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
     }
 
@@ -75,6 +133,8 @@ public class ZonaMobileController {
     @Operation(summary = "Elimina un zona", description = "Elimina un zona")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Zona eliminado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "404", description = "Zona no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
@@ -82,15 +142,38 @@ public class ZonaMobileController {
 
         try {
             zonaMobileService.eliminar(id);
-        } catch (ZonaNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.ZONA_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.ZONA_NO_ENCONTRADO_MENSAGE);
-        } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
 
-        return ResponseEntity.noContent().build();
+    @DeleteMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Elimina Lista de zona", description = "Elimina una Lista de zona")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lista Zona eliminados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> eliminarLote(@RequestBody List<Long> idLote) {
+        logeador.debug("eliminarLote() zona");
+
+        try {
+            zonaMobileService.eliminarLote(idLote);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
     }
 
     @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -105,19 +188,12 @@ public class ZonaMobileController {
 
         try {
             ZonaDto zonaDto = zonaMobileService.encontrarPorClave(id);
-            if (zonaDto != null) {
-                return ResponseEntity.ok(zonaDto);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return ResponseEntity.ok(zonaDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
-        } catch (ZonaNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.ZONA_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.notFound().build(); // Retorna  404 Not Found
         }
-
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -133,11 +209,10 @@ public class ZonaMobileController {
 
         try {
             zonas = zonaMobileService.obtenerTodos();
+             return ResponseEntity.ok(zonas); // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
-
-        return ResponseEntity.ok(zonas);
+       
     }
 }
