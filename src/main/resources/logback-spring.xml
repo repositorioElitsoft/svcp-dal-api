@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <!-- Console output pattern (customize as needed) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -37,7 +41,7 @@
         <appender-ref ref="FILE"/> </root>
 
     <!-- Para mostrar las sentencias sql ejecutadas por mybatis incluyendo parametros : INFO, DEBUG y TRACE -->
-    <logger name="com.elitsoft.servicampo.mapper" level="DEBUG" additivity="false">
+    <logger name="com.elitsoft.servicampo.mapper.DemoMapper" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 

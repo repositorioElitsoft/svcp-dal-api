@@ -26,7 +26,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     public static UserPrincipal create(Empleado empleado) {  // Static factory method (Good Practice)
-        GrantedAuthority authority = new SimpleGrantedAuthority(empleado.getRole().getNombreRol());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + empleado.getRole().getNombreRol());
 
         return new UserPrincipal(
                 empleado.getId(),

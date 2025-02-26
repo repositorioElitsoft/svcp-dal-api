@@ -7,14 +7,17 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
 
     @Value("${jwt.secret}") // Your JWT secret key (keep it secure!)
-    private String jwtSecret;
+    public String jwtSecret;
 
     @Value("${jwt.expiration}") // JWT expiration time in milliseconds
     private long jwtExpirationMs;
@@ -25,9 +28,15 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
+        // Extract roles from UserPrincipal
+        List<String> roles = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
         return Jwts.builder()
                 .setSubject(Long.toString(userPrincipal.getId())) // User ID as subject
                 .claim("username", userPrincipal.getUsername()) // Add other claims if needed
+                .claim("authorities", roles) // Add roles as a claim
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret) // Sign with your secret

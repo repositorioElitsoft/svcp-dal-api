@@ -4,6 +4,7 @@ import com.elitsoft.#app_name#.domain.dto.core.#Base#Dto;
 import com.elitsoft.#app_name#.exceptions.BaseDatosException;
 import com.elitsoft.#app_name#.filter.#Base#Filtro;
 import com.elitsoft.#app_name#.mapper.#Base#Mapper;
+import com.elitsoft.servicampo.mapstruct.#Base#MapStruct;
 import com.elitsoft.#app_name#.utils.Constantes;
 import com.elitsoft.#app_name#.utils.PagingAndSorting;
 import org.slf4j.Logger;

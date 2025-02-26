@@ -63,8 +63,8 @@
 
     <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
       <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.ClasificacionCliente" affectData="true" flushCache="true">
-        INSERT INTO ${schema}clasificaciones_clientes (clcl_id, clcl_dsc)
-        VALUES (#{id}, #{clasificacionClienteDesc})
+        INSERT INTO ${schema}clasificaciones_clientes (clcl_dsc)
+        VALUES (#{clasificacionClienteDesc})
         returning clcl_id as id, clcl_dsc as clasificacionClienteDesc
     </select>
 
