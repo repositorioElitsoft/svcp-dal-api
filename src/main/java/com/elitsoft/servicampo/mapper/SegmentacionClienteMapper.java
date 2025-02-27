@@ -16,31 +16,31 @@ public interface SegmentacionClienteMapper {
 
     /**
      * Agrega un SegmentacionCliente a la base de datos.
-     * @param segmentacioncliente La entidad SegmentacionCliente a agregar.
+     * @param segmentacionCliente La entidad SegmentacionCliente a agregar.
      * @return SegmentacionCliente con campo autogenerado.
      */
-    SegmentacionCliente agregar(SegmentacionCliente segmentacioncliente);
+    SegmentacionCliente agregar(SegmentacionCliente segmentacionCliente);
 
     /**
      * Agrega Lote SegmentacionCliente a la base de datos.
-     * @param segmentacionclienteLote Lista entidad SegmentacionCliente a agregar.
+     * @param segmentacionClienteLote Lista entidad SegmentacionCliente a agregar.
      * @return int cantidad de registros agregados
      */
-    int agregarLote(List<SegmentacionCliente> segmentacionclienteLote);
+    int agregarLote(List<SegmentacionCliente> segmentacionClienteLote);
 
     /**
      * Actualiza un SegmentacionCliente en la base de datos.
-     * @param segmentacioncliente La entidad SegmentacionCliente a actualizar.
+     * @param segmentacionCliente La entidad SegmentacionCliente a actualizar.
      * @return El numero de registro actualizados.
      */
-    int actualizar(SegmentacionCliente segmentacioncliente);
+    int actualizar(SegmentacionCliente segmentacionCliente);
 
     /**
      * Actualiza Lote SegmentacionCliente a la base de datos.
-     * @param segmentacionclienteLote Lista entidad SegmentacionCliente a agregar.
+     * @param segmentacionClienteLote Lista entidad SegmentacionCliente a agregar.
      * @return int cantidad de registros actualizados.
      */
-    int actualizarLote(List<SegmentacionCliente> segmentacionclienteLote);
+    int actualizarLote(List<SegmentacionCliente> segmentacionClienteLote);
 
     /**
      * Elimina un SegmentacionCliente en la base de datos por su clave.

@@ -16,31 +16,31 @@ public interface AgrupacionComercialMapper {
 
     /**
      * Agrega un AgrupacionComercial a la base de datos.
-     * @param agrupacioncomercial La entidad AgrupacionComercial a agregar.
+     * @param agrupacionComercial La entidad AgrupacionComercial a agregar.
      * @return AgrupacionComercial con campo autogenerado.
      */
-    AgrupacionComercial agregar(AgrupacionComercial agrupacioncomercial);
+    AgrupacionComercial agregar(AgrupacionComercial agrupacionComercial);
 
     /**
      * Agrega Lote AgrupacionComercial a la base de datos.
-     * @param agrupacioncomercialLote Lista entidad AgrupacionComercial a agregar.
+     * @param agrupacionComercialLote Lista entidad AgrupacionComercial a agregar.
      * @return int cantidad de registros agregados
      */
-    int agregarLote(List<AgrupacionComercial> agrupacioncomercialLote);
+    int agregarLote(List<AgrupacionComercial> agrupacionComercialLote);
 
     /**
      * Actualiza un AgrupacionComercial en la base de datos.
-     * @param agrupacioncomercial La entidad AgrupacionComercial a actualizar.
+     * @param agrupacionComercial La entidad AgrupacionComercial a actualizar.
      * @return El numero de registro actualizados.
      */
-    int actualizar(AgrupacionComercial agrupacioncomercial);
+    int actualizar(AgrupacionComercial agrupacionComercial);
 
     /**
      * Actualiza Lote AgrupacionComercial a la base de datos.
-     * @param agrupacioncomercialLote Lista entidad AgrupacionComercial a agregar.
+     * @param agrupacionComercialLote Lista entidad AgrupacionComercial a agregar.
      * @return int cantidad de registros actualizados.
      */
-    int actualizarLote(List<AgrupacionComercial> agrupacioncomercialLote);
+    int actualizarLote(List<AgrupacionComercial> agrupacionComercialLote);
 
     /**
      * Elimina un AgrupacionComercial en la base de datos por su clave.

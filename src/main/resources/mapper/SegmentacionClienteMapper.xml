@@ -90,10 +90,10 @@
 
     <!-- Sentencia SQL de Actualizar LOTE-->
     <update id="actualizarLote" parameterType="java.util.List" >
-        <foreach item='segmentacionCliente' collection='segmentacionclienteLote' separator=';'>
+        <foreach item='segmentacionCliente' collection='segmentacionClienteLote' separator=';'>
             UPDATE ${schema}segmentacion_clientes
-            SET sgcl_dsc = #{segmentacioncliente.descripcion}
-            WHERE sgcl_id = #{segmentacioncliente.id}
+            SET sgcl_dsc = #{segmentacionCliente.descripcion}
+            WHERE sgcl_id = #{segmentacionCliente.id}
         </foreach>
     </update>
 
