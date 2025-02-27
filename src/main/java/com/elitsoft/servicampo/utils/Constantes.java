@@ -192,4 +192,14 @@ public class Constantes {
     public static final String TIPOSERVICIO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOSERVICIO";
     public static final String TIPOSERVICIO_FILTRAR_MENSAJE = "Error filtrando TIPOSERVICIO";
 
+    public static final String TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOCLIENTE invalida.";
+    public static final String TIPOCLIENTE_DUPLICADO_MENSAGE = "Recurso  TIPOCLIENTE ya existe.";
+    public static final String TIPOCLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso TIPOCLIENTE no  encontrado";
+    public static final String TIPOCLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOCLIENTE";
+    public static final String TIPOCLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOCLIENTE";
+    public static final String TIPOCLIENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPOCLIENTE";
+    public static final String TIPOCLIENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPOCLIENTE";
+    public static final String TIPOCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOCLIENTE por clave :";
+    public static final String TIPOCLIENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOCLIENTE";
+    public static final String TIPOCLIENTE_FILTRAR_MENSAJE = "Error filtrando TIPOCLIENTE";
 }

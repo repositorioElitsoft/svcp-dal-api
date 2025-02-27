@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TipoClienteMapper">
+
+    <resultMap id="tipoClienteResultMap" type="com.elitsoft.servicampo.domain.entity.TipoCliente">
+        <id property="id" column="tpcl_id" />
+        <result property="nombre" column="tpcl_nombre" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="tipoClienteResultMap">
+        SELECT tpcl_id, tpcl_nombre
+        FROM ${schema}tipos_clientes
+        WHERE tpcl_id = #{id}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="tipoClienteResultMap">
+        SELECT tpcl_id, tpcl_nombre
+        FROM ${schema}tipos_clientes
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="tipoClienteResultMap">
+        SELECT * FROM ${schema}tipos_clientes
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND tpcl_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(tpcl_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY tpcl_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombre'">ORDER BY tpcl_nombre ${direccionOrden}</when>
+                <otherwise>ORDER BY tpcl_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}tipos_clientes
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND tpcl_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(tpcl_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregarReturning" resultType="com.elitsoft.servicampo.domain.entity.TipoCliente" affectData="true" flushCache="true">
+        INSERT INTO ${schema}tipos_clientes (tpcl_nombre)
+        VALUES (#{nombre})
+        returning tpcl_id as id, tpcl_nombre as nombre
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TipoCliente">
+        UPDATE ${schema}tipos_clientes
+        SET tpcl_nombre = #{nombre}
+        WHERE tpcl_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}tipos_clientes
+        WHERE tpcl_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}tipos_clientes (tpcl_nombre) VALUES
+        <foreach item="tipoCliente" collection="tipoClienteLote" separator=",">
+            (#{tipoCliente.nombre})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='tipoCliente' collection='tipoClienteLote' separator=';'>
+            UPDATE ${schema}tipos_clientes
+            SET tpcl_nombre = #{tipoCliente.nombre}
+            WHERE tpcl_id = #{tipoCliente.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}tipos_clientes WHERE tpcl_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

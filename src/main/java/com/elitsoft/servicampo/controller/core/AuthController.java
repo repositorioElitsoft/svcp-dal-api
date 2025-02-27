@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.elitsoft.servicampo.security.JwtTokenProvider;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 
 @RestController
@@ -33,13 +33,6 @@ public class AuthController {
     @PostMapping("/login" )
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authRequest) {
 
-
-        //String password = "1234";
-
-        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        //String hashedPassword = passwordEncoder.encode(password);
-
-        //System.out.println("BCrypt hash: " + hashedPassword);
 
         try {
             System.out.println("/login mehtod()");
