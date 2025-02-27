@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.mobile;
 import com.elitsoft.servicampo.domain.dto.core.TrabajoTareaDto;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.TrabajoTareaMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,72 +24,159 @@ import java.util.List;
 public class TrabajoTareaMobileController {
 
     @Autowired
-    private TrabajoTareaMobileService trabajotareaMobileService;
+    private TrabajoTareaMobileService trabajoTareaMobileService;
 
-    private static final Logger logeador = LoggerFactory.getLogger(TrabajoTareaMobileController.class);
+    private static final Logger logeador = LoggerFactory.getLogger(TrabajoTareaMobileController.class); //Logback
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un trabajotarea", description = "Agrega un nuevo trabajotarea")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "TrabajoTarea agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "TrabajoTarea ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody TrabajoTareaDto trabajotareaDto) {
+    public ResponseEntity<String> agregar(@RequestBody TrabajoTareaDto trabajoTareaDto) {
         logeador.debug("agregar() trabajotarea");
 
         try {
-            trabajotareaMobileService.agregar(trabajotareaDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            trabajoTareaMobileService.agregar(trabajoTareaDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
 
     }
 
-    @PutMapping(value = "/{trabajoId}/{tareaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega lista de trabajotarea", description = "Agrega una lista de nuevos trabajotarea")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Lista TrabajoTarea agregados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "TrabajoTarea ya Existe"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> agregarLote(@RequestBody List<TrabajoTareaDto> trabajoTareaLoteDto) {
+        logeador.debug("agregarLote() trabajotarea");
+
+        try {
+            trabajoTareaMobileService.agregarLote(trabajoTareaLoteDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
+    @PutMapping(value = "/{trabajoId}/tarea/{tareaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Actualiza un trabajotarea", description = "Actualiza un trabajotarea")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "TrabajoTarea actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "TrabajoTarea no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long trabajoId, @PathVariable Long tareaId, @RequestBody TrabajoTareaDto trabajotareaDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long trabajoId, @PathVariable Long tareaId,  @RequestBody TrabajoTareaDto trabajoTareaDto) {
         logeador.debug("actualizar() trabajotarea");
 
         try {
-            trabajotareaMobileService.actualizar(trabajoId,tareaId, trabajotareaDto);
-            return ResponseEntity.noContent().build();
-        } catch (TrabajoTareaNoEncontradoException e) {
-            logeador.error(Constantes.TRABAJOTAREA_NO_ENCONTRADO_MENSAGE + ": {}, {}", trabajoId,tareaId );
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.TRABAJOTAREA_NO_ENCONTRADO_MENSAGE);
+            trabajoTareaMobileService.actualizar(trabajoId, tareaId, trabajoTareaDto);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
     }
 
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Actualiza lista de trabajotarea", description = "Actualiza una lista de trabajotarea")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lote TrabajoTarea actualizados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TrabajoTareaDto> trabajoTareaLoteDto) {
+        logeador.debug("actualizarLote() trabajotarea");
+
+        try {
+            trabajoTareaMobileService.actualizarLote(trabajoTareaLoteDto);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @DeleteMapping(value = "/{trabajoId}/tarea/{tareaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Elimina un trabajotarea", description = "Elimina un trabajotarea")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "TrabajoTarea eliminado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "404", description = "TrabajoTarea no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminar(@PathVariable Long trabajoId, @PathVariable Long tareaId) {
-        logeador.debug("eliminar() trabajotarea: {}, {}", trabajoId,tareaId );
+        logeador.debug("eliminar() trabajotarea: {}, {}", trabajoId, tareaId);
 
         try {
-            trabajotareaMobileService.eliminar(trabajoId,tareaId );
-        } catch (TrabajoTareaNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.TRABAJOTAREA_NO_ENCONTRADO_MENSAGE);
-        } catch (BaseDatosException e) {
-            return ResponseEntity.internalServerError().build();
+            trabajoTareaMobileService.eliminar(trabajoId,tareaId);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
-
-        return ResponseEntity.noContent().build();
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
     }
 
-    @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Elimina Lista de trabajotarea", description = "Elimina una Lista de trabajotarea")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lista TrabajoTarea eliminados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> eliminarLote(@RequestBody List<Long> idLote) {
+        logeador.debug("eliminarLote() trabajotarea");
+
+        try {
+            trabajoTareaMobileService.eliminarLote(idLote);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @GetMapping(value = "/{trabajoId}/tarea/{tareaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Encuentra un trabajotarea", description = "Encuentra un trabajotarea por su clave")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "TrabajoTarea encontrado exitosamente"),
@@ -98,21 +184,16 @@ public class TrabajoTareaMobileController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<TrabajoTareaDto> encontrarPorClave(@PathVariable Long trabajoId, @PathVariable Long tareaId) {
-        logeador.debug("encontrarPorClave(): {}, {}", trabajoId, tareaId );
+        logeador.debug("encontrarPorClave(): {},  {}", trabajoId, tareaId );
 
         try {
-            TrabajoTareaDto trabajotareaDto = trabajotareaMobileService.encontrarPorClave(trabajoId, tareaId);
-            if (trabajotareaDto != null) {
-                return ResponseEntity.ok(trabajotareaDto);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            TrabajoTareaDto trabajotareaDto = trabajoTareaMobileService.encontrarPorClave(trabajoId, tareaId);
+            return ResponseEntity.ok(trabajotareaDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
-            return ResponseEntity.internalServerError().build();
-        } catch (TrabajoTareaNoEncontradoException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.notFound().build(); // Retorna  404 Not Found
         }
-
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -127,12 +208,11 @@ public class TrabajoTareaMobileController {
         List<TrabajoTareaDto> trabajotareas = null;
 
         try {
-            trabajotareas = trabajotareaMobileService.obtenerTodos();
+            trabajotareas = trabajoTareaMobileService.obtenerTodos();
+             return ResponseEntity.ok(trabajotareas); // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
-
-        return ResponseEntity.ok(trabajotareas);
+       
     }
 }

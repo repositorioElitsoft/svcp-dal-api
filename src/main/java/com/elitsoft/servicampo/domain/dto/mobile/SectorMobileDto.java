@@ -13,6 +13,7 @@ public class SectorMobileDto  implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 4933043323172469303L;
+
     private Long id;
     private String descripcionSector;
     private Zona zona;

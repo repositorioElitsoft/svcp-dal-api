@@ -65,11 +65,11 @@ public class SectorMobileController {
             @ApiResponse(responseCode = "409", description = "Sector ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<SectorDto> sectorsDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<SectorDto> sectorsLoteDto) {
         logeador.debug("agregarLote() sector");
 
         try {
-            sectorMobileService.agregarLote(sectorsDto);
+            sectorMobileService.agregarLote(sectorsLoteDto);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {

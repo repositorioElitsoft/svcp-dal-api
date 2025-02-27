@@ -92,31 +92,49 @@ public class Constantes {
     public static final String ZONA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ZONA";
     public static final String ZONA_FILTRAR_MENSAJE = "Error filtrando ZONA";
 
-    public static final String TIPOPRODUCTO_NO_ENCONTRADO_MENSAGE = "TIPOPRODUCTO no  encontrado";
-    public static final String TIPOPRODUCTO_AGREGAR_EXECPTION = "Error agregando TIPOPRODUCTO";
-    public static final String TIPOPRODUCTO_ACTUALIZAR_EXECPTION = "Error actualizando TIPOPRODUCTO";
-    public static final String TIPOPRODUCTO_ELIMINAR_EXECPTION = "Error eliminando TIPOPRODUCTO";
-    public static final String TIPOPRODUCTO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TIPOPRODUCTO por clave :";
-    public static final String TIPOPRODUCTO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TIPOPRODUCTO";
-    public static final String TAREA_NO_ENCONTRADO_MENSAGE = "TAREA no  encontrado";
-    public static final String TAREA_AGREGAR_EXECPTION = "Error agregando TAREA";
-    public static final String TAREA_ACTUALIZAR_EXECPTION = "Error actualizando TAREA";
-    public static final String TAREA_ELIMINAR_EXECPTION = "Error eliminando TAREA";
-    public static final String TAREA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TAREA por clave :";
-    public static final String TAREA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TAREA";
-    public static final String TAREA_FILTRAR_EXECPTION = "Error Filtrando  TAREA";
-    public static final String TRABAJO_NO_ENCONTRADO_MENSAGE = "TRABAJO no  encontrado";
-    public static final String TRABAJO_AGREGAR_EXECPTION = "Error agregando TRABAJO";
-    public static final String TRABAJO_ACTUALIZAR_EXECPTION = "Error actualizando TRABAJO";
-    public static final String TRABAJO_ELIMINAR_EXECPTION = "Error eliminando TRABAJO";
-    public static final String TRABAJO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TRABAJO por clave :";
-    public static final String TRABAJO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TRABAJO";
-    public static final String TRABAJOTAREA_NO_ENCONTRADO_MENSAGE = "TRABAJOTAREA no  encontrado";
-    public static final String TRABAJOTAREA_AGREGAR_EXECPTION = "Error agregando TRABAJOTAREA";
-    public static final String TRABAJOTAREA_ACTUALIZAR_EXECPTION = "Error actualizando TRABAJOTAREA";
-    public static final String TRABAJOTAREA_ELIMINAR_EXECPTION = "Error eliminando TRABAJOTAREA";
-    public static final String TRABAJOTAREA_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando TRABAJOTAREA por clave :";
-    public static final String TRABAJOTAREA_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los TRABAJOTAREA";
+    public static final String TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOPRODUCTO invalida.";
+    public static final String TIPOPRODUCTO_DUPLICADO_MENSAGE = "Recurso  TIPOPRODUCTO ya existe.";
+    public static final String TIPOPRODUCTO_NO_ENCONTRADO_MENSAGE = "Recurso TIPOPRODUCTO no  encontrado";
+    public static final String TIPOPRODUCTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOPRODUCTO";
+    public static final String TIPOPRODUCTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOPRODUCTO";
+    public static final String TIPOPRODUCTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPOPRODUCTO";
+    public static final String TIPOPRODUCTO_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPOPRODUCTO";
+    public static final String TIPOPRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOPRODUCTO por clave :";
+    public static final String TIPOPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOPRODUCTO";
+    public static final String TIPOPRODUCTO_FILTRAR_MENSAJE = "Error filtrando TIPOPRODUCTO";
+
+    public static final String TAREA_ENTRADA_INVALIDA_MENSAGE = "Entrada de TAREA invalida.";
+    public static final String TAREA_DUPLICADO_MENSAGE = "Recurso  TAREA ya existe.";
+    public static final String TAREA_NO_ENCONTRADO_MENSAGE = "Recurso TAREA no  encontrado";
+    public static final String TAREA_AGREGAR_MENSAJE = "Error Interno agregando Recurso TAREA";
+    public static final String TAREA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TAREA";
+    public static final String TAREA_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TAREA";
+    public static final String TAREA_ELIMINAR_MENSAJE = "Error eliminando Recurso TAREA";
+    public static final String TAREA_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TAREA por clave :";
+    public static final String TAREA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TAREA";
+    public static final String TAREA_FILTRAR_MENSAJE = "Error filtrando TAREA";
+
+    public static final String TRABAJO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TRABAJO invalida.";
+    public static final String TRABAJO_DUPLICADO_MENSAGE = "Recurso  TRABAJO ya existe.";
+    public static final String TRABAJO_NO_ENCONTRADO_MENSAGE = "Recurso TRABAJO no  encontrado";
+    public static final String TRABAJO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TRABAJO";
+    public static final String TRABAJO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TRABAJO";
+    public static final String TRABAJO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TRABAJO";
+    public static final String TRABAJO_ELIMINAR_MENSAJE = "Error eliminando Recurso TRABAJO";
+    public static final String TRABAJO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TRABAJO por clave :";
+    public static final String TRABAJO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TRABAJO";
+    public static final String TRABAJO_FILTRAR_MENSAJE = "Error filtrando TRABAJO";
+
+    public static final String TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE = "Entrada de TRABAJOTAREA invalida.";
+    public static final String TRABAJOTAREA_DUPLICADO_MENSAGE = "Recurso  TRABAJOTAREA ya existe.";
+    public static final String TRABAJOTAREA_NO_ENCONTRADO_MENSAGE = "Recurso TRABAJOTAREA no  encontrado";
+    public static final String TRABAJOTAREA_AGREGAR_MENSAJE = "Error Interno agregando Recurso TRABAJOTAREA";
+    public static final String TRABAJOTAREA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TRABAJOTAREA";
+    public static final String TRABAJOTAREA_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TRABAJOTAREA";
+    public static final String TRABAJOTAREA_ELIMINAR_MENSAJE = "Error eliminando Recurso TRABAJOTAREA";
+    public static final String TRABAJOTAREA_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TRABAJOTAREA por clave :";
+    public static final String TRABAJOTAREA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TRABAJOTAREA";
+    public static final String TRABAJOTAREA_FILTRAR_MENSAJE = "Error filtrando TRABAJOTAREA";
 
     public static final String CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de CLASIFICACIONCLIENTE invalida.";
     public static final String CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE = "Recurso  CLASIFICACIONCLIENTE ya existe.";
@@ -163,5 +181,15 @@ public class Constantes {
     public static final String SECTOR_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SECTOR";
     public static final String SECTOR_FILTRAR_MENSAJE = "Error filtrando SECTOR";
 
+    public static final String TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOSERVICIO invalida.";
+    public static final String TIPOSERVICIO_DUPLICADO_MENSAGE = "Recurso  TIPOSERVICIO ya existe.";
+    public static final String TIPOSERVICIO_NO_ENCONTRADO_MENSAGE = "Recurso TIPOSERVICIO no  encontrado";
+    public static final String TIPOSERVICIO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOSERVICIO";
+    public static final String TIPOSERVICIO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOSERVICIO";
+    public static final String TIPOSERVICIO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPOSERVICIO";
+    public static final String TIPOSERVICIO_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPOSERVICIO";
+    public static final String TIPOSERVICIO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOSERVICIO por clave :";
+    public static final String TIPOSERVICIO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOSERVICIO";
+    public static final String TIPOSERVICIO_FILTRAR_MENSAJE = "Error filtrando TIPOSERVICIO";
 
 }

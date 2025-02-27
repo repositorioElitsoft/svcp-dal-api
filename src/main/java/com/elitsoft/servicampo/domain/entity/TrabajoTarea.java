@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,7 +15,10 @@ import lombok.Builder;
 /**
  *
  */
-public class TrabajoTarea {
+public class TrabajoTarea  implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 8630087261893726669L;
 
     private Long trabajoId;
     private Long tareaId;

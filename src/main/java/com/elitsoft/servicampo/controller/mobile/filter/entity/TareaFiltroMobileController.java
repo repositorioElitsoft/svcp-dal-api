@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TareaFiltroMobileController {
 
     @Autowired
-    private TareaFiltroMobileService tareaFiltroMobileService; //Logica de Negocio de Filtrado del Core Service
+    private TareaFiltroMobileService tareaFiltroMobileService; //Logica de Negocio de Filtrado del Mobile Service
 
     private static final Logger logeador = LoggerFactory.getLogger(TareaFiltroMobileController.class); //Logback
 

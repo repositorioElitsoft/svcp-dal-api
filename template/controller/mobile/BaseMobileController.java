@@ -90,11 +90,11 @@ public class #Base#MobileController {
             @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<#Base#Dto> #base#sDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<#Base#Dto> #base#LoteDto) {
         logeador.debug("agregarLote() #base#");
 
         try {
-            #base#MobileService.agregarLote(#base#sDto);
+            #base#MobileService.agregarLote(#base#LoteDto);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {

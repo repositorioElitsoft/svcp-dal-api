@@ -2,7 +2,9 @@ package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.TipoProductoDto;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
-import com.elitsoft.servicampo.exceptions.TipoProductoNoEncontradoException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TipoProductoMapper;
 import com.elitsoft.servicampo.mapstruct.TipoProductoMapStruct;
 import com.elitsoft.servicampo.service.core.TipoProductoService;
@@ -20,7 +22,7 @@ import java.util.List;
 public class TipoProductoMobileService {
 
     @Autowired
-    private TipoProductoMapper tipoproductoMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private TipoProductoMapper tipoproductoMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
     private TipoProductoService tipoproductoService; //Logica de Negocio del Core Service
@@ -28,57 +30,100 @@ public class TipoProductoMobileService {
     @Autowired
     private TipoProductoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
 
-    private static final Logger logeador = LoggerFactory.getLogger(TipoProductoMobileService.class);
+    private static final Logger logeador = LoggerFactory.getLogger(TipoProductoMobileService.class); //Logback
 
     /**
      * Agrega un nuevo TipoProducto.
-     * @param tipoproductoDto El TipoProducto DTO.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param tipoproductoDto el TipoProducto DTO.
+     * @return el TipoProducto DTO agregado con campo auto generado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
+     * @throws RecursoDuplicadoException si el recurso TipoProducto ya existe.
      */
-    public void agregar(TipoProductoDto tipoproductoDto) throws BaseDatosException {
+    public TipoProductoDto agregar(TipoProductoDto tipoproductoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() tipoproducto");
-        tipoproductoService.agregar(tipoproductoDto);
+
+        return tipoproductoService.agregar(tipoproductoDto);
+    }
+
+    /**
+     * Agrega Lote nuevos TipoProducto.
+     * @param tipoproductoLoteDto lista de TipoProducto DTO a agregar.
+     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
+     * @throws RecursoDuplicadoException si el recurso TipoProducto ya existe.
+     */
+    public void agregarLote(List<TipoProductoDto> tipoproductoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregarLote() tipoproducto");
+
+        tipoproductoService.agregarLote(tipoproductoLoteDto);
     }
 
     /**
      * Actualiza un TipoProducto existente.
-     * @param id La Clave de TipoProducto a actualizar.
-     * @param tipoproductoDto El TipoProducto DTO con informacion actualizada.
-     * @throws TipoProductoNoEncontradoException Si TipoProducto no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param id la Clave de TipoProducto a actualizar.
+     * @param tipoproductoDto el TipoProducto DTO con informacion actualizada.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si TipoProducto no es encontrado.
+     * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      */
-    public void actualizar(Long id, TipoProductoDto tipoproductoDto) throws BaseDatosException, TipoProductoNoEncontradoException {
+    public void actualizar(Long id, TipoProductoDto tipoproductoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() tipoproducto");
+
         tipoproductoService.actualizar(id, tipoproductoDto);
     }
 
     /**
-     * Elimina TipoProducto por Clave.
-     * @param id La Clave de TipoProducto a eliminar.
-     * @throws TipoProductoNoEncontradoException Si el TipoProducto no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * Actualiza Lote de TipoProducto existentes.
+     * @param tipoproductoLoteDto lista de TipoProducto DTO con datos a actualizar.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      */
-    public void eliminar(Long id) throws BaseDatosException, TipoProductoNoEncontradoException {
+    public void actualizarLote(List<TipoProductoDto> tipoproductoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("actualizarLote() tipoproducto");
+
+        tipoproductoService.actualizarLote(tipoproductoLoteDto);
+    }
+
+    /**
+     * Elimina TipoProducto por Clave.
+     * @param id la clave de TipoProducto a eliminar.
+     * @throws RecursoNoEncontradoException si el TipoProducto no es encontrado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipoproducto: {}", id);
         tipoproductoService.eliminar(id);
     }
 
     /**
-     * Encuentra un TipoProducto por Clave.
-     * @param id La Clave TipoProducto a encontrar.
-     * @return El TipoProducto DTO encontrado, o null si no es encontrado.
-     * @throws BaseDatosException Si Ocurre un error de base de datos.
-     * @throws TipoProductoNoEncontradoException Si TipoProducto no es encontrado.
+     * Elimina Lote TipoProducto por Clave.
+     * @param idLote lista de claves de TipoProducto a eliminar.
+     * @throws EntradaInvalidadException si la lista  TipoProducto esta vacia.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public TipoProductoDto encontrarPorClave(Long id) throws BaseDatosException, TipoProductoNoEncontradoException {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("eliminarLote()");
+
+        tipoproductoService.eliminarLote(idLote);
+    }
+
+    /**
+     * Encuentra un TipoProducto por Clave.
+     * @param id la clave TipoProducto a encontrar.
+     * @return el TipoProducto DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si TipoProducto no es encontrado.
+     */
+    public TipoProductoDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return tipoproductoService.encontrarPorClave(id);
     }
 
     /**
      * Obtiene todos los TipoProductos.
-     * @return Una lista de todos TipoProducto DTOs.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @return lista de todos TipoProducto DTOs.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
     public List<TipoProductoDto> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");

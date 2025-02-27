@@ -2,6 +2,7 @@ package com.elitsoft.#app_name#.domain.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.io.Serializable;
 
 /**
  *

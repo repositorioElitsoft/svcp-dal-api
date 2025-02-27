@@ -2,7 +2,9 @@ package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.TrabajoDto;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
-import com.elitsoft.servicampo.exceptions.TrabajoNoEncontradoException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TrabajoMapper;
 import com.elitsoft.servicampo.mapstruct.TrabajoMapStruct;
 import com.elitsoft.servicampo.service.core.TrabajoService;
@@ -20,7 +22,7 @@ import java.util.List;
 public class TrabajoMobileService {
 
     @Autowired
-    private TrabajoMapper trabajoMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private TrabajoMapper trabajoMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
     private TrabajoService trabajoService; //Logica de Negocio del Core Service
@@ -28,57 +30,101 @@ public class TrabajoMobileService {
     @Autowired
     private TrabajoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
 
-    private static final Logger logeador = LoggerFactory.getLogger(TrabajoMobileService.class);
+    private static final Logger logeador = LoggerFactory.getLogger(TrabajoMobileService.class); //Logback
+
 
     /**
      * Agrega un nuevo Trabajo.
-     * @param trabajoDto El Trabajo DTO.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param trabajoDto el Trabajo DTO.
+     * @return el Trabajo DTO agregado con campo auto generado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
+     * @throws RecursoDuplicadoException si el recurso Trabajo ya existe.
      */
-    public void agregar(TrabajoDto trabajoDto) throws BaseDatosException {
+    public TrabajoDto agregar(TrabajoDto trabajoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() trabajo");
-        trabajoService.agregar(trabajoDto);
+
+        return trabajoService.agregar(trabajoDto);
+    }
+
+    /**
+     * Agrega Lote nuevos Trabajo.
+     * @param trabajoLoteDto lista de Trabajo DTO a agregar.
+     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
+     * @throws RecursoDuplicadoException si el recurso Trabajo ya existe.
+     */
+    public void agregarLote(List<TrabajoDto> trabajoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregarLote() trabajo");
+
+        trabajoService.agregarLote(trabajoLoteDto);
     }
 
     /**
      * Actualiza un Trabajo existente.
-     * @param id La Clave de Trabajo a actualizar.
-     * @param trabajoDto El Trabajo DTO con informacion actualizada.
-     * @throws TrabajoNoEncontradoException Si Trabajo no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param id la Clave de Trabajo a actualizar.
+     * @param trabajoDto el Trabajo DTO con informacion actualizada.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Trabajo no es encontrado.
+     * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
      */
-    public void actualizar(Long id, TrabajoDto trabajoDto) throws BaseDatosException, TrabajoNoEncontradoException {
+    public void actualizar(Long id, TrabajoDto trabajoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() trabajo");
+
         trabajoService.actualizar(id, trabajoDto);
     }
 
     /**
-     * Elimina Trabajo por Clave.
-     * @param id La Clave de Trabajo a eliminar.
-     * @throws TrabajoNoEncontradoException Si el Trabajo no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * Actualiza Lote de Trabajo existentes.
+     * @param trabajoLoteDto lista de Trabajo DTO con datos a actualizar.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
      */
-    public void eliminar(Long id) throws BaseDatosException, TrabajoNoEncontradoException {
+    public void actualizarLote(List<TrabajoDto> trabajoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("actualizarLote() trabajo");
+
+        trabajoService.actualizarLote(trabajoLoteDto);
+    }
+
+    /**
+     * Elimina Trabajo por Clave.
+     * @param id la clave de Trabajo a eliminar.
+     * @throws RecursoNoEncontradoException si el Trabajo no es encontrado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() trabajo: {}", id);
         trabajoService.eliminar(id);
     }
 
     /**
-     * Encuentra un Trabajo por Clave.
-     * @param id La Clave Trabajo a encontrar.
-     * @return El Trabajo DTO encontrado, o null si no es encontrado.
-     * @throws BaseDatosException Si Ocurre un error de base de datos.
-     * @throws TrabajoNoEncontradoException Si Trabajo no es encontrado.
+     * Elimina Lote Trabajo por Clave.
+     * @param idLote lista de claves de Trabajo a eliminar.
+     * @throws EntradaInvalidadException si la lista  Trabajo esta vacia.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public TrabajoDto encontrarPorClave(Long id) throws BaseDatosException, TrabajoNoEncontradoException {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+        logeador.debug("eliminarLote()");
+
+        trabajoService.eliminarLote(idLote);
+    }
+
+    /**
+     * Encuentra un Trabajo por Clave.
+     * @param id la clave Trabajo a encontrar.
+     * @return el Trabajo DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Trabajo no es encontrado.
+     */
+    public TrabajoDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return trabajoService.encontrarPorClave(id);
     }
 
     /**
      * Obtiene todos los Trabajos.
-     * @return Una lista de todos Trabajo DTOs.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @return lista de todos Trabajo DTOs.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
     public List<TrabajoDto> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");

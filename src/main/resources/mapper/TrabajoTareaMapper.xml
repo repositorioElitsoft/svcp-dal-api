@@ -10,12 +10,63 @@
         <association property="tarea" fetchType="lazy" column="tras_id" javaType="com.elitsoft.servicampo.domain.entity.Tarea" select="com.elitsoft.servicampo.mapper.TareaMapper.encontrarPorClave"/>
     </resultMap>
 
-    <select id="encontrarPorClave" parameterType="map" resultMap="trabajoTareaResultMap">
-        SELECT trbj_id, tras_id, trtr_secuencia FROM ${schema}trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="trabajoTareaResultMap">
+        SELECT trbj_id, tras_id, trtr_secuencia
+        FROM ${schema}trabajos_tareas
+        WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
     </select>
 
+   <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="trabajoTareaResultMap">
         SELECT trbj_id, tras_id, trtr_secuencia FROM ${schema}trabajos_tareas
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="trabajoTareaResultMap">
+        SELECT * FROM ${schema}trabajos_tareas
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.trabajoId != null">
+                    AND trbj_id = #{filtro.trabajoId}
+                </if>
+                <if test="filtro.tareaId != null">
+                    AND tras_id = #{filtro.tareaId}
+                </if>
+                <if test="filtro.ordenEjecucionTarea != null">
+                    AND trtr_secuencia = #{filtro.ordenEjecucionTarea}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'trabajoId'">ORDER BY trbj_id ${direccionOrden}</when>
+                <when test="campoOrden == 'tareaId'">ORDER BY tras_id ${direccionOrden}</when>
+                <when test="campoOrden == 'ordenEjecucionTarea'">ORDER BY trtr_secuencia ${direccionOrden}</when>
+                <otherwise>ORDER BY trbj_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}trabajos_tareas
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.trabajoId != null">
+                    AND trbj_id = #{filtro.trabajoId}
+                </if>
+                <if test="filtro.tareaId != null">
+                    AND tras_id = #{filtro.tareaId}
+                </if>
+                <if test="filtro.ordenEjecucionTarea != null">
+                    AND trtr_secuencia = #{filtro.ordenEjecucionTarea}
+                </if>
+            </if>
+        </where>
     </select>
 
     <!-- Sentencia SQL de Insertar-->
@@ -25,12 +76,39 @@
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
-        UPDATE ${schema}trabajos_tareas SET trtr_secuencia = #{ordenEjecucionTarea} WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+        UPDATE ${schema}trabajos_tareas
+        SET trtr_secuencia = #{ordenEjecucionTarea}
+        WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
-    <delete id="eliminar" parameterType="map">
-        DELETE FROM ${schema}trabajos_tareas WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}trabajos_tareas
+        WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
     </delete>
 
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}trabajos_tareas (trbj_id, tras_id, trtr_secuencia) VALUES
+        <foreach item="trabajoTarea" collection="trabajoTareaLote" separator=",">
+            (#{trabajoTarea.trabajoId}, #{trabajoTarea.tareaId}, #{trabajoTarea.ordenEjecucionTarea},)
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='trabajoTarea' collection='trabajoTareaLote' separator=';'>
+            UPDATE ${schema}trabajos_tareas
+            SET trtr_secuencia = #{trabajoTarea.ordenEjecucionTarea}
+            WHERE trbj_id = #{trabajoTarea.trabajoId} AND tras_id = #{trabajoTarea.tareaId} 
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}trabajos_tareas WHERE trbj_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

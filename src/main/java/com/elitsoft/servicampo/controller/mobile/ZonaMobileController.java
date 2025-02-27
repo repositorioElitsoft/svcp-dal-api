@@ -63,11 +63,11 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "409", description = "Zona ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<ZonaDto> zonasDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<ZonaDto> zonaLoteDto) {
         logeador.debug("agregarLote() zona");
 
         try {
-            zonaMobileService.agregarLote(zonasDto);
+            zonaMobileService.agregarLote(zonaLoteDto);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {

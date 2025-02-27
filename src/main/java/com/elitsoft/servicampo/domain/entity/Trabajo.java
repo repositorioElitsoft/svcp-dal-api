@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -15,7 +17,10 @@ import java.util.List;
  *
  */
 
-public class Trabajo {
+public class Trabajo implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 4340416980032460063L;
 
     private Long id;
     private String descripcionTrabajo;

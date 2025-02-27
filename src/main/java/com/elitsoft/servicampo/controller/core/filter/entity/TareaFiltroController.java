@@ -1,8 +1,8 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
-import com.elitsoft.servicampo.filter.TareaFiltro;
-import com.elitsoft.servicampo.domain.entity.Tarea;
+import com.elitsoft.servicampo.domain.dto.core.TareaDto;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.filter.TareaFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.TareaFiltroService;
 import com.elitsoft.servicampo.utils.PagedResponse;
 import com.elitsoft.servicampo.utils.PaginationUtils;
@@ -32,23 +32,23 @@ public class TareaFiltroController {
     private static final Logger logeador = LoggerFactory.getLogger(TareaFiltroController.class); //Logback
 
     @GetMapping(value = "/tarea", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Filtrar un tarea", description = "Filtrar un tarea por su clave")
+    @Operation(summary = "Filtra un tarea", description = "Filtra y hace paginado de tarea por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Tarea Filtrado exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PagedResponse<Tarea>> filtrarTareas(@ModelAttribute TareaFiltro filtro, PagingAndSorting paginado) {
-        logeador.debug("filtrarTareas()");
+    public ResponseEntity<PagedResponse<TareaDto>> filtrar(@ModelAttribute TareaFiltro filtro, PagingAndSorting paginado) {
+        logeador.debug("filtrar()");
 
         try {
-            List<Tarea> tareas = tareaFiltroService.filtrarTareas(filtro, paginado);
-            int totalTareas = tareaFiltroService.contarFiltroTareas(filtro);
+            List<TareaDto> tareaLista = tareaFiltroService.filtrar(filtro, paginado);
+            int totalFiltro = tareaFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<Tarea> response = PaginationUtils.createPagedResponse(tareas, totalTareas, paginado);
-            return ResponseEntity.ok(response);
+            PagedResponse<TareaDto> response = PaginationUtils.createPagedResponse(tareaLista, totalFiltro, paginado);
+            return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
 
     }

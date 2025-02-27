@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.core;
 import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDto;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.ClasificacionClienteService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ import java.util.List;
 public class ClasificacionClienteController {
 
     @Autowired
-    private ClasificacionClienteService clasificacionclienteService;
+    private ClasificacionClienteService clasificacionClienteService;
 
     private static final Logger logeador = LoggerFactory.getLogger(ClasificacionClienteController.class); //Logback
 
@@ -38,11 +37,11 @@ public class ClasificacionClienteController {
             @ApiResponse(responseCode = "409", description = "ClasificacionCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ClasificacionClienteDto> agregar(@RequestBody ClasificacionClienteDto clasificacionclienteDto) {
+    public ResponseEntity<ClasificacionClienteDto> agregar(@RequestBody ClasificacionClienteDto clasificacionClienteDto) {
         logeador.debug("agregar() clasificacioncliente");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(clasificacionclienteService.agregar(clasificacionclienteDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(clasificacionClienteService.agregar(clasificacionClienteDto)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -65,11 +64,11 @@ public class ClasificacionClienteController {
             @ApiResponse(responseCode = "409", description = "ClasificacionCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<ClasificacionClienteDto> clasificacionclientesDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<ClasificacionClienteDto> clasificacionClienteLoteDto) {
         logeador.debug("agregarLote() clasificacioncliente");
 
         try {
-            clasificacionclienteService.agregarLote (clasificacionclientesDto);
+            clasificacionClienteService.agregarLote (clasificacionClienteLoteDto);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -92,11 +91,11 @@ public class ClasificacionClienteController {
             @ApiResponse(responseCode = "404", description = "ClasificacionCliente no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ClasificacionClienteDto clasificacionclienteDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ClasificacionClienteDto clasificacionClienteDto) {
         logeador.debug("actualizar() clasificacioncliente");
 
         try {
-            clasificacionclienteService.actualizar(id, clasificacionclienteDto);
+            clasificacionClienteService.actualizar(id, clasificacionClienteDto);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -116,11 +115,11 @@ public class ClasificacionClienteController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<ClasificacionClienteDto> clasificacionclienteLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<ClasificacionClienteDto> clasificacionClienteLoteDto) {
         logeador.debug("actualizarLote() clasificacioncliente");
 
         try {
-            clasificacionclienteService.actualizarLote(clasificacionclienteLoteDto);
+            clasificacionClienteService.actualizarLote(clasificacionClienteLoteDto);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -143,7 +142,7 @@ public class ClasificacionClienteController {
         logeador.debug("eliminar() clasificacioncliente: {}", id);
 
         try {
-            clasificacionclienteService.eliminar(id);
+            clasificacionClienteService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -167,7 +166,7 @@ public class ClasificacionClienteController {
         logeador.debug("eliminarLote() clasificacioncliente");
 
         try {
-            clasificacionclienteService.eliminarLote(idLote);
+            clasificacionClienteService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -189,7 +188,7 @@ public class ClasificacionClienteController {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ClasificacionClienteDto clasificacionclienteDto = clasificacionclienteService.encontrarPorClave(id);
+            ClasificacionClienteDto clasificacionclienteDto = clasificacionClienteService.encontrarPorClave(id);
             return ResponseEntity.ok(clasificacionclienteDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -210,7 +209,7 @@ public class ClasificacionClienteController {
 
         try {
             List<ClasificacionClienteDto> clasificacionclientes = null;
-            clasificacionclientes = clasificacionclienteService.obtenerTodos();
+            clasificacionclientes = clasificacionClienteService.obtenerTodos();
             return ResponseEntity.ok(clasificacionclientes);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error

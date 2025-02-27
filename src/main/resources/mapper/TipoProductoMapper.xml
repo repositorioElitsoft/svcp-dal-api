@@ -7,27 +7,98 @@
         <result property="descripcionTipoProducto" column="tppr_dsc"/>
     </resultMap>
 
+    <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="tipoProductoResultMap">
         SELECT tppr_id, tppr_dsc FROM ${schema}tipos_productos WHERE tppr_id = #{id}
     </select>
 
+   <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="tipoProductoResultMap">
         SELECT tppr_id, tppr_dsc FROM ${schema}tipos_productos
     </select>
 
-    <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProducto">
-        INSERT INTO ${schema}tipos_productos (tppr_id, tppr_dsc) VALUES (#{id}, #{descripcionTipoProducto})
-    </insert>
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="tipoProductoResultMap">
+        SELECT * FROM ${schema}tipos_productos
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND tppr_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionTipoProducto != null and filtro.descripcionTipoProducto != ''">
+                    AND LOWER(tppr_dsc) LIKE '%' || LOWER(#{filtro.descripcionTipoProducto}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY tppr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTipoProducto'">ORDER BY tppr_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY tppr_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}tipos_productos
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND tppr_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionTipoProducto != null and filtro.descripcionTipoProducto != ''">
+                    AND LOWER(tppr_dsc) LIKE '%' || LOWER(#{filtro.descripcionTipoProducto}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.TipoProducto" affectData="true" flushCache="true">
+        INSERT INTO ${schema}tipos_productos (tppr_dsc)
+        VALUES (#{descripcionTipoProducto})
+        returning tppr_id as id, tppr_dsc as descripcionTipoProducto
+    </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProducto">
-        UPDATE ${schema}tipos_productos SET tppr_dsc = #{descripcionTipoProducto} WHERE tppr_id = #{id}
+        UPDATE ${schema}tipos_productos
+        SET  tppr_dsc = #{descripcionTipoProducto}
+        WHERE tppr_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM ${schema}tipos_productos WHERE tppr_id = #{id}
+        DELETE FROM ${schema}tipos_productos
+        WHERE tppr_id = #{id}
     </delete>
 
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}tipos_productos (tppr_dsc) VALUES
+        <foreach item="tipoProducto" collection="tipoProductoLote" separator=",">
+            (#{tipoProducto.descripcionTipoProducto})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='tipoProducto' collection='tipoProductoLote' separator=';'>
+            UPDATE ${schema}tipos_productos
+            SET tppr_dsc = #{tipoProducto.descripcionTipoProducto}
+            WHERE tppr_id = #{tipoProducto.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}tipos_productos WHERE tppr_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

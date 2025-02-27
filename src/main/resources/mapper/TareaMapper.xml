@@ -3,63 +3,102 @@
 <mapper namespace="com.elitsoft.servicampo.mapper.TareaMapper">
 
     <resultMap id="tareaResultMap" type="com.elitsoft.servicampo.domain.entity.Tarea">
-        <id property="id" column="tras_id"/>
-        <result property="descripcionTarea" column="tras_dsc"/>
-    </resultMap>
+        <id property="id" column="tras_id" />
+        <result property="descripcionTarea" column="tras_dsc" />
+        </resultMap>
 
+    <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="tareaResultMap">
         SELECT tras_id, tras_dsc FROM ${schema}tareas WHERE tras_id = #{id}
     </select>
 
+   <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="tareaResultMap">
         SELECT tras_id, tras_dsc FROM ${schema}tareas
     </select>
 
-    <select id="filtrarTareas" resultMap="tareaResultMap">
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="tareaResultMap">
         SELECT * FROM ${schema}tareas
         <where>
             <if test="filtro != null">
-                <if test="filtro.id != null and filtro.id != ''">
+                <if test="filtro.id != null">
                     AND tras_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
-                    AND tras_dsc LIKE #{filtro.descripcionTarea}
+                    AND LOWER(tras_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
                 </if>
             </if>
         </where>
         <if test="campoOrden != null and campoOrden != ''">
-            ORDER BY ${campoOrden} ${direccionOrden}
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY tras_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTarea'">ORDER BY tras_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY tras_id ASC</otherwise>
+            </choose>
         </if>
-        LIMIT #{limite} OFFSET #{desplazamiento}
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
     </select>
 
-    <select id="contarFiltroTareas" resultType="int">
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
         SELECT COUNT(*) FROM ${schema}tareas
         <where>
             <if test="filtro != null">
-                <if test="filtro.id != null and filtro.id != ''">
+                <if test="filtro.id != null">
                     AND tras_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
-                    AND tras_dsc LIKE #{filtro.descripcionTarea}
+                    AND LOWER(tras_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
                 </if>
             </if>
         </where>
     </select>
 
-    <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Tarea">
-        INSERT INTO ${schema}tareas (tras_id, tras_dsc) VALUES (#{id}, #{descripcionTarea})
-    </insert>
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Tarea" affectData="true" flushCache="true">
+        INSERT INTO ${schema}tareas (tras_dsc)
+        VALUES (#{descripcionTarea})
+        returning tras_id as id, tras_dsc as descripcionTarea
+    </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Tarea">
-        UPDATE ${schema}tareas SET tras_dsc = #{descripcionTarea} WHERE tras_id = #{id}
+        UPDATE ${schema}tareas
+        SET  tras_dsc = #{descripcionTarea}
+        WHERE tras_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM ${schema}tareas WHERE tras_id = #{id}
+        DELETE FROM ${schema}tareas
+        WHERE tras_id = #{id}
     </delete>
 
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}tareas (tras_dsc ) VALUES
+        <foreach item="tarea" collection="tareaLote" separator=",">
+            (#{tarea.descripcionTarea} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='tarea' collection='tareaLote' separator=';'>
+            UPDATE ${schema}tareas
+            SET tras_dsc = #{tarea.descripcionTarea}
+            WHERE tras_id = #{tarea.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}tareas WHERE tras_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

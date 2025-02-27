@@ -1,9 +1,10 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
-import com.elitsoft.servicampo.filter.TareaFiltro;
-import com.elitsoft.servicampo.domain.entity.Tarea;
+import com.elitsoft.servicampo.domain.dto.core.TareaDto;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.filter.TareaFiltro;
 import com.elitsoft.servicampo.mapper.TareaMapper;
+import com.elitsoft.servicampo.mapstruct.TareaMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
 import com.elitsoft.servicampo.utils.PagingAndSorting;
 import org.slf4j.Logger;
@@ -18,34 +19,46 @@ import java.util.List;
 public class TareaFiltroService {
 
     @Autowired
-    private TareaMapper tareaMapper;
+    private TareaMapper tareaMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
-    private static final Logger logeador = LoggerFactory.getLogger(TareaFiltroService.class);
+    @Autowired
+    private TareaMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
 
-    public List<Tarea> filtrarTareas(TareaFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    private static final Logger logeador = LoggerFactory.getLogger(TareaFiltroService.class); //Logback
 
-        logeador.debug("getTareas() estado");
+    /** Ejecuta filtro dinamico y paginacion para Tarea
+     * @param filtro clase que tiene los atributos a filtrar
+     * @param paginado clase que tiene los atributos de paginacion
+     * @return List<TareaDto> lista de entidades Tarea
+     * @throws BaseDatosException si la entrada LotePaginado tiene errores.
+     */
+    public List<TareaDto> filtrar(TareaFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+        logeador.debug("filtrar()");
 
         try {
-            int offset = paginado.getPageNumber() * paginado.getPageSize();
-            return tareaMapper.filtrarTareas(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), offset);
+            int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
+            
+            return mapper.toDtoList(tareaMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
         }  catch (DataAccessException e) {
-            logeador.error("{} {} {}",Constantes.TAREA_FILTRAR_EXECPTION,  filtro.toString(), e, e);
-            throw new BaseDatosException(Constantes.TAREA_FILTRAR_EXECPTION, e);
+            logeador.error("{}, {}, {}, {}",Constantes.TAREA_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
+            throw new BaseDatosException(Constantes.TAREA_FILTRAR_MENSAJE, e);
         }
 
     }
 
-    public int contarFiltroTareas(TareaFiltro filtro) throws BaseDatosException {
-        logeador.debug("getTotalTareas() estado");
+    /**
+     * Cuenta los registros que coinciden con el filtro dinamico para Tarea
+     * @param filtro clase que tiene los atributos a filtrar
+     * @return int cantidad de registros que retorna el filtro
+     */
+    public int contarFiltrar(TareaFiltro filtro) throws BaseDatosException {
+        logeador.debug("contarFiltrar()");
 
         try {
-            return tareaMapper.contarFiltroTareas(filtro);
+            return tareaMapper.contarFiltrar(filtro);
         }  catch (DataAccessException e) {
-            logeador.error("{} {} {}",Constantes.TAREA_FILTRAR_EXECPTION,  filtro.toString(), e, e);
-            throw new BaseDatosException(Constantes.TAREA_FILTRAR_EXECPTION, e);
+            logeador.error("{}, {}, {}",Constantes.TAREA_FILTRAR_MENSAJE,  filtro.toString(), e, e);
+            throw new BaseDatosException(Constantes.TAREA_FILTRAR_MENSAJE, e);
         }
-
-
     }
 }

@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.core;
 import com.elitsoft.servicampo.domain.dto.core.TipoEmpleadoDto;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.TipoEmpleadoService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ import java.util.List;
 public class TipoEmpleadoController {
 
     @Autowired
-    private TipoEmpleadoService tipoempleadoService;
+    private TipoEmpleadoService tipoEmpleadoService;
 
     private static final Logger logeador = LoggerFactory.getLogger(TipoEmpleadoController.class); //Logback
 
@@ -37,11 +36,11 @@ public class TipoEmpleadoController {
             @ApiResponse(responseCode = "409", description = "TipoEmpleado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TipoEmpleadoDto> agregar(@RequestBody TipoEmpleadoDto tipoempleadoDto) {
+    public ResponseEntity<TipoEmpleadoDto> agregar(@RequestBody TipoEmpleadoDto tipoEmpleadoDto) {
         logeador.debug("agregar() tipoempleado");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(tipoempleadoService.agregar(tipoempleadoDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(tipoEmpleadoService.agregar(tipoEmpleadoDto)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -63,11 +62,11 @@ public class TipoEmpleadoController {
             @ApiResponse(responseCode = "409", description = "TipoEmpleado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<TipoEmpleadoDto> tipoempleadosDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<TipoEmpleadoDto> tipoEmpleadoLoteDto) {
         logeador.debug("agregarLote() tipoempleado");
 
         try {
-            tipoempleadoService.agregarLote (tipoempleadosDto);
+            tipoEmpleadoService.agregarLote (tipoEmpleadoLoteDto);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -90,11 +89,11 @@ public class TipoEmpleadoController {
             @ApiResponse(responseCode = "404", description = "TipoEmpleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoEmpleadoDto tipoempleadoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoEmpleadoDto tipoEmpleadoDto) {
         logeador.debug("actualizar() tipoempleado");
 
         try {
-            tipoempleadoService.actualizar(id, tipoempleadoDto);
+            tipoEmpleadoService.actualizar(id, tipoEmpleadoDto);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -114,11 +113,11 @@ public class TipoEmpleadoController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoEmpleadoDto> tipoempleadoLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoEmpleadoDto> tipoEmpleadoLoteDto) {
         logeador.debug("actualizarLote() tipoempleado");
 
         try {
-            tipoempleadoService.actualizarLote(tipoempleadoLoteDto);
+            tipoEmpleadoService.actualizarLote(tipoEmpleadoLoteDto);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -141,7 +140,7 @@ public class TipoEmpleadoController {
         logeador.debug("eliminar() tipoempleado: {}", id);
 
         try {
-            tipoempleadoService.eliminar(id);
+            tipoEmpleadoService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -165,7 +164,7 @@ public class TipoEmpleadoController {
         logeador.debug("eliminarLote() tipoempleado");
 
         try {
-            tipoempleadoService.eliminarLote(idLote);
+            tipoEmpleadoService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -187,7 +186,7 @@ public class TipoEmpleadoController {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            TipoEmpleadoDto tipoempleadoDto = tipoempleadoService.encontrarPorClave(id);
+            TipoEmpleadoDto tipoempleadoDto = tipoEmpleadoService.encontrarPorClave(id);
             return ResponseEntity.ok(tipoempleadoDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -208,7 +207,7 @@ public class TipoEmpleadoController {
 
         try {
             List<TipoEmpleadoDto> tipoempleados = null;
-            tipoempleados = tipoempleadoService.obtenerTodos();
+            tipoempleados = tipoEmpleadoService.obtenerTodos();
             return ResponseEntity.ok(tipoempleados);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error

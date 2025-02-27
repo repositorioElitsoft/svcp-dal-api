@@ -64,11 +64,11 @@ public class SectorController {
             @ApiResponse(responseCode = "409", description = "Sector ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<SectorDto> sectorsDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<SectorDto> sectorLoteDto) {
         logeador.debug("agregarLote() sector");
 
         try {
-            sectorService.agregarLote (sectorsDto);
+            sectorService.agregarLote (sectorLoteDto);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {

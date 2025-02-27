@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.elitsoft.servicampo.security.JwtTokenProvider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -28,8 +30,9 @@ public class AuthController {
     @Autowired
     private UserMapper userMapper; // Your MyBatis UserRepository
 
-    @PostMapping("/login")
+    @PostMapping("/login" )
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authRequest) {
+
 
         //String password = "1234";
 

@@ -5,11 +5,17 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TipoEmpleadoMobileDto {
+public class TipoEmpleadoMobileDto implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -578488566580017789L;
 
     private Long id;
     private String descripcionTipoEmpleado;

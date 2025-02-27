@@ -99,9 +99,9 @@
 
     <!-- Sentencia SQL de Insertar LOTE-->
     <insert id="agregarLote" parameterType="java.util.List" >
-        INSERT INTO ${schema}poroto (prto_id, prto_nombre, prto_tipo, prto_color )VALUES
+        INSERT INTO ${schema}poroto ( prto_nombre, prto_tipo, prto_color )VALUES
         <foreach item="poroto" collection="porotoLote" separator=",">
-            (#{poroto.prtoId}, #{poroto.prtoNombre}, #{poroto.prtTipo}, #{poroto.prtoColor} )
+            ( #{poroto.prtoNombre}, #{poroto.prtTipo}, #{poroto.prtoColor} )
         </foreach>
     </insert>
 
