@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.SegmentacionClienteMapper">
+
+    <resultMap id="segmentacionClienteResultMap" type="com.elitsoft.servicampo.domain.entity.SegmentacionCliente">
+        <id property="id" column="sgcl_id" />
+        <result property="descripcion" column="sgcl_dsc" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="segmentacionClienteResultMap">
+        SELECT sgcl_id, sgcl_dsc
+        FROM ${schema}segmentacion_clientes
+        WHERE sgcl_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="segmentacionClienteResultMap">
+        SELECT sgcl_id, sgcl_dsc
+        FROM ${schema}segmentacion_clientes
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="segmentacionClienteResultMap">
+        SELECT * FROM ${schema}segmentacion_clientes
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND sgcl_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(sgcl_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY sgcl_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY sgcl_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY sgcl_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}segmentacion_clientes
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND sgcl_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(sgcl_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.SegmentacionCliente" affectData="true" flushCache="true">
+        INSERT INTO ${schema}segmentacion_clientes (sgcl_dsc)
+        VALUES (#{descripcion})
+        returning sgcl_id as id, sgcl_dsc as descripcion
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.SegmentacionCliente">
+        UPDATE ${schema}segmentacion_clientes
+        SET  sgcl_dsc = #{descripcion}
+        WHERE sgcl_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}segmentacion_clientes
+        WHERE sgcl_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}segmentacion_clientes (sgcl_dsc ) VALUES
+        <foreach item="segmentacionCliente" collection="segmentacionClienteLote" separator=",">
+            (#{segmentacionCliente.descripcion})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='segmentacionCliente' collection='segmentacionclienteLote' separator=';'>
+            UPDATE ${schema}segmentacion_clientes
+            SET sgcl_dsc = #{segmentacioncliente.descripcion}
+            WHERE sgcl_id = #{segmentacioncliente.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}segmentacion_clientes WHERE sgcl_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

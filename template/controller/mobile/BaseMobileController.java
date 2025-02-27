@@ -232,10 +232,10 @@ public class #Base#MobileController {
     public ResponseEntity<List<#Base#Dto>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<#Base#Dto> #base#s = null;
+        List<#Base#Dto> #base#Lista = null;
 
         try {
-            #base#s = #base#MobileService.obtenerTodos();
+            #base#Lista = #base#MobileService.obtenerTodos();
              return ResponseEntity.ok(#base#s); // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error

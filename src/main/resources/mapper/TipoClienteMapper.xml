@@ -62,7 +62,7 @@
 
 
     <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
-    <select id="agregarReturning" resultType="com.elitsoft.servicampo.domain.entity.TipoCliente" affectData="true" flushCache="true">
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.TipoCliente" affectData="true" flushCache="true">
         INSERT INTO ${schema}tipos_clientes (tpcl_nombre)
         VALUES (#{nombre})
         returning tpcl_id as id, tpcl_nombre as nombre

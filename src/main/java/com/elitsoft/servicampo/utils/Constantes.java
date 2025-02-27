@@ -202,4 +202,26 @@ public class Constantes {
     public static final String TIPOCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOCLIENTE por clave :";
     public static final String TIPOCLIENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOCLIENTE";
     public static final String TIPOCLIENTE_FILTRAR_MENSAJE = "Error filtrando TIPOCLIENTE";
+
+    public static final String SEGMENTACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de SEGMENTACIONCLIENTE invalida.";
+    public static final String SEGMENTACIONCLIENTE_DUPLICADO_MENSAGE = "Recurso  SEGMENTACIONCLIENTE ya existe.";
+    public static final String SEGMENTACIONCLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso SEGMENTACIONCLIENTE no  encontrado";
+    public static final String SEGMENTACIONCLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso SEGMENTACIONCLIENTE";
+    public static final String SEGMENTACIONCLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SEGMENTACIONCLIENTE";
+    public static final String SEGMENTACIONCLIENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso SEGMENTACIONCLIENTE";
+    public static final String SEGMENTACIONCLIENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso SEGMENTACIONCLIENTE";
+    public static final String SEGMENTACIONCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso SEGMENTACIONCLIENTE por clave :";
+    public static final String SEGMENTACIONCLIENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SEGMENTACIONCLIENTE";
+    public static final String SEGMENTACIONCLIENTE_FILTRAR_MENSAJE = "Error filtrando SEGMENTACIONCLIENTE";
+
+    public static final String AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE = "Entrada de AGRUPACIONCOMERCIAL invalida.";
+    public static final String AGRUPACIONCOMERCIAL_DUPLICADO_MENSAGE = "Recurso  AGRUPACIONCOMERCIAL ya existe.";
+    public static final String AGRUPACIONCOMERCIAL_NO_ENCONTRADO_MENSAGE = "Recurso AGRUPACIONCOMERCIAL no  encontrado";
+    public static final String AGRUPACIONCOMERCIAL_AGREGAR_MENSAJE = "Error Interno agregando Recurso AGRUPACIONCOMERCIAL";
+    public static final String AGRUPACIONCOMERCIAL_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos AGRUPACIONCOMERCIAL";
+    public static final String AGRUPACIONCOMERCIAL_ACTUALIZAR_MENSAJE = "Error actualizando Recurso AGRUPACIONCOMERCIAL";
+    public static final String AGRUPACIONCOMERCIAL_ELIMINAR_MENSAJE = "Error eliminando Recurso AGRUPACIONCOMERCIAL";
+    public static final String AGRUPACIONCOMERCIAL_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso AGRUPACIONCOMERCIAL por clave :";
+    public static final String AGRUPACIONCOMERCIAL_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos AGRUPACIONCOMERCIAL";
+    public static final String AGRUPACIONCOMERCIAL_FILTRAR_MENSAJE = "Error filtrando AGRUPACIONCOMERCIAL";
 }
