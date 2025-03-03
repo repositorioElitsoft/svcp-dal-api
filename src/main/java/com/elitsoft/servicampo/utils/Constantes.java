@@ -224,4 +224,50 @@ public class Constantes {
     public static final String AGRUPACIONCOMERCIAL_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso AGRUPACIONCOMERCIAL por clave :";
     public static final String AGRUPACIONCOMERCIAL_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos AGRUPACIONCOMERCIAL";
     public static final String AGRUPACIONCOMERCIAL_FILTRAR_MENSAJE = "Error filtrando AGRUPACIONCOMERCIAL";
+
+    public static final String COMUNA_ENTRADA_INVALIDA_MENSAGE = "Entrada de COMUNA invalida.";
+    public static final String COMUNA_DUPLICADO_MENSAGE = "Recurso  COMUNA ya existe.";
+    public static final String COMUNA_NO_ENCONTRADO_MENSAGE = "Recurso COMUNA no  encontrado";
+    public static final String COMUNA_AGREGAR_MENSAJE = "Error Interno agregando Recurso COMUNA";
+    public static final String COMUNA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos COMUNA";
+    public static final String COMUNA_ACTUALIZAR_MENSAJE = "Error actualizando Recurso COMUNA";
+    public static final String COMUNA_ELIMINAR_MENSAJE = "Error eliminando Recurso COMUNA";
+    public static final String COMUNA_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso COMUNA por clave :";
+    public static final String COMUNA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos COMUNA";
+    public static final String COMUNA_FILTRAR_MENSAJE = "Error filtrando COMUNA";
+
+    public static final String PROVINCIA_ENTRADA_INVALIDA_MENSAGE = "Entrada de PROVINCIA invalida.";
+    public static final String PROVINCIA_DUPLICADO_MENSAGE = "Recurso  PROVINCIA ya existe.";
+    public static final String PROVINCIA_NO_ENCONTRADO_MENSAGE = "Recurso PROVINCIA no  encontrado";
+    public static final String PROVINCIA_AGREGAR_MENSAJE = "Error Interno agregando Recurso PROVINCIA";
+    public static final String PROVINCIA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos PROVINCIA";
+    public static final String PROVINCIA_ACTUALIZAR_MENSAJE = "Error actualizando Recurso PROVINCIA";
+    public static final String PROVINCIA_ELIMINAR_MENSAJE = "Error eliminando Recurso PROVINCIA";
+    public static final String PROVINCIA_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso PROVINCIA por clave :";
+    public static final String PROVINCIA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos PROVINCIA";
+    public static final String PROVINCIA_FILTRAR_MENSAJE = "Error filtrando PROVINCIA";
+
+    public static final String REGION_ENTRADA_INVALIDA_MENSAGE = "Entrada de REGION invalida.";
+    public static final String REGION_DUPLICADO_MENSAGE = "Recurso  REGION ya existe.";
+    public static final String REGION_NO_ENCONTRADO_MENSAGE = "Recurso REGION no  encontrado";
+    public static final String REGION_AGREGAR_MENSAJE = "Error Interno agregando Recurso REGION";
+    public static final String REGION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos REGION";
+    public static final String REGION_ACTUALIZAR_MENSAJE = "Error actualizando Recurso REGION";
+    public static final String REGION_ELIMINAR_MENSAJE = "Error eliminando Recurso REGION";
+    public static final String REGION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso REGION por clave :";
+    public static final String REGION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos REGION";
+    public static final String REGION_FILTRAR_MENSAJE = "Error filtrando REGION";
+
+    public static final String PAIS_ENTRADA_INVALIDA_MENSAGE = "Entrada de PAIS invalida.";
+    public static final String PAIS_DUPLICADO_MENSAGE = "Recurso  PAIS ya existe.";
+    public static final String PAIS_NO_ENCONTRADO_MENSAGE = "Recurso PAIS no  encontrado";
+    public static final String PAIS_AGREGAR_MENSAJE = "Error Interno agregando Recurso PAIS";
+    public static final String PAIS_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos PAIS";
+    public static final String PAIS_ACTUALIZAR_MENSAJE = "Error actualizando Recurso PAIS";
+    public static final String PAIS_ELIMINAR_MENSAJE = "Error eliminando Recurso PAIS";
+    public static final String PAIS_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso PAIS por clave :";
+    public static final String PAIS_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos PAIS";
+    public static final String PAIS_FILTRAR_MENSAJE = "Error filtrando PAIS";
+
+
 }

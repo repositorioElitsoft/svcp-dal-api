@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ComunaMapper">
+
+    <resultMap id="comunaResultMap" type="com.elitsoft.servicampo.domain.entity.Comuna">
+        <id property="id" column="cmna_id" />
+        <result property="descripcionComuna" column="cmna_dsc" />
+        <association property="provincia" javaType="com.elitsoft.servicampo.domain.entity.Provincia">
+            <id property="id" column="prvs_id" />
+            <result property="descripcionCiudad" column="prvs_dsc" />
+        </association>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="comunaColumnas">
+        SELECT comuna.cmna_id, comuna.cmna_dsc, provincia.prvs_id, provincia.prvs_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="selectFrom">
+        FROM ${schema}comunas comuna
+        INNER JOIN ${schema}provincias provincia ON comuna.prvs_id = provincia.prvs_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="comunaResultMap">
+        <include refid="comunaColumnas"/>
+        <include refid="selectFrom"/>
+        AND comuna.cmna_id = #{id}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" parameterType="long" resultMap="comunaResultMap">
+        <include refid="comunaColumnas"/>
+        <include refid="selectFrom"/>
+        AND comuna.prvs_id = #{provinciaId}
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="comunaResultMap">
+        <include refid="comunaColumnas"/>
+        <include refid="selectFrom"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND comuna.cmna_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionComuna != null and filtro.descripcionComuna != ''">
+                    AND LOWER(comuna.cmna_dsc) LIKE '%' || LOWER(#{filtro.descripcionComuna}) || '%'
+                </if>
+                <if test="filtro.provinciaId != null">
+                    AND comuna.prvs_id = #{filtro.provinciaId}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY comuna.cmna_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionComuna'">ORDER BY comuna.cmna_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'provinciaId'">ORDER BY comuna.prvs_id ${direccionOrden}</when>
+                <otherwise>ORDER BY comuna.cmna_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)
+        <include refid="selectFrom"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND comuna.cmna_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionComuna != null and filtro.descripcionComuna != ''">
+                    AND LOWER(comuna.cmna_dsc) LIKE '%' || LOWER(#{filtro.descripcionComuna}) || '%'
+                </if>
+                <if test="filtro.provinciaId != null">
+                    AND comuna.prvs_id = #{filtro.provinciaId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Comuna" affectData="true" flushCache="true">
+        INSERT INTO ${schema}comunas (cmna_dsc, prvs_id)
+        VALUES (#{descripcionComuna}, #{provincia.id})
+        returning cmna_id as id, cmna_dsc as descripcionComuna, prvs_id as provinciaId
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Comuna">
+        UPDATE ${schema}comunas SET cmna_dsc = #{descripcionComuna}, prvs_id = #{provincia.id} WHERE cmna_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}comunas WHERE cmna_id = #{id}
+    </delete>
+
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}comunas (cmna_dsc, prvs_id) VALUES
+        <foreach item="comuna" collection="comunaLote" separator=",">
+            (#{comuna.descripcionComuna}, #{comuna.provincia.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='comuna' collection='comunaLote' separator=';'>
+            UPDATE ${schema}comunas
+            SET cmna_dsc = #{comuna.descripcionComuna}, prvs_id = #{comuna.provincia.id}
+            WHERE cmna_id = #{comuna.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}comuna WHERE cmna_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.RegionMapper">
+
+    <sql id="regionColumnas"> region.rgns_id, region.rgns_dsc, pais.pses_id, pais.pses_dsc </sql>
+
+    <resultMap id="regionResultMap" type="com.elitsoft.servicampo.domain.entity.Region">
+        <id property="id" column="rgns_id" />
+        <result property="descripcionRegion" column="rgns_dsc" />
+        <association property="pais" javaType="com.elitsoft.servicampo.domain.entity.Pais">
+            <id property="id" column="pses_id" />
+            <result property="descripcionPais" column="pses_dsc" />
+        </association>
+        <collection property="provincias" column="rgns_id" fetchType="lazy"  ofType="com.elitsoft.servicampo.domain.entity.Provincia"  select="com.elitsoft.servicampo.mapper.ProvinciaMapper.encontrarPorRegion"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="regionResultMap">
+        SELECT <include refid="regionColumnas"/>
+        FROM ${schema}regiones region
+        INNER JOIN  ${schema}paises  pais ON region.pses_id = pais.pses_id
+        AND region.rgns_id = #{id}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" parameterType="long"  resultMap="regionResultMap">
+        SELECT  <include refid="regionColumnas"/>
+        FROM ${schema}regiones region
+        INNER JOIN  ${schema}paises  pais ON region.pses_id = pais.pses_id
+        AND region.pses_id = #{paisId}
+    </select>
+
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="regionResultMap">
+        SELECT <include refid="regionColumnas"/>
+        FROM ${schema}regiones region
+        INNER JOIN  ${schema}paises  pais ON region.pses_id = pais.pses_id
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND region.rgns_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionRegion != null and filtro.descripcionRegion != ''">
+                    AND LOWER(region.rgns_dsc) LIKE '%' || LOWER(#{filtro.descripcionRegion}) || '%'
+                </if>
+                <if test="filtro.paisId != null">
+                    AND region.pses_id = #{filtro.paisId}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY region.rgns_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionRegion'">ORDER BY region.rgns_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'paisId'">ORDER BY region.pses_id ${direccionOrden}</when>
+                <otherwise>ORDER BY region.rgns_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)
+        FROM ${schema}regiones region
+        INNER JOIN  ${schema}paises  pais ON region.pses_id = pais.pses_id
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND region.rgns_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionRegion != null and filtro.descripcionRegion != ''">
+                    AND LOWER(region.rgns_dsc) LIKE '%' || LOWER(#{filtro.descripcionRegion}) || '%'
+                </if>
+                <if test="filtro.paisId != null">
+                    AND region.pses_id = #{filtro.paisId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregarReturning" resultType="com.elitsoft.servicampo.domain.entity.Region" affectData="true" flushCache="true">
+        INSERT INTO ${schema}regiones (rgns_dsc, pses_id)
+        VALUES (#{descripcionRegion}, #{pais.id})
+        returning rgns_id as id, rgns_dsc as descripcionRegion, pses_id as paisId
+    </select>
+
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Region">
+        UPDATE ${schema}regiones
+        SET rgns_dsc = #{descripcionRegion}, pses_id = #{pais.id}
+        WHERE rgns_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}regiones
+        WHERE rgns_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}regiones (rgns_dsc, pses_id) VALUES
+        <foreach item="region" collection="regionLote" separator=",">
+            (#{region.descripcionRegion}, #{region.pais.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='region' collection='regionLote' separator=';'>
+            UPDATE ${schema}regiones SET rgns_dsc = #{region.descripcionRegion}, pses_id = #{region.pais.id}
+            WHERE rgns_id = #{region.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}region WHERE rgns_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

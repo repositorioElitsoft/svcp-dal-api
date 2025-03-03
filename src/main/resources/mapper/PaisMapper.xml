@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.PaisMapper">
+
+    <resultMap id="paisResultMap" type="com.elitsoft.servicampo.domain.entity.Pais">
+        <id property="id" column="pses_id" />
+        <result property="descripcionPais" column="pses_dsc" />
+        <collection property="regiones" column="pses_id"  fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.Region" select="com.elitsoft.servicampo.mapper.RegionMapper.encontrarPorPais"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="paisResultMap">
+        SELECT pses_id, pses_dsc
+        FROM ${schema}paises
+        WHERE pses_id = #{id}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="paisResultMap">
+        SELECT pses_id, pses_dsc
+        FROM ${schema}paises
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="paisResultMap">
+        SELECT * FROM ${schema}paises
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND pses_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionPais != null and filtro.descripcionPais != ''">
+                    AND LOWER(pses_dsc) LIKE '%' || LOWER(#{filtro.descripcionPais}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY pses_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionPais'">ORDER BY pses_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY pses_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*) FROM ${schema}paises
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND pses_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionPais != null and filtro.descripcionPais != ''">
+                    AND LOWER(pses_dsc) LIKE '%' || LOWER(#{filtro.descripcionPais}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregarReturning" resultType="com.elitsoft.servicampo.domain.entity.Pais" affectData="true" flushCache="true">
+        INSERT INTO ${schema}paises (pses_dsc)
+        VALUES (#{descripcionPais})
+        returning pses_id as id, pses_dsc as descripcionPais
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Pais">
+        UPDATE ${schema}paises
+        SET pses_dsc = #{descripcionPais}
+        WHERE pses_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}paises
+        WHERE pses_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}paises (pses_dsc) VALUES
+        <foreach item="pais" collection="paisLote" separator=",">
+            (#{pais.descripcionPais})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='pais' collection='paisLote' separator=';'>
+            UPDATE ${schema}paises
+            SET pses_dsc = #{pais.descripcionPais}
+            WHERE pses_id = #{pais.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}paises WHERE pses_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

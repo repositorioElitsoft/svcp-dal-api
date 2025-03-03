@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ProvinciaMapper">
+
+    <sql id="provinciaColumnas"> provincia.prvs_id, provincia.prvs_dsc,  region.rgns_id, region.rgns_dsc  </sql>
+
+    <resultMap id="provinciaResultMap" type="com.elitsoft.servicampo.domain.entity.Provincia">
+        <id property="id" column="prvs_id" />
+        <result property="descripcionCiudad" column="prvs_dsc" />
+        <association property="region" javaType="com.elitsoft.servicampo.domain.entity.Region">
+            <id property="id" column="rgns_id" />
+            <result property="descripcionRegion" column="rgns_dsc" />
+        </association>
+        <collection property="comunas" column="prvs_id" fetchType="lazy"  ofType="com.elitsoft.servicampo.domain.entity.Comuna"  select="com.elitsoft.servicampo.mapper.ComunaMapper.encontrarPorProvincia"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorRegion" parameterType="long" resultMap="provinciaResultMap">
+        SELECT <include refid="provinciaColumnas"/>
+        FROM ${schema}provincias provincia
+        INNER JOIN ${schema}regiones region ON provincia.rgns_id = region.rgns_id
+        AND provincia.rgns_id = #{regionId}
+    </select>
+
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="provinciaResultMap">
+        SELECT <include refid="provinciaColumnas"/>
+        FROM ${schema}provincias provincia
+        INNER JOIN ${schema}regiones region ON provincia.rgns_id = region.rgns_id
+        AND provincia.prvs_id = #{Id}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="provinciaResultMap">
+        SELECT  <include refid="provinciaColumnas"/>
+        FROM ${schema}provincias provincia
+        INNER JOIN ${schema}regiones region ON provincia.rgns_id = region.rgns_id
+        AND provincia.rgns_id = #{regionId}
+    </select>
+
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="provinciaResultMap">
+        SELECT <include refid="provinciaColumnas"/>
+        FROM ${schema}provincias provincia
+        INNER JOIN ${schema}regiones region ON provincia.rgns_id = region.rgns_id
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND region.prvs_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionCiudad != null and filtro.descripcionCiudad != ''">
+                    AND LOWER(region.prvs_dsc) LIKE '%' || LOWER(#{filtro.descripcionCiudad}) || '%'
+                </if>
+                <if test="filtro.regionId != null">
+                    AND region.rgns_id = #{filtro.regionId}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY region.prvs_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionCiudad'">ORDER BY region.prvs_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'regionId'">ORDER BY region.rgns_id ${direccionOrden}</when>
+                <otherwise>ORDER BY region.prvs_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)
+        FROM ${schema}provincias provincia
+        INNER JOIN ${schema}regiones region ON provincia.rgns_id = region.rgns_id
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND prvs_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcionCiudad != null and filtro.descripcionCiudad != ''">
+                    AND LOWER(prvs_dsc) LIKE '%' || LOWER(#{filtro.descripcionCiudad}) || '%'
+                </if>
+                <if test="filtro.regionId != null">
+                    AND rgns_id = #{filtro.regionId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Provincia" affectData="true" flushCache="true">
+        INSERT INTO ${schema}provincias (prvs_dsc, rgns_id)
+        VALUES (#{descripcionCiudad}, #{region.id})
+        returning prvs_id as id, prvs_dsc as descripcionCiudad, rgns_id as regionId
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Provincia">
+        UPDATE ${schema}provincias
+        SET prvs_dsc = #{descripcionCiudad}, rgns_id = #{region.id}
+        WHERE prvs_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}provincias
+        WHERE prvs_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}provincias (prvs_dsc, rgns_id) VALUES
+        <foreach item="provincia" collection="provinciaLote" separator=",">
+            (#{provincia.descripcionCiudad}, #{provincia.region.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='provincia' collection='provinciaLote' separator=';'>
+            UPDATE ${schema}provincias
+            SET prvs_dsc = #{provincia.descripcionCiudad}, rgns_id = #{provincia.region.id}
+            WHERE prvs_id = #{provincia.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}provincias WHERE prvs_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
