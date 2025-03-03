@@ -225,9 +225,9 @@ public class TrabajoService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TrabajoDto> trabajoList = mapper.toDtoList(trabajoMapper.obtenerTodos());
+            List<TrabajoDto> trabajoLista = mapper.toDtoList(trabajoMapper.obtenerTodos());
             logeador.info("trabajos obtenidos");
-            return trabajoList;
+            return trabajoLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TRABAJO_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.TRABAJO_OBTENER_TODOS_MENSAJE, e);

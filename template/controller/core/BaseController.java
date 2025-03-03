@@ -236,7 +236,7 @@ public class #Base#Controller {
         try {
             List<#Base#Dto> #base#Lista = null;
             #base#Lista = #base#Service.obtenerTodos();
-            return ResponseEntity.ok(#base#s);  // Retorna  200
+            return ResponseEntity.ok(#base#Lista);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }

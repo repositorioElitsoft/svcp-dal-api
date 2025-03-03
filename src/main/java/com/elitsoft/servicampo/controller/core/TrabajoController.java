@@ -207,9 +207,9 @@ public class TrabajoController {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TrabajoDto> trabajos = null;
-            trabajos = trabajoService.obtenerTodos();
-            return ResponseEntity.ok(trabajos);  // Retorna  200
+            List<TrabajoDto> trabajoLista = null;
+            trabajoLista = trabajoService.obtenerTodos();
+            return ResponseEntity.ok(trabajoLista);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }

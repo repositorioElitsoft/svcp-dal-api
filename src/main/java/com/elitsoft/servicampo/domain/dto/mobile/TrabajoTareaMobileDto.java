@@ -1,5 +1,7 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
+import com.elitsoft.servicampo.domain.dto.core.TareaDto;
+import com.elitsoft.servicampo.domain.dto.core.TrabajoDto;
 import com.elitsoft.servicampo.domain.entity.Tarea;
 import com.elitsoft.servicampo.domain.entity.Trabajo;
 import lombok.Data;
@@ -22,6 +24,6 @@ public class TrabajoTareaMobileDto implements Serializable  {
     private Long trabajoId;
     private Long tareaId;
     private Integer ordenEjecucionTarea;
-    private Trabajo trabajo;
-    private Tarea tarea;
+    private TrabajoDto trabajo;
+    private TareaDto tarea;
 }

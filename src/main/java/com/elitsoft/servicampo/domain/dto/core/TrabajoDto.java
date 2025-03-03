@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class TrabajoDto implements Serializable {
 
     @Serial
@@ -21,5 +20,6 @@ public class TrabajoDto implements Serializable {
 
     private Long id;
     private String descripcionTrabajo;
-    private List<TrabajoTarea> trabajoTareas;
+
+
 }

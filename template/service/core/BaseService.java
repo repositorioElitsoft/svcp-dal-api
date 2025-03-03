@@ -256,9 +256,9 @@ public class #Base#Service {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<#Base#Dto> #base#List = mapper.toDtoList(#base#Mapper.obtenerTodos());
+            List<#Base#Dto> #base#Lista = mapper.toDtoList(#base#Mapper.obtenerTodos());
             logeador.info("#base#s obtenidos");
-            return #base#List;
+            return #base#Lista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.#BASE#_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.#BASE#_OBTENER_TODOS_MENSAJE, e);

@@ -29,6 +29,7 @@ public class TrabajoMobileController {
 
     private static final Logger logeador = LoggerFactory.getLogger(TrabajoMobileController.class); //Logback
 
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un trabajo", description = "Agrega un nuevo trabajo")
     @ApiResponses(value = {
@@ -205,11 +206,11 @@ public class TrabajoMobileController {
     public ResponseEntity<List<TrabajoDto>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<TrabajoDto> trabajos = null;
+        List<TrabajoDto> trabajoLista = null;
 
         try {
-            trabajos = trabajoMobileService.obtenerTodos();
-             return ResponseEntity.ok(trabajos); // Retorna  200 OK
+            trabajoLista = trabajoMobileService.obtenerTodos();
+             return ResponseEntity.ok(trabajoLista); // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }

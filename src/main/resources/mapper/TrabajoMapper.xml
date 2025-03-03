@@ -3,23 +3,27 @@
 <mapper namespace="com.elitsoft.servicampo.mapper.TrabajoMapper">
 
     <resultMap id="trabajoResultMap" type="com.elitsoft.servicampo.domain.entity.Trabajo">
-        <id property="id" column="trbj_id" />
-        <result property="descripcionTrabajo" column="trbj_dsc" />
+        <id property="id" column="trbj_id"/>
+        <result property="descripcionTrabajo" column="trbj_dsc"/>
+        <collection property="trabajoTareas" column="trbj_id" fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.TrabajoTarea"  select="com.elitsoft.servicampo.mapper.TrabajoTareaMapper.encontrarPorTrabajo"/>
     </resultMap>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMap">
-        SELECT trbj_id, trbj_dsc FROM ${schema}trabajos WHERE trbj_id = #{id}
+        SELECT trbj_id, trbj_dsc
+        FROM ${schema}trabajos
+        WHERE trbj_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="trabajoResultMap">
-        SELECT trbj_id, trbj_dsc FROM ${schema}trabajos
+        SELECT trbj_id, trbj_dsc
+        FROM ${schema}trabajos
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="trabajoResultMap">
-        SELECT * FROM ${schema}trabajos
+        SELECT trbj_id, trbj_dsc FROM ${schema}trabajos
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
@@ -68,7 +72,7 @@
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Trabajo">
         UPDATE ${schema}trabajos
-        SET  trbj_dsc = #{descripcionTrabajo}
+        SET trbj_dsc = #{descripcionTrabajo}
         WHERE trbj_id = #{id}
     </update>
 
@@ -91,7 +95,7 @@
         <foreach item='trabajo' collection='trabajoLote' separator=';'>
             UPDATE ${schema}trabajos
             SET trbj_dsc = #{trabajo.descripcionTrabajo}
-            WHERE trbj_id = #{trabajo.id}
+            WHERE trbj_id =  #{trabajo.id}
         </foreach>
     </update>
 

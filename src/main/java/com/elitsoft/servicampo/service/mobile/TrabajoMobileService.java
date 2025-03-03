@@ -32,7 +32,6 @@ public class TrabajoMobileService {
 
     private static final Logger logeador = LoggerFactory.getLogger(TrabajoMobileService.class); //Logback
 
-
     /**
      * Agrega un nuevo Trabajo.
      * @param trabajoDto el Trabajo DTO.

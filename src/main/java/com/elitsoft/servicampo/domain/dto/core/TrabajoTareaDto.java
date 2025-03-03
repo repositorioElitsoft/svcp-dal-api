@@ -22,6 +22,6 @@ public class TrabajoTareaDto implements Serializable {
     private Long trabajoId;
     private Long tareaId;
     private Integer ordenEjecucionTarea;
-    private Trabajo trabajo;
-    private Tarea tarea;
+    private TrabajoDto trabajo;
+    private TareaDto tarea;
 }

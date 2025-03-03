@@ -11,6 +11,13 @@
     </resultMap>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorTrabajo" parameterType="long" resultMap="trabajoTareaResultMap">
+        SELECT trbj_id, tras_id, trtr_secuencia
+        FROM ${schema}trabajos_tareas
+        WHERE trbj_id = #{trabajoId}
+    </select>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="trabajoTareaResultMap">
         SELECT trbj_id, tras_id, trtr_secuencia
         FROM ${schema}trabajos_tareas

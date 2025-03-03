@@ -13,7 +13,6 @@ import java.util.List;
 @Mapper
 public interface TrabajoMapper {
 
-
     /**
      * Agrega un Trabajo a la base de datos.
      * @param trabajo La entidad Trabajo a agregar.

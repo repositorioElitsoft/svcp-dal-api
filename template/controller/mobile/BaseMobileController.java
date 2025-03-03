@@ -236,7 +236,7 @@ public class #Base#MobileController {
 
         try {
             #base#Lista = #base#MobileService.obtenerTodos();
-             return ResponseEntity.ok(#base#s); // Retorna  200 OK
+             return ResponseEntity.ok(#base#Lista); // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
