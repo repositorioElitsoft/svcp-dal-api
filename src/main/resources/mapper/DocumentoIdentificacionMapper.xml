@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper">
+
+    <resultMap id="documentoIdentificacionResultMap" type="com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion">
+        <id property="id" column="doid_id" />
+        <result property="numero" column="doid_num" />
+        <result property="digitoVerificador" column="doid_dv" />
+        <association property="tipoDocumentoIdentificacion" javaType="com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion">
+            <id property="id" column="tpdi_id" />
+            <result property="nombre" column="tpdi_nombre" />
+            <result property="descripcion" column="tpdi_dsc" />
+        </association>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT identificacion.doid_id, identificacion.doid_num, identificacion.doid_dv,
+               tipo_identificacion.tpdi_id, tipo_identificacion.tpdi_nombre, tipo_identificacion.tpdi_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}documentos_identificacion identificacion
+        INNER JOIN ${schema}tipos_documentos_identificacion tipo_identificacion
+        ON identificacion.tpdi_id = tipo_identificacion.tpdi_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="documentoIdentificacionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        AND identificacion.doid_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="documentoIdentificacionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="documentoIdentificacionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND identificacion.doid_id = #{filtro.id}
+                </if>
+                <if test="filtro.numero != null and filtro.numero != ''">
+                    AND identificacion.doid_num = #{filtro.numero}
+                </if>
+                <if test="filtro.digitoVerificador != null and filtro.digitoVerificador != ''">
+                    AND identificacion.doid_dv =#{filtro.digitoVerificador}
+                </if>
+                <if test="filtro.tipoDocumentoIdentificacionId != null">
+                    AND identificacion.tpdi_id = #{filtro.tipoDocumentoIdentificacionId}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY identificacion.doid_id ${direccionOrden}</when>
+                <when test="campoOrden == 'numero'">ORDER BY identificacion.doid_num ${direccionOrden}</when>
+                <when test="campoOrden == 'digitoVerificador'">ORDER BY identificacion.doid_dv ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoDocumentoIdentificacionId'">ORDER BY identificacion.tpdi_id ${direccionOrden}</when>
+                <otherwise>ORDER BY identificacion.doid_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND identificacion.doid_id = #{filtro.id}
+                </if>
+                <if test="filtro.numero != null and filtro.numero != ''">
+                    AND identificacion.doid_num = #{filtro.numero}
+                </if>
+                <if test="filtro.digitoVerificador != null and filtro.digitoVerificador != ''">
+                    AND identificacion.doid_dv =#{filtro.digitoVerificador}
+                </if>
+                <if test="filtro.tipoDocumentoIdentificacionId != null">
+                    AND identificacion.tpdi_id = #{filtro.tipoDocumentoIdentificacionId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion" affectData="true" flushCache="true">
+        INSERT INTO ${schema}documentos_identificacion (doid_num, doid_dv, tpdi_id)
+        VALUES (#{numero}, #{digitoVerificador}, #{tipoDocumentoIdentificacion.id})
+        returning doid_id as id, doid_num as numero, doid_dv as digitoVerificador
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion">
+        UPDATE ${schema}documentos_identificacion
+        SET  doid_num = #{numero}, doid_dv = #{digitoVerificador}, tpdi_id = #{tipoDocumentoIdentificacion.id}
+        WHERE doid_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}documentos_identificacion
+        WHERE doid_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}documentos_identificacion (doid_num, doid_dv, tpdi_id ) VALUES
+        <foreach item="documentoIdentificacion" collection="documentoIdentificacionLote" separator=",">
+            (#{documentoIdentificacion.numero}, #{documentoIdentificacion.digitoVerificador}, #{documentoIdentificacion.tipoDocumentoIdentificacion.id} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='documentoIdentificacion' collection='documentoIdentificacionLote' separator=';'>
+            UPDATE ${schema}documentos_identificacion
+            SET doid_num = #{documentoIdentificacion.numero}, doid_dv = #{documentoIdentificacion.digitoVerificador},
+            tpdi_id =  #{documentoIdentificacion.tipoDocumentoIdentificacion.id}
+            WHERE doid_id = #{documentoIdentificacion.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}documentos_identificacion WHERE doid_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

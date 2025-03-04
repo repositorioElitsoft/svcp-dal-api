@@ -287,5 +287,15 @@ public class Constantes {
     public static final String TIPODOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPODOCUMENTOIDENTIFICACION";
     public static final String TIPODOCUMENTOIDENTIFICACION_FILTRAR_MENSAJE = "Error filtrando TIPODOCUMENTOIDENTIFICACION";
 
+    public static final String DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE = "Entrada de DOCUMENTOIDENTIFICACION invalida.";
+    public static final String DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE = "Recurso  DOCUMENTOIDENTIFICACION ya existe.";
+    public static final String DOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE = "Recurso DOCUMENTOIDENTIFICACION no  encontrado";
+    public static final String DOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE = "Error Interno agregando Recurso DOCUMENTOIDENTIFICACION";
+    public static final String DOCUMENTOIDENTIFICACION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos DOCUMENTOIDENTIFICACION";
+    public static final String DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE = "Error actualizando Recurso DOCUMENTOIDENTIFICACION";
+    public static final String DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE = "Error eliminando Recurso DOCUMENTOIDENTIFICACION";
+    public static final String DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DOCUMENTOIDENTIFICACION por clave :";
+    public static final String DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DOCUMENTOIDENTIFICACION";
+    public static final String DOCUMENTOIDENTIFICACION_FILTRAR_MENSAJE = "Error filtrando DOCUMENTOIDENTIFICACION";
 }
 

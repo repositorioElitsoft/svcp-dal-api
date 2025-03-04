@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a TipoProducto
  */
 @RestController
-@RequestMapping("/tipoproducto")
+@RequestMapping("/tipo-producto")
 public class TipoProductoController {
 
     @Autowired

@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a SegmentacionCliente
  */
 @RestController
-@RequestMapping("/segmentacioncliente")
+@RequestMapping("/segmentacion-cliente")
 public class SegmentacionClienteController {
 
     @Autowired

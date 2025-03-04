@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a TipoCliente
  */
 @RestController
-@RequestMapping("/tipocliente")
+@RequestMapping("/tipo-cliente")
 public class TipoClienteController {
 
     @Autowired

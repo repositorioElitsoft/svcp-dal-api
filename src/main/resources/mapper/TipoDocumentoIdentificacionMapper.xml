@@ -2,39 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.elitsoft.servicampo.mapper.TipoDocumentoIdentificacionMapper">
 
-    <resultMap id="tipodocumentoidentificacionResultMap" type="com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion">
+    <resultMap id="tipoDocumentoIdentificacionResultMap" type="com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion">
         <id property="id" column="tpdi_id" />
         <result property="nombre" column="tpdi_nombre" />
         <result property="descripcion" column="tpdi_dsc" />
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
-    <sql id="tipodocumentoidentificacionColumnas">
+    <sql id="select">
         SELECT tpdi_id, tpdi_nombre, tpdi_dsc
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
-    <sql id="selectFrom">
+    <sql id="from">
         FROM ${schema}tipos_documentos_identificacion
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
-    <select id="encontrarPorClave" parameterType="long" resultMap="tipodocumentoidentificacionResultMap">
-        <include refid="tipodocumentoidentificacionColumnas"/>
-        <include refid="selectFrom"/>
+    <select id="encontrarPorClave" parameterType="long" resultMap="tipoDocumentoIdentificacionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
         WHERE tpdi_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
-    <select id="obtenerTodos" resultMap="tipodocumentoidentificacionResultMap">
-        <include refid="tipodocumentoidentificacionColumnas"/>
-        <include refid="selectFrom"/>
+    <select id="obtenerTodos" resultMap="tipoDocumentoIdentificacionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
-    <select id="filtrar" resultMap="tipodocumentoidentificacionResultMap">
-        <include refid="tipodocumentoidentificacionColumnas"/>
-        <include refid="selectFrom"/>
+    <select id="filtrar" resultMap="tipoDocumentoIdentificacionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
@@ -64,7 +64,7 @@
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
         SELECT COUNT(*)        
-        <include refid="selectFrom"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">

@@ -31,7 +31,7 @@ public class TipoClienteFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(TipoClienteFiltroController.class); //Logback
 
-    @GetMapping(value = "/tipocliente", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/tipo-cliente", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un tipocliente", description = "Filtra y hace paginado de tipocliente por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "TipoCliente Filtrado exitosamente"),

@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a TrabajoTarea para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/trabajotarea")
+@RequestMapping("/mobile/trabajo-tarea")
 public class TrabajoTareaMobileController {
 
     @Autowired

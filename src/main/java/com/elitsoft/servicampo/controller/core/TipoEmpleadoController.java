@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a TipoEmpleado
  */
 @RestController
-@RequestMapping("/tipoempleado")
+@RequestMapping("/tipo-empleado")
 public class TipoEmpleadoController {
 
     @Autowired

@@ -10,32 +10,32 @@
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
-    <sql id="#base#Columnas">
+    <sql id="select">
         SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
-    <sql id="selectFrom">
+    <sql id="from">
         FROM ${schema}#base#
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="#base#ResultMap">
-        <include refid="#base#Columnas"/>
-        <include refid="selectFrom"/>
+        <include refid="select"/>
+        <include refid="from"/>
         AND dmo_id = #{dmoId}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="#base#ResultMap">
-        <include refid="#base#Columnas"/>
-        <include refid="selectFrom"/>
+        <include refid="select"/>
+        <include refid="from"/>
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="#base#ResultMap">
-        <include refid="#base#Columnas"/>
-        <include refid="selectFrom"/>
+        <include refid="select"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.dmoId != null">
@@ -69,7 +69,7 @@
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
         SELECT COUNT(*)        
-        <include refid="selectFrom"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.dmoId != null">
