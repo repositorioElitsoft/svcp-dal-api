@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoProductoDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -40,7 +40,7 @@ public class TipoProductoMobileService {
      * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoProducto ya existe.
      */
-    public TipoProductoDto agregar(TipoProductoDto tipoproductoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public TipoProductoDTO agregar(TipoProductoDTO tipoproductoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() tipoproducto");
 
         return tipoproductoService.agregar(tipoproductoDto);
@@ -53,7 +53,7 @@ public class TipoProductoMobileService {
      * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoProducto ya existe.
      */
-    public void agregarLote(List<TipoProductoDto> tipoproductoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TipoProductoDTO> tipoproductoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() tipoproducto");
 
         tipoproductoService.agregarLote(tipoproductoLoteDto);
@@ -67,7 +67,7 @@ public class TipoProductoMobileService {
      * @throws RecursoNoEncontradoException si TipoProducto no es encontrado.
      * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      */
-    public void actualizar(Long id, TipoProductoDto tipoproductoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TipoProductoDTO tipoproductoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() tipoproducto");
 
         tipoproductoService.actualizar(id, tipoproductoDto);
@@ -79,7 +79,7 @@ public class TipoProductoMobileService {
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      */
-    public void actualizarLote(List<TipoProductoDto> tipoproductoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoProductoDTO> tipoproductoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tipoproducto");
 
         tipoproductoService.actualizarLote(tipoproductoLoteDto);
@@ -115,7 +115,7 @@ public class TipoProductoMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoProducto no es encontrado.
      */
-    public TipoProductoDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public TipoProductoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return tipoproductoService.encontrarPorClave(id);
     }
@@ -125,7 +125,7 @@ public class TipoProductoMobileService {
      * @return lista de todos TipoProducto DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<TipoProductoDto> obtenerTodos() throws BaseDatosException {
+    public List<TipoProductoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return tipoproductoService.obtenerTodos();
     }

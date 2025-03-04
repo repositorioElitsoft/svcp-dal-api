@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoProductoDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
 import com.elitsoft.servicampo.domain.entity.TipoProducto;
 import org.mapstruct.Mapper;
 
@@ -17,26 +17,26 @@ public interface TipoProductoMapStruct {
      * @param entity La entidad TipoProducto.
      * @return El TipoProductoDto.
      */
-    TipoProductoDto toDto(TipoProducto entity);
+    TipoProductoDTO toDto(TipoProducto entity);
 
     /**
      * Convierte un TipoProductoDto a entidad TipoProducto.
      * @param dto El TipoProductoDto.
      * @return La entidad TipoProducto.
      */
-    TipoProducto toEntity(TipoProductoDto dto);
+    TipoProducto toEntity(TipoProductoDTO dto);
 
     /**
      * Convierte una lista de entidades TipoProducto a una lista de TipoProductoDtos.
      * @param entities La lista de entidades TipoProducto.
      * @return The list of TipoProductoDtos.
      */
-    List<TipoProductoDto> toDtoList(List<TipoProducto> entities);
+    List<TipoProductoDTO> toDtoList(List<TipoProducto> entities);
 
     /**
      * Convierte una lista de TipoProductoDtos a una lista de entidades TipoProducto entities.
      * @param dtos The list of TipoProductoDtos.
      * @return The list of TipoProducto entities.
      */
-    List<TipoProducto> toEntityList(List<TipoProductoDto> dtos);
+    List<TipoProducto> toEntityList(List<TipoProductoDTO> dtos);
 }

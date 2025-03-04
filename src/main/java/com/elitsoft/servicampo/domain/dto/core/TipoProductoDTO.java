@@ -1,4 +1,4 @@
-package com.elitsoft.servicampo.domain.dto.mobile;
+package com.elitsoft.servicampo.domain.dto.core;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,10 +12,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TipoProductoMobileDto implements Serializable {
+public class TipoProductoDTO implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -6481626244538500364L;
+    private static final long serialVersionUID = -5579300936305724693L;
 
     private Long id;
     private String descripcionTipoProducto;
