@@ -3,36 +3,123 @@
 <mapper namespace="com.elitsoft.servicampo.mapper.RoleMapper">
 
     <resultMap id="roleResultMap" type="com.elitsoft.servicampo.domain.entity.Role">
-        <id property="id" column="rles_id"/>
-        <result property="nombreRol" column="rles_nom"/>
+        <id property="id" column="rles_id" />
+        <result property="nombreRol" column="rles_nom" />
         <collection property="permisos" fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.Permiso" column="rles_id" select="selectPermisosByRoleId"/>
     </resultMap>
 
-    <select id="encontrarPorClave" parameterType="long" resultMap="roleResultMap">
-        SELECT rles_id, rles_nom FROM ${schema}roles WHERE rles_id = #{id}
-    </select>
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT rles_id, rles_nom
+    </sql>
 
-    <select id="obtenerTodos" resultMap="roleResultMap">
-        SELECT rles_id, rles_nom FROM ${schema}roles
-    </select>
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}roles
+    </sql>
 
     <select id="selectPermisosByRoleId" parameterType="long" resultMap="com.elitsoft.servicampo.mapper.PermisoMapper.permisoResultMap">
-        SELECT * FROM ${schema}permisos WHERE rles_id = #{rles_id}
+        SELECT prms_id, prms_dsc FROM ${schema}permisos WHERE rles_id = #{rles_id}
     </select>
 
-    <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Role">
-        INSERT INTO ${schema}roles (rles_id, rles_nom) VALUES (#{id}, #{nombreRol})
-    </insert>
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="roleResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE rles_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="roleResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="roleResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND rles_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombreRol != null and filtro.nombreRol != ''">
+                    AND LOWER(rles_nom) LIKE '%' || LOWER(#{filtro.nombreRol}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY rles_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombreRol'">ORDER BY rles_nom ${direccionOrden}</when>
+                <otherwise>ORDER BY rles_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND rles_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombreRol != null and filtro.nombreRol != ''">
+                    AND LOWER(rles_nom) LIKE '%' || LOWER(#{filtro.nombreRol}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Role" affectData="true" flushCache="true">
+        INSERT INTO ${schema}roles (rles_nom)
+        VALUES (#{nombreRol})
+        returning rles_id as id, rles_nom as nombreRol
+    </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Role">
-        UPDATE ${schema}roles SET rles_nom = #{nombreRol} WHERE rles_id = #{id}
+        UPDATE ${schema}roles
+        SET  rles_nom = #{nombreRol}
+        WHERE rles_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM ${schema}roles WHERE rles_id = #{id}
+        DELETE FROM ${schema}roles
+        WHERE rles_id = #{id}
     </delete>
 
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}roles (rles_nom) VALUES
+        <foreach item="role" collection="roleLote" separator=",">
+            (#{role.nombreRol})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='role' collection='roleLote' separator=';'>
+            UPDATE ${schema}roles
+            SET rles_nom = #{role.nombreRol}
+            WHERE rles_id = #{role.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}roles WHERE rles_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

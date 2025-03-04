@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.RoleDto;
+import com.elitsoft.servicampo.domain.dto.core.RoleDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.RoleMobileService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -27,24 +27,58 @@ public class RoleMobileController {
     @Autowired
     private RoleMobileService roleMobileService;
 
-    private static final Logger logeador = LoggerFactory.getLogger(RoleMobileController.class);
+    private static final Logger logeador = LoggerFactory.getLogger(RoleMobileController.class); //Logback
+
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un role", description = "Agrega un nuevo role")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Role agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "Role ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody RoleDto roleDto) {
+    public ResponseEntity<RoleDTO> agregar(@RequestBody RoleDTO roleDTO) {
         logeador.debug("agregar() role");
 
         try {
-            roleMobileService.agregar(roleDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(roleMobileService.agregar(roleDTO)); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
+    @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega lista de role", description = "Agrega una lista de nuevos role")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Lista Role agregados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "Role ya Existe"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> agregarLote(@RequestBody List<RoleDTO> roleLoteDTO) {
+        logeador.debug("agregarLote() role");
+
+        try {
+            roleMobileService.agregarLote(roleLoteDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
 
     }
@@ -53,21 +87,46 @@ public class RoleMobileController {
     @Operation(summary = "Actualiza un role", description = "Actualiza un role")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Role actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "Role no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody RoleDto roleDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody RoleDTO roleDTO) {
         logeador.debug("actualizar() role");
 
         try {
-            roleMobileService.actualizar(id, roleDto);
-            return ResponseEntity.noContent().build();
-        } catch (RoleNoEncontradoException e) {
-            logeador.error(Constantes.ROLE_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.ROLE_NO_ENCONTRADO_MENSAGE);
+            roleMobileService.actualizar(id, roleDTO);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @PutMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Actualiza lista de role", description = "Actualiza una lista de role")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lote Role actualizados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> actualizarLote(@RequestBody List<RoleDTO> roleLoteDTO) {
+        logeador.debug("actualizarLote() role");
+
+        try {
+            roleMobileService.actualizarLote(roleLoteDTO);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
     }
 
@@ -75,6 +134,8 @@ public class RoleMobileController {
     @Operation(summary = "Elimina un role", description = "Elimina un role")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Role eliminado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "404", description = "Role no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
@@ -82,15 +143,38 @@ public class RoleMobileController {
 
         try {
             roleMobileService.eliminar(id);
-        } catch (RoleNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.ROLE_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.ROLE_NO_ENCONTRADO_MENSAGE);
-        } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
 
-        return ResponseEntity.noContent().build();
+    @DeleteMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Elimina Lista de role", description = "Elimina una Lista de role")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lista Role eliminados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> eliminarLote(@RequestBody List<Long> idLote) {
+        logeador.debug("eliminarLote() role");
+
+        try {
+            roleMobileService.eliminarLote(idLote);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
     }
 
     @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -100,24 +184,17 @@ public class RoleMobileController {
             @ApiResponse(responseCode = "404", description = "Role no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<RoleDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<RoleDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            RoleDto roleDto = roleMobileService.encontrarPorClave(id);
-            if (roleDto != null) {
-                return ResponseEntity.ok(roleDto);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            RoleDTO roleDTO = roleMobileService.encontrarPorClave(id);
+            return ResponseEntity.ok(roleDTO);  // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
-        } catch (RoleNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.ROLE_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.notFound().build(); // Retorna  404 Not Found
         }
-
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -126,18 +203,17 @@ public class RoleMobileController {
             @ApiResponse(responseCode = "200", description = "Roles obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<RoleDto>> obtenerTodos() {
+    public ResponseEntity<List<RoleDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<RoleDto> roles = null;
+        List<RoleDTO> roleLista = null;
 
         try {
-            roles = roleMobileService.obtenerTodos();
+            roleLista = roleMobileService.obtenerTodos();
+             return ResponseEntity.ok(roleLista); // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
-
-        return ResponseEntity.ok(roles);
+       
     }
 }

@@ -36,12 +36,16 @@ public class Constantes {
     public static final String TIPOEMPLEADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOEMPLEADO";
     public static final String TIPOEMPLEADO_FILTRAR_MENSAJE = "Error filtrando TIPOEMPLEADO";
 
-    public static final String ROLE_NO_ENCONTRADO_MENSAGE = "ROLE no  encontrado";
-    public static final String ROLE_AGREGAR_EXECPTION = "Error agregando ROLE";
-    public static final String ROLE_ACTUALIZAR_EXECPTION = "Error actualizando ROLE";
-    public static final String ROLE_ELIMINAR_EXECPTION = "Error eliminando ROLE";
-    public static final String ROLE_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando ROLE por clave :";
-    public static final String ROLE_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los ROLE";
+    public static final String ROLE_ENTRADA_INVALIDA_MENSAGE = "Entrada de ROLE invalida.";
+    public static final String ROLE_DUPLICADO_MENSAGE = "Recurso  ROLE ya existe.";
+    public static final String ROLE_NO_ENCONTRADO_MENSAGE = "Recurso ROLE no  encontrado";
+    public static final String ROLE_AGREGAR_MENSAJE = "Error Interno agregando Recurso ROLE";
+    public static final String ROLE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ROLE";
+    public static final String ROLE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso ROLE";
+    public static final String ROLE_ELIMINAR_MENSAJE = "Error eliminando Recurso ROLE";
+    public static final String ROLE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso ROLE por clave :";
+    public static final String ROLE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ROLE";
+    public static final String ROLE_FILTRAR_MENSAJE = "Error filtrando ROLE";
 
     public static final String ESTADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de ESTADO invalida.";
     public static final String ESTADO_DUPLICADO_MENSAGE = "Recurso  ESTADO ya existe.";
@@ -297,5 +301,6 @@ public class Constantes {
     public static final String DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DOCUMENTOIDENTIFICACION por clave :";
     public static final String DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_FILTRAR_MENSAJE = "Error filtrando DOCUMENTOIDENTIFICACION";
+
 }
 

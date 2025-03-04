@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.RoleDto;
+import com.elitsoft.servicampo.domain.dto.core.RoleDTO;
 import com.elitsoft.servicampo.domain.entity.Role;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface RoleMapStruct {
 
     /**
-     * Convierte un entidad Role a RoleDto.
+     * Convierte un entidad Role a RoleDTO.
      * @param entity La entidad Role.
-     * @return El RoleDto.
+     * @return El RoleDTO.
      */
-    RoleDto toDto(Role entity);
+    RoleDTO toDTO(Role entity);
 
     /**
-     * Convierte un RoleDto a entidad Role.
-     * @param dto El RoleDto.
+     * Convierte un RoleDTO a entidad Role.
+     * @param dto El RoleDTO.
      * @return La entidad Role.
      */
-    Role toEntity(RoleDto dto);
+    Role toEntity(RoleDTO dto);
 
     /**
-     * Convierte una lista de entidades Role a una lista de RoleDtos.
+     * Convierte una lista de entidades Role a una lista de RoleDTOs.
      * @param entities La lista de entidades Role.
-     * @return The list of RoleDtos.
+     * @return The list of RoleDTOs.
      */
-    List<RoleDto> toDtoList(List<Role> entities);
+    List<RoleDTO> toDTOList(List<Role> entities);
 
     /**
-     * Convierte una lista de RoleDtos a una lista de entidades Role entities.
-     * @param dtos The list of RoleDtos.
+     * Convierte una lista de RoleDTOs a una lista de entidades Role entities.
+     * @param dto The list of RoleDTOs.
      * @return The list of Role entities.
      */
-    List<Role> toEntityList(List<RoleDto> dtos);
+    List<Role> toEntityList(List<RoleDTO> dto);
 }
