@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TipoDocumentoIdentificacionMapper">
+
+    <resultMap id="tipodocumentoidentificacionResultMap" type="com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion">
+        <id property="id" column="tpdi_id" />
+        <result property="nombre" column="tpdi_nombre" />
+        <result property="descripcion" column="tpdi_dsc" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="tipodocumentoidentificacionColumnas">
+        SELECT tpdi_id, tpdi_nombre, tpdi_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="selectFrom">
+        FROM ${schema}tipos_documentos_identificacion
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="tipodocumentoidentificacionResultMap">
+        <include refid="tipodocumentoidentificacionColumnas"/>
+        <include refid="selectFrom"/>
+        WHERE tpdi_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="tipodocumentoidentificacionResultMap">
+        <include refid="tipodocumentoidentificacionColumnas"/>
+        <include refid="selectFrom"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="tipodocumentoidentificacionResultMap">
+        <include refid="tipodocumentoidentificacionColumnas"/>
+        <include refid="selectFrom"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND tpdi_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(tpdi_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(tpdi_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY tpdi_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombre'">ORDER BY tpdi_nombre ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY tpdi_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY tpdi_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="selectFrom"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND tpdi_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(tpdi_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(tpdi_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion" affectData="true" flushCache="true">
+        INSERT INTO ${schema}tipos_documentos_identificacion (tpdi_id, tpdi_nombre, tpdi_dsc)
+        VALUES (#{id}, #{nombre}, #{descripcion})
+        returning tpdi_id as id, tpdi_nombre as nombre, tpdi_dsc as descripcion
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion">
+        UPDATE ${schema}tipos_documentos_identificacion
+        SET  tpdi_nombre = #{nombre}, tpdi_dsc = #{descripcion}
+        WHERE tpdi_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}tipos_documentos_identificacion
+        WHERE tpdi_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}tipos_documentos_identificacion (tpdi_id, tpdi_nombre, tpdi_dsc ) VALUES
+        <foreach item="tipoDocumentoIdentificacion" collection="tipoDocumentoIdentificacionLote" separator=",">
+            (#{tipoDocumentoIdentificacion.id}, #{tipoDocumentoIdentificacion.nombre}, #{tipoDocumentoIdentificacion.descripcion} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='tipoDocumentoIdentificacion' collection='tipoDocumentoIdentificacionLote' separator=';'>
+            UPDATE ${schema}tipos_documentos_identificacion
+            SET tpdi_nombre = #{tipoDocumentoIdentificacion.nombre}, tpdi_dsc = #{tipoDocumentoIdentificacion.descripcion}
+            WHERE tpdi_id = #{tipoDocumentoIdentificacion.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}tipos_documentos_identificacion WHERE tpdi_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

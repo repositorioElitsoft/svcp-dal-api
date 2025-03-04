@@ -9,22 +9,33 @@
         <result property="dmoStatus" column="dmo_status" />
     </resultMap>
 
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="#base#Columnas">
+        SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="selectFrom">
+        FROM ${schema}#base#
+    </sql>
+
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="#base#ResultMap">
-        SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
-        FROM ${schema}#base#
-        WHERE dmo_id = #{dmoId}
+        <include refid="#base#Columnas"/>
+        <include refid="selectFrom"/>
+        AND dmo_id = #{dmoId}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="#base#ResultMap">
-        SELECT dmo_id, dmo_nom, dmo_correo, dmo_status
-        FROM ${schema}#base#
+        <include refid="#base#Columnas"/>
+        <include refid="selectFrom"/>
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="#base#ResultMap">
-        SELECT * FROM ${schema}#base#
+        <include refid="#base#Columnas"/>
+        <include refid="selectFrom"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.dmoId != null">
@@ -57,7 +68,8 @@
 
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
-        SELECT COUNT(*) FROM ${schema}#base#
+        SELECT COUNT(*)        
+        <include refid="selectFrom"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.dmoId != null">

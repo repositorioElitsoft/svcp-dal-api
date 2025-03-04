@@ -1,6 +1,6 @@
 package com.elitsoft.#app_name#.service.core.filter.entity;
 
-import com.elitsoft.#app_name#.domain.dto.core.#Base#Dto;
+import com.elitsoft.#app_name#.domain.dto.core.#Base#DTO;
 import com.elitsoft.#app_name#.exceptions.BaseDatosException;
 import com.elitsoft.#app_name#.filter.#Base#Filtro;
 import com.elitsoft.#app_name#.mapper.#Base#Mapper;
@@ -22,23 +22,23 @@ public class #Base#FiltroService {
     private #Base#Mapper #base#Mapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
-    private #Base#MapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
+    private #Base#MapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
 
     private static final Logger logeador = LoggerFactory.getLogger(#Base#FiltroService.class); //Logback
 
     /** Ejecuta filtro dinamico y paginacion para #Base#
      * @param filtro clase que tiene los atributos a filtrar
      * @param paginado clase que tiene los atributos de paginacion
-     * @return List<#Base#Dto> lista de entidades #Base#
+     * @return List<#Base#DTO> lista de entidades #Base#
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<#Base#Dto> filtrar(#Base#Filtro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<#Base#DTO> filtrar(#Base#Filtro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
             
-            return mapper.toDtoList(#base#Mapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
+            return mapper.toDTOList(#base#Mapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
         }  catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}",Constantes.#BASE#_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.#BASE#_FILTRAR_MENSAJE, e);

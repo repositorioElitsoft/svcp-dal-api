@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class #Base#Dto implements Serializable {
+public class #Base#DTO implements Serializable {
 
     private Long dmoId;
     private String dmoNom;

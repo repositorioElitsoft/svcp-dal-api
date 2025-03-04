@@ -17,7 +17,7 @@ public class Constantes {
     public static final String CARRITO_ARTICULO_ELIMINAR_EXECPTION = "Error eliminando articulo de carrito";
     public static final String CARRITO_ARTICULO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando articulo de carrito por clave :";
     public static final String CARRITO_ARTICULO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los articulo de carrito ";
-    
+
     public static final String EMPLEADO_NO_ENCONTRADO_MENSAGE = "EMPLEADO no  encontrado";
     public static final String EMPLEADO_AGREGAR_EXECPTION = "Error agregando EMPLEADO";
     public static final String EMPLEADO_ACTUALIZAR_EXECPTION = "Error actualizando EMPLEADO";
@@ -42,12 +42,18 @@ public class Constantes {
     public static final String ROLE_ELIMINAR_EXECPTION = "Error eliminando ROLE";
     public static final String ROLE_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando ROLE por clave :";
     public static final String ROLE_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los ROLE";
-    public static final String ESTADO_NO_ENCONTRADO_MENSAGE = "ESTADO no  encontrado";
-    public static final String ESTADO_AGREGAR_EXECPTION = "Error agregando ESTADO";
-    public static final String ESTADO_ACTUALIZAR_EXECPTION = "Error actualizando ESTADO";
-    public static final String ESTADO_ELIMINAR_EXECPTION = "Error eliminando ESTADO";
-    public static final String ESTADO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando ESTADO por clave :";
-    public static final String ESTADO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los ESTADO";
+
+    public static final String ESTADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de ESTADO invalida.";
+    public static final String ESTADO_DUPLICADO_MENSAGE = "Recurso  ESTADO ya existe.";
+    public static final String ESTADO_NO_ENCONTRADO_MENSAGE = "Recurso ESTADO no  encontrado";
+    public static final String ESTADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso ESTADO";
+    public static final String ESTADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ESTADO";
+    public static final String ESTADO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso ESTADO";
+    public static final String ESTADO_ELIMINAR_MENSAJE = "Error eliminando Recurso ESTADO";
+    public static final String ESTADO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso ESTADO por clave :";
+    public static final String ESTADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ESTADO";
+    public static final String ESTADO_FILTRAR_MENSAJE = "Error filtrando ESTADO";
+
     public static final String MODULO_NO_ENCONTRADO_MENSAGE = "MODULO no  encontrado";
     public static final String MODULO_AGREGAR_EXECPTION = "Error agregando MODULO";
     public static final String MODULO_ACTUALIZAR_EXECPTION = "Error actualizando MODULO";
@@ -270,4 +276,16 @@ public class Constantes {
     public static final String PAIS_FILTRAR_MENSAJE = "Error filtrando PAIS";
 
 
+    public static final String TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPODOCUMENTOIDENTIFICACION invalida.";
+    public static final String TIPODOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE = "Recurso  TIPODOCUMENTOIDENTIFICACION ya existe.";
+    public static final String TIPODOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE = "Recurso TIPODOCUMENTOIDENTIFICACION no  encontrado";
+    public static final String TIPODOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPODOCUMENTOIDENTIFICACION";
+    public static final String TIPODOCUMENTOIDENTIFICACION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPODOCUMENTOIDENTIFICACION";
+    public static final String TIPODOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPODOCUMENTOIDENTIFICACION";
+    public static final String TIPODOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPODOCUMENTOIDENTIFICACION";
+    public static final String TIPODOCUMENTOIDENTIFICACION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPODOCUMENTOIDENTIFICACION por clave :";
+    public static final String TIPODOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPODOCUMENTOIDENTIFICACION";
+    public static final String TIPODOCUMENTOIDENTIFICACION_FILTRAR_MENSAJE = "Error filtrando TIPODOCUMENTOIDENTIFICACION";
+
 }
+

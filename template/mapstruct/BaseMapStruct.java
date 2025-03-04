@@ -1,6 +1,6 @@
 package com.elitsoft.#app_name#.mapstruct;
 
-import com.elitsoft.#app_name#.domain.dto.core.#Base#Dto;
+import com.elitsoft.#app_name#.domain.dto.core.#Base#DTO;
 import com.elitsoft.#app_name#.domain.entity.#Base#;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface #Base#MapStruct {
 
     /**
-     * Convierte un entidad #Base# a #Base#Dto.
+     * Convierte un entidad #Base# a #Base#DTO.
      * @param entity La entidad #Base#.
-     * @return El #Base#Dto.
+     * @return El #Base#DTO.
      */
-    #Base#Dto toDto(#Base# entity);
+    #Base#DTO toDTO(#Base# entity);
 
     /**
-     * Convierte un #Base#Dto a entidad #Base#.
-     * @param dto El #Base#Dto.
+     * Convierte un #Base#DTO a entidad #Base#.
+     * @param dto El #Base#DTO.
      * @return La entidad #Base#.
      */
-    #Base# toEntity(#Base#Dto dto);
+    #Base# toEntity(#Base#DTO dto);
 
     /**
-     * Convierte una lista de entidades #Base# a una lista de #Base#Dtos.
+     * Convierte una lista de entidades #Base# a una lista de #Base#DTOs.
      * @param entities La lista de entidades #Base#.
-     * @return The list of #Base#Dtos.
+     * @return The list of #Base#DTOs.
      */
-    List<#Base#Dto> toDtoList(List<#Base#> entities);
+    List<#Base#DTO> toDTOList(List<#Base#> entities);
 
     /**
-     * Convierte una lista de #Base#Dtos a una lista de entidades #Base# entities.
-     * @param dtos The list of #Base#Dtos.
+     * Convierte una lista de #Base#DTOs a una lista de entidades #Base# entities.
+     * @param dto The list of #Base#DTOs.
      * @return The list of #Base# entities.
      */
-    List<#Base#> toEntityList(List<#Base#Dto> dtos);
+    List<#Base#> toEntityList(List<#Base#DTO> dto);
 }

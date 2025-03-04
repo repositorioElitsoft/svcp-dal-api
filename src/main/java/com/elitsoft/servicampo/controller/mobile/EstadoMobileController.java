@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.EstadoDto;
+import com.elitsoft.servicampo.domain.dto.core.EstadoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.EstadoMobileService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -27,24 +27,57 @@ public class EstadoMobileController {
     @Autowired
     private EstadoMobileService estadoMobileService;
 
-    private static final Logger logeador = LoggerFactory.getLogger(EstadoMobileController.class);
+    private static final Logger logeador = LoggerFactory.getLogger(EstadoMobileController.class); //Logback
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega un estado", description = "Agrega un nuevo estado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Estado agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "Estado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody EstadoDto estadoDto) {
+    public ResponseEntity<EstadoDTO> agregar(@RequestBody EstadoDTO estadoDTO) {
         logeador.debug("agregar() estado");
 
         try {
-            estadoMobileService.agregar(estadoDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(estadoMobileService.agregar(estadoDTO)); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
+    @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega lista de estado", description = "Agrega una lista de nuevos estado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Lista Estado agregados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "Estado ya Existe"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> agregarLote(@RequestBody List<EstadoDTO> estadoLoteDTO) {
+        logeador.debug("agregarLote() estado");
+
+        try {
+            estadoMobileService.agregarLote(estadoLoteDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // Retorna  409 Conflict
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
 
     }
@@ -53,21 +86,46 @@ public class EstadoMobileController {
     @Operation(summary = "Actualiza un estado", description = "Actualiza un estado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Estado actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "Estado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody EstadoDto estadoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody EstadoDTO estadoDTO) {
         logeador.debug("actualizar() estado");
 
         try {
-            estadoMobileService.actualizar(id, estadoDto);
-            return ResponseEntity.noContent().build();
-        } catch (EstadoNoEncontradoException e) {
-            logeador.error(Constantes.ESTADO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.ESTADO_NO_ENCONTRADO_MENSAGE);
+            estadoMobileService.actualizar(id, estadoDTO);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @PutMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Actualiza lista de estado", description = "Actualiza una lista de estado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lote Estado actualizados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> actualizarLote(@RequestBody List<EstadoDTO> estadoLoteDTO) {
+        logeador.debug("actualizarLote() estado");
+
+        try {
+            estadoMobileService.actualizarLote(estadoLoteDTO);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
         }
     }
 
@@ -75,6 +133,8 @@ public class EstadoMobileController {
     @Operation(summary = "Elimina un estado", description = "Elimina un estado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Estado eliminado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "404", description = "Estado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
@@ -82,15 +142,38 @@ public class EstadoMobileController {
 
         try {
             estadoMobileService.eliminar(id);
-        } catch (EstadoNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.ESTADO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.ESTADO_NO_ENCONTRADO_MENSAGE);
-        } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
+    }
 
-        return ResponseEntity.noContent().build();
+    @DeleteMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Elimina Lista de estado", description = "Elimina una Lista de estado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Lista Estado eliminados exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<String> eliminarLote(@RequestBody List<Long> idLote) {
+        logeador.debug("eliminarLote() estado");
+
+        try {
+            estadoMobileService.eliminarLote(idLote);
+            return ResponseEntity.noContent().build(); // Retorna  204 No Content
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+        }
     }
 
     @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -100,24 +183,17 @@ public class EstadoMobileController {
             @ApiResponse(responseCode = "404", description = "Estado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<EstadoDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<EstadoDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            EstadoDto estadoDto = estadoMobileService.encontrarPorClave(id);
-            if (estadoDto != null) {
-                return ResponseEntity.ok(estadoDto);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            EstadoDTO estadoDTO = estadoMobileService.encontrarPorClave(id);
+            return ResponseEntity.ok(estadoDTO);  // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
-        } catch (EstadoNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.ESTADO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.notFound().build(); // Retorna  404 Not Found
         }
-
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -126,18 +202,17 @@ public class EstadoMobileController {
             @ApiResponse(responseCode = "200", description = "Estados obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<EstadoDto>> obtenerTodos() {
+    public ResponseEntity<List<EstadoDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<EstadoDto> estados = null;
+        List<EstadoDTO> estadoLista = null;
 
         try {
-            estados = estadoMobileService.obtenerTodos();
+            estadoLista = estadoMobileService.obtenerTodos();
+             return ResponseEntity.ok(estadoLista); // Retorna  200 OK
         } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
-
-        return ResponseEntity.ok(estados);
+       
     }
 }

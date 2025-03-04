@@ -1,6 +1,6 @@
 package com.elitsoft.#app_name#.controller.core;
 
-import com.elitsoft.#app_name#.domain.dto.core.#Base#Dto;
+import com.elitsoft.#app_name#.domain.dto.core.#Base#DTO;
 import com.elitsoft.#app_name#.exceptions.*;
 import com.elitsoft.#app_name#.service.core.#Base#Service;
 import com.elitsoft.#app_name#.utils.Constantes;
@@ -37,11 +37,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody #Base#Dto #base#Dto) {
+    public ResponseEntity<String> agregar(@RequestBody #Base#DTO #base#DTO) {
         logeador.debug("agregar() #base#");
 
         try {
-            #base#Service.agregar(#base#Dto);
+            #base#Service.agregar(#base#DTO);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -64,11 +64,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<#Base#Dto> agregar(@RequestBody #Base#Dto #base#Dto) {
+    public ResponseEntity<#Base#DTO> agregar(@RequestBody #Base#DTO #base#DTO) {
         logeador.debug("agregar() #base#");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(#base#Service.agregar(#base#Dto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(#base#Service.agregar(#base#DTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -90,11 +90,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<#Base#Dto> #base#LoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<#Base#DTO> #base#LoteDTO) {
         logeador.debug("agregarLote() #base#");
 
         try {
-            #base#Service.agregarLote (#base#LoteDto);
+            #base#Service.agregarLote (#base#LoteDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -117,11 +117,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody #Base#Dto #base#Dto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody #Base#DTO #base#DTO) {
         logeador.debug("actualizar() #base#");
 
         try {
-            #base#Service.actualizar(id, #base#Dto);
+            #base#Service.actualizar(id, #base#DTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -141,11 +141,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<#Base#Dto> #base#LoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<#Base#DTO> #base#LoteDTO) {
         logeador.debug("actualizarLote() #base#");
 
         try {
-            #base#Service.actualizarLote(#base#LoteDto);
+            #base#Service.actualizarLote(#base#LoteDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -210,12 +210,12 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<#Base#Dto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<#Base#DTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            #Base#Dto #base#Dto = #base#Service.encontrarPorClave(id);
-            return ResponseEntity.ok(#base#Dto); // Retorna  200
+            #Base#DTO #base#DTO = #base#Service.encontrarPorClave(id);
+            return ResponseEntity.ok(#base#DTO); // Retorna  200
         }
         catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -230,11 +230,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "200", description = "#Base#s obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<#Base#Dto>> obtenerTodos() {
+    public ResponseEntity<List<#Base#DTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<#Base#Dto> #base#Lista = null;
+            List<#Base#DTO> #base#Lista = null;
             #base#Lista = #base#Service.obtenerTodos();
             return ResponseEntity.ok(#base#Lista);  // Retorna  200
         } catch (BaseDatosException e) {
