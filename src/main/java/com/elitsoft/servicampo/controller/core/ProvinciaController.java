@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Provincia
  */
 @RestController
-@RequestMapping("/provincia")
+@RequestMapping("/provincias")
 public class ProvinciaController {
 
     @Autowired

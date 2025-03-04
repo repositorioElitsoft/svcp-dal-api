@@ -31,7 +31,7 @@ public class ComunaFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(ComunaFiltroController.class); //Logback
 
-    @GetMapping(value = "/comuna", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/comunas", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un comuna", description = "Filtra y hace paginado de comuna por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comuna Filtrado exitosamente"),

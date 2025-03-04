@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Permiso
  */
 @RestController
-@RequestMapping("/permiso")
+@RequestMapping("/permisos")
 public class PermisoController {
 
     @Autowired

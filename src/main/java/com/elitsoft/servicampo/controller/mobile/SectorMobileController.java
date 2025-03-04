@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Sector para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/sector")
+@RequestMapping("/mobile/sectores")
 public class SectorMobileController {
 
     @Autowired

@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Pais
  */
 @RestController
-@RequestMapping("/pais")
+@RequestMapping("/paises")
 public class PaisController {
 
     @Autowired

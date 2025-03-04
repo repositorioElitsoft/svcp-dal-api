@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Comuna
  */
 @RestController
-@RequestMapping("/comuna")
+@RequestMapping("/comunas")
 public class ComunaController {
 
     @Autowired

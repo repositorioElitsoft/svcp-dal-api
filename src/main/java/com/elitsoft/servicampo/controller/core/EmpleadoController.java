@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Empleado
  */
 @RestController
-@RequestMapping("/empleado")
+@RequestMapping("/empleados")
 public class EmpleadoController {
 
     @Autowired

@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Zona
  */
 @RestController
-@RequestMapping("/zona")
+@RequestMapping("/zonas")
 public class ZonaController {
 
     @Autowired

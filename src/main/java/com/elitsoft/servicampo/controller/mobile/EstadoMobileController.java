@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Estado para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/estado")
+@RequestMapping("/mobile/estados")
 public class EstadoMobileController {
 
     @Autowired

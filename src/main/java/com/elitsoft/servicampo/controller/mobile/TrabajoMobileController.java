@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Trabajo para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/trabajo")
+@RequestMapping("/mobile/trabajos")
 public class TrabajoMobileController {
 
     @Autowired

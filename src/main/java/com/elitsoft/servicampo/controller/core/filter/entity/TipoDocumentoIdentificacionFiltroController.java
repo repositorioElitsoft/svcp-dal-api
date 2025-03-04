@@ -31,7 +31,7 @@ public class TipoDocumentoIdentificacionFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(TipoDocumentoIdentificacionFiltroController.class); //Logback
 
-    @GetMapping(value = "/tipo-documento-identificacion", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/tipos-documentos-identificaciones", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un tipodocumentoidentificacion", description = "Filtra y hace paginado de tipodocumentoidentificacion por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "TipoDocumentoIdentificacion Filtrado exitosamente"),

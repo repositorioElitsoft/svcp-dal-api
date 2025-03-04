@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Tarea para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/tarea")
+@RequestMapping("/mobile/tareas")
 public class TareaMobileController {
 
     @Autowired

@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Sector
  */
 @RestController
-@RequestMapping("/sector")
+@RequestMapping("/sectores")
 public class SectorController {
 
     @Autowired

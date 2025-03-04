@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Estado
  */
 @RestController
-@RequestMapping("/estado")
+@RequestMapping("/estados")
 public class EstadoController {
 
     @Autowired

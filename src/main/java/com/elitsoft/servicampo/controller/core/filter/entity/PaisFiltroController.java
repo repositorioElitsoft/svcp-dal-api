@@ -31,7 +31,7 @@ public class PaisFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(PaisFiltroController.class); //Logback
 
-    @GetMapping(value = "/pais", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/paises", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un pais", description = "Filtra y hace paginado de pais por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pais Filtrado exitosamente"),

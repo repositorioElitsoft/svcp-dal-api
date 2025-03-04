@@ -31,7 +31,7 @@ public class EstadoFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(EstadoFiltroController.class); //Logback
 
-    @GetMapping(value = "/estado", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/estados", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un estado", description = "Filtra y hace paginado de estado por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estado Filtrado exitosamente"),

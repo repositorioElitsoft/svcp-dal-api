@@ -31,7 +31,7 @@ public class TrabajoFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(TrabajoFiltroController.class); //Logback
 
-    @GetMapping(value = "/trabajo", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/trabajos", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un trabajo", description = "Filtra y hace paginado de trabajo por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Trabajo Filtrado exitosamente"),

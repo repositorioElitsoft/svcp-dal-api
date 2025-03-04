@@ -31,7 +31,7 @@ public class RegionFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(RegionFiltroController.class); //Logback
 
-    @GetMapping(value = "/region", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/regiones", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un region", description = "Filtra y hace paginado de region por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Region Filtrado exitosamente"),

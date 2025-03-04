@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a TrabajoTarea
  */
 @RestController
-@RequestMapping("/trabajo-tarea")
+@RequestMapping("/trabajos-tareas")
 public class TrabajoTareaController {
 
     @Autowired

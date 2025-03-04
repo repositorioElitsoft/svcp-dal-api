@@ -31,7 +31,7 @@ public class SegmentacionClienteFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(SegmentacionClienteFiltroController.class); //Logback
 
-    @GetMapping(value = "/segmentacion-cliente", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/segmentaciones-clientes", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un segmentacioncliente", description = "Filtra y hace paginado de segmentacioncliente por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "SegmentacionCliente Filtrado exitosamente"),

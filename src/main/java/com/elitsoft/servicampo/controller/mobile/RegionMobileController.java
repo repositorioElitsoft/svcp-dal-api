@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Region para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/region")
+@RequestMapping("/mobile/regiones")
 public class RegionMobileController {
 
     @Autowired

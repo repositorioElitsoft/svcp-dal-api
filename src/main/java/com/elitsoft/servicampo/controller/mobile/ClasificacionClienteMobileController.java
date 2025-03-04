@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a ClasificacionCliente para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/clasificacion-cliente")
+@RequestMapping("/mobile/clasificaciones-clientes")
 public class ClasificacionClienteMobileController {
 
     @Autowired

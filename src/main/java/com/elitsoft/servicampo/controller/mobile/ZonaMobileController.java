@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Zona para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/zona")
+@RequestMapping("/mobile/zonas")
 public class ZonaMobileController {
 
     @Autowired

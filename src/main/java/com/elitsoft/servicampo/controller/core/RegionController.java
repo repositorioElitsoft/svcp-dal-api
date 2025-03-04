@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Region
  */
 @RestController
-@RequestMapping("/region")
+@RequestMapping("/regiones")
 public class RegionController {
 
     @Autowired

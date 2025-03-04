@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a TipoCliente para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/tipo-cliente")
+@RequestMapping("/mobile/tipos-clientes")
 public class TipoClienteMobileController {
 
     @Autowired

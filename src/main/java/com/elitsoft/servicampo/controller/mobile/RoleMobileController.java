@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Role para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/role")
+@RequestMapping("/mobile/roles")
 public class RoleMobileController {
 
     @Autowired

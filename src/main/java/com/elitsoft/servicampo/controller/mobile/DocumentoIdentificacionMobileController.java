@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a DocumentoIdentificacion para la version mobile
  */
 @RestController
-@RequestMapping("/mobile/documento-identificacion")
+@RequestMapping("/mobile/documentos-identificaciones")
 public class DocumentoIdentificacionMobileController {
 
     @Autowired

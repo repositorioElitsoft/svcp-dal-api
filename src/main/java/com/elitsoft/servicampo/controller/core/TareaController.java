@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Tarea
  */
 @RestController
-@RequestMapping("/tarea")
+@RequestMapping("/tareas")
 public class TareaController {
 
     @Autowired

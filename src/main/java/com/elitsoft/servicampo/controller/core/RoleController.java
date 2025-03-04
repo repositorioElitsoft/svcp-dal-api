@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a Role
  */
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/roles")
 public class RoleController {
 
     @Autowired

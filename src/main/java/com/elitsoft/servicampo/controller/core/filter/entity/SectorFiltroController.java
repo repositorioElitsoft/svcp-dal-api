@@ -31,7 +31,7 @@ public class SectorFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(SectorFiltroController.class); //Logback
 
-    @GetMapping(value = "/sector", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/sectores", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un sector", description = "Filtra y hace paginado de sector por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sector Filtrado exitosamente"),

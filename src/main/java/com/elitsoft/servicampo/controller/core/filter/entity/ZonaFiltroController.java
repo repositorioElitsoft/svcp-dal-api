@@ -31,7 +31,7 @@ public class ZonaFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(ZonaFiltroController.class); //Logback
 
-    @GetMapping(value = "/zona", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/zonas", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un zona", description = "Filtra y hace paginado de zona por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Zona Filtrado exitosamente"),

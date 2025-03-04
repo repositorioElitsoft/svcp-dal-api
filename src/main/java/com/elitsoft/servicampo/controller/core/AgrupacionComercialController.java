@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a AgrupacionComercial
  */
 @RestController
-@RequestMapping("/agrupacion-comercial")
+@RequestMapping("/agrupaciones-comerciales")
 public class AgrupacionComercialController {
 
     @Autowired

@@ -31,7 +31,7 @@ public class AgrupacionComercialFiltroController {
 
     private static final Logger logeador = LoggerFactory.getLogger(AgrupacionComercialFiltroController.class); //Logback
 
-    @GetMapping(value = "/agrupacion-comercial", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/agrupaciones-comerciales", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Filtra un agrupacioncomercial", description = "Filtra y hace paginado de agrupacioncomercial por atributos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "AgrupacionComercial Filtrado exitosamente"),

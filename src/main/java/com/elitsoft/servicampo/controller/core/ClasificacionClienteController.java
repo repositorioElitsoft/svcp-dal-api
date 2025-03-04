@@ -20,7 +20,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a ClasificacionCliente
  */
 @RestController
-@RequestMapping("/clasificacion-cliente")
+@RequestMapping("/clasificaciones-clientes")
 public class ClasificacionClienteController {
 
     @Autowired

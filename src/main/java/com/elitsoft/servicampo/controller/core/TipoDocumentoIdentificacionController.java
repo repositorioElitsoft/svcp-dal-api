@@ -21,7 +21,7 @@ import java.util.List;
  * Gestiona las peticiones y respuestas http relativas a TipoDocumentoIdentificacion
  */
 @RestController
-@RequestMapping("/tipo-documento-identificacion")
+@RequestMapping("/tipos-documentos-identificaciones")
 public class TipoDocumentoIdentificacionController {
 
     @Autowired
