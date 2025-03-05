@@ -18,9 +18,17 @@ public class Constantes {
     public static final String CARRITO_ARTICULO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando articulo de carrito por clave :";
     public static final String CARRITO_ARTICULO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los articulo de carrito ";
 
+    public static final String EMPLEADO_NO_ENCONTRADO_MENSAGE = "EMPLEADO no  encontrado";
+    public static final String EMPLEADO_AGREGAR_EXECPTION = "Error agregando EMPLEADO";
+    public static final String EMPLEADO_ACTUALIZAR_EXECPTION = "Error actualizando EMPLEADO";
+    public static final String EMPLEADO_ELIMINAR_EXECPTION = "Error eliminando EMPLEADO";
+    public static final String EMPLEADO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando EMPLEADO por clave :";
+    public static final String EMPLEADO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los EMPLEADO";
+
+
     public static final String EMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de EMPLEADO invalida.";
     public static final String EMPLEADO_DUPLICADO_MENSAGE = "Recurso  EMPLEADO ya existe.";
-    public static final String EMPLEADO_NO_ENCONTRADO_MENSAGE = "Recurso EMPLEADO no  encontrado";
+    //public static final String EMPLEADO_NO_ENCONTRADO_MENSAGE = "Recurso EMPLEADO no  encontrado";
     public static final String EMPLEADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso EMPLEADO";
     public static final String EMPLEADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos EMPLEADO";
     public static final String EMPLEADO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso EMPLEADO";
