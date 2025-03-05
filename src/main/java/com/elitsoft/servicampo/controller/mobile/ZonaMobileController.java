@@ -135,6 +135,7 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "204", description = "Zona eliminado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "Zona no encontrado"),
+            @ApiResponse(responseCode = "460", description = "Zona Viola integridad referencial"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
@@ -146,6 +147,9 @@ public class ZonaMobileController {
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoEliminarException e) {
+            return ResponseEntity.status(460).body(e.getMessage()); // Retorna  460 Integridad Violada
         }
         catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
@@ -159,6 +163,7 @@ public class ZonaMobileController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Lista Zona eliminados exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "460", description = "Zona Viola integridad referencial"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<String> eliminarLote(@RequestBody List<Long> idLote) {
@@ -170,6 +175,9 @@ public class ZonaMobileController {
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (RecursoEliminarException e) {
+            return ResponseEntity.status(460).body(e.getMessage()); // Retorna  460 Integridad Violada
         }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error

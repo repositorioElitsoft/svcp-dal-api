@@ -1,8 +1,10 @@
 package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.domain.entity.Sector;
 import com.elitsoft.servicampo.domain.entity.Zona;
 import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.mapper.SectorMapper;
 import com.elitsoft.servicampo.mapper.ZonaMapper;
 import com.elitsoft.servicampo.mapstruct.ZonaMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -24,6 +26,9 @@ public class ZonaService {
 
     @Autowired
     private ZonaMapper zonaMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+
+    @Autowired
+    private SectorMapper sectorMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
     private ZonaMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
@@ -153,8 +158,11 @@ public class ZonaService {
      * @throws RecursoNoEncontradoException si el Zona no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, RecursoEliminarException, BaseDatosException {
         logeador.debug("eliminar() zona: {}", id);
+
+        //Verifica integridad referencial
+        this.verificarIntegridadEliminar(id);
 
         try {
             ZonaDto zonaDto = this.encontrarPorClave(id); // Verifica si existe
@@ -172,13 +180,18 @@ public class ZonaService {
      * @throws EntradaInvalidadException si la lista  Zona esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException  {
         logeador.debug("eliminarLote()");
 
         //  Valida Entrada
         if (idLote.isEmpty()) {
             logeador.error(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        //Verifica integridad referencial
+        for (Long id : idLote) {
+            this.verificarIntegridadEliminar(id);
         }
 
         try {
@@ -234,4 +247,55 @@ public class ZonaService {
             throw new BaseDatosException(Constantes.ZONA_OBTENER_TODOS_MENSAJE, e);
         }
     }
+
+
+    /**
+     * Verifica la violacion de integridad referencia de Zona
+     * @param id la clave Zona a encontrar.
+     * @throws RecursoEliminarException
+     * @throws BaseDatosException
+     */
+    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
+        logeador.debug("verificarIntegridadEliminar() zona: {}", id);
+
+        boolean sectoresPorZona = false;
+
+        try {
+            sectoresPorZona = this.sectoresPorZona(id);
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.ZONA_ELIMINAR_MENSAJE + ": {}", id, e);
+            throw new BaseDatosException(Constantes.ZONA_ELIMINAR_MENSAJE, e);
+        }
+
+        //Verifca la integridad con sectores
+        if (sectoresPorZona) {
+            throw new RecursoEliminarException(Constantes.ZONA_VIOLACION_INTEGRIDAD_MENSAGE);
+        }
+
+    }
+
+    /**
+     * Buscar Zonas que tengan Sectores.
+     * @param id la clave Zona a encontrar.
+     * @return boolean Zona tiene o no registros asociados
+     * @throws BaseDatosException
+     */
+    public boolean sectoresPorZona(Long id) throws  BaseDatosException {
+        logeador.debug("sectoresPorZona() zona: {}", id);
+
+        try {
+            List<Sector> sectores = sectorMapper.encontrarPorZona(id); // Verifica si existe Sectores asociados
+            if (!sectores.isEmpty()) {
+                logeador.info("zona  tiene sectores asociados");
+                return true;
+            } else{
+                logeador.info("zona no tiene sectores asociados");
+                return false;
+            }
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.ZONA_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}", id, e);
+            throw new BaseDatosException(Constantes.ZONA_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+        }
+    }
+
 }

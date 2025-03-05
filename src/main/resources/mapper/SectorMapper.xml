@@ -21,6 +21,14 @@
         FROM ${schema}sectores
     </select>
 
+    <!-- Sentencia SQL de Encontrar por Zona -->
+    <select id="encontrarPorZona" parameterType="long"  resultMap="sectorResultMap">
+        SELECT sctr.sctr_id, sctr.sctr_dsc, sctr.znas_id
+        FROM ${schema}sectores sctr INNER JOIN ${schema}zonas znas
+        ON sctr.znas_id = znas.znas_id
+        AND znas.znas_id = #{zonaId}
+    </select>
+
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="sectorResultMap">
         SELECT * FROM ${schema}sectores
