@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.DireccionEmpleadoMapper">
+
+    <resultMap id="direccionEmpleadoResultMap" type="com.elitsoft.servicampo.domain.entity.DireccionEmpleado">
+        <id property="id" column="drce_id" />
+        <result property="calle" column="drce_calle" />
+        <result property="numeracion" column="drce_numeracion" />
+        <result property="latitud" column="drce_latitud" />
+        <result property="longitud" column="drce_longitud" />
+        <result property="descripcion" column="drce_dsc" />
+        <result property="referencia" column="drce_referencia" />
+        <association property="estado"  resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap" />
+        <association property="comuna"  resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap" />
+        <association property="empleado"  resultMap="com.elitsoft.servicampo.mapper.EmpleadoMapper.empleadoResultMap" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT  drce.drce_id,
+                drce.drce_calle,
+                drce.drce_numeracion,
+                drce.drce_latitud,
+                drce.drce_longitud,
+                drce.drce_dsc,
+                drce.drce_referencia,
+                estd.estd_id AS estd_id,
+                estd.estd_dsc AS estd_dsc,
+                cmna.cmna_id AS cmna_id,
+                cmna.cmna_dsc AS cmna_dsc,
+                prvs.prvs_id AS cmna_prvs_id,
+                prvs.prvs_dsc AS cmna_prvs_dsc,
+                empl.empl_id AS empl_id,
+                empl.empl_nombre AS empl_nombre
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM
+        ${schema}direcciones_empleados drce
+        INNER JOIN ${schema}estados estd ON drce.estd_id = estd.estd_id
+        INNER JOIN ${schema}comunas cmna ON drce.cmna_id = cmna.cmna_id
+        INNER JOIN ${schema}provincias prvs ON cmna.prvs_id = prvs.prvs_id
+        INNER JOIN ${schema}empleados empl ON drce.empl_id = empl.empl_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="direccionEmpleadoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        AND drce.drce_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="direccionEmpleadoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="direccionEmpleadoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND drce.drce_id = #{filtro.id}
+                </if>
+                <if test="filtro.calle != null and filtro.calle != ''">
+                    AND LOWER(drce.drce_calle) LIKE '%' || LOWER(#{filtro.calle}) || '%'
+                </if>
+                <if test="filtro.numeracion != null and filtro.numeracion != ''">
+                    AND LOWER(drce.drce_numeracion) LIKE '%' || LOWER(#{filtro.numeracion}) || '%'
+                </if>
+                <if test="filtro.latitud != null">
+                    AND drce.drce_latitud = #{filtro.latitud}
+                </if>
+                <if test="filtro.longitud != null">
+                    AND drce.drce_longitud = #{filtro.longitud}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(drce.drce_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.referencia != null and filtro.referencia != ''">
+                    AND LOWER(drce.drce_referencia) LIKE '%' || LOWER(#{filtro.referencia}) || '%'
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND drce.estd_id = #{filtro.estadoId}
+                </if>
+                <if test="filtro.comunaId != null">
+                    AND drce.cmna_id = #{filtro.comunaId}
+                </if>
+                <if test="filtro.empleadoId != null">
+                    AND drce.empl_id = #{filtro.empleadoId}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY drce.drce_id ${direccionOrden}</when>
+                <when test="campoOrden == 'calle'">ORDER BY drce.drce_calle ${direccionOrden}</when>
+                <when test="campoOrden == 'numeracion'">ORDER BY drce.drce_numeracion ${direccionOrden}</when>
+                <when test="campoOrden == 'latitud'">ORDER BY drce.drce_latitud ${direccionOrden}</when>
+                <when test="campoOrden == 'longitud'">ORDER BY drce.drce_longitud ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY drce.drce_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'estadoId'">ORDER BY drce.estd_id ${direccionOrden}</when>
+                <when test="campoOrden == 'comunaId'">ORDER BY drce.cmna_id ${direccionOrden}</when>
+                <when test="campoOrden == 'empleadoId'">ORDER BY drce.empl_id ${direccionOrden}</when>
+                <otherwise>ORDER BY drce.drce_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND drce.drce_id = #{filtro.id}
+                </if>
+                <if test="filtro.calle != null and filtro.calle != ''">
+                    AND LOWER(drce.drce_calle) LIKE '%' || LOWER(#{filtro.calle}) || '%'
+                </if>
+                <if test="filtro.numeracion != null and filtro.numeracion != ''">
+                    AND LOWER(drce.drce_numeracion) LIKE '%' || LOWER(#{filtro.numeracion}) || '%'
+                </if>
+                <if test="filtro.latitud != null">
+                    AND drce.drce_latitud = #{filtro.latitud}
+                </if>
+                <if test="filtro.longitud != null">
+                    AND drce.drce_longitud = #{filtro.longitud}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(drce.drce_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.referencia != null and filtro.referencia != ''">
+                    AND LOWER(drce.drce_referencia) LIKE '%' || LOWER(#{filtro.referencia}) || '%'
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND drce.estd_id = #{filtro.estadoId}
+                </if>
+                <if test="filtro.comunaId != null">
+                    AND drce.cmna_id = #{filtro.comunaId}
+                </if>
+                <if test="filtro.empleadoId != null">
+                    AND drce.empl_id = #{filtro.empleadoId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.DireccionEmpleado" affectData="true" flushCache="true" resultMap="direccionEmpleadoResultMap">
+        INSERT INTO ${schema}direcciones_empleados (estd_id, cmna_id, drce_calle, drce_numeracion, drce_latitud, drce_longitud, drce_dsc, drce_referencia, empl_id )
+        VALUES (#{estado.id}, #{comuna.id}, #{calle}, #{numeracion},#{latitud},#{longitud},#{descripcion},#{referencia},#{empleado.id})
+        returning drce_id, estd_id, cmna_id, drce_calle, drce_numeracion, drce_latitud, drce_longitud, drce_dsc, drce_referencia, empl_id
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.DireccionEmpleado">
+        UPDATE ${schema}direcciones_empleados
+        SET  estd_id = #{estado.id}, cmna_id = #{comuna.id}, drce_calle = #{calle}, drce_numeracion = #{numeracion},
+             drce_latitud = #{latitud}, drce_longitud = #{longitud}, drce_dsc = #{descripcion}, drce_referencia = #{referencia},
+             empl_id = #{empleado.id}
+        WHERE drce_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}direcciones_empleados
+        WHERE drce_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}direcciones_empleados (estd_id, cmna_id, drce_calle, drce_numeracion, drce_latitud, drce_longitud, drce_dsc, drce_referencia, empl_id ) VALUES
+        <foreach item="direccionEmpleado" collection="direccionEmpleadoLote" separator=",">
+            (#{direccionEmpleado.estado.id}, #{direccionEmpleado.comuna.id}, #{direccionEmpleado.calle}, #{direccionEmpleado.numeracion},
+            #{direccionEmpleado.latitud},#{direccionEmpleado.longitud},#{direccionEmpleado.descripcion},#{direccionEmpleado.referencia},
+            #{direccionEmpleado.empleado.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='direccionEmpleado' collection='direccionEmpleadoLote' separator=';'>
+            UPDATE ${schema}direcciones_empleados
+            SET  estd_id = #{direccionEmpleado.estado.id}, cmna_id = #{direccionEmpleado.comuna.id}, drce_calle = #{direccionEmpleado.calle},
+                 drce_numeracion = #{direccionEmpleado.numeracion}, drce_latitud = #{direccionEmpleado.latitud},
+                 drce_longitud = #{direccionEmpleado.longitud}, drce_dsc = #{direccionEmpleado.descripcion},
+                 drce_referencia = #{direccionEmpleado.referencia},  empl_id = #{direccionEmpleado.empleado.id}
+            WHERE drce_id = #{direccionEmpleado.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}direcciones_empleados WHERE drce_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

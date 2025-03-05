@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoProductoDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.TipoProductoFiltro;
 import com.elitsoft.servicampo.mapper.TipoProductoMapper;
@@ -32,7 +32,7 @@ public class TipoProductoFiltroService {
      * @return List<TipoProductoDto> lista de entidades TipoProducto
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<TipoProductoDto> filtrar(TipoProductoFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<TipoProductoDTO> filtrar(TipoProductoFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {

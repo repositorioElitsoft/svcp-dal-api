@@ -302,5 +302,16 @@ public class Constantes {
     public static final String DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_FILTRAR_MENSAJE = "Error filtrando DOCUMENTOIDENTIFICACION";
 
+    public static final String DIRECCIONEMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de DIRECCIONEMPLEADO invalida.";
+    public static final String DIRECCIONEMPLEADO_DUPLICADO_MENSAGE = "Recurso  DIRECCIONEMPLEADO ya existe.";
+    public static final String DIRECCIONEMPLEADO_NO_ENCONTRADO_MENSAGE = "Recurso DIRECCIONEMPLEADO no  encontrado";
+    public static final String DIRECCIONEMPLEADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso DIRECCIONEMPLEADO";
+    public static final String DIRECCIONEMPLEADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos DIRECCIONEMPLEADO";
+    public static final String DIRECCIONEMPLEADO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso DIRECCIONEMPLEADO";
+    public static final String DIRECCIONEMPLEADO_ELIMINAR_MENSAJE = "Error eliminando Recurso DIRECCIONEMPLEADO";
+    public static final String DIRECCIONEMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DIRECCIONEMPLEADO por clave :";
+    public static final String DIRECCIONEMPLEADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DIRECCIONEMPLEADO";
+    public static final String DIRECCIONEMPLEADO_FILTRAR_MENSAJE = "Error filtrando DIRECCIONEMPLEADO";
+
 }
 
