@@ -22,11 +22,16 @@
     </select>
 
     <!-- Sentencia SQL de Encontrar por Zona -->
-    <select id="encontrarPorZona" parameterType="long"  resultMap="sectorResultMap">
+    <select id="encontrarPorZona"  resultMap="sectorResultMap">
         SELECT sctr.sctr_id, sctr.sctr_dsc, sctr.znas_id
         FROM ${schema}sectores sctr INNER JOIN ${schema}zonas znas
         ON sctr.znas_id = znas.znas_id
         AND znas.znas_id = #{zonaId}
+
+        <!-- Para limitar el tamaño del resultado-->
+        <if test="limite">
+            LIMIT 2 OFFSET 0;
+        </if>
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->

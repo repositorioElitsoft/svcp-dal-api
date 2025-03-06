@@ -39,12 +39,14 @@ public class Constantes {
 
     public static final String TIPOEMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOEMPLEADO invalida.";
     public static final String TIPOEMPLEADO_DUPLICADO_MENSAGE = "Recurso  TIPOEMPLEADO ya existe.";
+    public static final String TIPOEMPLEADO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOEMPLEADO viola Integridad. INTGVIOLADA001";
     public static final String TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE = "Recurso TIPOEMPLEADO no  encontrado";
     public static final String TIPOEMPLEADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOEMPLEADO";
     public static final String TIPOEMPLEADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOEMPLEADO";
     public static final String TIPOEMPLEADO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPOEMPLEADO";
     public static final String TIPOEMPLEADO_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPOEMPLEADO";
     public static final String TIPOEMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOEMPLEADO por clave :";
+    public static final String TIPOEMPLEADO_EMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EMPLEADO por clave TIPOEMPLEADO:";
     public static final String TIPOEMPLEADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOEMPLEADO";
     public static final String TIPOEMPLEADO_FILTRAR_MENSAJE = "Error filtrando TIPOEMPLEADO";
 

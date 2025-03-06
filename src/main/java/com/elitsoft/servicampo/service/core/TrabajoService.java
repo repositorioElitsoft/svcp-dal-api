@@ -109,6 +109,12 @@ public class TrabajoService {
             throw new EntradaInvalidadException(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(trabajoDto.getId())) {
+            logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  trabajoDto.toString());
+            throw new EntradaInvalidadException(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             TrabajoDto trabajoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             Trabajo trabajo = mapper.toEntity(trabajoDto);

@@ -1,15 +1,21 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.EmpleadoDto;
+import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
+import com.elitsoft.servicampo.domain.dto.core.EmpleadoDTO;
 import com.elitsoft.servicampo.domain.entity.Empleado;
 import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapper.EmpleadoMapper;
+import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.mapstruct.EmpleadoMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
+import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,125 +25,208 @@ import java.util.List;
  * Clase de Servicio para la entidad Empleado.
  */
 @Service
-@Transactional
 public class EmpleadoService {
 
     @Autowired
     private EmpleadoMapper empleadoMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
-    private EmpleadoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
+    private DocumentoIdentificacionMapper documentoIdentificacionMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
-    private static final Logger logeador = LoggerFactory.getLogger(EmpleadoService.class);
+    @Autowired
+    private DocumentoIdentificacionService documentoIdentificacionService;
+
+
+    @Autowired
+    private EmpleadoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
+
+    @Autowired
+    private DocumentoIdentificacionMapStruct documentoIdentificacionMapStruct; // MapStruct Mapper (ToEntity(), ToDTO())
+
+    private static final Logger logeador = LoggerFactory.getLogger(EmpleadoService.class); //Logback
+
 
     /**
      * Agrega un nuevo Empleado.
-     * @param empleadoDto El Empleado DTO.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param empleadoDTO el Empleado DTO.
+     * @return el Empleado DTO agregado con campo auto generado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
+     * @throws RecursoDuplicadoException si el recurso Empleado ya existe.
      */
-    public void agregar(EmpleadoDto empleadoDto) throws BaseDatosException {
-        logeador.debug("agregar() empleado");
+    @Transactional
+    public EmpleadoDTO agregar(EmpleadoDTO empleadoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregar() Empleado");
 
+        //  Valida Entrada
+        if (empleadoDTO == null || empleadoDTO.getContrasena() == null || empleadoDTO.getContrasena().isEmpty()) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        // Agrega el Documento de Identificacion
+        DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.agregar(empleadoDTO.getDocumentoIdentificacion());
 
         try {
-            Empleado empleado = mapper.toEntity(empleadoDto);
-            Long nuevoId = empleadoMapper.agregar(empleado);
-            logeador.info("Empleado agregado exitosamente id: {}", nuevoId);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.EMPLEADO_AGREGAR_EXECPTION + ": {}", empleadoDto.toString(), e);
-            throw new BaseDatosException(Constantes.EMPLEADO_AGREGAR_EXECPTION, e);
+
+            // Asocia el documento de Identificacion creado al empleado
+            empleadoDTO.setDocumentoIdentificacion(documentoIdentificacionDTO);
+
+            //Encripta el la clave de usuario
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            empleadoDTO.setContrasena(passwordEncoder.encode(empleadoDTO.getContrasena()));
+
+            Empleado empleado = mapper.toEntity(empleadoDTO);
+            empleado = empleadoMapper.agregar(empleado);
+
+            EmpleadoDTO empleadoDTOEncontrado = this.encontrarPorClave(empleado.getId()); // Busca el Empleado creado
+
+             empleado = mapper.toEntity(empleadoDTOEncontrado);
+
+            logeador.info("Empleado agregado exitosamente id: {}", empleado.getId());
+            return mapper.toDTO(empleado);
         }
+        catch (DuplicateKeyException e) {
+            logeador.error(Constantes.EMPLEADO_DUPLICADO_MENSAGE + ": {}", empleadoDTO.getId());
+            throw new RecursoDuplicadoException(Constantes.EMPLEADO_DUPLICADO_MENSAGE);
+        }
+        catch (DataAccessException | RecursoNoEncontradoException e) {
+            logeador.error(Constantes.EMPLEADO_AGREGAR_MENSAJE + ": {}", empleadoDTO.toString(), e);
+            throw new BaseDatosException(Constantes.EMPLEADO_AGREGAR_MENSAJE, e);
+    }
     }
 
     /**
      * Actualiza un Empleado existente.
-     * @param id La Clave de Empleado a actualizar.
-     * @param empleadoDto El Empleado DTO con informacion actualizada.
-     * @throws EmpleadoNoEncontradoException Si Empleado no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param id la clave de Empleado a actualizar.
+     * @param empleadoDTO el Empleado DTO con informacion actualizada.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Empleado no es encontrado.
+     * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
      */
-    public void actualizar(Long id, EmpleadoDto empleadoDto) throws EmpleadoNoEncontradoException, BaseDatosException {
+    public void actualizar(Long id, EmpleadoDTO empleadoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() empleado");
 
-        try {
-            EmpleadoDto empleadoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe
+        //  Valida Entrada
+        if (id == null || empleadoDTO == null || empleadoDTO.getId() == null) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((empleadoDTO != null) ? empleadoDTO.toString() : null  ));
+            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        }
 
-            Empleado empleado = mapper.toEntity(empleadoDto);
+        //  Valida id
+        if (!id.equals(empleadoDTO.getId())) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  empleadoDTO.toString());
+            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        try {
+            EmpleadoDTO empleadoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Empleado empleado = mapper.toEntity(empleadoDTO);
             empleado.setId(id);
             int registrosActualizados = empleadoMapper.actualizar(empleado);
             logeador.info("empleado actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
-        } catch (EmpleadoNoEncontradoException e) {
-            throw e;
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.EMPLEADO_ACTUALIZAR_EXECPTION + ": id={} {}", id, empleadoDto.toString(), e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ACTUALIZAR_EXECPTION, e);
+        } catch (DataAccessException | BindingException e) {
+            logeador.error(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE + ": id={} {}", id, empleadoDTO.toString(), e);
+            throw new BaseDatosException(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE, e);
         }
     }
+
+    /**
+     * Actualiza la clave de Empleado existente.
+     * @param id la clave de Empleado a actualizar.
+     * @param contrasena La clave Empleado a actualizar.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Empleado no es encontrado.
+     * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
+     */
+    public void actualizarClave(Long id, String contrasena) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+        logeador.debug("actualizarClave() empleado");
+
+        //  Valida Entrada
+        if (id == null || contrasena.isEmpty()) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((id != null) ? id : null  ));
+            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        try {
+
+            EmpleadoDTO empleadoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+
+            //Encripta el la clave de usuario
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            contrasena = passwordEncoder.encode(contrasena);
+
+            int registrosActualizados = empleadoMapper.actualizarClave (id,contrasena);
+            logeador.info("empleado clave actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
+        } catch (DataAccessException | BindingException e) {
+            logeador.error(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE + ": id={}", id, e);
+            throw new BaseDatosException(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE, e);
+        }
+    }
+
 
     /**
      * Elimina Empleado por Clave.
-     * @param id La Clave de Empleado a eliminar.
-     * @throws EmpleadoNoEncontradoException Si el Empleado no es encontrado.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @param id la clave de Empleado a eliminar.
+     * @throws RecursoNoEncontradoException si el Empleado no es encontrado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id) throws EmpleadoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() empleado: {}", id);
 
         try {
-            EmpleadoDto empleadoDto = this.encontrarPorClave(id); // Verifica si existe
+            EmpleadoDTO empleadoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = empleadoMapper.eliminar(id);
             logeador.info("empleado eliminado: {}, registros eliminados: {}", id, registrosEliminados);
-        } catch (EmpleadoNoEncontradoException e) {
-            throw e;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.EMPLEADO_ELIMINAR_EXECPTION + ": {}", id, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ELIMINAR_EXECPTION, e);
+            logeador.error(Constantes.EMPLEADO_ELIMINAR_MENSAJE + ": {}", id, e);
+            throw new BaseDatosException(Constantes.EMPLEADO_ELIMINAR_MENSAJE, e);
         }
-
     }
+
 
     /**
      * Encuentra un Empleado por Clave.
-     * @param id La Clave Empleado a encontrar.
-     * @return El Empleado DTO encontrado, o null si no es encontrado.
-     * @throws BaseDatosException Si Ocurre un error de base de datos.
-     * @throws EmpleadoNoEncontradoException Si Empleado no es encontrado.
+     * @param id la clave Empleado a encontrar.
+     * @return el Empleado DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Empleado no es encontrado.
      */
-    public EmpleadoDto encontrarPorClave(Long id) throws BaseDatosException, EmpleadoNoEncontradoException {
+    public EmpleadoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            EmpleadoDto empleadoDto = mapper.toDto(empleadoMapper.encontrarPorClave(id));
 
-            if (empleadoDto != null) {
+            EmpleadoDTO empleadoDTO = mapper.toDTO(empleadoMapper.encontrarPorClave(id));
+            if (empleadoDTO != null) {
                 logeador.info("empleado encontrado por clave : {}", id);
             } else {
                 logeador.info("empleado clave:{} no encontrado", id);
-                throw new EmpleadoNoEncontradoException(Constantes.EMPLEADO_NO_ENCONTRADO_MENSAGE);
+                throw new RecursoNoEncontradoException(Constantes.EMPLEADO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return empleadoDto;
+            return empleadoDTO;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.EMPLEADO_ENCONTRAR_POR_CLAVE_EXECPTION + " {}", id, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ENCONTRAR_POR_CLAVE_EXECPTION, e);
+            logeador.error(Constantes.EMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
+            throw new BaseDatosException(Constantes.EMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
     /**
      * Obtiene todos los Empleados.
-     * @return Una lista de todos Empleado DTOs.
-     * @throws BaseDatosException Si ocurre un error de base de datos.
+     * @return una lista de todos Empleado DTOs.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<EmpleadoDto> obtenerTodos() throws BaseDatosException {
+    public List<EmpleadoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<EmpleadoDto> empleadoList = mapper.toDtoList(empleadoMapper.obtenerTodos());
+            List<EmpleadoDTO> empleadoLista = mapper.toDTOList(empleadoMapper.obtenerTodos());
             logeador.info("empleados obtenidos");
-            return empleadoList;
+            return empleadoLista;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.EMPLEADO_OBTENER_TODOS_EXECPTION, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_OBTENER_TODOS_EXECPTION, e);
+            logeador.error(Constantes.EMPLEADO_OBTENER_TODOS_MENSAJE, e);
+            throw new BaseDatosException(Constantes.EMPLEADO_OBTENER_TODOS_MENSAJE, e);
         }
     }
 }

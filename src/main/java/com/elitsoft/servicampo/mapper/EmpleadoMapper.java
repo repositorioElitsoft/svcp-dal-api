@@ -54,6 +54,14 @@ public interface EmpleadoMapper {
     Empleado encontrarPorClave(Long id);
 
     /**
+     * Encuentra lista Empleado en la base de datos asociados a TipoEmpleado.
+     * @param tipoEmpleadoId La clave de TipoEmpleado a encontrar.
+     * @param limite si ejerce un limite de registros o no en los resultados
+     * @return Lista entidad Empleado encontrado, o null si no es encontrado.
+     */
+    List<Empleado>  encontrarPorTipoEmpleado(Long tipoEmpleadoId, boolean limite);
+
+    /**
      * Encuentra un Empleado en la base de datos por su nombre.
      * @param username del Empleado a encontrar.
      * @return El objecto Empleado encontrado, o null si no es encontrado.

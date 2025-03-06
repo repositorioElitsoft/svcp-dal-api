@@ -111,6 +111,12 @@ public class SectorService {
             throw new EntradaInvalidadException(Constantes.SECTOR_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(sectorDto.getId())) {
+            logeador.error(Constantes.SECTOR_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  sectorDto.toString());
+            throw new EntradaInvalidadException(Constantes.SECTOR_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             SectorDto sectorDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             Sector sector = mapper.toEntity(sectorDto);

@@ -110,6 +110,13 @@ public class AgrupacionComercialService {
             throw new EntradaInvalidadException(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(agrupacionComercialDto.getId())) {
+            logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  agrupacionComercialDto.toString());
+            throw new EntradaInvalidadException(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+
         try {
             AgrupacionComercialDto agrupacionComercialDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             AgrupacionComercial agrupacionComercial = mapper.toEntity(agrupacionComercialDto);

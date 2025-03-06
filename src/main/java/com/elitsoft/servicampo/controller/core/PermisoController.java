@@ -52,6 +52,7 @@ public class PermisoController {
     @Operation(summary = "Actualiza un permiso", description = "Actualiza un permiso")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Permiso actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
@@ -61,7 +62,11 @@ public class PermisoController {
         try {
             permisoService.actualizar(id, permisoDto);
             return ResponseEntity.noContent().build();
-        } catch (PermisoNoEncontradoException e) {
+        }
+        catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+        }
+        catch (PermisoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.PERMISO_NO_ENCONTRADO_MENSAGE);
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();

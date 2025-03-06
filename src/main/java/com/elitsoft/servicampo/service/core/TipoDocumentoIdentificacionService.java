@@ -112,7 +112,7 @@ public class TipoDocumentoIdentificacionService {
 
         //  Valida id
         if (!id.equals(tipoDocumentoIdentificacionDTO.getId())) {
-            logeador.error(Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}",  tipoDocumentoIdentificacionDTO.toString());
+            logeador.error(Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tipoDocumentoIdentificacionDTO.toString());
             throw new EntradaInvalidadException(Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
 

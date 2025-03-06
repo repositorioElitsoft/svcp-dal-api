@@ -105,13 +105,13 @@ public class RoleService {
 
         //  Valida Entrada
         if (id == null || roleDTO == null || roleDTO.getId() == null) {
-            logeador.error(Constantes.ROLE_ENTRADA_INVALIDA_MENSAGE + ": {}", ((roleDTO != null) ? roleDTO.toString() : null  ));
+            logeador.error(Constantes.ROLE_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id, ((roleDTO != null) ? roleDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.ROLE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
         if (!id.equals(roleDTO.getId())) {
-            logeador.error(Constantes.ROLE_ENTRADA_INVALIDA_MENSAGE + ": {}",  roleDTO.toString());
+            logeador.error(Constantes.ROLE_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  roleDTO.toString());
             throw new EntradaInvalidadException(Constantes.ROLE_ENTRADA_INVALIDA_MENSAGE);
         }
 

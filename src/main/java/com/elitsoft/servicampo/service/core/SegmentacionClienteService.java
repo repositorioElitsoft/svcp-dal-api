@@ -110,6 +110,12 @@ public class SegmentacionClienteService {
             throw new EntradaInvalidadException(Constantes.SEGMENTACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(segmentacionClienteDto.getId())) {
+            logeador.error(Constantes.SEGMENTACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  segmentacionClienteDto.toString());
+            throw new EntradaInvalidadException(Constantes.SEGMENTACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             SegmentacionClienteDto segmentacionClienteDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             SegmentacionCliente segmentacionClienteliente = mapper.toEntity(segmentacionClienteDto);

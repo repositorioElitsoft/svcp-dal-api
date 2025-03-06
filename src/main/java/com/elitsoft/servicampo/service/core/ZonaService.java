@@ -115,6 +115,12 @@ public class ZonaService {
             throw new EntradaInvalidadException(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(zonaDto.getId())) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  zonaDto.toString());
+            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             ZonaDto zonaDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             Zona zona = mapper.toEntity(zonaDto);
@@ -156,6 +162,7 @@ public class ZonaService {
      * Elimina Zona por Clave.
      * @param id la clave de Zona a eliminar.
      * @throws RecursoNoEncontradoException si el Zona no es encontrado.
+     * @throws RecursoEliminarException si el Zona viola la integridad referencial.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
     public void eliminar(Long id) throws RecursoNoEncontradoException, RecursoEliminarException, BaseDatosException {
@@ -178,6 +185,7 @@ public class ZonaService {
      * Elimina Lote Zona por Clave.
      * @param idLote lista de claves de Zona a eliminar.
      * @throws EntradaInvalidadException si la lista  Zona esta vacia.
+     * @throws RecursoEliminarException si el Zona viola la integridad referencial.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
     public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException  {
@@ -284,7 +292,7 @@ public class ZonaService {
         logeador.debug("sectoresPorZona() zona: {}", id);
 
         try {
-            List<Sector> sectores = sectorMapper.encontrarPorZona(id); // Verifica si existe Sectores asociados
+            List<Sector> sectores = sectorMapper.encontrarPorZona(id,true); // Verifica si existe Sectores asociados
             if (!sectores.isEmpty()) {
                 logeador.info("zona  tiene sectores asociados");
                 return true;

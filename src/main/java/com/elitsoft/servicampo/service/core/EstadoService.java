@@ -111,7 +111,7 @@ public class EstadoService {
 
         //  Valida id
         if (!id.equals(estadoDTO.getId())) {
-            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}",  estadoDTO.toString());
+            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  estadoDTO.toString());
             throw new EntradaInvalidadException(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE);
         }
 

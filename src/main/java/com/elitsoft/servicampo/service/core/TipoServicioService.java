@@ -110,6 +110,12 @@ public class TipoServicioService {
             throw new EntradaInvalidadException(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(tiposervicioDto.getId())) {
+            logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tiposervicioDto.toString());
+            throw new EntradaInvalidadException(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             TipoServicioDto tiposervicioDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             TipoServicio tiposervicio = mapper.toEntity(tiposervicioDto);

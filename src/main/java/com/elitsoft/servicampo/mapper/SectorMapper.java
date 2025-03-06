@@ -64,11 +64,12 @@ public interface SectorMapper {
     Sector encontrarPorClave(Long id);
 
     /**
-     * Encuentra un Sector en la base de datos por su clave.
+     * Encuentra lista Sector en la base de datos asociados a Zona.
      * @param zonaId La clave de Zona a encontrar.
-     * @return La entidad Sector encontrado, o null si no es encontrado.
+     * @param limite si ejerce un limite de registros o no en los resultados
+     * @return Lista entidad Sector encontrado, o null si no es encontrado.
      */
-    List<Sector>  encontrarPorZona(Long zonaId);
+    List<Sector>  encontrarPorZona(Long zonaId, boolean limite);
 
     /**
      * Obtiene todos los Sector desde la base de datos.

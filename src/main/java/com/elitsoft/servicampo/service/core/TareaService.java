@@ -110,6 +110,12 @@ public class TareaService {
             throw new EntradaInvalidadException(Constantes.TAREA_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(tareaDto.getId())) {
+            logeador.error(Constantes.TAREA_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tareaDto.toString());
+            throw new EntradaInvalidadException(Constantes.TAREA_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             TareaDto tareaDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             Tarea tarea = mapper.toEntity(tareaDto);

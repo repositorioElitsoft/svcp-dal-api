@@ -74,6 +74,18 @@
         WHERE empl.empl_nombre_usuario =  #{username}
     </select>
 
+    <!-- Sentencia SQL de Filtrar por clave TipoEmpleado-->
+    <select id="encontrarPorTipoEmpleado"  resultMap="empleadoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE  empl.tpem_id  =  #{tipoEmpleadoId}
+
+        <!-- Para limitar el tamaño del resultado-->
+        <if test="limite">
+            LIMIT 2 OFFSET 0;
+        </if>
+    </select>
+
    <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="empleadoResultMap">
         <include refid="select"/>
@@ -120,17 +132,17 @@
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY empl_id.empl_id ${direccionOrden}</when>
-                <when test="campoOrden == 'nombre'">ORDER BY empl_id.empl_nombre ${direccionOrden}</when>
-                <when test="campoOrden == 'apellidoPaterno'">ORDER BY empl_id.empl_apellido_paterno ${direccionOrden}</when>
-                <when test="campoOrden == 'apellidoMaterno'">ORDER BY empl_id.empl_apellido_materno ${direccionOrden}</when>
-                <when test="campoOrden == 'nombreUsuario'">ORDER BY empl_id.empl_nombre_usuario ${direccionOrden}</when>
+                <when test="campoOrden == 'id'">ORDER BY empl.empl_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombre'">ORDER BY empl.empl_nombre ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoPaterno'">ORDER BY empl.empl_apellido_paterno ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoMaterno'">ORDER BY empl.empl_apellido_materno ${direccionOrden}</when>
+                <when test="campoOrden == 'nombreUsuario'">ORDER BY empl.empl_nombre_usuario ${direccionOrden}</when>
                 <when test="campoOrden == 'tipoEmpleadoId'">ORDER BY tpem.tpem_id ${direccionOrden}</when>
                 <when test="campoOrden == 'roleId'">ORDER BY rles.rles_id  ${direccionOrden}</when>
                 <when test="campoOrden == 'estadoId'">ORDER BY estd.estd_id ${direccionOrden}</when>
                 <when test="campoOrden == 'numero'">ORDER BY doid.doid_num ${direccionOrden}</when>
                 <when test="campoOrden == 'digitoVerificador'">ORDER BY doid.doid_dv ${direccionOrden}</when>
-                <otherwise>ORDER BY empl_id.empl_id ASC</otherwise>
+                <otherwise>ORDER BY empl.empl_id ASC</otherwise>
             </choose>
         </if>
         <if test="limite != null and desplazamiento != null">

@@ -113,7 +113,7 @@ public class DireccionEmpleadoService {
 
         //  Valida id
         if (!id.equals(direccionempleadoDTO.getId())) {
-            logeador.error(Constantes.DIRECCIONEMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}",  direccionempleadoDTO.toString());
+            logeador.error(Constantes.DIRECCIONEMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  direccionempleadoDTO.toString());
             throw new EntradaInvalidadException(Constantes.DIRECCIONEMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
 

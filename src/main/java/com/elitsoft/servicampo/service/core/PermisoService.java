@@ -56,8 +56,20 @@ public class PermisoService {
      * @throws PermisoNoEncontradoException Si Permiso no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, PermisoDto permisoDto) throws PermisoNoEncontradoException, BaseDatosException {
+    public void actualizar(Long id, PermisoDto permisoDto) throws PermisoNoEncontradoException, BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizar() permiso");
+
+        //  Valida Entrada
+        if (id == null || permisoDto == null || permisoDto.getId() == null) {
+            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((permisoDto != null) ? permisoDto.toString() : null  ));
+            throw new EntradaInvalidadException(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        //  Valida id
+        if (!id.equals(permisoDto.getId())) {
+            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  permisoDto.toString());
+            throw new EntradaInvalidadException(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE);
+        }
 
         try {
             PermisoDto permisoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe

@@ -43,10 +43,11 @@ public class DocumentoIdentificacionService {
         logeador.debug("agregar() DocumentoIdentificacion");
 
         //  Valida Entrada
-        if (documentoidentificacionDTO == null) {
+        if (documentoidentificacionDTO == null || documentoidentificacionDTO.getNumero() == null || documentoidentificacionDTO.getNumero().isEmpty() ) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
+
 
         try {
             DocumentoIdentificacion documentoIdentificacion = mapper.toEntity(documentoidentificacionDTO);
@@ -113,7 +114,7 @@ public class DocumentoIdentificacionService {
 
         //  Valida id
         if (!id.equals(documentoidentificacionDTO.getId())) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}",  documentoidentificacionDTO.toString());
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  documentoidentificacionDTO.toString());
             throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
 

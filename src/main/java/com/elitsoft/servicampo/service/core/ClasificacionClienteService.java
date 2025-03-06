@@ -110,6 +110,12 @@ public class ClasificacionClienteService {
             throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(clasificacionclienteDto.getId())) {
+            logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  clasificacionclienteDto.toString());
+            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             ClasificacionClienteDto clasificacionclienteDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             ClasificacionCliente clasificacioncliente = mapper.toEntity(clasificacionclienteDto);

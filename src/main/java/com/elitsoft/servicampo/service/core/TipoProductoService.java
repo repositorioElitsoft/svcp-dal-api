@@ -109,6 +109,12 @@ public class TipoProductoService {
             throw new EntradaInvalidadException(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //  Valida id
+        if (!id.equals(tipoproductoDto.getId())) {
+            logeador.error(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tipoproductoDto.toString());
+            throw new EntradaInvalidadException(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
         try {
             TipoProductoDTO tipoproductoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
             TipoProducto tipoproducto = mapper.toEntity(tipoproductoDto);
