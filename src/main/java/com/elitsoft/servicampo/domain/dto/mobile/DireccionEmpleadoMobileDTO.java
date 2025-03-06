@@ -1,8 +1,5 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ComunaDto;
-import com.elitsoft.servicampo.domain.dto.core.EmpleadoDto;
-import com.elitsoft.servicampo.domain.dto.core.EstadoDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +22,6 @@ public class DireccionEmpleadoMobileDTO implements Serializable {
     private Double longitud;
     private String descripcion;
     private String referencia;
-    private EmpleadoMobileDto empleado;
+    private EmpleadoMobileDTO empleado;
 
 }

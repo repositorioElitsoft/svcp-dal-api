@@ -12,46 +12,219 @@
         <result property="telefonoMovil" column="empl_fono_movil"/>
         <result property="fechaNacimiento" column="empl_fecha_nacimiento"/>
         <result property="email" column="empl_email"/>
-        <result property="rut" column="empl_rut"/>
-        <result property="rutDv" column="empl_rut_dv"/>
+        <result property="contrasena" column="empl_contrasena"/>
+        <result property="nombreUsuario" column="empl_nombre_usuario"/>
+        <association property="tipoEmpleado"  resultMap="com.elitsoft.servicampo.mapper.TipoEmpleadoMapper.tipoEmpleadoResultMap" />
+        <association property="role"  resultMap="com.elitsoft.servicampo.mapper.RoleMapper.roleResultMap" />
+        <association property="estado"  resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap" />
+        <association property="documentoIdentificacion"  resultMap="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.documentoIdentificacionResultMap" />
+    </resultMap>
+
+    <resultMap id="empleadoIntegridadResultMap" type="com.elitsoft.servicampo.domain.entity.Empleado">
+        <id property="id" column="empl_id"/>
+        <result property="nombre" column="empl_nombre"/>
+        <result property="apellidoPaterno" column="empl_apellido_paterno"/>
+        <result property="apellidoMaterno" column="empl_apellido_materno"/>
+        <result property="imagenPerfil" column="empl_imagen_perfil"/>
+        <result property="telefonoFijo" column="empl_fono_fijo"/>
+        <result property="telefonoMovil" column="empl_fono_movil"/>
+        <result property="fechaNacimiento" column="empl_fecha_nacimiento"/>
+        <result property="email" column="empl_email"/>
         <result property="contrasena" column="empl_contrasena"/>
         <result property="nombreUsuario" column="empl_nombre_usuario"/>
         <association property="tipoEmpleado" column="tpem_id" fetchType="lazy" javaType="com.elitsoft.servicampo.domain.entity.TipoEmpleado" select="com.elitsoft.servicampo.mapper.TipoEmpleadoMapper.encontrarPorClave"/>
         <association property="role" column="rles_id"  fetchType="lazy"  javaType="com.elitsoft.servicampo.domain.entity.Role" select="com.elitsoft.servicampo.mapper.RoleMapper.encontrarPorClave"/>
         <association property="estado" column="estd_id"  fetchType="lazy"  javaType="com.elitsoft.servicampo.domain.entity.Estado" select="com.elitsoft.servicampo.mapper.EstadoMapper.encontrarPorClave"/>
-
+        <association property="documentoIdentificacion" column="doid_id"  fetchType="lazy"  javaType="com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion" select="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.encontrarPorClave"/>
     </resultMap>
 
 
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT empl.empl_id               , empl.empl_nombre           , empl.empl_apellido_paterno ,
+               empl.empl_apellido_materno , empl.empl_imagen_perfil    , empl.empl_fono_fijo        ,
+               empl.empl_fono_movil       , empl.empl_fecha_nacimiento , empl.empl_email            ,
+               empl.empl_contrasena       , empl.empl_nombre_usuario   ,
+               tpem.tpem_id               , tpem.tpem_dsc              ,
+               rles.rles_id               , rles.rles_nom              ,
+               estd.estd_id               , estd.estd_dsc              ,
+               doid.doid_id               , doid.doid_num              , doid.doid_dv
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}empleados as empl
+        LEFT JOIN  ${schema}tipos_empleados as tpem ON empl.tpem_id = tpem.tpem_id
+        LEFT JOIN  ${schema}roles as rles ON empl.rles_id = rles.rles_id
+        LEFT JOIN  ${schema}estados as estd ON empl.estd_id = estd.estd_id
+        LEFT JOIN  ${schema}documentos_identificacion  as doid ON empl.doid_id = doid.doid_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="empleadoResultMap">
-        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id
-        FROM ${schema}empleados WHERE empl_id = #{id}
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE empl.empl_id = #{id}
     </select>
 
     <!-- Sentencia SQL de Filtrar por clave-->
     <select id="encontrarPorNombre" parameterType="string" resultMap="empleadoResultMap">
-        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id
-        FROM ${schema}empleados WHERE empl_nombre_usuario =  #{username}
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE empl.empl_nombre_usuario =  #{username}
     </select>
 
+   <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="empleadoResultMap">
-        SELECT empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id FROM ${schema}empleados
+        <include refid="select"/>
+        <include refid="from"/>
     </select>
 
-    <!-- Sentencia SQL de Insertar-->
-    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Empleado">
-        INSERT INTO ${schema}empleados (empl_id, empl_nombre, empl_apellido_paterno, empl_apellido_materno, empl_imagen_perfil, empl_fono_fijo, empl_fono_movil, empl_fecha_nacimiento, empl_email, empl_rut, empl_rut_dv, empl_contrasena, empl_nombre_usuario, tpem_id, rles_id, estd_id)
-                      VALUES (#{id}, #{nombre}, #{apellidoPaterno}, #{apellidoMaterno}, #{imagenPerfil}, #{telefonoFijo}, #{telefonoMovil}, #{fechaNacimiento}, #{email}, #{rut}, #{rutDv}, #{contrasena}, #{nombreUsuario}, #{tipoEmpleado.id}, #{role.id}, #{estado.id})
-    </insert>
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="empleadoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND empl.empl_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(empl.empl_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+                <if test="filtro.apellidoPaterno != null and filtro.apellidoPaterno != ''">
+                    AND LOWER(empl.empl_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
+                </if>
+                <if test="filtro.apellidoMaterno != null and filtro.apellidoMaterno != ''">
+                    AND LOWER(empl.empl_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
+                </if>
+                <if test="filtro.nombreUsuario != null and filtro.nombreUsuario != ''">
+                    AND LOWER(empl.empl_nombre_usuario) LIKE '%' || LOWER(#{filtro.nombreUsuario}) || '%'
+                </if>
+                <if test="filtro.tipoEmpleadoId != null">
+                    AND tpem.tpem_id = #{filtro.tipoEmpleadoId}
+                </if>
+                <if test="filtro.roleId != null">
+                    AND rles.rles_id = #{filtro.roleId}
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND estd.estd_id = #{filtro.estadoId}
+                </if>
+                <if test="filtro.numero != null and filtro.numero != ''">
+                    AND doid.doid_num = #{filtro.numero})
+                </if>
+                <if test="filtro.digitoVerificador != null and filtro.digitoVerificador != ''">
+                    AND doid.doid_dv = #{filtro.digitoVerificador}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY empl_id.empl_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombre'">ORDER BY empl_id.empl_nombre ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoPaterno'">ORDER BY empl_id.empl_apellido_paterno ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoMaterno'">ORDER BY empl_id.empl_apellido_materno ${direccionOrden}</when>
+                <when test="campoOrden == 'nombreUsuario'">ORDER BY empl_id.empl_nombre_usuario ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoEmpleadoId'">ORDER BY tpem.tpem_id ${direccionOrden}</when>
+                <when test="campoOrden == 'roleId'">ORDER BY rles.rles_id  ${direccionOrden}</when>
+                <when test="campoOrden == 'estadoId'">ORDER BY estd.estd_id ${direccionOrden}</when>
+                <when test="campoOrden == 'numero'">ORDER BY doid.doid_num ${direccionOrden}</when>
+                <when test="campoOrden == 'digitoVerificador'">ORDER BY doid.doid_dv ${direccionOrden}</when>
+                <otherwise>ORDER BY empl_id.empl_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND empl.empl_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(empl.empl_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+                <if test="filtro.apellidoPaterno != null and filtro.apellidoPaterno != ''">
+                    AND LOWER(empl.empl_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
+                </if>
+                <if test="filtro.apellidoMaterno != null and filtro.apellidoMaterno != ''">
+                    AND LOWER(empl.empl_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
+                </if>
+                <if test="filtro.nombreUsuario != null and filtro.nombreUsuario != ''">
+                    AND LOWER(empl.empl_nombre_usuario) LIKE '%' || LOWER(#{filtro.nombreUsuario}) || '%'
+                </if>
+                <if test="filtro.tipoEmpleadoId != null">
+                    AND tpem.tpem_id = #{filtro.tipoEmpleadoId}
+                </if>
+                <if test="filtro.roleId != null">
+                    AND rles.rles_id = #{filtro.roleId}
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND estd.estd_id = #{filtro.estadoId}
+                </if>
+                <if test="filtro.numero != null and filtro.numero != ''">
+                    AND doid.doid_num = #{filtro.numero})
+                </if>
+                <if test="filtro.digitoVerificador != null and filtro.digitoVerificador != ''">
+                    AND doid.doid_dv = #{filtro.digitoVerificador}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Empleado" affectData="true" flushCache="true">
+          INSERT INTO ${schema}empleados (
+                                          empl_nombre           , empl_apellido_paterno ,
+                                          empl_apellido_materno , empl_imagen_perfil    ,
+                                          empl_fono_fijo        , empl_fono_movil       ,
+                                          empl_fecha_nacimiento , empl_email            ,
+                                          empl_contrasena       , empl_nombre_usuario   ,
+                                          tpem_id               , rles_id               ,
+                                          estd_id               , doid_id
+                                         )
+                                  VALUES (
+                                          #{nombre}             , #{apellidoPaterno}    ,
+                                          #{apellidoMaterno}    , #{imagenPerfil}       ,
+                                          #{telefonoFijo}       , #{telefonoMovil}      ,
+                                          #{fechaNacimiento}    , #{email}              ,
+                                          #{contrasena}         , #{nombreUsuario}      ,
+                                          #{tipoEmpleado.id}    , #{role.id}            ,
+                                          #{estado.id}          , #{documentoIdentificacion.id}
+                                          )
+        returning empl_id as id, empl_nombre as nombre, empl_apellido_paterno as apellidoPaterno, empl_nombre_usuario as nombreUsuario
+    </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Empleado">
-        UPDATE ${schema}empleados SET empl_nombre = #{nombre}, empl_apellido_paterno = #{apellidoPaterno}, empl_apellido_materno = #{apellidoMaterno}, empl_imagen_perfil = #{imagenPerfil}, empl_fono_fijo = #{telefonoFijo}, empl_fono_movil = #{telefonoMovil}, empl_fecha_nacimiento = #{fechaNacimiento}, empl_email = #{email}, empl_rut = #{rut}, empl_rut_dv = #{rutDv}, empl_contrasena = #{contrasena}, empl_nombre_usuario = #{nombreUsuario}, tpem_id = #{tipoEmpleado.id}, rles_id = #{role.id}, estd_id = #{estado.id} WHERE empl_id = #{id}
+        UPDATE ${schema}empleados
+        SET empl_nombre           = #{nombre}          , empl_apellido_paterno = #{apellidoPaterno} ,
+            empl_apellido_materno = #{apellidoMaterno} , empl_imagen_perfil    = #{imagenPerfil}    ,
+            empl_fono_fijo        = #{telefonoFijo}    , empl_fono_movil       = #{telefonoMovil}   ,
+            empl_fecha_nacimiento = #{fechaNacimiento} , empl_email            = #{email}           ,
+            empl_nombre_usuario   = #{nombreUsuario}   , tpem_id               = #{tipoEmpleado.id} ,
+            rles_id               = #{role.id}         , estd_id               = #{estado.id}
+        WHERE empl_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizarClave" parameterType="com.elitsoft.servicampo.domain.entity.Empleado">
+        UPDATE ${schema}empleados
+        SET  empl_contrasena       = #{contrasena}
+        WHERE empl_id = #{id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
-        DELETE FROM ${schema}empleados WHERE empl_id = #{id}
+        DELETE FROM ${schema}empleados
+        WHERE empl_id = #{id}
     </delete>
 
 </mapper>

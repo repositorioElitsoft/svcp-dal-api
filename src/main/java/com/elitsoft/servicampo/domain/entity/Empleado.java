@@ -3,19 +3,23 @@ package com.elitsoft.servicampo.domain.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 /**
  *
  */
 public class Empleado implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -844167942075002521L;
 
     private Long id;
     private String nombre;
@@ -26,12 +30,12 @@ public class Empleado implements Serializable {
     private String telefonoMovil;
     private LocalDate fechaNacimiento;
     private String email;
-    private Integer rut;
-    private Character rutDv;
     private String contrasena;
     private String nombreUsuario;
     private TipoEmpleado tipoEmpleado;
     private Role role;
     private Estado estado;
+    private DocumentoIdentificacion documentoIdentificacion;
+    private List<DireccionEmpleado> direccionesEmpleados;
 }
 

@@ -1,9 +1,6 @@
 package com.elitsoft.servicampo.filter;
 
 
-import com.elitsoft.servicampo.domain.dto.core.ComunaDto;
-import com.elitsoft.servicampo.domain.dto.core.EmpleadoDto;
-import com.elitsoft.servicampo.domain.dto.core.EstadoDTO;
 import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
