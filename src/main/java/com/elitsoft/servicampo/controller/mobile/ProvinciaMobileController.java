@@ -196,7 +196,7 @@ public class ProvinciaMobileController {
         }
     }
 
-    @GetMapping(value = "/region/{regionId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/regiones/{regionId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Obtiene todos  los provincia por clave de Region", description = "Obtiene todos los provincia por clave de Region")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Provincias obtenidos exitosamente"),

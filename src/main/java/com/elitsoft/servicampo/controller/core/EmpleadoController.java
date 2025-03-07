@@ -1,5 +1,6 @@
 package com.elitsoft.servicampo.controller.core;
 
+import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.EmpleadoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.EmpleadoService;
@@ -35,20 +36,25 @@ public class EmpleadoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Empleado agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "Empleado ya Existe"),
+            @ApiResponse(responseCode = "404", description = "Dependencia No Encontrada - Entrada datos Invalida"),
+            @ApiResponse(responseCode = "409", description = "Empleado/Correo ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<EmpleadoDTO> agregar(@RequestBody EmpleadoDTO empleadoDTO) {
+    public ResponseEntity<ApiEnityResponse<EmpleadoDTO>> agregar(@RequestBody EmpleadoDTO empleadoDTO) {
         logeador.debug("agregar() empleado");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(empleadoService.agregar(empleadoDTO)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(empleadoService.agregar(empleadoDTO)));
+            //return ResponseEntity.status(HttpStatus.CREATED).body(empleadoService.agregar(empleadoDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
+            return ResponseEntity.badRequest().body(new ApiEnityResponse<>(empleadoDTO, e.getCodigoError(),  e.getMessage())); // Retorna  400 Bad Request
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(empleadoDTO, e.getCodigoError(),  e.getMessage())); // Retorna  404 Not Found
         }
         catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(empleadoDTO, e.getCodigoError(),  e.getMessage())); // Retorna  409 Conflict
         }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
@@ -65,20 +71,24 @@ public class EmpleadoController {
             @ApiResponse(responseCode = "404", description = "Empleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody EmpleadoDTO empleadoDTO) {
+    public ResponseEntity<ApiEnityResponse<String>> actualizar(@PathVariable Long id, @RequestBody EmpleadoDTO empleadoDTO) {
         logeador.debug("actualizar() empleado");
 
         try {
             empleadoService.actualizar(id, empleadoDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
+
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+            return ResponseEntity.badRequest().body(new ApiEnityResponse<>(e.getMessage(), e.getCodigoError(),  e.getMessage())); // Retorna  400 Bad Request
         }
         catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(e.getMessage(), e.getCodigoError(),  e.getMessage())); // Retorna  404 Not Found
+        }
+        catch (RecursoDuplicadoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(e.getMessage(), e.getCodigoError(),  e.getMessage())); // Retorna  409 Conflict
         } catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()); // Retorna  500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(e.getMessage(), null,  e.getMessage())); // Retorna  500 Internal Server Error
         }
     }
 

@@ -198,7 +198,7 @@ public class ComunaController {
         }
     }
 
-    @GetMapping(value = "/provincia/{provinciaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/provincias/{provinciaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Obtiene todos  los comuna por Provincia", description = "Obtiene todos los comuna por Provincia")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comunas obtenidos exitosamente"),

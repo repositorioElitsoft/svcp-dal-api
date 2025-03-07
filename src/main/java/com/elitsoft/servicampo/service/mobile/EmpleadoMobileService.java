@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.EmpleadoDTO;
+import com.elitsoft.servicampo.domain.entity.Empleado;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -40,7 +41,7 @@ public class EmpleadoMobileService {
      * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
      * @throws RecursoDuplicadoException si el recurso Empleado ya existe.
      */
-    public EmpleadoDTO agregar(EmpleadoDTO empleadoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public EmpleadoDTO agregar(EmpleadoDTO empleadoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregar() empleado");
 
         return empleadoService.agregar(empleadoDTO);
@@ -97,6 +98,17 @@ public class EmpleadoMobileService {
     public EmpleadoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return empleadoService.encontrarPorClave(id);
+    }
+
+    /**
+     * Encuentra un Empleado por correo.
+     * @param email correo de Empleado a encontrar.
+     * @return el Empleado encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     */
+    public Empleado encontrarPorCorreo(String email) throws BaseDatosException {
+        logeador.debug("encontrarPorCorreo(): {}", email);
+        return empleadoService.encontrarPorCorreo(email);
     }
 
     /**

@@ -70,6 +70,15 @@ public interface #Base#Mapper {
     #Base# encontrarPorClave(Long id);
 
     /**
+     * Encuentra lista #Base# en la base de datos asociados a #EntityRelacionado#.
+     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
+     * @param limite si ejerce un limite de registros o no en los resultados
+     * @return Lista entidad #Base# encontrado, o null si no es encontrado.
+     */
+    List<#Base#>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
+
+
+    /**
      * Obtiene todos los #Base# desde la base de datos.
      * @return List<#Base#> Una lista de todos los entidades #Base#.
      */

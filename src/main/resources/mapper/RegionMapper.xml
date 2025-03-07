@@ -11,8 +11,16 @@
             <id property="id" column="pses_id" />
             <result property="descripcionPais" column="pses_dsc" />
         </association>
-        <collection property="provincias" column="rgns_id" fetchType="lazy"  ofType="com.elitsoft.servicampo.domain.entity.Provincia"  select="com.elitsoft.servicampo.mapper.ProvinciaMapper.encontrarPorRegion"/>
+        <collection property="provincias" column="rgns_id" fetchType="lazy"  ofType="com.elitsoft.servicampo.domain.entity.Provincia"  select="com.elitsoft.servicampo.mapper.ProvinciaMapper.obtenerTodos"/>
     </resultMap>
+
+    <!-- Sentencia SQL de Encontrar por Pais -->
+    <select id="encontrarPorPais" parameterType="long" resultMap="regionResultMap">
+        SELECT <include refid="regionColumnas"/>
+        FROM ${schema}regiones region
+        INNER JOIN  ${schema}paises  pais ON region.pses_id = pais.pses_id
+        AND pais.pses_id = #{paisId}
+    </select>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="regionResultMap">

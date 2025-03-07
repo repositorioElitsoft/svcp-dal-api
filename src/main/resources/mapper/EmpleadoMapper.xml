@@ -74,6 +74,13 @@
         WHERE empl.empl_nombre_usuario =  #{username}
     </select>
 
+    <!-- Sentencia SQL de Filtrar por clave-->
+    <select id="encontrarPorCorreo" parameterType="string" resultMap="empleadoResultMap">
+        SELECT empl.empl_email
+        FROM ${schema}empleados as empl
+        WHERE empl.empl_email =  #{email}
+    </select>
+
     <!-- Sentencia SQL de Filtrar por clave TipoEmpleado-->
     <select id="encontrarPorTipoEmpleado"  resultMap="empleadoResultMap">
         <include refid="select"/>

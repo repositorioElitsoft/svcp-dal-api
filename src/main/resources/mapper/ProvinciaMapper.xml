@@ -11,16 +11,18 @@
             <id property="id" column="rgns_id" />
             <result property="descripcionRegion" column="rgns_dsc" />
         </association>
-        <collection property="comunas" column="prvs_id" fetchType="lazy"  ofType="com.elitsoft.servicampo.domain.entity.Comuna"  select="com.elitsoft.servicampo.mapper.ComunaMapper.encontrarPorProvincia"/>
+        <collection property="comunas" column="prvs_id" fetchType="lazy"  ofType="com.elitsoft.servicampo.domain.entity.Comuna"  select="com.elitsoft.servicampo.mapper.ComunaMapper.obtenerTodos"/>
     </resultMap>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
+    <!--
     <select id="encontrarPorRegion" parameterType="long" resultMap="provinciaResultMap">
         SELECT <include refid="provinciaColumnas"/>
         FROM ${schema}provincias provincia
         INNER JOIN ${schema}regiones region ON provincia.rgns_id = region.rgns_id
         AND provincia.rgns_id = #{regionId}
     </select>
+    -->
 
 
     <!-- Sentencia SQL de Encontrar por Clave -->

@@ -6,6 +6,8 @@ package com.elitsoft.servicampo.utils;
  */
 public class Constantes {
 
+
+    public static final Long TIPO_DOCUMENTO_INDENTIFICACION_RUT = 1L;
     public static final String MONEDA = "CLP";
     public static final int CARRITO_ARTICULO_MAXIMO = 15;
     public static final double TASA_ENTREGA = 5.00; // Example
@@ -19,27 +21,24 @@ public class Constantes {
     public static final String CARRITO_ARTICULO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los articulo de carrito ";
 
     public static final String EMPLEADO_NO_ENCONTRADO_MENSAGE = "EMPLEADO no  encontrado";
-    public static final String EMPLEADO_AGREGAR_EXECPTION = "Error agregando EMPLEADO";
     public static final String EMPLEADO_ACTUALIZAR_EXECPTION = "Error actualizando EMPLEADO";
-    public static final String EMPLEADO_ELIMINAR_EXECPTION = "Error eliminando EMPLEADO";
-    public static final String EMPLEADO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando EMPLEADO por clave :";
-    public static final String EMPLEADO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los EMPLEADO";
-
-
     public static final String EMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de EMPLEADO invalida.";
+    public static final String EMPLEADO_ENTRADA_INVALIDA_CORRE0_MENSAGE = "Entrada de EMPLEADO requiere correo.";
     public static final String EMPLEADO_DUPLICADO_MENSAGE = "Recurso  EMPLEADO ya existe.";
+    public static final String EMPLEADO_CORREO_DUPLICADO_MENSAGE = "Recurso correo de  EMPLEADO ya existe. ";
     //public static final String EMPLEADO_NO_ENCONTRADO_MENSAGE = "Recurso EMPLEADO no  encontrado";
     public static final String EMPLEADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso EMPLEADO";
     public static final String EMPLEADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos EMPLEADO";
     public static final String EMPLEADO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso EMPLEADO";
     public static final String EMPLEADO_ELIMINAR_MENSAJE = "Error eliminando Recurso EMPLEADO";
     public static final String EMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EMPLEADO por clave :";
+    public static final String EMPLEADO_ENCONTRAR_POR_CORREO_MENSAGE = "Error encontrando Recurso EMPLEADO por correo :";
     public static final String EMPLEADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos EMPLEADO";
     public static final String EMPLEADO_FILTRAR_MENSAJE = "Error filtrando EMPLEADO";
 
     public static final String TIPOEMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOEMPLEADO invalida.";
     public static final String TIPOEMPLEADO_DUPLICADO_MENSAGE = "Recurso  TIPOEMPLEADO ya existe.";
-    public static final String TIPOEMPLEADO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOEMPLEADO viola Integridad. INTGVIOLADA001";
+    public static final String TIPOEMPLEADO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOEMPLEADO viola Integridad. ";
     public static final String TIPOEMPLEADO_NO_ENCONTRADO_MENSAGE = "Recurso TIPOEMPLEADO no  encontrado";
     public static final String TIPOEMPLEADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOEMPLEADO";
     public static final String TIPOEMPLEADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOEMPLEADO";
@@ -297,6 +296,7 @@ public class Constantes {
 
 
     public static final String TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPODOCUMENTOIDENTIFICACION invalida.";
+    public static final String TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE = "Entrada de TIPODOCUMENTOIDENTIFICACION requiere id.";
     public static final String TIPODOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE = "Recurso  TIPODOCUMENTOIDENTIFICACION ya existe.";
     public static final String TIPODOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE = "Recurso TIPODOCUMENTOIDENTIFICACION no  encontrado";
     public static final String TIPODOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPODOCUMENTOIDENTIFICACION";
@@ -308,13 +308,16 @@ public class Constantes {
     public static final String TIPODOCUMENTOIDENTIFICACION_FILTRAR_MENSAJE = "Error filtrando TIPODOCUMENTOIDENTIFICACION";
 
     public static final String DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE = "Entrada de DOCUMENTOIDENTIFICACION invalida.";
-    public static final String DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE = "Recurso  DOCUMENTOIDENTIFICACION ya existe.";
+    public static final String DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE = "Entrada de DOCUMENTOIDENTIFICACION requiere numero.";
+    public static final String DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_DIGITO_VERIFICADOR_MENSAGE = "Entrada de DOCUMENTOIDENTIFICACION requiere digito vericador.";
+    public static final String DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE = "Recurso  DOCUMENTOIDENTIFICACION ya existe. ";
     public static final String DOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE = "Recurso DOCUMENTOIDENTIFICACION no  encontrado";
     public static final String DOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE = "Error Interno agregando Recurso DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE = "Error actualizando Recurso DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE = "Error eliminando Recurso DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DOCUMENTOIDENTIFICACION por clave :";
+    public static final String DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_IDENTIFICACION_MENSAGE = "Error encontrando Recurso DOCUMENTOIDENTIFICACION por numero, digito verificador :";
     public static final String DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_FILTRAR_MENSAJE = "Error filtrando DOCUMENTOIDENTIFICACION";
 

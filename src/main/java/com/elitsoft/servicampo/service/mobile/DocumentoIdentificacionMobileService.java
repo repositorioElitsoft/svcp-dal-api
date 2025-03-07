@@ -1,10 +1,8 @@
 package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
-import com.elitsoft.servicampo.exceptions.BaseDatosException;
-import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
-import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
-import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
+import com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion;
+import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.service.core.DocumentoIdentificacionService;
@@ -41,7 +39,7 @@ public class DocumentoIdentificacionMobileService {
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso DocumentoIdentificacion ya existe.
      */
-    public DocumentoIdentificacionDTO agregar(DocumentoIdentificacionDTO documentoidentificacionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public DocumentoIdentificacionDTO agregar(DocumentoIdentificacionDTO documentoidentificacionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregar() documentoidentificacion");
 
         return documentoIdentificacionService.agregar(documentoidentificacionDTO);
@@ -119,6 +117,19 @@ public class DocumentoIdentificacionMobileService {
     public DocumentoIdentificacionDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return documentoIdentificacionService.encontrarPorClave(id);
+    }
+
+    /**
+     * Encuentra un DocumentoIdentificacion por su numero y opcional digitoVerificador.
+     * @param numero documento de identificacion.
+     * @param digitoVerificador digito verificador.
+     * @return el DocumentoIdentificacion DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws DocumentoIdentificacionNoEncontradoException si DocumentoIdentificacion no es encontrado.
+     */
+    public DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador) throws BaseDatosException, DocumentoIdentificacionNoEncontradoException {
+        logeador.debug("encontrarPorIndentificacion(): {} , {}", numero, digitoVerificador);
+        return documentoIdentificacionService.encontrarPorIndentificacion(numero,digitoVerificador );
     }
 
     /**

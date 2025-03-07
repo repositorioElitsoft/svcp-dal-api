@@ -17,5 +17,5 @@ public class DocumentoIdentificacionDTO implements Serializable {
     private Long id;
     private String numero;
     private Character digitoVerificador;
-    private TipoDocumentoIdentificacion tipoDocumentoIdentificacion;
+    private TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacion;
 }

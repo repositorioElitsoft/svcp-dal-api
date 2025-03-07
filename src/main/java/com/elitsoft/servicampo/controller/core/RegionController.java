@@ -197,7 +197,7 @@ public class RegionController {
         }
     }
 
-    @GetMapping(value = "/pais/{paisId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/paises/{paisId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Obtiene todos  los region por clave Pais", description = "Obtiene todos los region por clave Pais")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Regions obtenidos exitosamente"),

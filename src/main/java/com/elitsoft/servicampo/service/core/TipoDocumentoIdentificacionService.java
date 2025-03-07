@@ -6,6 +6,7 @@ import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.TipoDocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapstruct.TipoDocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
+import com.elitsoft.servicampo.utils.ErroresNegocio;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,7 +214,8 @@ public class TipoDocumentoIdentificacionService {
                 logeador.info("tipodocumentoidentificacion encontrado por clave : {}", id);
             } else {
                 logeador.info("tipodocumentoidentificacion clave:{} no encontrado", id);
-                throw new RecursoNoEncontradoException(Constantes.TIPODOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE);
+                throw new RecursoNoEncontradoException(ErroresNegocio.TIPO_DOCUMENTO_IDENTIFICACION_NO_ENCONTRADO.getCodigoError(),
+                                                       Constantes.TIPODOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE);
             }
 
             return tipoDocumentoIdentificacionDTO;

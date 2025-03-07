@@ -189,8 +189,11 @@ public class #Base#Service {
      * @throws RecursoNoEncontradoException si el #Base# no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() #base#: {}", id);
+
+        //Verifica integridad referencial
+        this.verificarIntegridadEliminar(id);
 
         try {
             #Base#DTO #base#DTO = this.encontrarPorClave(id); // Verifica si existe
@@ -211,10 +214,16 @@ public class #Base#Service {
     public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("eliminarLote()");
 
+
         //  Valida Entrada
         if (idLote.isEmpty()) {
             logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        //Verifica integridad referencial
+        for (Long id : idLote) {
+            this.verificarIntegridadEliminar(id);
         }
 
         try {
@@ -268,6 +277,55 @@ public class #Base#Service {
         } catch (DataAccessException e) {
             logeador.error(Constantes.#BASE#_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.#BASE#_OBTENER_TODOS_MENSAJE, e);
+        }
+    }
+
+        /**
+     * Verifica la violacion de integridad referencia de #Base#
+     * @param id la clave #Base# a encontrar.
+     * @throws RecursoEliminarException
+     * @throws BaseDatosException
+     */
+    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
+        logeador.debug("verificarIntegridadEliminar() #base#: {}", id);
+
+        boolean entityRelacionadoPor#Base# = false;
+
+        try {
+            entityRelacionadoPor#Base# = this.entityRelacionadoPor#Base#(id);
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.#Base#_ELIMINAR_MENSAJE + ": {}", id, e);
+            throw new BaseDatosException(Constantes.#Base#_ELIMINAR_MENSAJE, e);
+        }
+
+        //Verifca la integridad con sectores
+        if (entityRelacionadoPor#Base#) {
+            throw new RecursoEliminarException(Constantes.#Base#_VIOLACION_INTEGRIDAD_MENSAGE);
+        }
+
+    }
+
+    /**
+     * Buscar #Base# que tengan EntityRelacionado.
+     * @param id la clave #Base# a encontrar.
+     * @return boolean #Base# tiene o no registros asociados
+     * @throws BaseDatosException
+     */
+    public boolean entityRelacionadoPor#Base#(Long id) throws  BaseDatosException {
+        logeador.debug("entityRelacionadoPor#Base#() #base#: {}", id);
+
+        try {
+            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPor#Base#(id); // Verifica si tiene EntityRelacionado  asociados
+            if (!entitys.isEmpty()) {
+                logeador.info("#base#  tiene #EntityRelacionado# asociados");
+                return true;
+            } else{
+                logeador.info("#base# no tiene #EntityRelacionado# asociados");
+                return false;
+            }
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.#Base#_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}", id, e);
+            throw new BaseDatosException(Constantes.#Base#_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 }

@@ -47,6 +47,9 @@ public class DocumentoIdentificacionController {
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
         }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna  404 Not Found
+        }
         catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
         }

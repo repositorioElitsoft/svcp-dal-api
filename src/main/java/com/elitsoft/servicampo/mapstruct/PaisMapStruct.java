@@ -33,7 +33,6 @@ public interface PaisMapStruct {
      * @param entities La lista de entidades Pais.
      * @return The list of PaisDtos.
      */
-    @Mapping(target = "regiones", ignore = true) // Add this annotation
     List<PaisDto> toDtoList(List<Pais> entities);
 
     /**

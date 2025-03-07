@@ -68,6 +68,15 @@ public interface EmpleadoMapper {
      */
     Empleado encontrarPorNombre(String username);
 
+
+    /**
+     * Encuentra un Empleado en la base de datos por su correo.
+     * @param email correo del Empleado a encontrar.
+     * @return El objecto Empleado encontrado, o null si no es encontrado.
+     */
+    Empleado encontrarPorCorreo(String email);
+
+
     /**
      * Obtiene todos los Empleado desde la base de datos.
      * @return List<Empleado> Una lista de todos los entidades Empleado.

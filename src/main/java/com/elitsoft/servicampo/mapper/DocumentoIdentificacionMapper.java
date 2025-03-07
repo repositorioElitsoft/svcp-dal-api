@@ -64,6 +64,23 @@ public interface DocumentoIdentificacionMapper {
     DocumentoIdentificacion encontrarPorClave(Long id);
 
     /**
+     * Encuentra un DocumentoIdentificacion en la base de datos por su clave.
+     * @param id La clave de DocumentoIdentificacion a encontrar.
+     * @return La entidad DocumentoIdentificacion encontrado, o null si no es encontrado.
+     */
+
+    /**
+     * Encuentra un DocumentoIdentificacion en la base de datos por su numero y opcional digitoVerificador.
+     * @param numero documento de identificacion.
+     * @param digitoVerificador digito verificador.
+     * @return La entidad DocumentoIdentificacion encontrado, o null si no es encontrado.
+     */
+    DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador);
+
+
+
+
+    /**
      * Obtiene todos los DocumentoIdentificacion desde la base de datos.
      * @return List<DocumentoIdentificacion> Una lista de todos los entidades DocumentoIdentificacion.
      */

@@ -64,6 +64,13 @@ public interface RegionMapper {
     Region encontrarPorClave(Long id);
 
     /**
+     * Encuentra un Pais en la base de datos por su clave relacionado a Regiones.
+     * @param paisId La clave de Pais a encontrar.
+     * @return La entidad Region encontrado, o null si no es encontrado.
+     */
+    List<Region> encontrarPorPais(Long paisId);
+
+    /**
      * Obtiene todos los Region desde la base de datos.
      * @return List<Region> Una lista de todos los entidades Region.
      */

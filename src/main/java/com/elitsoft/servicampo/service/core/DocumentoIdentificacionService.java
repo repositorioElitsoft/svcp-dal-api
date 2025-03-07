@@ -1,11 +1,13 @@
 package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
+import com.elitsoft.servicampo.domain.dto.core.TipoDocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
+import com.elitsoft.servicampo.utils.ErroresNegocio;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,10 @@ public class DocumentoIdentificacionService {
     private DocumentoIdentificacionMapper documentoIdentificacionMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
+    private TipoDocumentoIdentificacionService tipoDocumentoIdentificacionService;
+
+
+    @Autowired
     private DocumentoIdentificacionMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
 
     private static final Logger logeador = LoggerFactory.getLogger(DocumentoIdentificacionService.class); //Logback
@@ -39,15 +45,24 @@ public class DocumentoIdentificacionService {
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso DocumentoIdentificacion ya existe.
      */
-    public DocumentoIdentificacionDTO agregar(DocumentoIdentificacionDTO documentoidentificacionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public DocumentoIdentificacionDTO agregar(DocumentoIdentificacionDTO documentoidentificacionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregar() DocumentoIdentificacion");
 
         //  Valida Entrada
-        if (documentoidentificacionDTO == null || documentoidentificacionDTO.getNumero() == null || documentoidentificacionDTO.getNumero().isEmpty() ) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
-        }
+        this.valiacionesEntrada(documentoidentificacionDTO);
 
+        //Verifica Identificacion Duplicada.
+        DocumentoIdentificacion documentoIdentificacionExiste =  encontrarPorIndentificacion(
+                documentoidentificacionDTO.getNumero(),
+                documentoidentificacionDTO.getDigitoVerificador());
+
+        if (documentoIdentificacionExiste != null) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {} , {}",
+                           documentoidentificacionDTO.getNumero(),
+                           documentoidentificacionDTO.getDigitoVerificador());
+            throw new RecursoDuplicadoException(ErroresNegocio.IDENTIFICACION_DUPLICADO.getCodigoError() ,
+                                                Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
+        }
 
         try {
             DocumentoIdentificacion documentoIdentificacion = mapper.toEntity(documentoidentificacionDTO);
@@ -117,6 +132,20 @@ public class DocumentoIdentificacionService {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  documentoidentificacionDTO.toString());
             throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
+
+        //  Valida Entrada
+        this.valiacionesEntrada(documentoidentificacionDTO);
+
+        /**
+        DocumentoIdentificacion documentoIdentificacionExiste =  encontrarPorIndentificacion(
+                documentoidentificacionDTO.getNumero(),
+                documentoidentificacionDTO.getDigitoVerificador());
+
+        if (documentoIdentificacionExiste != null) {
+            throw new RecursoDuplicadoException(ErroresNegocio.IDENTIFICACION_DUPLICADO.codigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
+        }
+         */
 
         try {
             DocumentoIdentificacionDTO documentoidentificacionDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
@@ -226,6 +255,24 @@ public class DocumentoIdentificacionService {
     }
 
     /**
+     * Encuentra un DocumentoIdentificacion por su numero y opcional digitoVerificador.
+     * @param numero documento de identificacion.
+     * @param digitoVerificador digito verificador.
+     * @return el DocumentoIdentificacion DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     */
+    public DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador) throws BaseDatosException {
+        logeador.debug("encontrarPorIndentificacion(): {} , {}", numero, digitoVerificador);
+
+        try {
+            return documentoIdentificacionMapper.encontrarPorIndentificacion(numero, digitoVerificador);
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_IDENTIFICACION_MENSAGE + " {} , {}", numero, digitoVerificador, e);
+            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_IDENTIFICACION_MENSAGE, e);
+        }
+    }
+
+    /**
      * Obtiene todos los DocumentoIdentificacions.
      * @return una lista de todos DocumentoIdentificacion DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
@@ -241,5 +288,48 @@ public class DocumentoIdentificacionService {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE, e);
         }
+    }
+
+    /**
+     * Verifica campoa requeridos
+     * @param documentoIdentificacionDTO el DocumentoIdentificacion DTO.
+     * @throws EntradaInvalidadException si el recurso Empleado ya existe.
+     */
+    public void valiacionesEntrada(DocumentoIdentificacionDTO documentoIdentificacionDTO) throws EntradaInvalidadException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("valiacionesEntrada()");
+
+
+        //Valida Numero de identificacion
+        if (documentoIdentificacionDTO == null || documentoIdentificacionDTO.getNumero() == null || documentoIdentificacionDTO.getNumero().isEmpty() ) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE );
+            throw new EntradaInvalidadException(ErroresNegocio.IDENTIFICACION_NUMERO_REQUERIDO.getCodigoError(),
+                                                Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE);
+        }
+
+        TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTO = documentoIdentificacionDTO.getTipoDocumentoIdentificacion();
+
+
+        //Valida Id Tipo Documento Identificacion
+        if (tipoDocumentoIdentificacionDTO == null || tipoDocumentoIdentificacionDTO.getId() == null
+                                                   || tipoDocumentoIdentificacionDTO.getId().toString().isEmpty()){
+            logeador.error(Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE );
+            throw new EntradaInvalidadException(ErroresNegocio.TIPO_DOCUMENTO_IDENTIFICACION_ID_REQUERIDO.getCodigoError(),
+                    Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE);
+
+        }
+
+        //Verifica Existencia Tipo Documento Identificacion
+        TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTOEncontrado =
+                         tipoDocumentoIdentificacionService.encontrarPorClave(tipoDocumentoIdentificacionDTO.getId());
+
+        //Valida Digito Verificador
+        if (tipoDocumentoIdentificacionDTO.getId().equals(Constantes.TIPO_DOCUMENTO_INDENTIFICACION_RUT)
+                                                && (documentoIdentificacionDTO.getDigitoVerificador () == null
+                                                || documentoIdentificacionDTO.getDigitoVerificador() == ' ') ) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE );
+            throw new EntradaInvalidadException(ErroresNegocio.IDENTIFICACION_DIGITO_VERIFICADOR_REQUERIDO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_DIGITO_VERIFICADOR_MENSAGE);
+        }
+
     }
 }

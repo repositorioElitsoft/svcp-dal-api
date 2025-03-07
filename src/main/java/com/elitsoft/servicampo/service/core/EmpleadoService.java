@@ -9,6 +9,7 @@ import com.elitsoft.servicampo.mapper.EmpleadoMapper;
 import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.mapstruct.EmpleadoMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
+import com.elitsoft.servicampo.utils.ErroresNegocio;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,17 +56,17 @@ public class EmpleadoService {
      * @throws RecursoDuplicadoException si el recurso Empleado ya existe.
      */
     @Transactional
-    public EmpleadoDTO agregar(EmpleadoDTO empleadoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public EmpleadoDTO agregar(EmpleadoDTO empleadoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregar() Empleado");
 
-        //  Valida Entrada
-        if (empleadoDTO == null || empleadoDTO.getContrasena() == null || empleadoDTO.getContrasena().isEmpty()) {
-            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
-        }
+        this.valiacionesEntrada(empleadoDTO, true); //  Valida Entrada
 
         // Agrega el Documento de Identificacion
         DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.agregar(empleadoDTO.getDocumentoIdentificacion());
+
+        Empleado empleadoCorreo =  this.encontrarPorCorreo(empleadoDTO.getEmail()); //Verifica Existencia de correo.
+
+        this.valiacionesCorreo(empleadoDTO); //Valida existencia de correo
 
         try {
 
@@ -113,11 +114,18 @@ public class EmpleadoService {
             throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
+        //Valida Documento
+        documentoIdentificacionService.valiacionesEntrada(empleadoDTO.getDocumentoIdentificacion());
+
+        //Valida Entrada
+        this.valiacionesEntrada(empleadoDTO, false);
+
         //  Valida id
         if (!id.equals(empleadoDTO.getId())) {
             logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  empleadoDTO.toString());
             throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
+
 
         try {
             EmpleadoDTO empleadoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
@@ -212,6 +220,7 @@ public class EmpleadoService {
         }
     }
 
+
     /**
      * Obtiene todos los Empleados.
      * @return una lista de todos Empleado DTOs.
@@ -229,4 +238,73 @@ public class EmpleadoService {
             throw new BaseDatosException(Constantes.EMPLEADO_OBTENER_TODOS_MENSAJE, e);
         }
     }
+
+    /**
+     * Encuentra un Empleado por correo.
+     * @param email correo de Empleado a encontrar.
+     * @return el Empleado  encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     */
+    public Empleado encontrarPorCorreo(String email) throws BaseDatosException {
+        logeador.debug("encontrarPorCorreo(): {}", email);
+
+        try {
+            return empleadoMapper.encontrarPorCorreo (email);
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.EMPLEADO_ENCONTRAR_POR_CORREO_MENSAGE + " {}", email, e);
+            throw new BaseDatosException(Constantes.EMPLEADO_ENCONTRAR_POR_CORREO_MENSAGE, e);
+        }
+    }
+
+
+    /**
+     * Verifica la existencia de un correo
+     * @param empleadoDTO el Empleado DTO.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoDuplicadoException si el recurso Empleado ya existe.
+     */
+    public void valiacionesCorreo(EmpleadoDTO empleadoDTO) throws BaseDatosException, RecursoDuplicadoException {
+        logeador.debug("valiacionesCorreo() " + empleadoDTO.getEmail());
+
+        Empleado empleado =  this.encontrarPorCorreo(empleadoDTO.getEmail()); //Verifica Existencia de correo.
+
+        if (empleado != null){
+            logeador.error(Constantes.EMPLEADO_CORREO_DUPLICADO_MENSAGE);
+            throw new RecursoDuplicadoException(ErroresNegocio.EMPLEADO_CORREO_DUPLICADO.getCodigoError(),
+                    Constantes.EMPLEADO_CORREO_DUPLICADO_MENSAGE);
+        }
+    }
+
+    /**
+     * Verifica campoa requeridos
+     * @param empleadoDTO el Empleado DTO.
+     * @param  contrasena indica si debe evaluar o entradas de contransena
+     * @throws EntradaInvalidadException si el recurso Empleado ya existe.
+     */
+    public void valiacionesEntrada(EmpleadoDTO empleadoDTO, boolean contrasena) throws  EntradaInvalidadException {
+        logeador.debug("valiacionesEntrada()");
+
+        //  Valida Entrada
+        if (empleadoDTO == null ) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        //Solo para agregar clave
+        if (contrasena) {
+            if (empleadoDTO.getContrasena() == null || empleadoDTO.getContrasena().isEmpty()) {
+                logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+                throw new EntradaInvalidadException(ErroresNegocio.EMPLEADO_CONTRASENA_REQUERIDO.getCodigoError(),
+                        Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+            }
+        }
+
+        if (empleadoDTO.getEmail() == null || empleadoDTO.getEmail().isEmpty()  ) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_CORRE0_MENSAGE);
+            throw new EntradaInvalidadException(ErroresNegocio.EMPLEADO_CORREO_REQUERIDO.getCodigoError(),
+                                                Constantes.EMPLEADO_ENTRADA_INVALIDA_CORRE0_MENSAGE);
+        }
+    }
+
+
 }
