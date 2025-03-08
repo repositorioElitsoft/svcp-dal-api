@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.PorotoDto;
+import com.elitsoft.servicampo.domain.dto.core.PorotoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.PorotoService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,11 +37,11 @@ public class PorotoController {
             @ApiResponse(responseCode = "409", description = "Poroto ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PorotoDto> agregar(@RequestBody PorotoDto porotoDto) {
+    public ResponseEntity<PorotoDTO> agregar(@RequestBody PorotoDTO porotoDTO) {
         logeador.debug("agregar() poroto");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(porotoService.agregar(porotoDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(porotoService.agregar(porotoDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -64,11 +63,11 @@ public class PorotoController {
             @ApiResponse(responseCode = "409", description = "Poroto ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<PorotoDto> porotosDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<PorotoDTO> porotosDTOLote) {
         logeador.debug("agregarLote() poroto");
 
         try {
-            porotoService.agregarLote (porotosDto);
+            porotoService.agregarLote (porotosDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -91,11 +90,11 @@ public class PorotoController {
             @ApiResponse(responseCode = "404", description = "Poroto no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PorotoDto porotoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PorotoDTO porotoDTO) {
         logeador.debug("actualizar() poroto");
 
         try {
-            porotoService.actualizar(id, porotoDto);
+            porotoService.actualizar(id, porotoDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -115,11 +114,11 @@ public class PorotoController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<PorotoDto> porotoLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<PorotoDTO> porotoDTOLote) {
         logeador.debug("actualizarLote() poroto");
 
         try {
-            porotoService.actualizarLote(porotoLoteDto);
+            porotoService.actualizarLote(porotoDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -184,11 +183,11 @@ public class PorotoController {
             @ApiResponse(responseCode = "404", description = "Poroto no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PorotoDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<PorotoDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            PorotoDto porotoDto = porotoService.encontrarPorClave(id);
+            PorotoDTO porotoDto = porotoService.encontrarPorClave(id);
             return ResponseEntity.ok(porotoDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -204,11 +203,11 @@ public class PorotoController {
             @ApiResponse(responseCode = "200", description = "Porotos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<PorotoDto>> obtenerTodos() {
+    public ResponseEntity<List<PorotoDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<PorotoDto> porotos = null;
+            List<PorotoDTO> porotos = null;
             porotos = porotoService.obtenerTodos();
             return ResponseEntity.ok(porotos);  // Retorna  200
         } catch (BaseDatosException e) {

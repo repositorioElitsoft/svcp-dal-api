@@ -22,10 +22,10 @@ import java.util.List;
 public class DireccionEmpleadoMobileService {
 
     @Autowired
-    private DireccionEmpleadoMapper direccionempleadoMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private DireccionEmpleadoMapper direccionEmpleadoMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
-    private DireccionEmpleadoService direccionempleadoService; //Logica de Negocio del Core Service
+    private DireccionEmpleadoService direccionEmpleadoService; //Logica de Negocio del Core Service
 
     @Autowired
     private DireccionEmpleadoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
@@ -35,55 +35,55 @@ public class DireccionEmpleadoMobileService {
 
     /**
      * Agrega un nuevo DireccionEmpleado.
-     * @param direccionempleadoDTO el DireccionEmpleado DTO.
+     * @param direccionEmpleadoDTO el DireccionEmpleado DTO.
      * @return el DireccionEmpleado DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DireccionEmpleado tiene errores.
      * @throws RecursoDuplicadoException si el recurso DireccionEmpleado ya existe.
      */
-    public DireccionEmpleadoDTO agregar(DireccionEmpleadoDTO direccionempleadoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public DireccionEmpleadoDTO agregar(DireccionEmpleadoDTO direccionEmpleadoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() direccionempleado");
 
-        return direccionempleadoService.agregar(direccionempleadoDTO);
+        return direccionEmpleadoService.agregar(direccionEmpleadoDTO);
     }
 
     /**
      * Agrega Lote nuevos DireccionEmpleado.
-     * @param direccionempleadoLoteDTO lista de DireccionEmpleado DTO a agregar.
+     * @param direccionEmpleadoLoteDTO lista de DireccionEmpleado DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DireccionEmpleado tiene errores.
      * @throws RecursoDuplicadoException si el recurso DireccionEmpleado ya existe.
      */
-    public void agregarLote(List<DireccionEmpleadoDTO> direccionempleadoLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<DireccionEmpleadoDTO> direccionEmpleadoLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() direccionempleado");
 
-        direccionempleadoService.agregarLote(direccionempleadoLoteDTO);
+        direccionEmpleadoService.agregarLote(direccionEmpleadoLoteDTO);
     }
 
     /**
      * Actualiza un DireccionEmpleado existente.
      * @param id la Clave de DireccionEmpleado a actualizar.
-     * @param direccionempleadoDTO el DireccionEmpleado DTO con informacion actualizada.
+     * @param direccionEmpleadoDTO el DireccionEmpleado DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si DireccionEmpleado no es encontrado.
      * @throws EntradaInvalidadException si la entrada DireccionEmpleado tiene errores.
      */
-    public void actualizar(Long id, DireccionEmpleadoDTO direccionempleadoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, DireccionEmpleadoDTO direccionEmpleadoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() direccionempleado");
 
-        direccionempleadoService.actualizar(id, direccionempleadoDTO);
+        direccionEmpleadoService.actualizar(id, direccionEmpleadoDTO);
     }
 
     /**
      * Actualiza Lote de DireccionEmpleado existentes.
-     * @param direccionempleadoLoteDTO lista de DireccionEmpleado DTO con datos a actualizar.
+     * @param direccionEmpleadoLoteDTO lista de DireccionEmpleado DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DireccionEmpleado tiene errores.
      */
-    public void actualizarLote(List<DireccionEmpleadoDTO> direccionempleadoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<DireccionEmpleadoDTO> direccionEmpleadoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() direccionempleado");
 
-        direccionempleadoService.actualizarLote(direccionempleadoLoteDTO);
+        direccionEmpleadoService.actualizarLote(direccionEmpleadoLoteDTO);
     }
 
     /**
@@ -94,7 +94,7 @@ public class DireccionEmpleadoMobileService {
      */
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() direccionempleado: {}", id);
-        direccionempleadoService.eliminar(id);
+        direccionEmpleadoService.eliminar(id);
     }
 
     /**
@@ -106,7 +106,7 @@ public class DireccionEmpleadoMobileService {
     public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("eliminarLote()");
 
-        direccionempleadoService.eliminarLote(idLote);
+        direccionEmpleadoService.eliminarLote(idLote);
     }
 
     /**
@@ -118,7 +118,7 @@ public class DireccionEmpleadoMobileService {
      */
     public DireccionEmpleadoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
-        return direccionempleadoService.encontrarPorClave(id);
+        return direccionEmpleadoService.encontrarPorClave(id);
     }
 
     /**
@@ -128,6 +128,6 @@ public class DireccionEmpleadoMobileService {
      */
     public List<DireccionEmpleadoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
-        return direccionempleadoService.obtenerTodos();
+        return direccionEmpleadoService.obtenerTodos();
     }
 }

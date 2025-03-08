@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.ZonaFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.ZonaFiltroService;
@@ -37,14 +37,14 @@ public class ZonaFiltroController {
             @ApiResponse(responseCode = "200", description = "Zona Filtrado exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PagedResponse<ZonaDto>> filtrar(@ModelAttribute ZonaFiltro filtro, PagingAndSorting paginado) {
+    public ResponseEntity<PagedResponse<ZonaDTO>> filtrar(@ModelAttribute ZonaFiltro filtro, PagingAndSorting paginado) {
         logeador.debug("filtrar()");
 
         try {
-            List<ZonaDto> zonaLista = zonaFiltroService.filtrar(filtro, paginado);
+            List<ZonaDTO> zonaDTOLista = zonaFiltroService.filtrar(filtro, paginado);
             int totalFiltro = zonaFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<ZonaDto> response = PaginationUtils.createPagedResponse(zonaLista, totalFiltro, paginado);
+            PagedResponse<ZonaDTO> response = PaginationUtils.createPagedResponse(zonaDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

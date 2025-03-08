@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.ModuloDto;
+import com.elitsoft.servicampo.domain.dto.core.ModuloDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.ModuloService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -36,11 +36,11 @@ public class ModuloController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody ModuloDto moduloDto) {
+    public ResponseEntity<String> agregar(@RequestBody ModuloDTO moduloDTO) {
         logeador.debug("agregar() modulo");
 
         try {
-            moduloService.agregar(moduloDto);
+            moduloService.agregar(moduloDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();
@@ -55,11 +55,11 @@ public class ModuloController {
             @ApiResponse(responseCode = "404", description = "Modulo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ModuloDto moduloDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ModuloDTO moduloDTO) {
         logeador.debug("actualizar() modulo");
 
         try {
-            moduloService.actualizar(id, moduloDto);
+            moduloService.actualizar(id, moduloDTO);
             return ResponseEntity.noContent().build();
         } catch (ModuloNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.MODULO_NO_ENCONTRADO_MENSAGE);
@@ -94,11 +94,11 @@ public class ModuloController {
             @ApiResponse(responseCode = "404", description = "Modulo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ModuloDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ModuloDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ModuloDto moduloDto = moduloService.encontrarPorClave(id);
+            ModuloDTO moduloDto = moduloService.encontrarPorClave(id);
             return ResponseEntity.ok(moduloDto);
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();
@@ -113,10 +113,10 @@ public class ModuloController {
             @ApiResponse(responseCode = "200", description = "Modulos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<ModuloDto>> obtenerTodos() {
+    public ResponseEntity<List<ModuloDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<ModuloDto> modulos = null;
+        List<ModuloDTO> modulos = null;
 
         try {
             modulos = moduloService.obtenerTodos();

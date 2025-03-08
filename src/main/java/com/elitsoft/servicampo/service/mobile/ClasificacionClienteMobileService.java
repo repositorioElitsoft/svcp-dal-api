@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDto;
+import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -34,55 +34,55 @@ public class ClasificacionClienteMobileService {
 
     /**
      * Agrega un nuevo ClasificacionCliente.
-     * @param clasificacionclienteDto el ClasificacionCliente DTO.
+     * @param clasificacionClienteDTO el ClasificacionCliente DTO.
      * @return el ClasificacionCliente DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
      */
-    public ClasificacionClienteDto agregar(ClasificacionClienteDto clasificacionclienteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ClasificacionClienteDTO agregar(ClasificacionClienteDTO clasificacionClienteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() clasificacioncliente");
 
-        return clasificacionclienteService.agregar(clasificacionclienteDto);
+        return clasificacionclienteService.agregar(clasificacionClienteDTO);
     }
 
     /**
      * Agrega Lote nuevos ClasificacionCliente.
-     * @param clasificacionclienteLoteDto lista de ClasificacionCliente DTO a agregar.
+     * @param clasificacionClienteLoteDTO lista de ClasificacionCliente DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
      */
-    public void agregarLote(List<ClasificacionClienteDto> clasificacionclienteLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<ClasificacionClienteDTO> clasificacionClienteLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() clasificacioncliente");
 
-        clasificacionclienteService.agregarLote(clasificacionclienteLoteDto);
+        clasificacionclienteService.agregarLote(clasificacionClienteLoteDTO);
     }
 
     /**
      * Actualiza un ClasificacionCliente existente.
      * @param id la Clave de ClasificacionCliente a actualizar.
-     * @param clasificacionclienteDto el ClasificacionCliente DTO con informacion actualizada.
+     * @param clasificacionClienteDTO el ClasificacionCliente DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si ClasificacionCliente no es encontrado.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      */
-    public void actualizar(Long id, ClasificacionClienteDto clasificacionclienteDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, ClasificacionClienteDTO clasificacionClienteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() clasificacioncliente");
 
-        clasificacionclienteService.actualizar(id, clasificacionclienteDto);
+        clasificacionclienteService.actualizar(id, clasificacionClienteDTO);
     }
 
     /**
      * Actualiza Lote de ClasificacionCliente existentes.
-     * @param clasificacionclienteLoteDto lista de ClasificacionCliente DTO con datos a actualizar.
+     * @param clasificacionClienteLoteDTO lista de ClasificacionCliente DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      */
-    public void actualizarLote(List<ClasificacionClienteDto> clasificacionclienteLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ClasificacionClienteDTO> clasificacionClienteLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() clasificacioncliente");
 
-        clasificacionclienteService.actualizarLote(clasificacionclienteLoteDto);
+        clasificacionclienteService.actualizarLote(clasificacionClienteLoteDTO);
     }
 
     /**
@@ -115,7 +115,7 @@ public class ClasificacionClienteMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si ClasificacionCliente no es encontrado.
      */
-    public ClasificacionClienteDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public ClasificacionClienteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return clasificacionclienteService.encontrarPorClave(id);
     }
@@ -125,7 +125,7 @@ public class ClasificacionClienteMobileService {
      * @return lista de todos ClasificacionCliente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<ClasificacionClienteDto> obtenerTodos() throws BaseDatosException {
+    public List<ClasificacionClienteDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return clasificacionclienteService.obtenerTodos();
     }

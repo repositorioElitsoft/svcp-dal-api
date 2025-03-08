@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoClienteDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoClienteDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -35,55 +35,55 @@ public class TipoClienteMobileService {
 
     /**
      * Agrega un nuevo TipoCliente.
-     * @param tipoClienteDto el TipoCliente DTO.
+     * @param tipoClienteDTO el TipoCliente DTO.
      * @return el TipoCliente DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoCliente ya existe.
      */
-    public TipoClienteDto agregar(TipoClienteDto tipoClienteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public TipoClienteDTO agregar(TipoClienteDTO tipoClienteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() tipocliente");
 
-        return tipoClienteService.agregar(tipoClienteDto);
+        return tipoClienteService.agregar(tipoClienteDTO);
     }
 
     /**
      * Agrega Lote nuevos TipoCliente.
-     * @param tipoClienteLoteDto lista de TipoCliente DTO a agregar.
+     * @param tipoClienteLoteDTO lista de TipoCliente DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoCliente ya existe.
      */
-    public void agregarLote(List<TipoClienteDto> tipoClienteLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TipoClienteDTO> tipoClienteLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() tipocliente");
 
-        tipoClienteService.agregarLote(tipoClienteLoteDto);
+        tipoClienteService.agregarLote(tipoClienteLoteDTO);
     }
 
     /**
      * Actualiza un TipoCliente existente.
      * @param id la Clave de TipoCliente a actualizar.
-     * @param tipoClienteDto el TipoCliente DTO con informacion actualizada.
+     * @param tipoClienteDTO el TipoCliente DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoCliente no es encontrado.
      * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
      */
-    public void actualizar(Long id, TipoClienteDto tipoClienteDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TipoClienteDTO tipoClienteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() tipocliente");
 
-        tipoClienteService.actualizar(id, tipoClienteDto);
+        tipoClienteService.actualizar(id, tipoClienteDTO);
     }
 
     /**
      * Actualiza Lote de TipoCliente existentes.
-     * @param tipoClienteLoteDto lista de TipoCliente DTO con datos a actualizar.
+     * @param tipoClienteLoteDTO lista de TipoCliente DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
      */
-    public void actualizarLote(List<TipoClienteDto> tipoClienteLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoClienteDTO> tipoClienteLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tipocliente");
 
-        tipoClienteService.actualizarLote(tipoClienteLoteDto);
+        tipoClienteService.actualizarLote(tipoClienteLoteDTO);
     }
 
     /**
@@ -116,7 +116,7 @@ public class TipoClienteMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoCliente no es encontrado.
      */
-    public TipoClienteDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public TipoClienteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return tipoClienteService.encontrarPorClave(id);
     }
@@ -126,7 +126,7 @@ public class TipoClienteMobileService {
      * @return lista de todos TipoCliente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<TipoClienteDto> obtenerTodos() throws BaseDatosException {
+    public List<TipoClienteDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return tipoClienteService.obtenerTodos();
     }

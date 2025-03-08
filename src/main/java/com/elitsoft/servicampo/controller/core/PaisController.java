@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.PaisDto;
+import com.elitsoft.servicampo.domain.dto.core.PaisDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.PaisService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,11 +36,11 @@ public class PaisController {
             @ApiResponse(responseCode = "409", description = "Pais ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PaisDto> agregar(@RequestBody PaisDto paisDto) {
+    public ResponseEntity<PaisDTO> agregar(@RequestBody PaisDTO paisDTO) {
         logeador.debug("agregar() pais");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(paisService.agregar(paisDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(paisService.agregar(paisDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -63,11 +62,11 @@ public class PaisController {
             @ApiResponse(responseCode = "409", description = "Pais ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<PaisDto> paisLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<PaisDTO> paisDTOLote) {
         logeador.debug("agregarLote() pais");
 
         try {
-            paisService.agregarLote (paisLoteDto);
+            paisService.agregarLote (paisDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -90,11 +89,11 @@ public class PaisController {
             @ApiResponse(responseCode = "404", description = "Pais no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PaisDto paisDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PaisDTO paisDTO) {
         logeador.debug("actualizar() pais");
 
         try {
-            paisService.actualizar(id, paisDto);
+            paisService.actualizar(id, paisDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -114,11 +113,11 @@ public class PaisController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<PaisDto> paisLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<PaisDTO> paisDTOLote) {
         logeador.debug("actualizarLote() pais");
 
         try {
-            paisService.actualizarLote(paisLoteDto);
+            paisService.actualizarLote(paisDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -183,11 +182,11 @@ public class PaisController {
             @ApiResponse(responseCode = "404", description = "Pais no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PaisDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<PaisDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            PaisDto paisDto = paisService.encontrarPorClave(id);
+            PaisDTO paisDto = paisService.encontrarPorClave(id);
             return ResponseEntity.ok(paisDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -203,11 +202,11 @@ public class PaisController {
             @ApiResponse(responseCode = "200", description = "Paiss obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<PaisDto>> obtenerTodos() {
+    public ResponseEntity<List<PaisDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<PaisDto> paisLista = null;
+            List<PaisDTO> paisLista = null;
             paisLista = paisService.obtenerTodos();
             return ResponseEntity.ok(paisLista);  // Retorna  200
         } catch (BaseDatosException e) {

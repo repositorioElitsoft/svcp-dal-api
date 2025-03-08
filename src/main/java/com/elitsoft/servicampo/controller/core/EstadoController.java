@@ -64,11 +64,11 @@ public class EstadoController {
             @ApiResponse(responseCode = "409", description = "Estado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<EstadoDTO> estadoLoteDTO) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<EstadoDTO> estadoDTOLote) {
         logeador.debug("agregarLote() estado");
 
         try {
-            estadoService.agregarLote (estadoLoteDTO);
+            estadoService.agregarLote (estadoDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -115,11 +115,11 @@ public class EstadoController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<EstadoDTO> estadoLoteDTO) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<EstadoDTO> estadoDTOLote) {
         logeador.debug("actualizarLote() estado");
 
         try {
-            estadoService.actualizarLote(estadoLoteDTO);
+            estadoService.actualizarLote(estadoDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {

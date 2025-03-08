@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.MenuDto;
+import com.elitsoft.servicampo.domain.dto.core.MenuDTO;
 import com.elitsoft.servicampo.domain.entity.Menu;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.MenuMapper;
@@ -32,19 +32,19 @@ public class MenuService {
 
     /**
      * Agrega un nuevo Menu.
-     * @param menuDto El Menu DTO.
+     * @param menuDTO El Menu DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(MenuDto menuDto) throws BaseDatosException {
+    public void agregar(MenuDTO menuDTO) throws BaseDatosException {
         logeador.debug("agregar() menu");
 
 
         try {
-            Menu menu = mapper.toEntity(menuDto);
+            Menu menu = mapper.toEntity(menuDTO);
             Long nuevoId = menuMapper.agregar(menu);
             logeador.info("Menu agregado exitosamente id: {}", nuevoId);
         } catch (DataAccessException e) {
-            logeador.error(Constantes.MENU_AGREGAR_EXECPTION + ": {}", menuDto.toString(), e);
+            logeador.error(Constantes.MENU_AGREGAR_EXECPTION + ": {}", menuDTO.toString(), e);
             throw new BaseDatosException(Constantes.MENU_AGREGAR_EXECPTION, e);
         }
     }
@@ -52,24 +52,24 @@ public class MenuService {
     /**
      * Actualiza un Menu existente.
      * @param id La Clave de Menu a actualizar.
-     * @param menuDto El Menu DTO con informacion actualizada.
+     * @param menuDTO El Menu DTO con informacion actualizada.
      * @throws MenuNoEncontradoException Si Menu no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, MenuDto menuDto) throws MenuNoEncontradoException, BaseDatosException {
+    public void actualizar(Long id, MenuDTO menuDTO) throws MenuNoEncontradoException, BaseDatosException {
         logeador.debug("actualizar() menu");
 
         try {
-            MenuDto menuDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe
+            MenuDTO menuDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe
 
-            Menu menu = mapper.toEntity(menuDto);
+            Menu menu = mapper.toEntity(menuDTO);
             menu.setId(id);
             int registrosActualizados = menuMapper.actualizar(menu);
             logeador.info("menu actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (MenuNoEncontradoException e) {
             throw e;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.MENU_ACTUALIZAR_EXECPTION + ": id={} {}", id, menuDto.toString(), e);
+            logeador.error(Constantes.MENU_ACTUALIZAR_EXECPTION + ": id={} {}", id, menuDTO.toString(), e);
             throw new BaseDatosException(Constantes.MENU_ACTUALIZAR_EXECPTION, e);
         }
     }
@@ -84,7 +84,7 @@ public class MenuService {
         logeador.debug("eliminar() menu: {}", id);
 
         try {
-            MenuDto menuDto = this.encontrarPorClave(id); // Verifica si existe
+            MenuDTO menuDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = menuMapper.eliminar(id);
             logeador.info("menu eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (MenuNoEncontradoException e) {
@@ -103,20 +103,20 @@ public class MenuService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws MenuNoEncontradoException Si Menu no es encontrado.
      */
-    public MenuDto encontrarPorClave(Long id) throws BaseDatosException, MenuNoEncontradoException {
+    public MenuDTO encontrarPorClave(Long id) throws BaseDatosException, MenuNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            MenuDto menuDto = mapper.toDto(menuMapper.encontrarPorClave(id));
+            MenuDTO menuDTO = mapper.toDto(menuMapper.encontrarPorClave(id));
 
-            if (menuDto != null) {
+            if (menuDTO != null) {
                 logeador.info("menu encontrado por clave : {}", id);
             } else {
                 logeador.info("menu clave:{} no encontrado", id);
                 throw new MenuNoEncontradoException(Constantes.MENU_NO_ENCONTRADO_MENSAGE);
             }
 
-            return menuDto;
+            return menuDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.MENU_ENCONTRAR_POR_CLAVE_EXECPTION + " {}", id, e);
             throw new BaseDatosException(Constantes.MENU_ENCONTRAR_POR_CLAVE_EXECPTION, e);
@@ -128,13 +128,13 @@ public class MenuService {
      * @return Una lista de todos Menu DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<MenuDto> obtenerTodos() throws BaseDatosException {
+    public List<MenuDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<MenuDto> menuList = mapper.toDtoList(menuMapper.obtenerTodos());
+            List<MenuDTO> menuLista = mapper.toDtoList(menuMapper.obtenerTodos());
             logeador.info("menus obtenidos");
-            return menuList;
+            return menuLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.MENU_OBTENER_TODOS_EXECPTION, e);
             throw new BaseDatosException(Constantes.MENU_OBTENER_TODOS_EXECPTION, e);

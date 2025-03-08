@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDto;
+import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.ClasificacionClienteFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.ClasificacionClienteFiltroService;
@@ -27,7 +27,7 @@ import java.util.List;
 public class ClasificacionClienteFiltroController {
 
     @Autowired
-    private ClasificacionClienteFiltroService clasificacionclienteFiltroService; //Logica de Negocio de Filtrado del Core Service
+    private ClasificacionClienteFiltroService clasificacionClienteFiltroService; //Logica de Negocio de Filtrado del Core Service
 
     private static final Logger logeador = LoggerFactory.getLogger(ClasificacionClienteFiltroController.class); //Logback
 
@@ -37,14 +37,14 @@ public class ClasificacionClienteFiltroController {
             @ApiResponse(responseCode = "200", description = "ClasificacionCliente Filtrado exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PagedResponse<ClasificacionClienteDto>> filtrar(@ModelAttribute ClasificacionClienteFiltro filtro, PagingAndSorting paginado) {
+    public ResponseEntity<PagedResponse<ClasificacionClienteDTO>> filtrar(@ModelAttribute ClasificacionClienteFiltro filtro, PagingAndSorting paginado) {
         logeador.debug("filtrar()");
 
         try {
-            List<ClasificacionClienteDto> clasificacionClienteLista = clasificacionclienteFiltroService.filtrar(filtro, paginado);
-            int totalFiltro = clasificacionclienteFiltroService.contarFiltrar(filtro);
+            List<ClasificacionClienteDTO> clasificacionClienteDTOLista = clasificacionClienteFiltroService.filtrar(filtro, paginado);
+            int totalFiltro = clasificacionClienteFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<ClasificacionClienteDto> response = PaginationUtils.createPagedResponse(clasificacionClienteLista, totalFiltro, paginado);
+            PagedResponse<ClasificacionClienteDTO> response = PaginationUtils.createPagedResponse(clasificacionClienteDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

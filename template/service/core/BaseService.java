@@ -96,21 +96,21 @@ public class #Base#Service {
 
     /**
      * Agrega Lote nuevos #Base#.
-     * @param #base#LoteDTO lista de #Base# DTO a agregar.
+     * @param #base#DTOLote lista de #Base# DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
      * @throws RecursoDuplicadoException si el recurso #base# ya existe.
      */
-    public void agregarLote(List<#Base#DTO> #base#LoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<#Base#DTO> #base#DTOLote) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() #base#");
 
         //  Valida Entrada
-        if (#base#LoteDTO.isEmpty()) {
+        if (#base#DTOLote.isEmpty()) {
             logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<#Base#> #base#Lote = mapper.toEntityList(#base#LoteDTO);
+            List<#Base#> #base#Lote = mapper.toEntityList(#base#DTOLote);
 
             int registrosAgregados =  #base#Mapper.agregarLote(#base#Lote);
             logeador.info("Lote #Base# agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -160,21 +160,21 @@ public class #Base#Service {
 
    /**
      * Actualiza Lote de #Base# existentes.
-     * @param #base#LoteDTO lista de #Base# DTO con datos a actualizar.
+     * @param #base#DTOLote lista de #Base# DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
      */
-    public void actualizarLote(List<#Base#DTO> #base#LoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<#Base#DTO> #base#DTOLote) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() #base#");
 
         //  Valida Entrada
-        if (#base#LoteDTO.isEmpty()) {
+        if (#base#DTOLote.isEmpty()) {
             logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<#Base#> #base#Lote = mapper.toEntityList(#base#LoteDTO);
+            List<#Base#> #base#Lote = mapper.toEntityList(#base#DTOLote);
             int registrosActualizados = #base#Mapper.actualizarLote(#base#Lote);
             logeador.info("Lote #base# actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {

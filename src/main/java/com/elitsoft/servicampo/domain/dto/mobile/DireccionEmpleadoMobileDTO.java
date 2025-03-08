@@ -15,7 +15,7 @@ public class DireccionEmpleadoMobileDTO implements Serializable {
 
     private Long id;
     private EstadoMobileDTO estado;
-    private ComunaMobileDto comuna;
+    private ComunaMobileDTO comuna;
     private String calle;
     private String numeracion;
     private Double latitud;

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto;
+import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.CarritoArticuloMobileService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -32,7 +32,7 @@ public class CarritoArticuloMobileController {
     /**
      * Llama al servicio de Agregar una Articulo de Carrito
      *
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @return
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -42,19 +42,19 @@ public class CarritoArticuloMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody CarritoArticuloDto carritoArticuloDto) {
+    public ResponseEntity<String> agregar(@RequestBody CarritoArticuloDTO carritoArticuloDTO) {
         logeador.info("agregar() articulo de carrito" );
 
         try{
-            carritoArticuloMobileService.agregar (carritoArticuloDto);
+            carritoArticuloMobileService.agregar (carritoArticuloDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna 201 Bad Request Not Found
         }
         catch (EntradaInvalidadException e) {
-            logeador.error(Constantes.CARRITO_ARTICULO_ENTRADA_INVALIDA + ": {}", carritoArticuloDto.getProductId());
+            logeador.error(Constantes.CARRITO_ARTICULO_ENTRADA_INVALIDA + ": {}", carritoArticuloDTO.getProductId());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constantes.CARRITO_ARTICULO_ENTRADA_INVALIDA);// Retorna  400 Bad Request
         }
         catch (CarritoArticuloLimiteException e) {
-            logeador.error(Constantes.CARRITO_ARTICULO_EXEDE_LIMITE + ": {}", carritoArticuloDto.getProductId());
+            logeador.error(Constantes.CARRITO_ARTICULO_EXEDE_LIMITE + ": {}", carritoArticuloDTO.getProductId());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constantes.CARRITO_ARTICULO_EXEDE_LIMITE);// Retorna  400 Bad Request
         }
         catch (BaseDatosException e) {
@@ -69,7 +69,7 @@ public class CarritoArticuloMobileController {
      * Llama al servicio de Actualizar un Articulo de Carrito
      *
      * @param id
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @return
      */
     @PutMapping( value = "/{id}" , consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -79,11 +79,11 @@ public class CarritoArticuloMobileController {
             @ApiResponse(responseCode = "404", description = "Articulo de carrito no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody CarritoArticuloDto carritoArticuloDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody CarritoArticuloDTO carritoArticuloDTO) {
         logeador.info("actualizar() articulo de carrito");
 
         try {
-            carritoArticuloMobileService.actualizar(id, carritoArticuloDto);
+            carritoArticuloMobileService.actualizar(id, carritoArticuloDTO);
             return ResponseEntity.noContent().build(); // Retorna 204 No Content
         } catch (CarritoArticuloNoEncontradoException e) {
             logeador.error(Constantes.CARRITO_ARTICULO_NO_ENCONTRADO_MENSAGE + ": {}", id);
@@ -135,11 +135,11 @@ public class CarritoArticuloMobileController {
             @ApiResponse(responseCode = "404", description = "Articulo de carrito no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<CarritoArticuloDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<CarritoArticuloDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.info("encontrarPorClave(): {}", id);
 
         try {
-            CarritoArticuloDto carritoArticuloDto = carritoArticuloMobileService.encontrarPorClave(id);
+            CarritoArticuloDTO carritoArticuloDto = carritoArticuloMobileService.encontrarPorClave(id);
             if (carritoArticuloDto != null) {
                 return ResponseEntity.ok(carritoArticuloDto); // Retorna 200 OK
             } else {
@@ -166,10 +166,10 @@ public class CarritoArticuloMobileController {
             @ApiResponse(responseCode = "200", description = "Articulos de carrito obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<CarritoArticuloDto>> obtenerTodos() {
+    public ResponseEntity<List<CarritoArticuloDTO>> obtenerTodos() {
         logeador.info("obtenerTodos()");
 
-        List<CarritoArticuloDto> carritoArticulos = null;
+        List<CarritoArticuloDTO> carritoArticulos = null;
 
         try {
             carritoArticulos = carritoArticuloMobileService.obtenerTodos ();

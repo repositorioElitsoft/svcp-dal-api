@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.PermisoDto;
+import com.elitsoft.servicampo.domain.dto.core.PermisoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.PermisoMobileService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -36,7 +36,7 @@ public class PermisoMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody PermisoDto permisoDto) {
+    public ResponseEntity<String> agregar(@RequestBody PermisoDTO permisoDto) {
         logeador.debug("agregar() permiso");
 
         try {
@@ -56,7 +56,7 @@ public class PermisoMobileController {
             @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PermisoDto permisoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PermisoDTO permisoDto) {
         logeador.debug("actualizar() permiso");
 
         try {
@@ -100,11 +100,11 @@ public class PermisoMobileController {
             @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PermisoDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<PermisoDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            PermisoDto permisoDto = permisoMobileService.encontrarPorClave(id);
+            PermisoDTO permisoDto = permisoMobileService.encontrarPorClave(id);
             if (permisoDto != null) {
                 return ResponseEntity.ok(permisoDto);
             } else {
@@ -126,10 +126,10 @@ public class PermisoMobileController {
             @ApiResponse(responseCode = "200", description = "Permisos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<PermisoDto>> obtenerTodos() {
+    public ResponseEntity<List<PermisoDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<PermisoDto> permisos = null;
+        List<PermisoDTO> permisos = null;
 
         try {
             permisos = permisoMobileService.obtenerTodos();

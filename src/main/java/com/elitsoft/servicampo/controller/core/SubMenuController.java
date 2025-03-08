@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.SubMenuDto;
+import com.elitsoft.servicampo.domain.dto.core.SubMenuDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.SubMenuService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -25,7 +25,7 @@ import java.util.List;
 public class SubMenuController {
 
     @Autowired
-    private SubMenuService submenuService;
+    private SubMenuService subMenuService;
 
     private static final Logger logeador = LoggerFactory.getLogger(SubMenuController.class);
 
@@ -36,11 +36,11 @@ public class SubMenuController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody SubMenuDto submenuDto) {
+    public ResponseEntity<String> agregar(@RequestBody SubMenuDTO subMenuDTO) {
         logeador.debug("agregar() submenu");
 
         try {
-            submenuService.agregar(submenuDto);
+            subMenuService.agregar(subMenuDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();
@@ -55,11 +55,11 @@ public class SubMenuController {
             @ApiResponse(responseCode = "404", description = "SubMenu no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SubMenuDto submenuDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SubMenuDTO subMenuDTO) {
         logeador.debug("actualizar() submenu");
 
         try {
-            submenuService.actualizar(id, submenuDto);
+            subMenuService.actualizar(id, subMenuDTO);
             return ResponseEntity.noContent().build();
         } catch (SubMenuNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.SUBMENU_NO_ENCONTRADO_MENSAGE);
@@ -78,7 +78,7 @@ public class SubMenuController {
         logeador.debug("eliminar() submenu: {}", id);
 
         try {
-            submenuService.eliminar(id);
+            subMenuService.eliminar(id);
         } catch (SubMenuNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.SUBMENU_NO_ENCONTRADO_MENSAGE);
         } catch (BaseDatosException e) {
@@ -94,11 +94,11 @@ public class SubMenuController {
             @ApiResponse(responseCode = "404", description = "SubMenu no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<SubMenuDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<SubMenuDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            SubMenuDto submenuDto = submenuService.encontrarPorClave(id);
+            SubMenuDTO submenuDto = subMenuService.encontrarPorClave(id);
             return ResponseEntity.ok(submenuDto);
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();
@@ -113,13 +113,13 @@ public class SubMenuController {
             @ApiResponse(responseCode = "200", description = "SubMenus obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<SubMenuDto>> obtenerTodos() {
+    public ResponseEntity<List<SubMenuDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<SubMenuDto> submenus = null;
+        List<SubMenuDTO> submenus = null;
 
         try {
-            submenus = submenuService.obtenerTodos();
+            submenus = subMenuService.obtenerTodos();
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();
         }

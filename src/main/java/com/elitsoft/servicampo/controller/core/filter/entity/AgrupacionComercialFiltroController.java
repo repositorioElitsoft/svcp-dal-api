@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDto;
+import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.AgrupacionComercialFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.AgrupacionComercialFiltroService;
@@ -37,14 +37,14 @@ public class AgrupacionComercialFiltroController {
             @ApiResponse(responseCode = "200", description = "AgrupacionComercial Filtrado exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PagedResponse<AgrupacionComercialDto>> filtrar(@ModelAttribute AgrupacionComercialFiltro filtro, PagingAndSorting paginado) {
+    public ResponseEntity<PagedResponse<AgrupacionComercialDTO>> filtrar(@ModelAttribute AgrupacionComercialFiltro filtro, PagingAndSorting paginado) {
         logeador.debug("filtrar()");
 
         try {
-            List<AgrupacionComercialDto> agrupacionComercialLista = agrupacionComercialFiltroService.filtrar(filtro, paginado);
+            List<AgrupacionComercialDTO> agrupacionComercialDTOLista = agrupacionComercialFiltroService.filtrar(filtro, paginado);
             int totalFiltro = agrupacionComercialFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<AgrupacionComercialDto> response = PaginationUtils.createPagedResponse(agrupacionComercialLista, totalFiltro, paginado);
+            PagedResponse<AgrupacionComercialDTO> response = PaginationUtils.createPagedResponse(agrupacionComercialDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

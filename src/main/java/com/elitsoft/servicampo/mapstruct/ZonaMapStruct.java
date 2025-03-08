@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import com.elitsoft.servicampo.domain.entity.Zona;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface ZonaMapStruct {
 
     /**
-     * Convierte un entidad Zona a ZonaDto.
+     * Convierte un entidad Zona a ZonaDTO.
      * @param entity La entidad Zona.
-     * @return El ZonaDto.
+     * @return El ZonaDTO.
      */
-    ZonaDto toDto(Zona entity);
+    ZonaDTO toDto(Zona entity);
 
     /**
-     * Convierte un ZonaDto a entidad Zona.
-     * @param dto El ZonaDto.
+     * Convierte un ZonaDTO a entidad Zona.
+     * @param dto El ZonaDTO.
      * @return La entidad Zona.
      */
-    Zona toEntity(ZonaDto dto);
+    Zona toEntity(ZonaDTO dto);
 
     /**
      * Convierte una lista de entidades Zona a una lista de ZonaDtos.
      * @param entities La lista de entidades Zona.
      * @return The list of ZonaDtos.
      */
-    List<ZonaDto> toDtoList(List<Zona> entities);
+    List<ZonaDTO> toDtoList(List<Zona> entities);
 
     /**
      * Convierte una lista de ZonaDtos a una lista de entidades Zona entities.
      * @param dtos The list of ZonaDtos.
      * @return The list of Zona entities.
      */
-    List<Zona> toEntityList(List<ZonaDto> dtos);
+    List<Zona> toEntityList(List<ZonaDTO> dtos);
 }

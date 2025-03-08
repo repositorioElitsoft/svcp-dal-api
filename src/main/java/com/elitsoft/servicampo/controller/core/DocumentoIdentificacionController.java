@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.core;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.DocumentoIdentificacionService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ import java.util.List;
 public class DocumentoIdentificacionController {
 
     @Autowired
-    private DocumentoIdentificacionService documentoidentificacionService;
+    private DocumentoIdentificacionService documentoIdentificacionService;
 
     private static final Logger logeador = LoggerFactory.getLogger(DocumentoIdentificacionController.class); //Logback
 
@@ -38,11 +37,11 @@ public class DocumentoIdentificacionController {
             @ApiResponse(responseCode = "409", description = "DocumentoIdentificacion ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<DocumentoIdentificacionDTO> agregar(@RequestBody DocumentoIdentificacionDTO documentoidentificacionDTO) {
+    public ResponseEntity<DocumentoIdentificacionDTO> agregar(@RequestBody DocumentoIdentificacionDTO documentoIdentificacionDTO) {
         logeador.debug("agregar() documentoidentificacion");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(documentoidentificacionService.agregar(documentoidentificacionDTO)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(documentoIdentificacionService.agregar(documentoIdentificacionDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -67,11 +66,11 @@ public class DocumentoIdentificacionController {
             @ApiResponse(responseCode = "409", description = "DocumentoIdentificacion ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<DocumentoIdentificacionDTO> documentoidentificacionLoteDTO) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<DocumentoIdentificacionDTO> documentoIdentificacionDTOLote) {
         logeador.debug("agregarLote() documentoidentificacion");
 
         try {
-            documentoidentificacionService.agregarLote (documentoidentificacionLoteDTO);
+            documentoIdentificacionService.agregarLote (documentoIdentificacionDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -94,11 +93,11 @@ public class DocumentoIdentificacionController {
             @ApiResponse(responseCode = "404", description = "DocumentoIdentificacion no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody DocumentoIdentificacionDTO documentoidentificacionDTO) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody DocumentoIdentificacionDTO documentoIdentificacionDTO) {
         logeador.debug("actualizar() documentoidentificacion");
 
         try {
-            documentoidentificacionService.actualizar(id, documentoidentificacionDTO);
+            documentoIdentificacionService.actualizar(id, documentoIdentificacionDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -118,11 +117,11 @@ public class DocumentoIdentificacionController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<DocumentoIdentificacionDTO> documentoidentificacionLoteDTO) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<DocumentoIdentificacionDTO> documentoIdentificacionDTOLote) {
         logeador.debug("actualizarLote() documentoidentificacion");
 
         try {
-            documentoidentificacionService.actualizarLote(documentoidentificacionLoteDTO);
+            documentoIdentificacionService.actualizarLote(documentoIdentificacionDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -145,7 +144,7 @@ public class DocumentoIdentificacionController {
         logeador.debug("eliminar() documentoidentificacion: {}", id);
 
         try {
-            documentoidentificacionService.eliminar(id);
+            documentoIdentificacionService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -169,7 +168,7 @@ public class DocumentoIdentificacionController {
         logeador.debug("eliminarLote() documentoidentificacion");
 
         try {
-            documentoidentificacionService.eliminarLote(idLote);
+            documentoIdentificacionService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -191,8 +190,8 @@ public class DocumentoIdentificacionController {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            DocumentoIdentificacionDTO documentoidentificacionDTO = documentoidentificacionService.encontrarPorClave(id);
-            return ResponseEntity.ok(documentoidentificacionDTO); // Retorna  200
+            DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.encontrarPorClave(id);
+            return ResponseEntity.ok(documentoIdentificacionDTO); // Retorna  200
         }
         catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -211,9 +210,9 @@ public class DocumentoIdentificacionController {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<DocumentoIdentificacionDTO> documentoidentificacionLista = null;
-            documentoidentificacionLista = documentoidentificacionService.obtenerTodos();
-            return ResponseEntity.ok(documentoidentificacionLista);  // Retorna  200
+            List<DocumentoIdentificacionDTO> documentoIdentIficacionLista = null;
+            documentoIdentIficacionLista = documentoIdentificacionService.obtenerTodos();
+            return ResponseEntity.ok(documentoIdentIficacionLista);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }

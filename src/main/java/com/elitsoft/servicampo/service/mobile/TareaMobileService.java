@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TareaDto;
+import com.elitsoft.servicampo.domain.dto.core.TareaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -35,55 +35,55 @@ public class TareaMobileService {
 
     /**
      * Agrega un nuevo Tarea.
-     * @param tareaDto el Tarea DTO.
+     * @param tareaDTO el Tarea DTO.
      * @return el Tarea DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
      * @throws RecursoDuplicadoException si el recurso Tarea ya existe.
      */
-    public TareaDto agregar(TareaDto tareaDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public TareaDTO agregar(TareaDTO tareaDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() tarea");
 
-        return tareaService.agregar(tareaDto);
+        return tareaService.agregar(tareaDTO);
     }
 
     /**
      * Agrega Lote nuevos Tarea.
-     * @param tareaLoteDto lista de Tarea DTO a agregar.
+     * @param tareaLoteDTO lista de Tarea DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
      * @throws RecursoDuplicadoException si el recurso Tarea ya existe.
      */
-    public void agregarLote(List<TareaDto> tareaLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TareaDTO> tareaLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() tarea");
 
-        tareaService.agregarLote(tareaLoteDto);
+        tareaService.agregarLote(tareaLoteDTO);
     }
 
     /**
      * Actualiza un Tarea existente.
      * @param id la Clave de Tarea a actualizar.
-     * @param tareaDto el Tarea DTO con informacion actualizada.
+     * @param tareaDTO el Tarea DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Tarea no es encontrado.
      * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
      */
-    public void actualizar(Long id, TareaDto tareaDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TareaDTO tareaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() tarea");
 
-        tareaService.actualizar(id, tareaDto);
+        tareaService.actualizar(id, tareaDTO);
     }
 
     /**
      * Actualiza Lote de Tarea existentes.
-     * @param tareaLoteDto lista de Tarea DTO con datos a actualizar.
+     * @param tareaLoteDTO lista de Tarea DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
      */
-    public void actualizarLote(List<TareaDto> tareaLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TareaDTO> tareaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tarea");
 
-        tareaService.actualizarLote(tareaLoteDto);
+        tareaService.actualizarLote(tareaLoteDTO);
     }
 
     /**
@@ -116,7 +116,7 @@ public class TareaMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Tarea no es encontrado.
      */
-    public TareaDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public TareaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return tareaService.encontrarPorClave(id);
     }
@@ -126,7 +126,7 @@ public class TareaMobileService {
      * @return lista de todos Tarea DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<TareaDto> obtenerTodos() throws BaseDatosException {
+    public List<TareaDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return tareaService.obtenerTodos();
     }

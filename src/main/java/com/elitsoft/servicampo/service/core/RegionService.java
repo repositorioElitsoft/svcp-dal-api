@@ -1,7 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.RegionDto;
-import com.elitsoft.servicampo.domain.entity.Pais;
+import com.elitsoft.servicampo.domain.dto.core.RegionDTO;
 import com.elitsoft.servicampo.domain.entity.Region;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.RegionMapper;
@@ -34,54 +33,54 @@ public class RegionService {
 
     /**
      * Agrega un nuevo Region.
-     * @param regionDto el Region DTO.
+     * @param regionDTO el Region DTO.
      * @return el Region DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      * @throws RecursoDuplicadoException si el recurso Region ya existe.
      */
-    public RegionDto agregar(RegionDto regionDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public RegionDTO agregar(RegionDTO regionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Region");
 
         //  Valida Entrada
-        if (regionDto == null) {
+        if (regionDTO == null) {
             logeador.error(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Region region = mapper.toEntity(regionDto);
+            Region region = mapper.toEntity(regionDTO);
             region = regionMapper.agregar(region);
             logeador.info("Region agregado exitosamente id: {}", region.getId());
             return mapper.toDto(region);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.REGION_DUPLICADO_MENSAGE + ": {}", regionDto.getId());
+            logeador.error(Constantes.REGION_DUPLICADO_MENSAGE + ": {}", regionDTO.getId());
             throw new RecursoDuplicadoException(Constantes.REGION_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.REGION_AGREGAR_MENSAJE + ": {}", regionDto.toString(), e);
+            logeador.error(Constantes.REGION_AGREGAR_MENSAJE + ": {}", regionDTO.toString(), e);
             throw new BaseDatosException(Constantes.REGION_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Region.
-     * @param regionLoteDto lista de Region DTO a agregar.
+     * @param regionLoteDTO lista de Region DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      * @throws RecursoDuplicadoException si el recurso region ya existe.
      */
-    public void agregarLote(List<RegionDto> regionLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<RegionDTO> regionLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() region");
 
         //  Valida Entrada
-        if (regionLoteDto.isEmpty()) {
+        if (regionLoteDTO.isEmpty()) {
             logeador.error(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Region> regionLote = mapper.toEntityList(regionLoteDto);
+            List<Region> regionLote = mapper.toEntityList(regionLoteDTO);
 
             int registrosAgregados =  regionMapper.agregarLote(regionLote);
             logeador.info("Lote Region agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -97,49 +96,49 @@ public class RegionService {
     /**
      * Actualiza un Region existente.
      * @param id la clave de Region a actualizar.
-     * @param regionDto el Region DTO con informacion actualizada.
+     * @param regionDTO el Region DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Region no es encontrado.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      */
-    public void actualizar(Long id, RegionDto regionDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, RegionDTO regionDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() region");
 
         //  Valida Entrada
-        if (id == null || regionDto == null || regionDto.getId() == null) {
-            logeador.error(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE + ": {}", ((regionDto != null) ? regionDto.toString() : null  ));
+        if (id == null || regionDTO == null || regionDTO.getId() == null) {
+            logeador.error(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE + ": {}", ((regionDTO != null) ? regionDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            RegionDto regionDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Region region = mapper.toEntity(regionDto);
+            RegionDTO regionDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Region region = mapper.toEntity(regionDTO);
             region.setId(id);
             int registrosActualizados = regionMapper.actualizar(region);
             logeador.info("region actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.REGION_ACTUALIZAR_MENSAJE + ": id={} {}", id, regionDto.toString(), e);
+            logeador.error(Constantes.REGION_ACTUALIZAR_MENSAJE + ": id={} {}", id, regionDTO.toString(), e);
             throw new BaseDatosException(Constantes.REGION_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de Region existentes.
-     * @param regionLoteDto lista de Region DTO con datos a actualizar.
+     * @param regionLoteDTO lista de Region DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      */
-    public void actualizarLote(List<RegionDto> regionLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<RegionDTO> regionLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() region");
 
         //  Valida Entrada
-        if (regionLoteDto.isEmpty()) {
+        if (regionLoteDTO.isEmpty()) {
             logeador.error(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.REGION_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Region> regionLote = mapper.toEntityList(regionLoteDto);
+            List<Region> regionLote = mapper.toEntityList(regionLoteDTO);
             int registrosActualizados = regionMapper.actualizarLote(regionLote);
             logeador.info("Lote region actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -158,7 +157,7 @@ public class RegionService {
         logeador.debug("eliminar() region: {}", id);
 
         try {
-            RegionDto regionDto = this.encontrarPorClave(id); // Verifica si existe
+            RegionDTO regionDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = regionMapper.eliminar(id);
             logeador.info("region eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -198,21 +197,21 @@ public class RegionService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Region no es encontrado.
      */
-    public RegionDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public RegionDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
 
-            RegionDto regionDto = mapper.toDto(regionMapper.encontrarPorClave(id));
+            RegionDTO regionDTO = mapper.toDto(regionMapper.encontrarPorClave(id));
 
-            if (regionDto != null) {
+            if (regionDTO != null) {
                 logeador.info("region encontrado por clave : {}", id);
             } else {
                 logeador.info("region clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.REGION_NO_ENCONTRADO_MENSAGE);
             }
 
-            return regionDto;
+            return regionDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.REGION_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.REGION_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -225,13 +224,13 @@ public class RegionService {
      * @return una lista de todos Region DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<RegionDto> obtenerTodos(Long paisId) throws BaseDatosException {
+    public List<RegionDTO> obtenerTodos(Long paisId) throws BaseDatosException {
         logeador.debug("obtenerTodos() {}",paisId);
 
         try {
-            List<RegionDto> regionList = mapper.toDtoList(regionMapper.obtenerTodos(paisId));
+            List<RegionDTO> regionLista = mapper.toDtoList(regionMapper.obtenerTodos(paisId));
             logeador.info("regions obtenidos");
-            return regionList;
+            return regionLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.REGION_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.REGION_OBTENER_TODOS_MENSAJE, e);

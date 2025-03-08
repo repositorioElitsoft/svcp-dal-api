@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto;
+import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDTO;
 import com.elitsoft.servicampo.domain.entity.CarritoArticulo;
 import org.mapstruct.Mapper;
 
@@ -19,23 +19,23 @@ public interface CarritoArticuloMapStruct { //Renamed interface
      * @return
      */
     //@Mapping(target = "id", ignore = true) // Add this annotation
-    CarritoArticuloDto toDto(CarritoArticulo entity);
+    CarritoArticuloDTO toDto(CarritoArticulo entity);
 
     /**
      * @param dto
      * @return
      */
-    CarritoArticulo toEntity(CarritoArticuloDto dto);
+    CarritoArticulo toEntity(CarritoArticuloDTO dto);
 
     /**
      * @param entities
      * @return
      */
-    List<CarritoArticuloDto> toDtoList(List<CarritoArticulo> entities);
+    List<CarritoArticuloDTO> toDtoList(List<CarritoArticulo> entities);
 
     /**
      * @param dtos
      * @return
      */
-    List<CarritoArticulo> toEntityList(List<CarritoArticuloDto> dtos);
+    List<CarritoArticulo> toEntityList(List<CarritoArticuloDTO> dtos);
 }

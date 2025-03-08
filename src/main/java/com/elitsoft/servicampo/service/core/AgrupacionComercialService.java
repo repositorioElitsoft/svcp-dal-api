@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDto;
+import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
 import com.elitsoft.servicampo.domain.entity.AgrupacionComercial;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.AgrupacionComercialMapper;
@@ -33,54 +33,54 @@ public class AgrupacionComercialService {
 
     /**
      * Agrega un nuevo AgrupacionComercial.
-     * @param agrupacionComercialDto el AgrupacionComercial DTO.
+     * @param agrupacionComercialDTO el AgrupacionComercial DTO.
      * @return el AgrupacionComercial DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      * @throws RecursoDuplicadoException si el recurso AgrupacionComercial ya existe.
      */
-    public AgrupacionComercialDto agregar(AgrupacionComercialDto agrupacionComercialDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public AgrupacionComercialDTO agregar(AgrupacionComercialDTO agrupacionComercialDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() AgrupacionComercial");
 
         //  Valida Entrada
-        if (agrupacionComercialDto == null) {
+        if (agrupacionComercialDTO == null) {
             logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            AgrupacionComercial agrupacionComercial = mapper.toEntity(agrupacionComercialDto);
+            AgrupacionComercial agrupacionComercial = mapper.toEntity(agrupacionComercialDTO);
             agrupacionComercial = agrupacionComercialMapper.agregar(agrupacionComercial);
             logeador.info("AgrupacionComercial agregado exitosamente id: {}", agrupacionComercial.getId());
             return mapper.toDto(agrupacionComercial);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.AGRUPACIONCOMERCIAL_DUPLICADO_MENSAGE + ": {}", agrupacionComercialDto.getId());
+            logeador.error(Constantes.AGRUPACIONCOMERCIAL_DUPLICADO_MENSAGE + ": {}", agrupacionComercialDTO.getId());
             throw new RecursoDuplicadoException(Constantes.AGRUPACIONCOMERCIAL_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.AGRUPACIONCOMERCIAL_AGREGAR_MENSAJE + ": {}", agrupacionComercialDto.toString(), e);
+            logeador.error(Constantes.AGRUPACIONCOMERCIAL_AGREGAR_MENSAJE + ": {}", agrupacionComercialDTO.toString(), e);
             throw new BaseDatosException(Constantes.AGRUPACIONCOMERCIAL_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos AgrupacionComercial.
-     * @param agrupacionComercialLoteDto lista de AgrupacionComercial DTO a agregar.
+     * @param agrupacionComercialLoteDTO lista de AgrupacionComercial DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      * @throws RecursoDuplicadoException si el recurso agrupacioncomercial ya existe.
      */
-    public void agregarLote(List<AgrupacionComercialDto> agrupacionComercialLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<AgrupacionComercialDTO> agrupacionComercialLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() agrupacioncomercial");
 
         //  Valida Entrada
-        if (agrupacionComercialLoteDto.isEmpty()) {
+        if (agrupacionComercialLoteDTO.isEmpty()) {
             logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<AgrupacionComercial> agrupacionComercialLote = mapper.toEntityList(agrupacionComercialLoteDto);
+            List<AgrupacionComercial> agrupacionComercialLote = mapper.toEntityList(agrupacionComercialLoteDTO);
 
             int registrosAgregados =  agrupacionComercialMapper.agregarLote(agrupacionComercialLote);
             logeador.info("Lote AgrupacionComercial agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -96,56 +96,56 @@ public class AgrupacionComercialService {
     /**
      * Actualiza un AgrupacionComercial existente.
      * @param id la clave de AgrupacionComercial a actualizar.
-     * @param agrupacionComercialDto el AgrupacionComercial DTO con informacion actualizada.
+     * @param agrupacionComercialDTO el AgrupacionComercial DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si AgrupacionComercial no es encontrado.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      */
-    public void actualizar(Long id, AgrupacionComercialDto agrupacionComercialDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, AgrupacionComercialDTO agrupacionComercialDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() agrupacioncomercial");
 
         //  Valida Entrada
-        if (id == null || agrupacionComercialDto == null || agrupacionComercialDto.getId() == null) {
-            logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE + ": {}", ((agrupacionComercialDto != null) ? agrupacionComercialDto.toString() : null  ));
+        if (id == null || agrupacionComercialDTO == null || agrupacionComercialDTO.getId() == null) {
+            logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE + ": {}", ((agrupacionComercialDTO != null) ? agrupacionComercialDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
-        if (!id.equals(agrupacionComercialDto.getId())) {
-            logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  agrupacionComercialDto.toString());
+        if (!id.equals(agrupacionComercialDTO.getId())) {
+            logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  agrupacionComercialDTO.toString());
             throw new EntradaInvalidadException(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
         }
 
 
         try {
-            AgrupacionComercialDto agrupacionComercialDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            AgrupacionComercial agrupacionComercial = mapper.toEntity(agrupacionComercialDto);
+            AgrupacionComercialDTO agrupacionComercialDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            AgrupacionComercial agrupacionComercial = mapper.toEntity(agrupacionComercialDTO);
             agrupacionComercial.setId(id);
             int registrosActualizados = agrupacionComercialMapper.actualizar(agrupacionComercial);
             logeador.info("agrupacioncomercial actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.AGRUPACIONCOMERCIAL_ACTUALIZAR_MENSAJE + ": id={} {}", id, agrupacionComercialDto.toString(), e);
+            logeador.error(Constantes.AGRUPACIONCOMERCIAL_ACTUALIZAR_MENSAJE + ": id={} {}", id, agrupacionComercialDTO.toString(), e);
             throw new BaseDatosException(Constantes.AGRUPACIONCOMERCIAL_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de AgrupacionComercial existentes.
-     * @param agrupacioncomercialLoteDto lista de AgrupacionComercial DTO con datos a actualizar.
+     * @param agrupacioncomercialLoteDTO lista de AgrupacionComercial DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      */
-    public void actualizarLote(List<AgrupacionComercialDto> agrupacioncomercialLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<AgrupacionComercialDTO> agrupacioncomercialLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() agrupacioncomercial");
 
         //  Valida Entrada
-        if (agrupacioncomercialLoteDto.isEmpty()) {
+        if (agrupacioncomercialLoteDTO.isEmpty()) {
             logeador.error(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<AgrupacionComercial> agrupacionComercialLote = mapper.toEntityList(agrupacioncomercialLoteDto);
+            List<AgrupacionComercial> agrupacionComercialLote = mapper.toEntityList(agrupacioncomercialLoteDTO);
             int registrosActualizados = agrupacionComercialMapper.actualizarLote(agrupacionComercialLote);
             logeador.info("Lote agrupacioncomercial actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -164,7 +164,7 @@ public class AgrupacionComercialService {
         logeador.debug("eliminar() agrupacioncomercial: {}", id);
 
         try {
-            AgrupacionComercialDto agrupacionComercialDto = this.encontrarPorClave(id); // Verifica si existe
+            AgrupacionComercialDTO agrupacionComercialDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = agrupacionComercialMapper.eliminar(id);
             logeador.info("agrupacioncomercial eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -204,11 +204,11 @@ public class AgrupacionComercialService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si AgrupacionComercial no es encontrado.
      */
-    public AgrupacionComercialDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public AgrupacionComercialDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            AgrupacionComercialDto agrupacionComercialDto = mapper.toDto(agrupacionComercialMapper.encontrarPorClave(id));
+            AgrupacionComercialDTO agrupacionComercialDto = mapper.toDto(agrupacionComercialMapper.encontrarPorClave(id));
 
             if (agrupacionComercialDto != null) {
                 logeador.info("agrupacioncomercial encontrado por clave : {}", id);
@@ -229,11 +229,11 @@ public class AgrupacionComercialService {
      * @return una lista de todos AgrupacionComercial DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<AgrupacionComercialDto> obtenerTodos() throws BaseDatosException {
+    public List<AgrupacionComercialDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<AgrupacionComercialDto> agrupacionComercialLista = mapper.toDtoList(agrupacionComercialMapper.obtenerTodos());
+            List<AgrupacionComercialDTO> agrupacionComercialLista = mapper.toDtoList(agrupacionComercialMapper.obtenerTodos());
             logeador.info("agrupacioncomercials obtenidos");
             return agrupacionComercialLista;
         } catch (DataAccessException e) {

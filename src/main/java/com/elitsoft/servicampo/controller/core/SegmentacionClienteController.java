@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.SegmentacionClienteDto;
+import com.elitsoft.servicampo.domain.dto.core.SegmentacionClienteDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.SegmentacionClienteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,11 +37,11 @@ public class SegmentacionClienteController {
             @ApiResponse(responseCode = "409", description = "SegmentacionCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<SegmentacionClienteDto> agregar(@RequestBody SegmentacionClienteDto segmentacionClienteDto) {
+    public ResponseEntity<SegmentacionClienteDTO> agregar(@RequestBody SegmentacionClienteDTO segmentacionClienteDTO) {
         logeador.debug("agregar() segmentacioncliente");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(segmentacionClienteService.agregar(segmentacionClienteDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(segmentacionClienteService.agregar(segmentacionClienteDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -63,11 +63,11 @@ public class SegmentacionClienteController {
             @ApiResponse(responseCode = "409", description = "SegmentacionCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<SegmentacionClienteDto> segmentacionClienteLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<SegmentacionClienteDTO> segmentacionClienteDTOLote) {
         logeador.debug("agregarLote() segmentacioncliente");
 
         try {
-            segmentacionClienteService.agregarLote (segmentacionClienteLoteDto);
+            segmentacionClienteService.agregarLote (segmentacionClienteDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -90,11 +90,11 @@ public class SegmentacionClienteController {
             @ApiResponse(responseCode = "404", description = "SegmentacionCliente no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SegmentacionClienteDto segmentacionClienteDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SegmentacionClienteDTO segmentacionClienteDTO) {
         logeador.debug("actualizar() segmentacioncliente");
 
         try {
-            segmentacionClienteService.actualizar(id, segmentacionClienteDto);
+            segmentacionClienteService.actualizar(id, segmentacionClienteDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -114,11 +114,11 @@ public class SegmentacionClienteController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<SegmentacionClienteDto> segmentacionClienteLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<SegmentacionClienteDTO> segmentacionClienteDTOLote) {
         logeador.debug("actualizarLote() segmentacioncliente");
 
         try {
-            segmentacionClienteService.actualizarLote(segmentacionClienteLoteDto);
+            segmentacionClienteService.actualizarLote(segmentacionClienteDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -183,11 +183,11 @@ public class SegmentacionClienteController {
             @ApiResponse(responseCode = "404", description = "SegmentacionCliente no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<SegmentacionClienteDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<SegmentacionClienteDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            SegmentacionClienteDto segmentacionClienteDto = segmentacionClienteService.encontrarPorClave(id);
+            SegmentacionClienteDTO segmentacionClienteDto = segmentacionClienteService.encontrarPorClave(id);
             return ResponseEntity.ok(segmentacionClienteDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -203,11 +203,11 @@ public class SegmentacionClienteController {
             @ApiResponse(responseCode = "200", description = "SegmentacionClientes obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<SegmentacionClienteDto>> obtenerTodos() {
+    public ResponseEntity<List<SegmentacionClienteDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<SegmentacionClienteDto> segmentacionClientes = null;
+            List<SegmentacionClienteDTO> segmentacionClientes = null;
             segmentacionClientes = segmentacionClienteService.obtenerTodos();
             return ResponseEntity.ok(segmentacionClientes);  // Retorna  200
         } catch (BaseDatosException e) {

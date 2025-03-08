@@ -23,7 +23,7 @@ import java.util.List;
 public class TipoProductoService {
 
     @Autowired
-    private TipoProductoMapper tipoproductoMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private TipoProductoMapper tipoProductoMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
     private TipoProductoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
@@ -48,10 +48,10 @@ public class TipoProductoService {
         }
 
         try {
-            TipoProducto tipoproducto = mapper.toEntity(tipoproductoDto);
-            tipoproducto = tipoproductoMapper.agregar(tipoproducto);
-            logeador.info("TipoProducto agregado exitosamente id: {}", tipoproducto.getId());
-            return mapper.toDto(tipoproducto);
+            TipoProducto tipoProducto = mapper.toEntity(tipoproductoDto);
+            tipoProducto = tipoProductoMapper.agregar(tipoProducto);
+            logeador.info("TipoProducto agregado exitosamente id: {}", tipoProducto.getId());
+            return mapper.toDto(tipoProducto);
         }
         catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOPRODUCTO_DUPLICADO_MENSAGE + ": {}", tipoproductoDto.getId());
@@ -65,23 +65,23 @@ public class TipoProductoService {
 
     /**
      * Agrega Lote nuevos TipoProducto.
-     * @param tipoproductoLoteDto lista de TipoProducto DTO a agregar.
+     * @param tipoProductoLoteDTO lista de TipoProducto DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      * @throws RecursoDuplicadoException si el recurso tipoproducto ya existe.
      */
-    public void agregarLote(List<TipoProductoDTO> tipoproductoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TipoProductoDTO> tipoProductoLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() tipoproducto");
 
         //  Valida Entrada
-        if (tipoproductoLoteDto.isEmpty()) {
+        if (tipoProductoLoteDTO.isEmpty()) {
             logeador.error(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<TipoProducto> tipoproductoLote = mapper.toEntityList(tipoproductoLoteDto);
+            List<TipoProducto> tipoProductoLote = mapper.toEntityList(tipoProductoLoteDTO);
 
-            int registrosAgregados =  tipoproductoMapper.agregarLote(tipoproductoLote);
+            int registrosAgregados =  tipoProductoMapper.agregarLote(tipoProductoLote);
             logeador.info("Lote TipoProducto agregados exitosamente,  registros agregados: {}", registrosAgregados);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOPRODUCTO_DUPLICADO_MENSAGE);
@@ -95,56 +95,56 @@ public class TipoProductoService {
     /**
      * Actualiza un TipoProducto existente.
      * @param id la clave de TipoProducto a actualizar.
-     * @param tipoproductoDto el TipoProducto DTO con informacion actualizada.
+     * @param tipoProductoDTO el TipoProducto DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoProducto no es encontrado.
      * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      */
-    public void actualizar(Long id, TipoProductoDTO tipoproductoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, TipoProductoDTO tipoProductoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() tipoproducto");
 
         //  Valida Entrada
-        if (id == null || tipoproductoDto == null || tipoproductoDto.getId() == null) {
-            logeador.error(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((tipoproductoDto != null) ? tipoproductoDto.toString() : null  ));
+        if (id == null || tipoProductoDTO == null || tipoProductoDTO.getId() == null) {
+            logeador.error(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((tipoProductoDTO != null) ? tipoProductoDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
-        if (!id.equals(tipoproductoDto.getId())) {
-            logeador.error(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tipoproductoDto.toString());
+        if (!id.equals(tipoProductoDTO.getId())) {
+            logeador.error(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tipoProductoDTO.toString());
             throw new EntradaInvalidadException(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            TipoProductoDTO tipoproductoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            TipoProducto tipoproducto = mapper.toEntity(tipoproductoDto);
+            TipoProductoDTO tipoProductoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            TipoProducto tipoproducto = mapper.toEntity(tipoProductoDTO);
             tipoproducto.setId(id);
-            int registrosActualizados = tipoproductoMapper.actualizar(tipoproducto);
+            int registrosActualizados = tipoProductoMapper.actualizar(tipoproducto);
             logeador.info("tipoproducto actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.TIPOPRODUCTO_ACTUALIZAR_MENSAJE + ": id={} {}", id, tipoproductoDto.toString(), e);
+            logeador.error(Constantes.TIPOPRODUCTO_ACTUALIZAR_MENSAJE + ": id={} {}", id, tipoProductoDTO.toString(), e);
             throw new BaseDatosException(Constantes.TIPOPRODUCTO_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de TipoProducto existentes.
-     * @param tipoproductoLoteDto lista de TipoProducto DTO con datos a actualizar.
+     * @param tipoProductoLoteDTO lista de TipoProducto DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoProducto tiene errores.
      */
-    public void actualizarLote(List<TipoProductoDTO> tipoproductoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoProductoDTO> tipoProductoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tipoproducto");
 
         //  Valida Entrada
-        if (tipoproductoLoteDto.isEmpty()) {
+        if (tipoProductoLoteDTO.isEmpty()) {
             logeador.error(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<TipoProducto> tipoproductoLote = mapper.toEntityList(tipoproductoLoteDto);
-            int registrosActualizados = tipoproductoMapper.actualizarLote(tipoproductoLote);
+            List<TipoProducto> tipoProductoLote = mapper.toEntityList(tipoProductoLoteDTO);
+            int registrosActualizados = tipoProductoMapper.actualizarLote(tipoProductoLote);
             logeador.info("Lote tipoproducto actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOPRODUCTO_ACTUALIZAR_MENSAJE, e);
@@ -162,8 +162,8 @@ public class TipoProductoService {
         logeador.debug("eliminar() tipoproducto: {}", id);
 
         try {
-            TipoProductoDTO tipoproductoDto = this.encontrarPorClave(id); // Verifica si existe
-            int registrosEliminados = tipoproductoMapper.eliminar(id);
+            TipoProductoDTO tipoProductoDTO = this.encontrarPorClave(id); // Verifica si existe
+            int registrosEliminados = tipoProductoMapper.eliminar(id);
             logeador.info("tipoproducto eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOPRODUCTO_ELIMINAR_MENSAJE + ": {}", id, e);
@@ -187,7 +187,7 @@ public class TipoProductoService {
         }
 
         try {
-            int registrosEliminados = tipoproductoMapper.eliminarLote(idLote);
+            int registrosEliminados = tipoProductoMapper.eliminarLote(idLote);
             logeador.info("Lote tipoproducto eliminados exitosamente, registros eliminados: {}", registrosEliminados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOPRODUCTO_ELIMINAR_MENSAJE,  e);
@@ -206,16 +206,16 @@ public class TipoProductoService {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            TipoProductoDTO tipoproductoDto = mapper.toDto(tipoproductoMapper.encontrarPorClave(id));
+            TipoProductoDTO tipoProductoDTO = mapper.toDto(tipoProductoMapper.encontrarPorClave(id));
 
-            if (tipoproductoDto != null) {
+            if (tipoProductoDTO != null) {
                 logeador.info("tipoproducto encontrado por clave : {}", id);
             } else {
                 logeador.info("tipoproducto clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.TIPOPRODUCTO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return tipoproductoDto;
+            return tipoProductoDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOPRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.TIPOPRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -231,9 +231,9 @@ public class TipoProductoService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TipoProductoDTO> tipoproductoList = mapper.toDtoList(tipoproductoMapper.obtenerTodos());
+            List<TipoProductoDTO> tipoProductoLista = mapper.toDtoList(tipoProductoMapper.obtenerTodos());
             logeador.info("tipoproductos obtenidos");
-            return tipoproductoList;
+            return tipoProductoLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOPRODUCTO_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.TIPOPRODUCTO_OBTENER_TODOS_MENSAJE, e);

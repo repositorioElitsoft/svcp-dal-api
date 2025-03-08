@@ -41,10 +41,10 @@ public class #Base#FiltroController {
         logeador.debug("filtrar()");
 
         try {
-            List<#Base#DTO> #base#Lista = #base#FiltroService.filtrar(filtro, paginado);
+            List<#Base#DTO> #base#DTOLista = #base#FiltroService.filtrar(filtro, paginado);
             int totalFiltro = #base#FiltroService.contarFiltrar(filtro);
 
-            PagedResponse<#Base#DTO> response = PaginationUtils.createPagedResponse(#base#Lista, totalFiltro, paginado);
+            PagedResponse<#Base#DTO> response = PaginationUtils.createPagedResponse(#base#DTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.ModuloDto;
+import com.elitsoft.servicampo.domain.dto.core.ModuloDTO;
 import com.elitsoft.servicampo.domain.entity.Modulo;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.ModuloMapper;
@@ -32,19 +32,19 @@ public class ModuloService {
 
     /**
      * Agrega un nuevo Modulo.
-     * @param moduloDto El Modulo DTO.
+     * @param moduloDTO El Modulo DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(ModuloDto moduloDto) throws BaseDatosException {
+    public void agregar(ModuloDTO moduloDTO) throws BaseDatosException {
         logeador.debug("agregar() modulo");
 
 
         try {
-            Modulo modulo = mapper.toEntity(moduloDto);
+            Modulo modulo = mapper.toEntity(moduloDTO);
             Long nuevoId = moduloMapper.agregar(modulo);
             logeador.info("Modulo agregado exitosamente id: {}", nuevoId);
         } catch (DataAccessException e) {
-            logeador.error(Constantes.MODULO_AGREGAR_EXECPTION + ": {}", moduloDto.toString(), e);
+            logeador.error(Constantes.MODULO_AGREGAR_EXECPTION + ": {}", moduloDTO.toString(), e);
             throw new BaseDatosException(Constantes.MODULO_AGREGAR_EXECPTION, e);
         }
     }
@@ -52,24 +52,24 @@ public class ModuloService {
     /**
      * Actualiza un Modulo existente.
      * @param id La Clave de Modulo a actualizar.
-     * @param moduloDto El Modulo DTO con informacion actualizada.
+     * @param moduloDTO El Modulo DTO con informacion actualizada.
      * @throws ModuloNoEncontradoException Si Modulo no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, ModuloDto moduloDto) throws ModuloNoEncontradoException, BaseDatosException {
+    public void actualizar(Long id, ModuloDTO moduloDTO) throws ModuloNoEncontradoException, BaseDatosException {
         logeador.debug("actualizar() modulo");
 
         try {
-            ModuloDto moduloDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe
+            ModuloDTO moduloDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe
 
-            Modulo modulo = mapper.toEntity(moduloDto);
+            Modulo modulo = mapper.toEntity(moduloDTO);
             modulo.setId(id);
             int registrosActualizados = moduloMapper.actualizar(modulo);
             logeador.info("modulo actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (ModuloNoEncontradoException e) {
             throw e;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.MODULO_ACTUALIZAR_EXECPTION + ": id={} {}", id, moduloDto.toString(), e);
+            logeador.error(Constantes.MODULO_ACTUALIZAR_EXECPTION + ": id={} {}", id, moduloDTO.toString(), e);
             throw new BaseDatosException(Constantes.MODULO_ACTUALIZAR_EXECPTION, e);
         }
     }
@@ -84,7 +84,7 @@ public class ModuloService {
         logeador.debug("eliminar() modulo: {}", id);
 
         try {
-            ModuloDto moduloDto = this.encontrarPorClave(id); // Verifica si existe
+            ModuloDTO moduloDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = moduloMapper.eliminar(id);
             logeador.info("modulo eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (ModuloNoEncontradoException e) {
@@ -103,20 +103,20 @@ public class ModuloService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws ModuloNoEncontradoException Si Modulo no es encontrado.
      */
-    public ModuloDto encontrarPorClave(Long id) throws BaseDatosException, ModuloNoEncontradoException {
+    public ModuloDTO encontrarPorClave(Long id) throws BaseDatosException, ModuloNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            ModuloDto moduloDto = mapper.toDto(moduloMapper.encontrarPorClave(id));
+            ModuloDTO moduloDTO = mapper.toDto(moduloMapper.encontrarPorClave(id));
 
-            if (moduloDto != null) {
+            if (moduloDTO != null) {
                 logeador.info("modulo encontrado por clave : {}", id);
             } else {
                 logeador.info("modulo clave:{} no encontrado", id);
                 throw new ModuloNoEncontradoException(Constantes.MODULO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return moduloDto;
+            return moduloDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.MODULO_ENCONTRAR_POR_CLAVE_EXECPTION + " {}", id, e);
             throw new BaseDatosException(Constantes.MODULO_ENCONTRAR_POR_CLAVE_EXECPTION, e);
@@ -128,13 +128,13 @@ public class ModuloService {
      * @return Una lista de todos Modulo DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<ModuloDto> obtenerTodos() throws BaseDatosException {
+    public List<ModuloDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<ModuloDto> moduloList = mapper.toDtoList(moduloMapper.obtenerTodos());
+            List<ModuloDTO> moduloLista = mapper.toDtoList(moduloMapper.obtenerTodos());
             logeador.info("modulos obtenidos");
-            return moduloList;
+            return moduloLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.MODULO_OBTENER_TODOS_EXECPTION, e);
             throw new BaseDatosException(Constantes.MODULO_OBTENER_TODOS_EXECPTION, e);

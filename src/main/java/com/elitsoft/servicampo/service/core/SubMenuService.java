@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.SubMenuDto;
+import com.elitsoft.servicampo.domain.dto.core.SubMenuDTO;
 import com.elitsoft.servicampo.domain.entity.SubMenu;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.SubMenuMapper;
@@ -32,19 +32,19 @@ public class SubMenuService {
 
     /**
      * Agrega un nuevo SubMenu.
-     * @param submenuDto El SubMenu DTO.
+     * @param subMenuDTO El SubMenu DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(SubMenuDto submenuDto) throws BaseDatosException {
+    public void agregar(SubMenuDTO subMenuDTO) throws BaseDatosException {
         logeador.debug("agregar() submenu");
 
 
         try {
-            SubMenu submenu = mapper.toEntity(submenuDto);
+            SubMenu submenu = mapper.toEntity(subMenuDTO);
             Long nuevoId = submenuMapper.agregar(submenu);
             logeador.info("SubMenu agregado exitosamente id: {}", nuevoId);
         } catch (DataAccessException e) {
-            logeador.error(Constantes.SUBMENU_AGREGAR_EXECPTION + ": {}", submenuDto.toString(), e);
+            logeador.error(Constantes.SUBMENU_AGREGAR_EXECPTION + ": {}", subMenuDTO.toString(), e);
             throw new BaseDatosException(Constantes.SUBMENU_AGREGAR_EXECPTION, e);
         }
     }
@@ -52,24 +52,24 @@ public class SubMenuService {
     /**
      * Actualiza un SubMenu existente.
      * @param id La Clave de SubMenu a actualizar.
-     * @param submenuDto El SubMenu DTO con informacion actualizada.
+     * @param subMenuDTO El SubMenu DTO con informacion actualizada.
      * @throws SubMenuNoEncontradoException Si SubMenu no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, SubMenuDto submenuDto) throws SubMenuNoEncontradoException, BaseDatosException {
+    public void actualizar(Long id, SubMenuDTO subMenuDTO) throws SubMenuNoEncontradoException, BaseDatosException {
         logeador.debug("actualizar() submenu");
 
         try {
-            SubMenuDto submenuDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe
+            SubMenuDTO submenuDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe
 
-            SubMenu submenu = mapper.toEntity(submenuDto);
+            SubMenu submenu = mapper.toEntity(subMenuDTO);
             submenu.setId(id);
             int registrosActualizados = submenuMapper.actualizar(submenu);
             logeador.info("submenu actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (SubMenuNoEncontradoException e) {
             throw e;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.SUBMENU_ACTUALIZAR_EXECPTION + ": id={} {}", id, submenuDto.toString(), e);
+            logeador.error(Constantes.SUBMENU_ACTUALIZAR_EXECPTION + ": id={} {}", id, subMenuDTO.toString(), e);
             throw new BaseDatosException(Constantes.SUBMENU_ACTUALIZAR_EXECPTION, e);
         }
     }
@@ -84,7 +84,7 @@ public class SubMenuService {
         logeador.debug("eliminar() submenu: {}", id);
 
         try {
-            SubMenuDto submenuDto = this.encontrarPorClave(id); // Verifica si existe
+            SubMenuDTO subMenuDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = submenuMapper.eliminar(id);
             logeador.info("submenu eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (SubMenuNoEncontradoException e) {
@@ -103,20 +103,20 @@ public class SubMenuService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws SubMenuNoEncontradoException Si SubMenu no es encontrado.
      */
-    public SubMenuDto encontrarPorClave(Long id) throws BaseDatosException, SubMenuNoEncontradoException {
+    public SubMenuDTO encontrarPorClave(Long id) throws BaseDatosException, SubMenuNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            SubMenuDto submenuDto = mapper.toDto(submenuMapper.encontrarPorClave(id));
+            SubMenuDTO subMenuDTO = mapper.toDto(submenuMapper.encontrarPorClave(id));
 
-            if (submenuDto != null) {
+            if (subMenuDTO != null) {
                 logeador.info("submenu encontrado por clave : {}", id);
             } else {
                 logeador.info("submenu clave:{} no encontrado", id);
                 throw new SubMenuNoEncontradoException(Constantes.SUBMENU_NO_ENCONTRADO_MENSAGE);
             }
 
-            return submenuDto;
+            return subMenuDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.SUBMENU_ENCONTRAR_POR_CLAVE_EXECPTION + " {}", id, e);
             throw new BaseDatosException(Constantes.SUBMENU_ENCONTRAR_POR_CLAVE_EXECPTION, e);
@@ -128,13 +128,13 @@ public class SubMenuService {
      * @return Una lista de todos SubMenu DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<SubMenuDto> obtenerTodos() throws BaseDatosException {
+    public List<SubMenuDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<SubMenuDto> submenuList = mapper.toDtoList(submenuMapper.obtenerTodos());
+            List<SubMenuDTO> subMenuLista = mapper.toDtoList(submenuMapper.obtenerTodos());
             logeador.info("submenus obtenidos");
-            return submenuList;
+            return subMenuLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.SUBMENU_OBTENER_TODOS_EXECPTION, e);
             throw new BaseDatosException(Constantes.SUBMENU_OBTENER_TODOS_EXECPTION, e);

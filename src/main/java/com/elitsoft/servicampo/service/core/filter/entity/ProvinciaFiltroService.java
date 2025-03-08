@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.ProvinciaDto;
+import com.elitsoft.servicampo.domain.dto.core.ProvinciaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.ProvinciaFiltro;
 import com.elitsoft.servicampo.mapper.ProvinciaMapper;
@@ -29,10 +29,10 @@ public class ProvinciaFiltroService {
     /** Ejecuta filtro dinamico y paginacion para Provincia
      * @param filtro clase que tiene los atributos a filtrar
      * @param paginado clase que tiene los atributos de paginacion
-     * @return List<ProvinciaDto> lista de entidades Provincia
+     * @return List<ProvinciaDTO> lista de entidades Provincia
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<ProvinciaDto> filtrar(ProvinciaFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<ProvinciaDTO> filtrar(ProvinciaFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {

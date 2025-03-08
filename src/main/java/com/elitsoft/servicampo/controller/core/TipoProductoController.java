@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.core;
 import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.TipoProductoService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ import java.util.List;
 public class TipoProductoController {
 
     @Autowired
-    private TipoProductoService tipoproductoService;
+    private TipoProductoService tipoProductoService;
 
     private static final Logger logeador = LoggerFactory.getLogger(TipoProductoController.class); //Logback
 
@@ -38,11 +37,11 @@ public class TipoProductoController {
             @ApiResponse(responseCode = "409", description = "TipoProducto ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TipoProductoDTO> agregar(@RequestBody TipoProductoDTO tipoproductoDTO) {
+    public ResponseEntity<TipoProductoDTO> agregar(@RequestBody TipoProductoDTO tipoProductoDTO) {
         logeador.debug("agregar() tipoproducto");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(tipoproductoService.agregar(tipoproductoDTO)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(tipoProductoService.agregar(tipoProductoDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -64,11 +63,11 @@ public class TipoProductoController {
             @ApiResponse(responseCode = "409", description = "TipoProducto ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<TipoProductoDTO> tipoproductoLoteDTO) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<TipoProductoDTO> tipoproductoDTOLote) {
         logeador.debug("agregarLote() tipoproducto");
 
         try {
-            tipoproductoService.agregarLote (tipoproductoLoteDTO);
+            tipoProductoService.agregarLote (tipoproductoDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -91,11 +90,11 @@ public class TipoProductoController {
             @ApiResponse(responseCode = "404", description = "TipoProducto no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoProductoDTO tipoproductoDTO) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoProductoDTO tipoProductoDTO) {
         logeador.debug("actualizar() tipoproducto");
 
         try {
-            tipoproductoService.actualizar(id, tipoproductoDTO);
+            tipoProductoService.actualizar(id, tipoProductoDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -115,11 +114,11 @@ public class TipoProductoController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoProductoDTO> tipoproductoLoteDTO) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoProductoDTO> tipoproductoDTOLote) {
         logeador.debug("actualizarLote() tipoproducto");
 
         try {
-            tipoproductoService.actualizarLote(tipoproductoLoteDTO);
+            tipoProductoService.actualizarLote(tipoproductoDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -142,7 +141,7 @@ public class TipoProductoController {
         logeador.debug("eliminar() tipoproducto: {}", id);
 
         try {
-            tipoproductoService.eliminar(id);
+            tipoProductoService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -166,7 +165,7 @@ public class TipoProductoController {
         logeador.debug("eliminarLote() tipoproducto");
 
         try {
-            tipoproductoService.eliminarLote(idLote);
+            tipoProductoService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -188,7 +187,7 @@ public class TipoProductoController {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            TipoProductoDTO tipoproductoDTO = tipoproductoService.encontrarPorClave(id);
+            TipoProductoDTO tipoproductoDTO = tipoProductoService.encontrarPorClave(id);
             return ResponseEntity.ok(tipoproductoDTO); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -209,7 +208,7 @@ public class TipoProductoController {
 
         try {
             List<TipoProductoDTO> tipoproductoLista = null;
-            tipoproductoLista = tipoproductoService.obtenerTodos();
+            tipoproductoLista = tipoProductoService.obtenerTodos();
             return ResponseEntity.ok(tipoproductoLista);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error

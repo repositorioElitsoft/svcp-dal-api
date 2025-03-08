@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.PorotoDto;
+import com.elitsoft.servicampo.domain.dto.core.PorotoDTO;
 import com.elitsoft.servicampo.domain.entity.Poroto;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.PorotoMapper;
@@ -33,54 +33,54 @@ public class PorotoService {
 
     /**
      * Agrega un nuevo Poroto.
-     * @param porotoDto el Poroto DTO.
+     * @param porotoDTO el Poroto DTO.
      * @return el Poroto DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      * @throws RecursoDuplicadoException si el recurso Poroto ya existe.
      */
-    public PorotoDto agregar(PorotoDto porotoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public PorotoDTO agregar(PorotoDTO porotoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Poroto");
 
         //  Valida Entrada
-        if (porotoDto == null) {
+        if (porotoDTO == null) {
             logeador.error(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Poroto poroto = mapper.toEntity(porotoDto);
+            Poroto poroto = mapper.toEntity(porotoDTO);
             poroto = porotoMapper.agregar(poroto);
             logeador.info("Poroto agregado exitosamente id: {}", poroto.getPrtoId());
             return mapper.toDto(poroto);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.POROTO_DUPLICADO_MENSAGE + ": {}", porotoDto.getPrtoId());
+            logeador.error(Constantes.POROTO_DUPLICADO_MENSAGE + ": {}", porotoDTO.getPrtoId());
             throw new RecursoDuplicadoException(Constantes.POROTO_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.POROTO_AGREGAR_MENSAJE + ": {}", porotoDto.toString(), e);
+            logeador.error(Constantes.POROTO_AGREGAR_MENSAJE + ": {}", porotoDTO.toString(), e);
             throw new BaseDatosException(Constantes.POROTO_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Poroto.
-     * @param porotoLoteDto lista de Poroto DTO a agregar.
+     * @param porotoLoteDTO lista de Poroto DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      * @throws RecursoDuplicadoException si el recurso poroto ya existe.
      */
-    public void agregarLote(List<PorotoDto> porotoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<PorotoDTO> porotoLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() poroto");
 
         //  Valida Entrada
-        if (porotoLoteDto.isEmpty()) {
+        if (porotoLoteDTO.isEmpty()) {
             logeador.error(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Poroto> porotoLote = mapper.toEntityList(porotoLoteDto);
+            List<Poroto> porotoLote = mapper.toEntityList(porotoLoteDTO);
 
             int registrosAgregados =  porotoMapper.agregarLote(porotoLote);
             logeador.info("Lote Poroto agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -96,49 +96,49 @@ public class PorotoService {
     /**
      * Actualiza un Poroto existente.
      * @param id la clave de Poroto a actualizar.
-     * @param porotoDto el Poroto DTO con informacion actualizada.
+     * @param porotoDTO el Poroto DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Poroto no es encontrado.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      */
-    public void actualizar(Long id, PorotoDto porotoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, PorotoDTO porotoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() poroto");
 
         //  Valida Entrada
-        if (id == null || porotoDto == null || porotoDto.getPrtoId() == null) {
-            logeador.error(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((porotoDto != null) ? porotoDto.toString() : null  ));
+        if (id == null || porotoDTO == null || porotoDTO.getPrtoId() == null) {
+            logeador.error(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((porotoDTO != null) ? porotoDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            PorotoDto porotoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Poroto poroto = mapper.toEntity(porotoDto);
+            PorotoDTO porotoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Poroto poroto = mapper.toEntity(porotoDTO);
             poroto.setPrtoId(id);
             int registrosActualizados = porotoMapper.actualizar(poroto);
             logeador.info("poroto actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.POROTO_ACTUALIZAR_MENSAJE + ": id={} {}", id, porotoDto.toString(), e);
+            logeador.error(Constantes.POROTO_ACTUALIZAR_MENSAJE + ": id={} {}", id, porotoDTO.toString(), e);
             throw new BaseDatosException(Constantes.POROTO_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de Poroto existentes.
-     * @param porotoLoteDto lista de Poroto DTO con datos a actualizar.
+     * @param porotoLoteDTO lista de Poroto DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      */
-    public void actualizarLote(List<PorotoDto> porotoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<PorotoDTO> porotoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() poroto");
 
         //  Valida Entrada
-        if (porotoLoteDto.isEmpty()) {
+        if (porotoLoteDTO.isEmpty()) {
             logeador.error(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.POROTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Poroto> porotoLote = mapper.toEntityList(porotoLoteDto);
+            List<Poroto> porotoLote = mapper.toEntityList(porotoLoteDTO);
             int registrosActualizados = porotoMapper.actualizarLote(porotoLote);
             logeador.info("Lote poroto actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -157,7 +157,7 @@ public class PorotoService {
         logeador.debug("eliminar() poroto: {}", id);
 
         try {
-            PorotoDto porotoDto = this.encontrarPorClave(id); // Verifica si existe
+            PorotoDTO porotoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = porotoMapper.eliminar(id);
             logeador.info("poroto eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -197,20 +197,20 @@ public class PorotoService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Poroto no es encontrado.
      */
-    public PorotoDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public PorotoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            PorotoDto porotoDto = mapper.toDto(porotoMapper.encontrarPorClave(id));
+            PorotoDTO porotoDTO = mapper.toDto(porotoMapper.encontrarPorClave(id));
 
-            if (porotoDto != null) {
+            if (porotoDTO != null) {
                 logeador.info("poroto encontrado por clave : {}", id);
             } else {
                 logeador.info("poroto clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.POROTO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return porotoDto;
+            return porotoDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.POROTO_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.POROTO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -222,13 +222,13 @@ public class PorotoService {
      * @return una lista de todos Poroto DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<PorotoDto> obtenerTodos() throws BaseDatosException {
+    public List<PorotoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<PorotoDto> porotoList = mapper.toDtoList(porotoMapper.obtenerTodos());
+            List<PorotoDTO> porotoLista = mapper.toDtoList(porotoMapper.obtenerTodos());
             logeador.info("porotos obtenidos");
-            return porotoList;
+            return porotoLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.POROTO_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.POROTO_OBTENER_TODOS_MENSAJE, e);

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto;
+import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDTO;
 import com.elitsoft.servicampo.domain.entity.CarritoArticulo;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.CarritoArticuloMapper;
@@ -34,34 +34,34 @@ public class CarritoArticuloService {
 
     /**
      * Agrega una Articulo de Carrito  a la base de datos
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @throws EntradaInvalidadException
      * @throws CarritoArticuloLimiteException
      * @throws BaseDatosException
      */
-    public void agregar(CarritoArticuloDto carritoArticuloDto) throws EntradaInvalidadException, CarritoArticuloLimiteException, BaseDatosException {
+    public void agregar(CarritoArticuloDTO carritoArticuloDTO) throws EntradaInvalidadException, CarritoArticuloLimiteException, BaseDatosException {
         logeador.info("agregar() articulo de carrito" );
 
         //  Valida Entrada (EntradaInvalidadException)
-        if (carritoArticuloDto == null || carritoArticuloDto.getProductId() == null || carritoArticuloDto.getQuantity() <= 0) {
-            logeador.error(Constantes.CARRITO_ARTICULO_ENTRADA_INVALIDA + ": {}", carritoArticuloDto.getProductId());
+        if (carritoArticuloDTO == null || carritoArticuloDTO.getProductId() == null || carritoArticuloDTO.getQuantity() <= 0) {
+            logeador.error(Constantes.CARRITO_ARTICULO_ENTRADA_INVALIDA + ": {}", carritoArticuloDTO.getProductId());
             throw new EntradaInvalidadException(Constantes.CARRITO_ARTICULO_ENTRADA_INVALIDA);
         }
 
         //  Revisa el limite Articulos del Carrito(CarritoArticuloLimiteException)
         List<CarritoArticulo> CarritoArticulosExistentes = carritoArticuloMapper.obtenerTodos();
         if (CarritoArticulosExistentes != null && CarritoArticulosExistentes.size() >= Constantes.CARRITO_ARTICULO_MAXIMO) {
-            logeador.error(Constantes.CARRITO_ARTICULO_EXEDE_LIMITE + ": {}", carritoArticuloDto.getProductId());
+            logeador.error(Constantes.CARRITO_ARTICULO_EXEDE_LIMITE + ": {}", carritoArticuloDTO.getProductId());
             throw new CarritoArticuloLimiteException(Constantes.CARRITO_ARTICULO_EXEDE_LIMITE);
         }
 
 
         try {
-            CarritoArticulo carritoArticulo = mapper.toEntity(carritoArticuloDto);
+            CarritoArticulo carritoArticulo = mapper.toEntity(carritoArticuloDTO);
             Long nuevoId = carritoArticuloMapper.agregar(carritoArticulo);
             logeador.debug("Articulo de carrito agregado exitosamente id: {}", nuevoId);
         } catch (DataAccessException e) {
-            logeador.error(Constantes.CARRITO_ARTICULO_AGREGAR_EXECPTION +": {}", carritoArticuloDto.toString(), e);
+            logeador.error(Constantes.CARRITO_ARTICULO_AGREGAR_EXECPTION +": {}", carritoArticuloDTO.toString(), e);
             throw new BaseDatosException(Constantes.CARRITO_ARTICULO_AGREGAR_EXECPTION, e);
         }
     }
@@ -69,26 +69,26 @@ public class CarritoArticuloService {
     /**
      * Actualiza un Articulo de Carrito identificado por su clave
      * @param id
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @throws CarritoArticuloNoEncontradoException
      * @throws BaseDatosException
      */
-    public void actualizar(Long id, CarritoArticuloDto carritoArticuloDto) throws BaseDatosException, CarritoArticuloNoEncontradoException {
+    public void actualizar(Long id, CarritoArticuloDTO carritoArticuloDTO) throws BaseDatosException, CarritoArticuloNoEncontradoException {
         logeador.info("actualizar() articulo de carrito");
 
 
         try {
             //  Revisa si el articulo de carrito existe (CarritoArticuloNoEncontradoException)
-            CarritoArticuloDto carritoArticuloDtoEncontrador = this.encontrarPorClave(id);
+            CarritoArticuloDTO carritoArticuloDTOEncontrador = this.encontrarPorClave(id);
 
-            CarritoArticulo carritoArticulo = mapper.toEntity(carritoArticuloDto);
+            CarritoArticulo carritoArticulo = mapper.toEntity(carritoArticuloDTO);
             carritoArticulo.setId(id);
             int registrosActualizados =  carritoArticuloMapper.actualizar(carritoArticulo);
             logeador.debug("articulo de carrito actualizado exitosamente: {}, registros actualizados: {}",id, registrosActualizados);
         } catch (CarritoArticuloNoEncontradoException e) {
             throw e;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.CARRITO_ARTICULO_ACTUALIZAR_EXECPTION +": id={} {}", id, carritoArticuloDto.toString(), e);
+            logeador.error(Constantes.CARRITO_ARTICULO_ACTUALIZAR_EXECPTION +": id={} {}", id, carritoArticuloDTO.toString(), e);
             throw new BaseDatosException(Constantes.CARRITO_ARTICULO_ACTUALIZAR_EXECPTION, e);
         }
     }
@@ -104,7 +104,7 @@ public class CarritoArticuloService {
 
         try {
             //  Revisa si el articulo de carrito existe (CarritoArticuloNoEncontradoException)
-            CarritoArticuloDto carritoArticuloDto = this.encontrarPorClave(id);
+            CarritoArticuloDTO carritoArticuloDTO = this.encontrarPorClave(id);
             int registrosEliminados =  carritoArticuloMapper.eliminar (id);
             logeador.debug("articulo de carrito eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (CarritoArticuloNoEncontradoException e) {
@@ -122,20 +122,20 @@ public class CarritoArticuloService {
      * @return
      * @throws BaseDatosException
      */
-    public CarritoArticuloDto encontrarPorClave(Long id) throws BaseDatosException, CarritoArticuloNoEncontradoException {
+    public CarritoArticuloDTO encontrarPorClave(Long id) throws BaseDatosException, CarritoArticuloNoEncontradoException {
         logeador.info("obtenerPorClave(): {}", id);
 
         try {
-            CarritoArticuloDto carritoArticuloDto = mapper.toDto(carritoArticuloMapper.encontrarPorClave(id));
+            CarritoArticuloDTO carritoArticuloDTO = mapper.toDto(carritoArticuloMapper.encontrarPorClave(id));
 
-            if (carritoArticuloDto!= null){
+            if (carritoArticuloDTO!= null){
                 logeador.debug("articulo de carrito encontrado por clave : {}", id);
             } else {
                 logeador.debug("articulo de carrito clave:{} no encontrado", id);
                 throw new CarritoArticuloNoEncontradoException(Constantes.CARRITO_ARTICULO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return carritoArticuloDto;
+            return carritoArticuloDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.CARRITO_ARTICULO_ENCONTRAR_POR_CLAVE_EXECPTION +" {}", id, e);
             throw new BaseDatosException(Constantes.CARRITO_ARTICULO_ENCONTRAR_POR_CLAVE_EXECPTION, e);
@@ -147,13 +147,13 @@ public class CarritoArticuloService {
      * @return
      * @throws BaseDatosException
      */
-    public List<CarritoArticuloDto> obtenerTodos() throws BaseDatosException {
+    public List<CarritoArticuloDTO> obtenerTodos() throws BaseDatosException {
         logeador.info("obtenerTodos()");
 
         try {
-            List<CarritoArticuloDto> carritoArticuloList = mapper.toDtoList(carritoArticuloMapper.obtenerTodos());
+            List<CarritoArticuloDTO> carritoArticuloLista = mapper.toDtoList(carritoArticuloMapper.obtenerTodos());
             logeador.debug("articulo de carrito obtenidos");
-            return carritoArticuloList;
+            return carritoArticuloLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.CARRITO_ARTICULO_OBTENER_TODOS_EXECPTION, e);
             throw new BaseDatosException(Constantes.CARRITO_ARTICULO_OBTENER_TODOS_EXECPTION, e);

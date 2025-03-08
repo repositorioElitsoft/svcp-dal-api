@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.TrabajoDto;
+import com.elitsoft.servicampo.domain.dto.core.TrabajoDTO;
 import com.elitsoft.servicampo.domain.entity.Trabajo;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.TrabajoMapper;
@@ -32,54 +32,54 @@ public class TrabajoService {
 
     /**
      * Agrega un nuevo Trabajo.
-     * @param trabajoDto el Trabajo DTO.
+     * @param trabajoDTO el Trabajo DTO.
      * @return el Trabajo DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
      * @throws RecursoDuplicadoException si el recurso Trabajo ya existe.
      */
-    public TrabajoDto agregar(TrabajoDto trabajoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public TrabajoDTO agregar(TrabajoDTO trabajoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Trabajo");
 
         //  Valida Entrada
-        if (trabajoDto == null) {
+        if (trabajoDTO == null) {
             logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Trabajo trabajo = mapper.toEntity(trabajoDto);
+            Trabajo trabajo = mapper.toEntity(trabajoDTO);
             trabajo = trabajoMapper.agregar(trabajo);
             logeador.info("Trabajo agregado exitosamente id: {}", trabajo.getId());
             return mapper.toDto(trabajo);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.TRABAJO_DUPLICADO_MENSAGE + ": {}", trabajoDto.getId());
+            logeador.error(Constantes.TRABAJO_DUPLICADO_MENSAGE + ": {}", trabajoDTO.getId());
             throw new RecursoDuplicadoException(Constantes.TRABAJO_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.TRABAJO_AGREGAR_MENSAJE + ": {}", trabajoDto.toString(), e);
+            logeador.error(Constantes.TRABAJO_AGREGAR_MENSAJE + ": {}", trabajoDTO.toString(), e);
             throw new BaseDatosException(Constantes.TRABAJO_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Trabajo.
-     * @param trabajoLoteDto lista de Trabajo DTO a agregar.
+     * @param trabajoLoteDTO lista de Trabajo DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
      * @throws RecursoDuplicadoException si el recurso trabajo ya existe.
      */
-    public void agregarLote(List<TrabajoDto> trabajoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TrabajoDTO> trabajoLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() trabajo");
 
         //  Valida Entrada
-        if (trabajoLoteDto.isEmpty()) {
+        if (trabajoLoteDTO.isEmpty()) {
             logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Trabajo> trabajoLote = mapper.toEntityList(trabajoLoteDto);
+            List<Trabajo> trabajoLote = mapper.toEntityList(trabajoLoteDTO);
 
             int registrosAgregados =  trabajoMapper.agregarLote(trabajoLote);
             logeador.info("Lote Trabajo agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -95,55 +95,55 @@ public class TrabajoService {
     /**
      * Actualiza un Trabajo existente.
      * @param id la clave de Trabajo a actualizar.
-     * @param trabajoDto el Trabajo DTO con informacion actualizada.
+     * @param trabajoDTO el Trabajo DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Trabajo no es encontrado.
      * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
      */
-    public void actualizar(Long id, TrabajoDto trabajoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, TrabajoDTO trabajoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() trabajo");
 
         //  Valida Entrada
-        if (id == null || trabajoDto == null || trabajoDto.getId() == null) {
-            logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((trabajoDto != null) ? trabajoDto.toString() : null  ));
+        if (id == null || trabajoDTO == null || trabajoDTO.getId() == null) {
+            logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((trabajoDTO != null) ? trabajoDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
-        if (!id.equals(trabajoDto.getId())) {
-            logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  trabajoDto.toString());
+        if (!id.equals(trabajoDTO.getId())) {
+            logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  trabajoDTO.toString());
             throw new EntradaInvalidadException(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            TrabajoDto trabajoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Trabajo trabajo = mapper.toEntity(trabajoDto);
+            TrabajoDTO trabajoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Trabajo trabajo = mapper.toEntity(trabajoDTO);
             trabajo.setId(id);
             int registrosActualizados = trabajoMapper.actualizar(trabajo);
             logeador.info("trabajo actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.TRABAJO_ACTUALIZAR_MENSAJE + ": id={} {}", id, trabajoDto.toString(), e);
+            logeador.error(Constantes.TRABAJO_ACTUALIZAR_MENSAJE + ": id={} {}", id, trabajoDTO.toString(), e);
             throw new BaseDatosException(Constantes.TRABAJO_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de Trabajo existentes.
-     * @param trabajoLoteDto lista de Trabajo DTO con datos a actualizar.
+     * @param trabajoLoteDTO lista de Trabajo DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Trabajo tiene errores.
      */
-    public void actualizarLote(List<TrabajoDto> trabajoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TrabajoDTO> trabajoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() trabajo");
 
         //  Valida Entrada
-        if (trabajoLoteDto.isEmpty()) {
+        if (trabajoLoteDTO.isEmpty()) {
             logeador.error(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TRABAJO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Trabajo> trabajoLote = mapper.toEntityList(trabajoLoteDto);
+            List<Trabajo> trabajoLote = mapper.toEntityList(trabajoLoteDTO);
             int registrosActualizados = trabajoMapper.actualizarLote(trabajoLote);
             logeador.info("Lote trabajo actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -162,7 +162,7 @@ public class TrabajoService {
         logeador.debug("eliminar() trabajo: {}", id);
 
         try {
-            TrabajoDto trabajoDto = this.encontrarPorClave(id); // Verifica si existe
+            TrabajoDTO trabajoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = trabajoMapper.eliminar(id);
             logeador.info("trabajo eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -202,20 +202,20 @@ public class TrabajoService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Trabajo no es encontrado.
      */
-    public TrabajoDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public TrabajoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            TrabajoDto trabajoDto = mapper.toDto(trabajoMapper.encontrarPorClave(id));
+            TrabajoDTO trabajoDTO = mapper.toDto(trabajoMapper.encontrarPorClave(id));
 
-            if (trabajoDto != null) {
+            if (trabajoDTO != null) {
                 logeador.info("trabajo encontrado por clave : {}", id);
             } else {
                 logeador.info("trabajo clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.TRABAJO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return trabajoDto;
+            return trabajoDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TRABAJO_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.TRABAJO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -227,11 +227,11 @@ public class TrabajoService {
      * @return una lista de todos Trabajo DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<TrabajoDto> obtenerTodos() throws BaseDatosException {
+    public List<TrabajoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TrabajoDto> trabajoLista = mapper.toDtoList(trabajoMapper.obtenerTodos());
+            List<TrabajoDTO> trabajoLista = mapper.toDtoList(trabajoMapper.obtenerTodos());
             logeador.info("trabajos obtenidos");
             return trabajoLista;
         } catch (DataAccessException e) {

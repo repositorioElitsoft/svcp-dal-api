@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.RegionDto;
+import com.elitsoft.servicampo.domain.dto.core.RegionDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -35,55 +35,55 @@ public class RegionMobileService {
 
     /**
      * Agrega un nuevo Region.
-     * @param regionDto el Region DTO.
+     * @param regionDTO el Region DTO.
      * @return el Region DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      * @throws RecursoDuplicadoException si el recurso Region ya existe.
      */
-    public RegionDto agregar(RegionDto regionDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public RegionDTO agregar(RegionDTO regionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() region");
 
-        return regionService.agregar(regionDto);
+        return regionService.agregar(regionDTO);
     }
 
     /**
      * Agrega Lote nuevos Region.
-     * @param regionLoteDto lista de Region DTO a agregar.
+     * @param regionLoteDTO lista de Region DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      * @throws RecursoDuplicadoException si el recurso Region ya existe.
      */
-    public void agregarLote(List<RegionDto> regionLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<RegionDTO> regionLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() region");
 
-        regionService.agregarLote(regionLoteDto);
+        regionService.agregarLote(regionLoteDTO);
     }
 
     /**
      * Actualiza un Region existente.
      * @param id la Clave de Region a actualizar.
-     * @param regionDto el Region DTO con informacion actualizada.
+     * @param regionDTO el Region DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Region no es encontrado.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      */
-    public void actualizar(Long id, RegionDto regionDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, RegionDTO regionDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() region");
 
-        regionService.actualizar(id, regionDto);
+        regionService.actualizar(id, regionDTO);
     }
 
     /**
      * Actualiza Lote de Region existentes.
-     * @param regionLoteDto lista de Region DTO con datos a actualizar.
+     * @param regionLoteDTO lista de Region DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Region tiene errores.
      */
-    public void actualizarLote(List<RegionDto> regionLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<RegionDTO> regionLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() region");
 
-        regionService.actualizarLote(regionLoteDto);
+        regionService.actualizarLote(regionLoteDTO);
     }
 
     /**
@@ -116,7 +116,7 @@ public class RegionMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Region no es encontrado.
      */
-    public RegionDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public RegionDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return regionService.encontrarPorClave(id);
     }
@@ -127,7 +127,7 @@ public class RegionMobileService {
      * @return lista de todos Region DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<RegionDto> obtenerTodos(Long paisId) throws BaseDatosException {
+    public List<RegionDTO> obtenerTodos(Long paisId) throws BaseDatosException {
         logeador.debug("obtenerTodos() {}",paisId);
         return regionService.obtenerTodos(paisId);
     }

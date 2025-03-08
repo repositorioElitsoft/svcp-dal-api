@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.SectorDto;
+import com.elitsoft.servicampo.domain.dto.core.SectorDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -35,56 +35,56 @@ public class SectorMobileService {
 
     /**
      * Agrega un nuevo Sector.
-     * @param sectorDto el Sector DTO.
+     * @param sectorDTO el Sector DTO.
      * @return el Sector DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Sector tiene errores.
      * @throws RecursoDuplicadoException si el recurso Sector ya existe.
      */
 
-    public SectorDto agregar(SectorDto sectorDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public SectorDTO agregar(SectorDTO sectorDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() sector");
 
-        return sectorService.agregar(sectorDto);
+        return sectorService.agregar(sectorDTO);
     }
 
     /**
      * Agrega Lote nuevos Sector.
-     * @param sectorLoteDto lista de Sector DTO a agregar.
+     * @param sectorLoteDTO lista de Sector DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Sector tiene errores.
      * @throws RecursoDuplicadoException si el recurso Sector ya existe.
      */
-    public void agregarLote(List<SectorDto> sectorLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<SectorDTO> sectorLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() sector");
 
-        sectorService.agregarLote(sectorLoteDto);
+        sectorService.agregarLote(sectorLoteDTO);
     }
 
     /**
      * Actualiza un Sector existente.
      * @param id la Clave de Sector a actualizar.
-     * @param sectorDto el Sector DTO con informacion actualizada.
+     * @param sectorDTO el Sector DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Sector no es encontrado.
      * @throws EntradaInvalidadException si la entrada Sector tiene errores.
      */
-    public void actualizar(Long id, SectorDto sectorDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, SectorDTO sectorDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() sector");
 
-        sectorService.actualizar(id, sectorDto);
+        sectorService.actualizar(id, sectorDTO);
     }
 
     /**
      * Actualiza Lote de Sector existentes.
-     * @param sectorLoteDto lista de Sector DTO con datos a actualizar.
+     * @param sectorLoteDTO lista de Sector DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Sector tiene errores.
      */
-    public void actualizarLote(List<SectorDto> sectorLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<SectorDTO> sectorLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() sector");
 
-        sectorService.actualizarLote(sectorLoteDto);
+        sectorService.actualizarLote(sectorLoteDTO);
     }
 
     /**
@@ -117,7 +117,7 @@ public class SectorMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Sector no es encontrado.
      */
-    public SectorDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public SectorDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return sectorService.encontrarPorClave(id);
     }
@@ -127,7 +127,7 @@ public class SectorMobileService {
      * @return lista de todos Sector DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<SectorDto> obtenerTodos() throws BaseDatosException {
+    public List<SectorDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return sectorService.obtenerTodos();
     }

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.MenuDto;
+import com.elitsoft.servicampo.domain.dto.core.MenuDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.MenuNoEncontradoException;
 import com.elitsoft.servicampo.mapper.MenuMapper;
@@ -32,24 +32,24 @@ public class MenuMobileService {
 
     /**
      * Agrega un nuevo Menu.
-     * @param menuDto El Menu DTO.
+     * @param menuDTO El Menu DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(MenuDto menuDto) throws BaseDatosException {
+    public void agregar(MenuDTO menuDTO) throws BaseDatosException {
         logeador.debug("agregar() menu");
-        menuService.agregar(menuDto);
+        menuService.agregar(menuDTO);
     }
 
     /**
      * Actualiza un Menu existente.
      * @param id La Clave de Menu a actualizar.
-     * @param menuDto El Menu DTO con informacion actualizada.
+     * @param menuDTO El Menu DTO con informacion actualizada.
      * @throws MenuNoEncontradoException Si Menu no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, MenuDto menuDto) throws BaseDatosException, MenuNoEncontradoException {
+    public void actualizar(Long id, MenuDTO menuDTO) throws BaseDatosException, MenuNoEncontradoException {
         logeador.debug("actualizar() menu");
-        menuService.actualizar(id, menuDto);
+        menuService.actualizar(id, menuDTO);
     }
 
     /**
@@ -70,7 +70,7 @@ public class MenuMobileService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws MenuNoEncontradoException Si Menu no es encontrado.
      */
-    public MenuDto encontrarPorClave(Long id) throws BaseDatosException, MenuNoEncontradoException {
+    public MenuDTO encontrarPorClave(Long id) throws BaseDatosException, MenuNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return menuService.encontrarPorClave(id);
     }
@@ -80,7 +80,7 @@ public class MenuMobileService {
      * @return Una lista de todos Menu DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<MenuDto> obtenerTodos() throws BaseDatosException {
+    public List<MenuDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return menuService.obtenerTodos();
     }

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.TrabajoTareaDto;
+import com.elitsoft.servicampo.domain.dto.core.TrabajoTareaDTO;
 import com.elitsoft.servicampo.domain.entity.TrabajoTarea;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface TrabajoTareaMapStruct {
 
     /**
-     * Convierte un entidad TrabajoTarea a TrabajoTareaDto.
+     * Convierte un entidad TrabajoTarea a TrabajoTareaDTO.
      * @param entity La entidad TrabajoTarea.
-     * @return El TrabajoTareaDto.
+     * @return El TrabajoTareaDTO.
      */
-    TrabajoTareaDto toDto(TrabajoTarea entity);
+    TrabajoTareaDTO toDto(TrabajoTarea entity);
 
     /**
-     * Convierte un TrabajoTareaDto a entidad TrabajoTarea.
-     * @param dto El TrabajoTareaDto.
+     * Convierte un TrabajoTareaDTO a entidad TrabajoTarea.
+     * @param dto El TrabajoTareaDTO.
      * @return La entidad TrabajoTarea.
      */
-    TrabajoTarea toEntity(TrabajoTareaDto dto);
+    TrabajoTarea toEntity(TrabajoTareaDTO dto);
 
     /**
      * Convierte una lista de entidades TrabajoTarea a una lista de TrabajoTareaDtos.
      * @param entities La lista de entidades TrabajoTarea.
      * @return The list of TrabajoTareaDtos.
      */
-    List<TrabajoTareaDto> toDtoList(List<TrabajoTarea> entities);
+    List<TrabajoTareaDTO> toDtoList(List<TrabajoTarea> entities);
 
     /**
      * Convierte una lista de TrabajoTareaDtos a una lista de entidades TrabajoTarea entities.
      * @param dtos The list of TrabajoTareaDtos.
      * @return The list of TrabajoTarea entities.
      */
-    List<TrabajoTarea> toEntityList(List<TrabajoTareaDto> dtos);
+    List<TrabajoTarea> toEntityList(List<TrabajoTareaDTO> dtos);
 }

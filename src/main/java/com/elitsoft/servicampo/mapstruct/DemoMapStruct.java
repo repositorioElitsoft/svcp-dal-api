@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.DemoDto;
+import com.elitsoft.servicampo.domain.dto.core.DemoDTO;
 import com.elitsoft.servicampo.domain.entity.Demo;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface DemoMapStruct {
 
     /**
-     * Convierte un entidad Demo a DemoDto.
+     * Convierte un entidad Demo a DemoDTO.
      * @param entity La entidad Demo.
-     * @return El DemoDto.
+     * @return El DemoDTO.
      */
-    DemoDto toDto(Demo entity);
+    DemoDTO toDto(Demo entity);
 
     /**
-     * Convierte un DemoDto a entidad Demo.
-     * @param dto El DemoDto.
+     * Convierte un DemoDTO a entidad Demo.
+     * @param dto El DemoDTO.
      * @return La entidad Demo.
      */
-    Demo toEntity(DemoDto dto);
+    Demo toEntity(DemoDTO dto);
 
     /**
      * Convierte una lista de entidades Demo a una lista de DemoDtos.
      * @param entities La lista de entidades Demo.
      * @return The list of DemoDtos.
      */
-    List<DemoDto> toDtoList(List<Demo> entities);
+    List<DemoDTO> toDtoList(List<Demo> entities);
 
     /**
      * Convierte una lista de DemoDtos a una lista de entidades Demo entities.
      * @param dtos The list of DemoDtos.
      * @return The list of Demo entities.
      */
-    List<Demo> toEntityList(List<DemoDto> dtos);
+    List<Demo> toEntityList(List<DemoDTO> dtos);
 }

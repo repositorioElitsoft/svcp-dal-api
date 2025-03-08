@@ -29,7 +29,7 @@ public class EmpleadoDTO implements Serializable  {
     private String email;
     private String contrasena;
     private String nombreUsuario;
-    private TipoEmpleadoDto tipoEmpleado;
+    private TipoEmpleadoDTO tipoEmpleado;
     private RoleDTO role;
     private EstadoDTO estado;
     private DocumentoIdentificacionDTO documentoIdentificacion;

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -34,55 +34,55 @@ public class ZonaMobileService {
 
     /**
      * Agrega un nuevo Zona.
-     * @param zonaDto el Zona DTO.
+     * @param zonaDTO el Zona DTO.
      * @return el Zona DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      * @throws RecursoDuplicadoException si el recurso Zona ya existe.
      */
-    public ZonaDto agregar(ZonaDto zonaDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ZonaDTO agregar(ZonaDTO zonaDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() zona");
 
-        return zonaService.agregar(zonaDto);
+        return zonaService.agregar(zonaDTO);
     }
 
     /**
      * Agrega Lote nuevos Zona.
-     * @param zonaLoteDto lista de Zona DTO a agregar.
+     * @param zonaLoteDTO lista de Zona DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      * @throws RecursoDuplicadoException si el recurso Zona ya existe.
      */
-    public void agregarLote(List<ZonaDto> zonaLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<ZonaDTO> zonaLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() zona");
 
-        zonaService.agregarLote(zonaLoteDto);
+        zonaService.agregarLote(zonaLoteDTO);
     }
 
     /**
      * Actualiza un Zona existente.
      * @param id la Clave de Zona a actualizar.
-     * @param zonaDto el Zona DTO con informacion actualizada.
+     * @param zonaDTO el Zona DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Zona no es encontrado.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      */
-    public void actualizar(Long id, ZonaDto zonaDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, ZonaDTO zonaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() zona");
 
-        zonaService.actualizar(id, zonaDto);
+        zonaService.actualizar(id, zonaDTO);
     }
 
     /**
      * Actualiza Lote de Zona existentes.
-     * @param zonaLoteDto lista de Zona DTO con datos a actualizar.
+     * @param zonaLoteDTO lista de Zona DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      */
-    public void actualizarLote(List<ZonaDto> zonaLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ZonaDTO> zonaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() zona");
 
-        zonaService.actualizarLote(zonaLoteDto);
+        zonaService.actualizarLote(zonaLoteDTO);
     }
 
     /**
@@ -115,7 +115,7 @@ public class ZonaMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Zona no es encontrado.
      */
-    public ZonaDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public ZonaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return zonaService.encontrarPorClave(id);
     }
@@ -125,7 +125,7 @@ public class ZonaMobileService {
      * @return lista de todos Zona DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<ZonaDto> obtenerTodos() throws BaseDatosException {
+    public List<ZonaDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return zonaService.obtenerTodos();
     }

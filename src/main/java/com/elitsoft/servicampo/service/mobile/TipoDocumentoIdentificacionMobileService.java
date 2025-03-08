@@ -34,55 +34,55 @@ public class TipoDocumentoIdentificacionMobileService {
 
     /**
      * Agrega un nuevo TipoDocumentoIdentificacion.
-     * @param tipodocumentoidentificacionDTO el TipoDocumentoIdentificacion DTO.
+     * @param tipoDocumentoIdentificacionDTO el TipoDocumentoIdentificacion DTO.
      * @return el TipoDocumentoIdentificacion DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoDocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoDocumentoIdentificacion ya existe.
      */
-    public TipoDocumentoIdentificacionDTO agregar(TipoDocumentoIdentificacionDTO tipodocumentoidentificacionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public TipoDocumentoIdentificacionDTO agregar(TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() tipodocumentoidentificacion");
 
-        return tipoDocumentoIdentificacionService.agregar(tipodocumentoidentificacionDTO);
+        return tipoDocumentoIdentificacionService.agregar(tipoDocumentoIdentificacionDTO);
     }
 
     /**
      * Agrega Lote nuevos TipoDocumentoIdentificacion.
-     * @param tipodocumentoidentificacionLoteDTO lista de TipoDocumentoIdentificacion DTO a agregar.
+     * @param tipodocumentoIdentificacionLoteDTO lista de TipoDocumentoIdentificacion DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoDocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoDocumentoIdentificacion ya existe.
      */
-    public void agregarLote(List<TipoDocumentoIdentificacionDTO> tipodocumentoidentificacionLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TipoDocumentoIdentificacionDTO> tipodocumentoIdentificacionLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() tipodocumentoidentificacion");
 
-        tipoDocumentoIdentificacionService.agregarLote(tipodocumentoidentificacionLoteDTO);
+        tipoDocumentoIdentificacionService.agregarLote(tipodocumentoIdentificacionLoteDTO);
     }
 
     /**
      * Actualiza un TipoDocumentoIdentificacion existente.
      * @param id la Clave de TipoDocumentoIdentificacion a actualizar.
-     * @param tipodocumentoidentificacionDTO el TipoDocumentoIdentificacion DTO con informacion actualizada.
+     * @param tipoDocumentoIdentificacionDTO el TipoDocumentoIdentificacion DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoDocumentoIdentificacion no es encontrado.
      * @throws EntradaInvalidadException si la entrada TipoDocumentoIdentificacion tiene errores.
      */
-    public void actualizar(Long id, TipoDocumentoIdentificacionDTO tipodocumentoidentificacionDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() tipodocumentoidentificacion");
 
-        tipoDocumentoIdentificacionService.actualizar(id, tipodocumentoidentificacionDTO);
+        tipoDocumentoIdentificacionService.actualizar(id, tipoDocumentoIdentificacionDTO);
     }
 
     /**
      * Actualiza Lote de TipoDocumentoIdentificacion existentes.
-     * @param tipodocumentoidentificacionLoteDTO lista de TipoDocumentoIdentificacion DTO con datos a actualizar.
+     * @param tipoDocumentoIdentificacionLoteDTO lista de TipoDocumentoIdentificacion DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoDocumentoIdentificacion tiene errores.
      */
-    public void actualizarLote(List<TipoDocumentoIdentificacionDTO> tipodocumentoidentificacionLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoDocumentoIdentificacionDTO> tipoDocumentoIdentificacionLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tipodocumentoidentificacion");
 
-        tipoDocumentoIdentificacionService.actualizarLote(tipodocumentoidentificacionLoteDTO);
+        tipoDocumentoIdentificacionService.actualizarLote(tipoDocumentoIdentificacionLoteDTO);
     }
 
     /**

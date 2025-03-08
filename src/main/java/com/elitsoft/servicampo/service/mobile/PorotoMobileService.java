@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.PorotoDto;
+import com.elitsoft.servicampo.domain.dto.core.PorotoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -35,55 +35,55 @@ public class PorotoMobileService {
 
     /**
      * Agrega un nuevo Poroto.
-     * @param porotoDto el Poroto DTO.
+     * @param porotoDTO el Poroto DTO.
      * @return el Poroto DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      * @throws RecursoDuplicadoException si el recurso Poroto ya existe.
      */
-    public PorotoDto agregar(PorotoDto porotoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public PorotoDTO agregar(PorotoDTO porotoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() poroto");
 
-        return porotoService.agregar(porotoDto);
+        return porotoService.agregar(porotoDTO);
     }
 
     /**
      * Agrega Lote nuevos Poroto.
-     * @param porotoLoteDto lista de Poroto DTO a agregar.
+     * @param porotoLoteDTO lista de Poroto DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      * @throws RecursoDuplicadoException si el recurso Poroto ya existe.
      */
-    public void agregarLote(List<PorotoDto> porotoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<PorotoDTO> porotoLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() poroto");
 
-        porotoService.agregarLote(porotoLoteDto);
+        porotoService.agregarLote(porotoLoteDTO);
     }
 
     /**
      * Actualiza un Poroto existente.
      * @param id la Clave de Poroto a actualizar.
-     * @param porotoDto el Poroto DTO con informacion actualizada.
+     * @param porotoDTO el Poroto DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Poroto no es encontrado.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      */
-    public void actualizar(Long id, PorotoDto porotoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, PorotoDTO porotoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() poroto");
 
-        porotoService.actualizar(id, porotoDto);
+        porotoService.actualizar(id, porotoDTO);
     }
 
     /**
      * Actualiza Lote de Poroto existentes.
-     * @param porotoLoteDto lista de Poroto DTO con datos a actualizar.
+     * @param porotoLoteDTO lista de Poroto DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Poroto tiene errores.
      */
-    public void actualizarLote(List<PorotoDto> porotoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<PorotoDTO> porotoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() poroto");
 
-        porotoService.actualizarLote(porotoLoteDto);
+        porotoService.actualizarLote(porotoLoteDTO);
     }
 
     /**
@@ -116,7 +116,7 @@ public class PorotoMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Poroto no es encontrado.
      */
-    public PorotoDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public PorotoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return porotoService.encontrarPorClave(id);
     }
@@ -126,7 +126,7 @@ public class PorotoMobileService {
      * @return lista de todos Poroto DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<PorotoDto> obtenerTodos() throws BaseDatosException {
+    public List<PorotoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return porotoService.obtenerTodos();
     }

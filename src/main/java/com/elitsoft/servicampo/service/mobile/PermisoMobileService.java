@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.PermisoDto;
+import com.elitsoft.servicampo.domain.dto.core.PermisoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.PermisoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.PermisoMapper;
@@ -32,24 +32,24 @@ public class PermisoMobileService {
 
     /**
      * Agrega un nuevo Permiso.
-     * @param permisoDto El Permiso DTO.
+     * @param permisoDTO El Permiso DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(PermisoDto permisoDto) throws BaseDatosException {
+    public void agregar(PermisoDTO permisoDTO) throws BaseDatosException {
         logeador.debug("agregar() permiso");
-        permisoService.agregar(permisoDto);
+        permisoService.agregar(permisoDTO);
     }
 
     /**
      * Actualiza un Permiso existente.
      * @param id La Clave de Permiso a actualizar.
-     * @param permisoDto El Permiso DTO con informacion actualizada.
+     * @param permisoDTO El Permiso DTO con informacion actualizada.
      * @throws PermisoNoEncontradoException Si Permiso no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, PermisoDto permisoDto) throws BaseDatosException, PermisoNoEncontradoException {
+    public void actualizar(Long id, PermisoDTO permisoDTO) throws BaseDatosException, PermisoNoEncontradoException {
         logeador.debug("actualizar() permiso");
-        permisoService.actualizar(id, permisoDto);
+        permisoService.actualizar(id, permisoDTO);
     }
 
     /**
@@ -70,7 +70,7 @@ public class PermisoMobileService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws PermisoNoEncontradoException Si Permiso no es encontrado.
      */
-    public PermisoDto encontrarPorClave(Long id) throws BaseDatosException, PermisoNoEncontradoException {
+    public PermisoDTO encontrarPorClave(Long id) throws BaseDatosException, PermisoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return permisoService.encontrarPorClave(id);
     }
@@ -80,7 +80,7 @@ public class PermisoMobileService {
      * @return Una lista de todos Permiso DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<PermisoDto> obtenerTodos() throws BaseDatosException {
+    public List<PermisoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return permisoService.obtenerTodos();
     }

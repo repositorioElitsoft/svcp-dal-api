@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TareaDto;
+import com.elitsoft.servicampo.domain.dto.core.TareaDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.TareaMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,7 +37,7 @@ public class TareaMobileController {
             @ApiResponse(responseCode = "409", description = "Tarea ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TareaDto> agregar(@RequestBody TareaDto tareaDto) {
+    public ResponseEntity<TareaDTO> agregar(@RequestBody TareaDTO tareaDto) {
         logeador.debug("agregar() tarea");
 
         try {
@@ -64,7 +63,7 @@ public class TareaMobileController {
             @ApiResponse(responseCode = "409", description = "Tarea ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<TareaDto> tareaLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<TareaDTO> tareaLoteDto) {
         logeador.debug("agregarLote() tarea");
 
         try {
@@ -91,7 +90,7 @@ public class TareaMobileController {
             @ApiResponse(responseCode = "404", description = "Tarea no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TareaDto tareaDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TareaDTO tareaDto) {
         logeador.debug("actualizar() tarea");
 
         try {
@@ -115,7 +114,7 @@ public class TareaMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<TareaDto> tareaLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TareaDTO> tareaLoteDto) {
         logeador.debug("actualizarLote() tarea");
 
         try {
@@ -184,11 +183,11 @@ public class TareaMobileController {
             @ApiResponse(responseCode = "404", description = "Tarea no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TareaDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<TareaDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            TareaDto tareaDto = tareaMobileService.encontrarPorClave(id);
+            TareaDTO tareaDto = tareaMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(tareaDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -203,10 +202,10 @@ public class TareaMobileController {
             @ApiResponse(responseCode = "200", description = "Tareas obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<TareaDto>> obtenerTodos() {
+    public ResponseEntity<List<TareaDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<TareaDto> tareas = null;
+        List<TareaDTO> tareas = null;
 
         try {
             tareas = tareaMobileService.obtenerTodos();

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto;
+import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.CarritoArticuloService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -33,7 +33,7 @@ public class CarritoArticuloController {
     /**
      * Llama al servicio de Agregar una Articulo de Carrito
      *
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @return
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -43,11 +43,11 @@ public class CarritoArticuloController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody CarritoArticuloDto carritoArticuloDto) {
+    public ResponseEntity<String> agregar(@RequestBody CarritoArticuloDTO carritoArticuloDTO) {
         logeador.info("agregar() articulo de carrito" );
 
         try{
-            carritoArticuloService.agregar (carritoArticuloDto);
+            carritoArticuloService.agregar (carritoArticuloDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna 201 Bad Request Not Found
         }
         catch (EntradaInvalidadException e) {
@@ -66,7 +66,7 @@ public class CarritoArticuloController {
     /**
      * Llama al servicio de Actualizar un Articulo de Carrito
      * @param id
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @return
      */
     @PutMapping( value = "/{id}" , consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -76,11 +76,11 @@ public class CarritoArticuloController {
             @ApiResponse(responseCode = "404", description = "Articulo de carrito no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody CarritoArticuloDto carritoArticuloDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody CarritoArticuloDTO carritoArticuloDTO) {
         logeador.info("actualizar() articulo de carrito");
 
         try {
-            carritoArticuloService.actualizar(id, carritoArticuloDto);
+            carritoArticuloService.actualizar(id, carritoArticuloDTO);
             return ResponseEntity.noContent().build(); // Retorna 204 No Content
         } catch (CarritoArticuloNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.CARRITO_ARTICULO_NO_ENCONTRADO_MENSAGE );// Retorna 404 Not Found
@@ -127,11 +127,11 @@ public class CarritoArticuloController {
             @ApiResponse(responseCode = "404", description = "Articulo de carrito no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<CarritoArticuloDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<CarritoArticuloDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.info("encontrarPorClave(): {}", id);
 
         try {
-            CarritoArticuloDto carritoArticuloDto = carritoArticuloService.encontrarPorClave(id);
+            CarritoArticuloDTO carritoArticuloDto = carritoArticuloService.encontrarPorClave(id);
             return ResponseEntity.ok(carritoArticuloDto); // Retorna 200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna 500 Internal Server Error
@@ -151,10 +151,10 @@ public class CarritoArticuloController {
             @ApiResponse(responseCode = "200", description = "Articulos de carrito obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<CarritoArticuloDto>> obtenerTodos() {
+    public ResponseEntity<List<CarritoArticuloDTO>> obtenerTodos() {
         logeador.info("obtenerTodos()");
 
-        List<CarritoArticuloDto> carritoArticulos = null;
+        List<CarritoArticuloDTO> carritoArticulos = null;
 
         try {
             carritoArticulos = carritoArticuloService.obtenerTodos ();

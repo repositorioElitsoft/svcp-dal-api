@@ -90,11 +90,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<#Base#DTO> #base#LoteDTO) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<#Base#DTO> #base#DTOLote) {
         logeador.debug("agregarLote() #base#");
 
         try {
-            #base#Service.agregarLote (#base#LoteDTO);
+            #base#Service.agregarLote (#base#DTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -141,11 +141,11 @@ public class #Base#Controller {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<#Base#DTO> #base#LoteDTO) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<#Base#DTO> #base#DTOLote) {
         logeador.debug("actualizarLote() #base#");
 
         try {
-            #base#Service.actualizarLote(#base#LoteDTO);
+            #base#Service.actualizarLote(#base#DTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {

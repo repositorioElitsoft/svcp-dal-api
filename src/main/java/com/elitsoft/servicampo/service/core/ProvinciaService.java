@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.ProvinciaDto;
+import com.elitsoft.servicampo.domain.dto.core.ProvinciaDTO;
 import com.elitsoft.servicampo.domain.entity.Provincia;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.ProvinciaMapper;
@@ -33,54 +33,54 @@ public class ProvinciaService {
 
     /**
      * Agrega un nuevo Provincia.
-     * @param provinciaDto el Provincia DTO.
+     * @param provinciaDTO el Provincia DTO.
      * @return el Provincia DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      * @throws RecursoDuplicadoException si el recurso Provincia ya existe.
      */
-    public ProvinciaDto agregar(ProvinciaDto provinciaDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ProvinciaDTO agregar(ProvinciaDTO provinciaDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Provincia");
 
         //  Valida Entrada
-        if (provinciaDto == null) {
+        if (provinciaDTO == null) {
             logeador.error(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Provincia provincia = mapper.toEntity(provinciaDto);
+            Provincia provincia = mapper.toEntity(provinciaDTO);
             provincia = provinciaMapper.agregar(provincia);
             logeador.info("Provincia agregado exitosamente id: {}", provincia.getId());
             return mapper.toDto(provincia);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.PROVINCIA_DUPLICADO_MENSAGE + ": {}", provinciaDto.getId());
+            logeador.error(Constantes.PROVINCIA_DUPLICADO_MENSAGE + ": {}", provinciaDTO.getId());
             throw new RecursoDuplicadoException(Constantes.PROVINCIA_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.PROVINCIA_AGREGAR_MENSAJE + ": {}", provinciaDto.toString(), e);
+            logeador.error(Constantes.PROVINCIA_AGREGAR_MENSAJE + ": {}", provinciaDTO.toString(), e);
             throw new BaseDatosException(Constantes.PROVINCIA_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Provincia.
-     * @param provinciaLoteDto lista de Provincia DTO a agregar.
+     * @param provinciaLoteDTO lista de Provincia DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      * @throws RecursoDuplicadoException si el recurso provincia ya existe.
      */
-    public void agregarLote(List<ProvinciaDto> provinciaLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<ProvinciaDTO> provinciaLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() provincia");
 
         //  Valida Entrada
-        if (provinciaLoteDto.isEmpty()) {
+        if (provinciaLoteDTO.isEmpty()) {
             logeador.error(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Provincia> provinciaLote = mapper.toEntityList(provinciaLoteDto);
+            List<Provincia> provinciaLote = mapper.toEntityList(provinciaLoteDTO);
 
             int registrosAgregados =  provinciaMapper.agregarLote(provinciaLote);
             logeador.info("Lote Provincia agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -96,49 +96,49 @@ public class ProvinciaService {
     /**
      * Actualiza un Provincia existente.
      * @param id la clave de Provincia a actualizar.
-     * @param provinciaDto el Provincia DTO con informacion actualizada.
+     * @param provinciaDTO el Provincia DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Provincia no es encontrado.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      */
-    public void actualizar(Long id, ProvinciaDto provinciaDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, ProvinciaDTO provinciaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() provincia");
 
         //  Valida Entrada
-        if (id == null || provinciaDto == null || provinciaDto.getId() == null) {
-            logeador.error(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((provinciaDto != null) ? provinciaDto.toString() : null  ));
+        if (id == null || provinciaDTO == null || provinciaDTO.getId() == null) {
+            logeador.error(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((provinciaDTO != null) ? provinciaDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            ProvinciaDto provinciaDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Provincia provincia = mapper.toEntity(provinciaDto);
+            ProvinciaDTO provinciaDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Provincia provincia = mapper.toEntity(provinciaDTO);
             provincia.setId(id);
             int registrosActualizados = provinciaMapper.actualizar(provincia);
             logeador.info("provincia actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.PROVINCIA_ACTUALIZAR_MENSAJE + ": id={} {}", id, provinciaDto.toString(), e);
+            logeador.error(Constantes.PROVINCIA_ACTUALIZAR_MENSAJE + ": id={} {}", id, provinciaDTO.toString(), e);
             throw new BaseDatosException(Constantes.PROVINCIA_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de Provincia existentes.
-     * @param provinciaLoteDto lista de Provincia DTO con datos a actualizar.
+     * @param provinciaLoteDTO lista de Provincia DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      */
-    public void actualizarLote(List<ProvinciaDto> provinciaLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ProvinciaDTO> provinciaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() provincia");
 
         //  Valida Entrada
-        if (provinciaLoteDto.isEmpty()) {
+        if (provinciaLoteDTO.isEmpty()) {
             logeador.error(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.PROVINCIA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Provincia> provinciaLote = mapper.toEntityList(provinciaLoteDto);
+            List<Provincia> provinciaLote = mapper.toEntityList(provinciaLoteDTO);
             int registrosActualizados = provinciaMapper.actualizarLote(provinciaLote);
             logeador.info("Lote provincia actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -157,7 +157,7 @@ public class ProvinciaService {
         logeador.debug("eliminar() provincia: {}", id);
 
         try {
-            ProvinciaDto provinciaDto = this.encontrarPorClave(id); // Verifica si existe
+            ProvinciaDTO provinciaDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = provinciaMapper.eliminar(id);
             logeador.info("provincia eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -197,20 +197,20 @@ public class ProvinciaService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Provincia no es encontrado.
      */
-    public ProvinciaDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public ProvinciaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            ProvinciaDto provinciaDto = mapper.toDto(provinciaMapper.encontrarPorClave(id));
+            ProvinciaDTO provinciaDTO = mapper.toDto(provinciaMapper.encontrarPorClave(id));
 
-            if (provinciaDto != null) {
+            if (provinciaDTO != null) {
                 logeador.info("provincia encontrado por clave : {}", id);
             } else {
                 logeador.info("provincia clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.PROVINCIA_NO_ENCONTRADO_MENSAGE);
             }
 
-            return provinciaDto;
+            return provinciaDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.PROVINCIA_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.PROVINCIA_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -223,11 +223,11 @@ public class ProvinciaService {
      * @return una lista de todos Provincia DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<ProvinciaDto> obtenerTodos(Long regionId) throws BaseDatosException {
+    public List<ProvinciaDTO> obtenerTodos(Long regionId) throws BaseDatosException {
         logeador.debug("obtenerTodos() {}",regionId);
 
         try {
-            List<ProvinciaDto> provinciaLista = mapper.toDtoList(provinciaMapper.obtenerTodos(regionId));
+            List<ProvinciaDTO> provinciaLista = mapper.toDtoList(provinciaMapper.obtenerTodos(regionId));
             logeador.info("provincias obtenidos");
             return provinciaLista;
         } catch (DataAccessException e) {

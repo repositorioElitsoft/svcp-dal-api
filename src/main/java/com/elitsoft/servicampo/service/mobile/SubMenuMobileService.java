@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.SubMenuDto;
+import com.elitsoft.servicampo.domain.dto.core.SubMenuDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.SubMenuNoEncontradoException;
 import com.elitsoft.servicampo.mapper.SubMenuMapper;
@@ -32,24 +32,24 @@ public class SubMenuMobileService {
 
     /**
      * Agrega un nuevo SubMenu.
-     * @param submenuDto El SubMenu DTO.
+     * @param subMenuDTO El SubMenu DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(SubMenuDto submenuDto) throws BaseDatosException {
+    public void agregar(SubMenuDTO subMenuDTO) throws BaseDatosException {
         logeador.debug("agregar() submenu");
-        submenuService.agregar(submenuDto);
+        submenuService.agregar(subMenuDTO);
     }
 
     /**
      * Actualiza un SubMenu existente.
      * @param id La Clave de SubMenu a actualizar.
-     * @param submenuDto El SubMenu DTO con informacion actualizada.
+     * @param subMenuDTO El SubMenu DTO con informacion actualizada.
      * @throws SubMenuNoEncontradoException Si SubMenu no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, SubMenuDto submenuDto) throws BaseDatosException, SubMenuNoEncontradoException {
+    public void actualizar(Long id, SubMenuDTO subMenuDTO) throws BaseDatosException, SubMenuNoEncontradoException {
         logeador.debug("actualizar() submenu");
-        submenuService.actualizar(id, submenuDto);
+        submenuService.actualizar(id, subMenuDTO);
     }
 
     /**
@@ -70,7 +70,7 @@ public class SubMenuMobileService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws SubMenuNoEncontradoException Si SubMenu no es encontrado.
      */
-    public SubMenuDto encontrarPorClave(Long id) throws BaseDatosException, SubMenuNoEncontradoException {
+    public SubMenuDTO encontrarPorClave(Long id) throws BaseDatosException, SubMenuNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return submenuService.encontrarPorClave(id);
     }
@@ -80,7 +80,7 @@ public class SubMenuMobileService {
      * @return Una lista de todos SubMenu DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<SubMenuDto> obtenerTodos() throws BaseDatosException {
+    public List<SubMenuDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return submenuService.obtenerTodos();
     }

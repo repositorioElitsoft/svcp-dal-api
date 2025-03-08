@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.SubMenuDto;
+import com.elitsoft.servicampo.domain.dto.core.SubMenuDTO;
 import com.elitsoft.servicampo.domain.entity.SubMenu;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface SubMenuMapStruct {
 
     /**
-     * Convierte un entidad SubMenu a SubMenuDto.
+     * Convierte un entidad SubMenu a SubMenuDTO.
      * @param entity La entidad SubMenu.
-     * @return El SubMenuDto.
+     * @return El SubMenuDTO.
      */
-    SubMenuDto toDto(SubMenu entity);
+    SubMenuDTO toDto(SubMenu entity);
 
     /**
-     * Convierte un SubMenuDto a entidad SubMenu.
-     * @param dto El SubMenuDto.
+     * Convierte un SubMenuDTO a entidad SubMenu.
+     * @param dto El SubMenuDTO.
      * @return La entidad SubMenu.
      */
-    SubMenu toEntity(SubMenuDto dto);
+    SubMenu toEntity(SubMenuDTO dto);
 
     /**
      * Convierte una lista de entidades SubMenu a una lista de SubMenuDtos.
      * @param entities La lista de entidades SubMenu.
      * @return The list of SubMenuDtos.
      */
-    List<SubMenuDto> toDtoList(List<SubMenu> entities);
+    List<SubMenuDTO> toDtoList(List<SubMenu> entities);
 
     /**
      * Convierte una lista de SubMenuDtos a una lista de entidades SubMenu entities.
      * @param dtos The list of SubMenuDtos.
      * @return The list of SubMenu entities.
      */
-    List<SubMenu> toEntityList(List<SubMenuDto> dtos);
+    List<SubMenu> toEntityList(List<SubMenuDTO> dtos);
 }

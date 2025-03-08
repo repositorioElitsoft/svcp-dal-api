@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ComunaDto;
+import com.elitsoft.servicampo.domain.dto.core.ComunaDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.ComunaMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,7 +37,7 @@ public class ComunaMobileController {
             @ApiResponse(responseCode = "409", description = "Comuna ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ComunaDto> agregar(@RequestBody ComunaDto comunaDto) {
+    public ResponseEntity<ComunaDTO> agregar(@RequestBody ComunaDTO comunaDto) {
         logeador.debug("agregar() comuna");
 
         try {
@@ -64,7 +63,7 @@ public class ComunaMobileController {
             @ApiResponse(responseCode = "409", description = "Comuna ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<ComunaDto> comunaLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<ComunaDTO> comunaLoteDto) {
         logeador.debug("agregarLote() comuna");
 
         try {
@@ -91,7 +90,7 @@ public class ComunaMobileController {
             @ApiResponse(responseCode = "404", description = "Comuna no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ComunaDto comunaDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ComunaDTO comunaDto) {
         logeador.debug("actualizar() comuna");
 
         try {
@@ -115,7 +114,7 @@ public class ComunaMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<ComunaDto> comunaLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<ComunaDTO> comunaLoteDto) {
         logeador.debug("actualizarLote() comuna");
 
         try {
@@ -184,11 +183,11 @@ public class ComunaMobileController {
             @ApiResponse(responseCode = "404", description = "Comuna no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ComunaDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ComunaDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ComunaDto comunaDto = comunaMobileService.encontrarPorClave(id);
+            ComunaDTO comunaDto = comunaMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(comunaDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -203,10 +202,10 @@ public class ComunaMobileController {
             @ApiResponse(responseCode = "200", description = "Comunas obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<ComunaDto>> obtenerTodos(@PathVariable Long provinciaId) {
+    public ResponseEntity<List<ComunaDTO>> obtenerTodos(@PathVariable Long provinciaId) {
         logeador.debug("obtenerTodos() {}",provinciaId);
 
-        List<ComunaDto> comunaLista = null;
+        List<ComunaDTO> comunaLista = null;
 
         try {
             comunaLista = comunaMobileService.obtenerTodos(provinciaId);

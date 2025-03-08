@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDto;
+import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -34,55 +34,55 @@ public class AgrupacionComercialMobileService {
 
     /**
      * Agrega un nuevo AgrupacionComercial.
-     * @param agrupacionComercialDto el AgrupacionComercial DTO.
+     * @param agrupacionComercialDTO el AgrupacionComercial DTO.
      * @return el AgrupacionComercial DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      * @throws RecursoDuplicadoException si el recurso AgrupacionComercial ya existe.
      */
-    public AgrupacionComercialDto agregar(AgrupacionComercialDto agrupacionComercialDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public AgrupacionComercialDTO agregar(AgrupacionComercialDTO agrupacionComercialDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() agrupacioncomercial");
 
-        return agrupacionComercialService.agregar(agrupacionComercialDto);
+        return agrupacionComercialService.agregar(agrupacionComercialDTO);
     }
 
     /**
      * Agrega Lote nuevos AgrupacionComercial.
-     * @param agrupacioncomercialLoteDto lista de AgrupacionComercial DTO a agregar.
+     * @param agrupacionComercialLoteDTO lista de AgrupacionComercial DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      * @throws RecursoDuplicadoException si el recurso AgrupacionComercial ya existe.
      */
-    public void agregarLote(List<AgrupacionComercialDto> agrupacioncomercialLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<AgrupacionComercialDTO> agrupacionComercialLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() agrupacioncomercial");
 
-        agrupacionComercialService.agregarLote(agrupacioncomercialLoteDto);
+        agrupacionComercialService.agregarLote(agrupacionComercialLoteDTO);
     }
 
     /**
      * Actualiza un AgrupacionComercial existente.
      * @param id la Clave de AgrupacionComercial a actualizar.
-     * @param agrupacionComercialDto el AgrupacionComercial DTO con informacion actualizada.
+     * @param agrupacionComercialDTO el AgrupacionComercial DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si AgrupacionComercial no es encontrado.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      */
-    public void actualizar(Long id, AgrupacionComercialDto agrupacionComercialDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, AgrupacionComercialDTO agrupacionComercialDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() agrupacioncomercial");
 
-        agrupacionComercialService.actualizar(id, agrupacionComercialDto);
+        agrupacionComercialService.actualizar(id, agrupacionComercialDTO);
     }
 
     /**
      * Actualiza Lote de AgrupacionComercial existentes.
-     * @param agrupacionComercialLoteDto lista de AgrupacionComercial DTO con datos a actualizar.
+     * @param agrupacionComercialLoteDTO lista de AgrupacionComercial DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      */
-    public void actualizarLote(List<AgrupacionComercialDto> agrupacionComercialLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<AgrupacionComercialDTO> agrupacionComercialLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() agrupacioncomercial");
 
-        agrupacionComercialService.actualizarLote(agrupacionComercialLoteDto);
+        agrupacionComercialService.actualizarLote(agrupacionComercialLoteDTO);
     }
 
     /**
@@ -115,7 +115,7 @@ public class AgrupacionComercialMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si AgrupacionComercial no es encontrado.
      */
-    public AgrupacionComercialDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public AgrupacionComercialDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return agrupacionComercialService.encontrarPorClave(id);
     }
@@ -125,7 +125,7 @@ public class AgrupacionComercialMobileService {
      * @return lista de todos AgrupacionComercial DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<AgrupacionComercialDto> obtenerTodos() throws BaseDatosException {
+    public List<AgrupacionComercialDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return agrupacionComercialService.obtenerTodos();
     }

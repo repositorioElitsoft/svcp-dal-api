@@ -1,9 +1,7 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.PaisDto;
+import com.elitsoft.servicampo.domain.dto.core.PaisDTO;
 import com.elitsoft.servicampo.domain.entity.Pais;
-import com.elitsoft.servicampo.domain.entity.Provincia;
-import com.elitsoft.servicampo.domain.entity.Region;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.PaisMapper;
 import com.elitsoft.servicampo.mapstruct.PaisMapStruct;
@@ -34,54 +32,54 @@ public class PaisService {
 
     /**
      * Agrega un nuevo Pais.
-     * @param paisDto el Pais DTO.
+     * @param paisDTO el Pais DTO.
      * @return el Pais DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Pais tiene errores.
      * @throws RecursoDuplicadoException si el recurso Pais ya existe.
      */
-    public PaisDto agregar(PaisDto paisDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public PaisDTO agregar(PaisDTO paisDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Pais");
 
         //  Valida Entrada
-        if (paisDto == null) {
+        if (paisDTO == null) {
             logeador.error(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Pais pais = mapper.toEntity(paisDto);
+            Pais pais = mapper.toEntity(paisDTO);
             pais = paisMapper.agregar(pais);
             logeador.info("Pais agregado exitosamente id: {}", pais.getId());
             return mapper.toDto(pais);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.PAIS_DUPLICADO_MENSAGE + ": {}", paisDto.getId());
+            logeador.error(Constantes.PAIS_DUPLICADO_MENSAGE + ": {}", paisDTO.getId());
             throw new RecursoDuplicadoException(Constantes.PAIS_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.PAIS_AGREGAR_MENSAJE + ": {}", paisDto.toString(), e);
+            logeador.error(Constantes.PAIS_AGREGAR_MENSAJE + ": {}", paisDTO.toString(), e);
             throw new BaseDatosException(Constantes.PAIS_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Pais.
-     * @param paisLoteDto lista de Pais DTO a agregar.
+     * @param paisLoteDTO lista de Pais DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Pais tiene errores.
      * @throws RecursoDuplicadoException si el recurso pais ya existe.
      */
-    public void agregarLote(List<PaisDto> paisLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<PaisDTO> paisLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() pais");
 
         //  Valida Entrada
-        if (paisLoteDto.isEmpty()) {
+        if (paisLoteDTO.isEmpty()) {
             logeador.error(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Pais> paisLote = mapper.toEntityList(paisLoteDto);
+            List<Pais> paisLote = mapper.toEntityList(paisLoteDTO);
 
             int registrosAgregados =  paisMapper.agregarLote(paisLote);
             logeador.info("Lote Pais agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -97,49 +95,49 @@ public class PaisService {
     /**
      * Actualiza un Pais existente.
      * @param id la clave de Pais a actualizar.
-     * @param paisDto el Pais DTO con informacion actualizada.
+     * @param paisDTO el Pais DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Pais no es encontrado.
      * @throws EntradaInvalidadException si la entrada Pais tiene errores.
      */
-    public void actualizar(Long id, PaisDto paisDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, PaisDTO paisDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() pais");
 
         //  Valida Entrada
-        if (id == null || paisDto == null || paisDto.getId() == null) {
-            logeador.error(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE + ": {}", ((paisDto != null) ? paisDto.toString() : null  ));
+        if (id == null || paisDTO == null || paisDTO.getId() == null) {
+            logeador.error(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE + ": {}", ((paisDTO != null) ? paisDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            PaisDto paisDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Pais pais = mapper.toEntity(paisDto);
+            PaisDTO paisDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Pais pais = mapper.toEntity(paisDTO);
             pais.setId(id);
             int registrosActualizados = paisMapper.actualizar(pais);
             logeador.info("pais actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.PAIS_ACTUALIZAR_MENSAJE + ": id={} {}", id, paisDto.toString(), e);
+            logeador.error(Constantes.PAIS_ACTUALIZAR_MENSAJE + ": id={} {}", id, paisDTO.toString(), e);
             throw new BaseDatosException(Constantes.PAIS_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de Pais existentes.
-     * @param paisLoteDto lista de Pais DTO con datos a actualizar.
+     * @param paisLoteDTO lista de Pais DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Pais tiene errores.
      */
-    public void actualizarLote(List<PaisDto> paisLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<PaisDTO> paisLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() pais");
 
         //  Valida Entrada
-        if (paisLoteDto.isEmpty()) {
+        if (paisLoteDTO.isEmpty()) {
             logeador.error(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.PAIS_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Pais> paisLote = mapper.toEntityList(paisLoteDto);
+            List<Pais> paisLote = mapper.toEntityList(paisLoteDTO);
             int registrosActualizados = paisMapper.actualizarLote(paisLote);
             logeador.info("Lote pais actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -158,7 +156,7 @@ public class PaisService {
         logeador.debug("eliminar() pais: {}", id);
 
         try {
-            PaisDto paisDto = this.encontrarPorClave(id); // Verifica si existe
+            PaisDTO paisDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = paisMapper.eliminar(id);
             logeador.info("pais eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -198,31 +196,21 @@ public class PaisService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Pais no es encontrado.
      */
-    public PaisDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public PaisDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-           // Pais pais = paisMapper.encontrarPorClave(id);
 
-            //List<Region> regiones =  pais.getRegiones();
+            PaisDTO paisDTO = mapper.toDto(paisMapper.encontrarPorClave(id));
 
-            //Region regionX = regiones.get(2);
-
-            //regionX.
-            //regiones.forEach(region -> System.out.println(region.getProvincias().size()));
-
-
-            System.out.println("test");
-            PaisDto paisDto = mapper.toDto(paisMapper.encontrarPorClave(id));
-
-            if (paisDto != null) {
+            if (paisDTO != null) {
                 logeador.info("pais encontrado por clave : {}", id);
             } else {
                 logeador.info("pais clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.PAIS_NO_ENCONTRADO_MENSAGE);
             }
 
-            return paisDto;
+            return paisDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.PAIS_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.PAIS_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -234,13 +222,13 @@ public class PaisService {
      * @return una lista de todos Pais DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<PaisDto> obtenerTodos() throws BaseDatosException {
+    public List<PaisDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<PaisDto> paisList = mapper.toDtoList(paisMapper.obtenerTodos());
+            List<PaisDTO> paisLista = mapper.toDtoList(paisMapper.obtenerTodos());
             logeador.info("paiss obtenidos");
-            return paisList;
+            return paisLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.PAIS_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.PAIS_OBTENER_TODOS_MENSAJE, e);

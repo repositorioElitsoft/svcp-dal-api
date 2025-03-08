@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoClienteDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoClienteDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.TipoClienteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,11 +36,11 @@ public class TipoClienteController {
             @ApiResponse(responseCode = "409", description = "TipoCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TipoClienteDto> agregar(@RequestBody TipoClienteDto tipoClienteDto) {
+    public ResponseEntity<TipoClienteDTO> agregar(@RequestBody TipoClienteDTO tipoClienteDTO) {
         logeador.debug("agregar() tipocliente");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(tipoClienteService.agregar(tipoClienteDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(tipoClienteService.agregar(tipoClienteDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -62,11 +62,11 @@ public class TipoClienteController {
             @ApiResponse(responseCode = "409", description = "TipoCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<TipoClienteDto> tipoClienteLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<TipoClienteDTO> tipoClienteDTOLote) {
         logeador.debug("agregarLote() tipocliente");
 
         try {
-            tipoClienteService.agregarLote (tipoClienteLoteDto);
+            tipoClienteService.agregarLote (tipoClienteDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -89,11 +89,11 @@ public class TipoClienteController {
             @ApiResponse(responseCode = "404", description = "TipoCliente no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoClienteDto tipoClienteDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoClienteDTO tipoClienteDTO) {
         logeador.debug("actualizar() tipocliente");
 
         try {
-            tipoClienteService.actualizar(id, tipoClienteDto);
+            tipoClienteService.actualizar(id, tipoClienteDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -113,11 +113,11 @@ public class TipoClienteController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoClienteDto> tipoClienteLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoClienteDTO> tipoClienteDTOLote) {
         logeador.debug("actualizarLote() tipocliente");
 
         try {
-            tipoClienteService.actualizarLote(tipoClienteLoteDto);
+            tipoClienteService.actualizarLote(tipoClienteDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -182,11 +182,11 @@ public class TipoClienteController {
             @ApiResponse(responseCode = "404", description = "TipoCliente no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TipoClienteDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<TipoClienteDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            TipoClienteDto tipoclienteDto = tipoClienteService.encontrarPorClave(id);
+            TipoClienteDTO tipoclienteDto = tipoClienteService.encontrarPorClave(id);
             return ResponseEntity.ok(tipoclienteDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -202,11 +202,11 @@ public class TipoClienteController {
             @ApiResponse(responseCode = "200", description = "TipoClientes obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<TipoClienteDto>> obtenerTodos() {
+    public ResponseEntity<List<TipoClienteDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TipoClienteDto> tipoclientes = null;
+            List<TipoClienteDTO> tipoclientes = null;
             tipoclientes = tipoClienteService.obtenerTodos();
             return ResponseEntity.ok(tipoclientes);  // Retorna  200
         } catch (BaseDatosException e) {

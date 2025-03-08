@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDto;
+import com.elitsoft.servicampo.domain.dto.core.CarritoArticuloDTO;
 import com.elitsoft.servicampo.exceptions.CarritoArticuloLimiteException;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
@@ -34,26 +34,26 @@ public class CarritoArticuloMobileService {
 
     /**
      * Agrega una Articulo de Carrito  a la base de datos
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @throws EntradaInvalidadException
      * @throws CarritoArticuloLimiteException
      * @throws BaseDatosException
      */
-    public void agregar(CarritoArticuloDto carritoArticuloDto) throws EntradaInvalidadException, CarritoArticuloLimiteException, BaseDatosException {
+    public void agregar(CarritoArticuloDTO carritoArticuloDTO) throws EntradaInvalidadException, CarritoArticuloLimiteException, BaseDatosException {
         logeador.info("agregar() articulo de carrito" );
-        carritoArticuloService.agregar(carritoArticuloDto);
+        carritoArticuloService.agregar(carritoArticuloDTO);
     }
 
 
     /**
      * @param id
-     * @param carritoArticuloDto
+     * @param carritoArticuloDTO
      * @throws BaseDatosException
      * @throws CarritoArticuloNoEncontradoException
      */
-    public void actualizar(Long id, CarritoArticuloDto carritoArticuloDto) throws BaseDatosException, CarritoArticuloNoEncontradoException  {
+    public void actualizar(Long id, CarritoArticuloDTO carritoArticuloDTO) throws BaseDatosException, CarritoArticuloNoEncontradoException  {
         logeador.info("actualizar() articulo de carrito");
-        carritoArticuloService.actualizar(id, carritoArticuloDto);
+        carritoArticuloService.actualizar(id, carritoArticuloDTO);
     }
 
 
@@ -74,7 +74,7 @@ public class CarritoArticuloMobileService {
      * @throws BaseDatosException
      * @throws CarritoArticuloNoEncontradoException
      */
-    public CarritoArticuloDto encontrarPorClave(Long id) throws BaseDatosException, CarritoArticuloNoEncontradoException {
+    public CarritoArticuloDTO encontrarPorClave(Long id) throws BaseDatosException, CarritoArticuloNoEncontradoException {
         logeador.info("encontrarPorClave(): {}", id);
         return carritoArticuloService.encontrarPorClave(id);
     }
@@ -84,7 +84,7 @@ public class CarritoArticuloMobileService {
      * @return
      * @throws BaseDatosException
      */
-    public List<CarritoArticuloDto> obtenerTodos() throws BaseDatosException {
+    public List<CarritoArticuloDTO> obtenerTodos() throws BaseDatosException {
         logeador.info("obtenerTodos()");
         return carritoArticuloService.obtenerTodos ();
     }

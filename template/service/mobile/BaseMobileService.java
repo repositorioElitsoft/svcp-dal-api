@@ -61,15 +61,15 @@ public class #Base#MobileService {
 
     /**
      * Agrega Lote nuevos #Base#.
-     * @param #base#LoteDTO lista de #Base# DTO a agregar.
+     * @param #base#DTOLote lista de #Base# DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
      * @throws RecursoDuplicadoException si el recurso #Base# ya existe.
      */
-    public void agregarLote(List<#Base#DTO> #base#LoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<#Base#DTO> #base#DTOLote) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() #base#");
 
-        #base#Service.agregarLote(#base#LoteDTO);
+        #base#Service.agregarLote(#base#DTOLote);
     }
 
     /**
@@ -88,14 +88,14 @@ public class #Base#MobileService {
 
     /**
      * Actualiza Lote de #Base# existentes.
-     * @param #base#LoteDTO lista de #Base# DTO con datos a actualizar.
+     * @param #base#DTOLote lista de #Base# DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada #Base# tiene errores.
      */
-    public void actualizarLote(List<#Base#DTO> #base#LoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<#Base#DTO> #base#DTOLote) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() #base#");
 
-        #base#Service.actualizarLote(#base#LoteDTO);
+        #base#Service.actualizarLote(#base#DTOLote);
     }
 
     /**

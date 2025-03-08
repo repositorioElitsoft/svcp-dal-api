@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.ComunaDto;
+import com.elitsoft.servicampo.domain.dto.core.ComunaDTO;
 import com.elitsoft.servicampo.domain.entity.Comuna;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.ComunaMapper;
@@ -33,54 +33,54 @@ public class ComunaService {
 
     /**
      * Agrega un nuevo Comuna.
-     * @param comunaDto el Comuna DTO.
+     * @param comunaDTO el Comuna DTO.
      * @return el Comuna DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      * @throws RecursoDuplicadoException si el recurso Comuna ya existe.
      */
-    public ComunaDto agregar(ComunaDto comunaDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ComunaDTO agregar(ComunaDTO comunaDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Comuna");
 
         //  Valida Entrada
-        if (comunaDto == null) {
+        if (comunaDTO == null) {
             logeador.error(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Comuna comuna = mapper.toEntity(comunaDto);
+            Comuna comuna = mapper.toEntity(comunaDTO);
             comuna = comunaMapper.agregar(comuna);
             logeador.info("Comuna agregado exitosamente id: {}", comuna.getId());
             return mapper.toDto(comuna);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.COMUNA_DUPLICADO_MENSAGE + ": {}", comunaDto.getId());
+            logeador.error(Constantes.COMUNA_DUPLICADO_MENSAGE + ": {}", comunaDTO.getId());
             throw new RecursoDuplicadoException(Constantes.COMUNA_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.COMUNA_AGREGAR_MENSAJE + ": {}", comunaDto.toString(), e);
+            logeador.error(Constantes.COMUNA_AGREGAR_MENSAJE + ": {}", comunaDTO.toString(), e);
             throw new BaseDatosException(Constantes.COMUNA_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Comuna.
-     * @param comunaLoteDto lista de Comuna DTO a agregar.
+     * @param comunaLoteDTO lista de Comuna DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      * @throws RecursoDuplicadoException si el recurso comuna ya existe.
      */
-    public void agregarLote(List<ComunaDto> comunaLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<ComunaDTO> comunaLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() comuna");
 
         //  Valida Entrada
-        if (comunaLoteDto.isEmpty()) {
+        if (comunaLoteDTO.isEmpty()) {
             logeador.error(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Comuna> comunaLote = mapper.toEntityList(comunaLoteDto);
+            List<Comuna> comunaLote = mapper.toEntityList(comunaLoteDTO);
 
             int registrosAgregados =  comunaMapper.agregarLote(comunaLote);
             logeador.info("Lote Comuna agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -96,49 +96,49 @@ public class ComunaService {
     /**
      * Actualiza un Comuna existente.
      * @param id la clave de Comuna a actualizar.
-     * @param comunaDto el Comuna DTO con informacion actualizada.
+     * @param comunaDTO el Comuna DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Comuna no es encontrado.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      */
-    public void actualizar(Long id, ComunaDto comunaDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, ComunaDTO comunaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() comuna");
 
         //  Valida Entrada
-        if (id == null || comunaDto == null || comunaDto.getId() == null) {
-            logeador.error(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((comunaDto != null) ? comunaDto.toString() : null  ));
+        if (id == null || comunaDTO == null || comunaDTO.getId() == null) {
+            logeador.error(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((comunaDTO != null) ? comunaDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            ComunaDto comunaDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Comuna comuna = mapper.toEntity(comunaDto);
+            ComunaDTO comunaDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Comuna comuna = mapper.toEntity(comunaDTO);
             comuna.setId(id);
             int registrosActualizados = comunaMapper.actualizar(comuna);
             logeador.info("comuna actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.COMUNA_ACTUALIZAR_MENSAJE + ": id={} {}", id, comunaDto.toString(), e);
+            logeador.error(Constantes.COMUNA_ACTUALIZAR_MENSAJE + ": id={} {}", id, comunaDTO.toString(), e);
             throw new BaseDatosException(Constantes.COMUNA_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de Comuna existentes.
-     * @param comunaLoteDto lista de Comuna DTO con datos a actualizar.
+     * @param comunaLoteDTO lista de Comuna DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      */
-    public void actualizarLote(List<ComunaDto> comunaLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ComunaDTO> comunaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() comuna");
 
         //  Valida Entrada
-        if (comunaLoteDto.isEmpty()) {
+        if (comunaLoteDTO.isEmpty()) {
             logeador.error(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.COMUNA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Comuna> comunaLote = mapper.toEntityList(comunaLoteDto);
+            List<Comuna> comunaLote = mapper.toEntityList(comunaLoteDTO);
             int registrosActualizados = comunaMapper.actualizarLote(comunaLote);
             logeador.info("Lote comuna actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -157,7 +157,7 @@ public class ComunaService {
         logeador.debug("eliminar() comuna: {}", id);
 
         try {
-            ComunaDto comunaDto = this.encontrarPorClave(id); // Verifica si existe
+            ComunaDTO comunaDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = comunaMapper.eliminar(id);
             logeador.info("comuna eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -197,20 +197,20 @@ public class ComunaService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Comuna no es encontrado.
      */
-    public ComunaDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public ComunaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            ComunaDto comunaDto = mapper.toDto(comunaMapper.encontrarPorClave(id));
+            ComunaDTO comunaDTO = mapper.toDto(comunaMapper.encontrarPorClave(id));
 
-            if (comunaDto != null) {
+            if (comunaDTO != null) {
                 logeador.info("comuna encontrado por clave : {}", id);
             } else {
                 logeador.info("comuna clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.COMUNA_NO_ENCONTRADO_MENSAGE);
             }
 
-            return comunaDto;
+            return comunaDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.COMUNA_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.COMUNA_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -223,11 +223,11 @@ public class ComunaService {
      * @return una lista de todos Comuna DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<ComunaDto> obtenerTodos(Long provinciaId) throws BaseDatosException {
+    public List<ComunaDTO> obtenerTodos(Long provinciaId) throws BaseDatosException {
         logeador.debug("obtenerTodos() {}", provinciaId);
 
         try {
-            List<ComunaDto> comunaLista = mapper.toDtoList(comunaMapper.obtenerTodos(provinciaId));
+            List<ComunaDTO> comunaLista = mapper.toDtoList(comunaMapper.obtenerTodos(provinciaId));
             logeador.info("comunas obtenidos");
             return comunaLista;
         } catch (DataAccessException e) {

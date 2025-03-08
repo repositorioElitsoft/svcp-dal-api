@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.ZonaService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,11 +36,11 @@ public class ZonaController {
             @ApiResponse(responseCode = "409", description = "Zona ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ZonaDto> agregar(@RequestBody ZonaDto zonaDto) {
+    public ResponseEntity<ZonaDTO> agregar(@RequestBody ZonaDTO zonaDTO) {
         logeador.debug("agregar() zona");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(zonaService.agregar(zonaDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(zonaService.agregar(zonaDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -63,11 +62,11 @@ public class ZonaController {
             @ApiResponse(responseCode = "409", description = "Zona ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<ZonaDto> zonasDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<ZonaDTO> zonaDTOLote) {
         logeador.debug("agregarLote() zona");
 
         try {
-            zonaService.agregarLote (zonasDto);
+            zonaService.agregarLote (zonaDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -90,11 +89,11 @@ public class ZonaController {
             @ApiResponse(responseCode = "404", description = "Zona no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ZonaDto zonaDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ZonaDTO zonaDTO) {
         logeador.debug("actualizar() zona");
 
         try {
-            zonaService.actualizar(id, zonaDto);
+            zonaService.actualizar(id, zonaDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -114,11 +113,11 @@ public class ZonaController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<ZonaDto> zonaLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<ZonaDTO> zonaDTOLote) {
         logeador.debug("actualizarLote() zona");
 
         try {
-            zonaService.actualizarLote(zonaLoteDto);
+            zonaService.actualizarLote(zonaDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -191,11 +190,11 @@ public class ZonaController {
             @ApiResponse(responseCode = "404", description = "Zona no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ZonaDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ZonaDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ZonaDto zonaDto = zonaService.encontrarPorClave(id);
+            ZonaDTO zonaDto = zonaService.encontrarPorClave(id);
             return ResponseEntity.ok(zonaDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -211,11 +210,11 @@ public class ZonaController {
             @ApiResponse(responseCode = "200", description = "Zonas obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<ZonaDto>> obtenerTodos() {
+    public ResponseEntity<List<ZonaDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<ZonaDto> zonas = null;
+            List<ZonaDTO> zonas = null;
             zonas = zonaService.obtenerTodos();
             return ResponseEntity.ok(zonas);  // Retorna  200
         } catch (BaseDatosException e) {

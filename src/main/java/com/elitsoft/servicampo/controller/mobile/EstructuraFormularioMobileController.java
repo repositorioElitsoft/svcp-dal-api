@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.EstructuraFormularioDto;
+import com.elitsoft.servicampo.domain.dto.core.EstructuraFormularioDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.EstructuraFormularioMobileService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -36,7 +36,7 @@ public class EstructuraFormularioMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody EstructuraFormularioDto estructuraformularioDto) {
+    public ResponseEntity<String> agregar(@RequestBody EstructuraFormularioDTO estructuraformularioDto) {
         logeador.debug("agregar() estructuraformulario");
 
         try {
@@ -56,7 +56,7 @@ public class EstructuraFormularioMobileController {
             @ApiResponse(responseCode = "404", description = "EstructuraFormulario no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody EstructuraFormularioDto estructuraformularioDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody EstructuraFormularioDTO estructuraformularioDto) {
         logeador.debug("actualizar() estructuraformulario");
 
         try {
@@ -100,11 +100,11 @@ public class EstructuraFormularioMobileController {
             @ApiResponse(responseCode = "404", description = "EstructuraFormulario no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<EstructuraFormularioDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<EstructuraFormularioDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            EstructuraFormularioDto estructuraformularioDto = estructuraformularioMobileService.encontrarPorClave(id);
+            EstructuraFormularioDTO estructuraformularioDto = estructuraformularioMobileService.encontrarPorClave(id);
             if (estructuraformularioDto != null) {
                 return ResponseEntity.ok(estructuraformularioDto);
             } else {
@@ -126,10 +126,10 @@ public class EstructuraFormularioMobileController {
             @ApiResponse(responseCode = "200", description = "EstructuraFormularios obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<EstructuraFormularioDto>> obtenerTodos() {
+    public ResponseEntity<List<EstructuraFormularioDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<EstructuraFormularioDto> estructuraformularios = null;
+        List<EstructuraFormularioDTO> estructuraformularios = null;
 
         try {
             estructuraformularios = estructuraformularioMobileService.obtenerTodos();

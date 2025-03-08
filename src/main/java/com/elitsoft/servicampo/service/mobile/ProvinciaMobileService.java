@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ProvinciaDto;
+import com.elitsoft.servicampo.domain.dto.core.ProvinciaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -35,55 +35,55 @@ public class ProvinciaMobileService {
 
     /**
      * Agrega un nuevo Provincia.
-     * @param provinciaDto el Provincia DTO.
+     * @param provinciaDTO el Provincia DTO.
      * @return el Provincia DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      * @throws RecursoDuplicadoException si el recurso Provincia ya existe.
      */
-    public ProvinciaDto agregar(ProvinciaDto provinciaDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ProvinciaDTO agregar(ProvinciaDTO provinciaDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() provincia");
 
-        return provinciaService.agregar(provinciaDto);
+        return provinciaService.agregar(provinciaDTO);
     }
 
     /**
      * Agrega Lote nuevos Provincia.
-     * @param provinciaLoteDto lista de Provincia DTO a agregar.
+     * @param provinciaLoteDTO lista de Provincia DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      * @throws RecursoDuplicadoException si el recurso Provincia ya existe.
      */
-    public void agregarLote(List<ProvinciaDto> provinciaLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<ProvinciaDTO> provinciaLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() provincia");
 
-        provinciaService.agregarLote(provinciaLoteDto);
+        provinciaService.agregarLote(provinciaLoteDTO);
     }
 
     /**
      * Actualiza un Provincia existente.
      * @param id la Clave de Provincia a actualizar.
-     * @param provinciaDto el Provincia DTO con informacion actualizada.
+     * @param provinciaDTO el Provincia DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Provincia no es encontrado.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      */
-    public void actualizar(Long id, ProvinciaDto provinciaDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, ProvinciaDTO provinciaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() provincia");
 
-        provinciaService.actualizar(id, provinciaDto);
+        provinciaService.actualizar(id, provinciaDTO);
     }
 
     /**
      * Actualiza Lote de Provincia existentes.
-     * @param provinciaLoteDto lista de Provincia DTO con datos a actualizar.
+     * @param provinciaLoteDTO lista de Provincia DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Provincia tiene errores.
      */
-    public void actualizarLote(List<ProvinciaDto> provinciaLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ProvinciaDTO> provinciaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() provincia");
 
-        provinciaService.actualizarLote(provinciaLoteDto);
+        provinciaService.actualizarLote(provinciaLoteDTO);
     }
 
     /**
@@ -116,7 +116,7 @@ public class ProvinciaMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Provincia no es encontrado.
      */
-    public ProvinciaDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public ProvinciaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return provinciaService.encontrarPorClave(id);
     }
@@ -127,7 +127,7 @@ public class ProvinciaMobileService {
      * @return lista de todos Provincia DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<ProvinciaDto> obtenerTodos(Long regionId) throws BaseDatosException {
+    public List<ProvinciaDTO> obtenerTodos(Long regionId) throws BaseDatosException {
         logeador.debug("obtenerTodos() {}",regionId);
         return provinciaService.obtenerTodos(regionId);
     }

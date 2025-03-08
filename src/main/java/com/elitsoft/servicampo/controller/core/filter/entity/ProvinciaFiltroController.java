@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.ProvinciaDto;
+import com.elitsoft.servicampo.domain.dto.core.ProvinciaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.ProvinciaFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.ProvinciaFiltroService;
@@ -37,14 +37,14 @@ public class ProvinciaFiltroController {
             @ApiResponse(responseCode = "200", description = "Provincia Filtrado exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PagedResponse<ProvinciaDto>> filtrar(@ModelAttribute ProvinciaFiltro filtro, PagingAndSorting paginado) {
+    public ResponseEntity<PagedResponse<ProvinciaDTO>> filtrar(@ModelAttribute ProvinciaFiltro filtro, PagingAndSorting paginado) {
         logeador.debug("filtrar()");
 
         try {
-            List<ProvinciaDto> provinciaLista = provinciaFiltroService.filtrar(filtro, paginado);
+            List<ProvinciaDTO> provinciaDTOLista = provinciaFiltroService.filtrar(filtro, paginado);
             int totalFiltro = provinciaFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<ProvinciaDto> response = PaginationUtils.createPagedResponse(provinciaLista, totalFiltro, paginado);
+            PagedResponse<ProvinciaDTO> response = PaginationUtils.createPagedResponse(provinciaDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

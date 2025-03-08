@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.core;
 import com.elitsoft.servicampo.domain.dto.core.DireccionEmpleadoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.DireccionEmpleadoService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ import java.util.List;
 public class DireccionEmpleadoController {
 
     @Autowired
-    private DireccionEmpleadoService direccionempleadoService;
+    private DireccionEmpleadoService direccionEmpleadoService;
 
     private static final Logger logeador = LoggerFactory.getLogger(DireccionEmpleadoController.class); //Logback
 
@@ -37,11 +36,11 @@ public class DireccionEmpleadoController {
             @ApiResponse(responseCode = "409", description = "DireccionEmpleado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<DireccionEmpleadoDTO> agregar(@RequestBody DireccionEmpleadoDTO direccionempleadoDTO) {
+    public ResponseEntity<DireccionEmpleadoDTO> agregar(@RequestBody DireccionEmpleadoDTO direccionEmpleadoDTO) {
         logeador.debug("agregar() direccionempleado");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(direccionempleadoService.agregar(direccionempleadoDTO)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(direccionEmpleadoService.agregar(direccionEmpleadoDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -63,11 +62,11 @@ public class DireccionEmpleadoController {
             @ApiResponse(responseCode = "409", description = "DireccionEmpleado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<DireccionEmpleadoDTO> direccionempleadoLoteDTO) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<DireccionEmpleadoDTO> direccionEmpleadoDTOLote) {
         logeador.debug("agregarLote() direccionempleado");
 
         try {
-            direccionempleadoService.agregarLote (direccionempleadoLoteDTO);
+            direccionEmpleadoService.agregarLote (direccionEmpleadoDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -90,11 +89,11 @@ public class DireccionEmpleadoController {
             @ApiResponse(responseCode = "404", description = "DireccionEmpleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody DireccionEmpleadoDTO direccionempleadoDTO) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody DireccionEmpleadoDTO direccionEmpleadoDTO) {
         logeador.debug("actualizar() direccionempleado");
 
         try {
-            direccionempleadoService.actualizar(id, direccionempleadoDTO);
+            direccionEmpleadoService.actualizar(id, direccionEmpleadoDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -114,11 +113,11 @@ public class DireccionEmpleadoController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<DireccionEmpleadoDTO> direccionempleadoLoteDTO) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<DireccionEmpleadoDTO> direccionEmpleadoDTOLote) {
         logeador.debug("actualizarLote() direccionempleado");
 
         try {
-            direccionempleadoService.actualizarLote(direccionempleadoLoteDTO);
+            direccionEmpleadoService.actualizarLote(direccionEmpleadoDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -141,7 +140,7 @@ public class DireccionEmpleadoController {
         logeador.debug("eliminar() direccionempleado: {}", id);
 
         try {
-            direccionempleadoService.eliminar(id);
+            direccionEmpleadoService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -165,7 +164,7 @@ public class DireccionEmpleadoController {
         logeador.debug("eliminarLote() direccionempleado");
 
         try {
-            direccionempleadoService.eliminarLote(idLote);
+            direccionEmpleadoService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -187,7 +186,7 @@ public class DireccionEmpleadoController {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            DireccionEmpleadoDTO direccionempleadoDTO = direccionempleadoService.encontrarPorClave(id);
+            DireccionEmpleadoDTO direccionempleadoDTO = direccionEmpleadoService.encontrarPorClave(id);
             return ResponseEntity.ok(direccionempleadoDTO); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -208,7 +207,7 @@ public class DireccionEmpleadoController {
 
         try {
             List<DireccionEmpleadoDTO> direccionempleadoLista = null;
-            direccionempleadoLista = direccionempleadoService.obtenerTodos();
+            direccionempleadoLista = direccionEmpleadoService.obtenerTodos();
             return ResponseEntity.ok(direccionempleadoLista);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error

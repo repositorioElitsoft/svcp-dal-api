@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ModuloDto;
+import com.elitsoft.servicampo.domain.dto.core.ModuloDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.ModuloMobileService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -36,7 +36,7 @@ public class ModuloMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody ModuloDto moduloDto) {
+    public ResponseEntity<String> agregar(@RequestBody ModuloDTO moduloDto) {
         logeador.debug("agregar() modulo");
 
         try {
@@ -56,7 +56,7 @@ public class ModuloMobileController {
             @ApiResponse(responseCode = "404", description = "Modulo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ModuloDto moduloDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ModuloDTO moduloDto) {
         logeador.debug("actualizar() modulo");
 
         try {
@@ -100,11 +100,11 @@ public class ModuloMobileController {
             @ApiResponse(responseCode = "404", description = "Modulo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ModuloDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ModuloDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ModuloDto moduloDto = moduloMobileService.encontrarPorClave(id);
+            ModuloDTO moduloDto = moduloMobileService.encontrarPorClave(id);
             if (moduloDto != null) {
                 return ResponseEntity.ok(moduloDto);
             } else {
@@ -126,10 +126,10 @@ public class ModuloMobileController {
             @ApiResponse(responseCode = "200", description = "Modulos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<ModuloDto>> obtenerTodos() {
+    public ResponseEntity<List<ModuloDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<ModuloDto> modulos = null;
+        List<ModuloDTO> modulos = null;
 
         try {
             modulos = moduloMobileService.obtenerTodos();

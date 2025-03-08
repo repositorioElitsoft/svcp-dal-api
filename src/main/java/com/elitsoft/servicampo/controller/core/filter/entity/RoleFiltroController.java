@@ -41,10 +41,10 @@ public class RoleFiltroController {
         logeador.debug("filtrar()");
 
         try {
-            List<RoleDTO> roleLista = roleFiltroService.filtrar(filtro, paginado);
+            List<RoleDTO> roleDTOLista = roleFiltroService.filtrar(filtro, paginado);
             int totalFiltro = roleFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<RoleDTO> response = PaginationUtils.createPagedResponse(roleLista, totalFiltro, paginado);
+            PagedResponse<RoleDTO> response = PaginationUtils.createPagedResponse(roleDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

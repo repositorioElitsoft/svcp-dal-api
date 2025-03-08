@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.EstructuraFormularioDto;
+import com.elitsoft.servicampo.domain.dto.core.EstructuraFormularioDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EstructuraFormularioNoEncontradoException;
 import com.elitsoft.servicampo.mapper.EstructuraFormularioMapper;
@@ -20,10 +20,10 @@ import java.util.List;
 public class EstructuraFormularioMobileService {
 
     @Autowired
-    private EstructuraFormularioMapper estructuraformularioMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private EstructuraFormularioMapper estructuraFormularioMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
-    private EstructuraFormularioService estructuraformularioService; //Logica de Negocio del Core Service
+    private EstructuraFormularioService estructuraFormularioService; //Logica de Negocio del Core Service
 
     @Autowired
     private EstructuraFormularioMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
@@ -32,24 +32,24 @@ public class EstructuraFormularioMobileService {
 
     /**
      * Agrega un nuevo EstructuraFormulario.
-     * @param estructuraformularioDto El EstructuraFormulario DTO.
+     * @param estructuraFormularioDTO El EstructuraFormulario DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(EstructuraFormularioDto estructuraformularioDto) throws BaseDatosException {
+    public void agregar(EstructuraFormularioDTO estructuraFormularioDTO) throws BaseDatosException {
         logeador.debug("agregar() estructuraformulario");
-        estructuraformularioService.agregar(estructuraformularioDto);
+        estructuraFormularioService.agregar(estructuraFormularioDTO);
     }
 
     /**
      * Actualiza un EstructuraFormulario existente.
      * @param id La Clave de EstructuraFormulario a actualizar.
-     * @param estructuraformularioDto El EstructuraFormulario DTO con informacion actualizada.
+     * @param estructuraFormularioDTO El EstructuraFormulario DTO con informacion actualizada.
      * @throws EstructuraFormularioNoEncontradoException Si EstructuraFormulario no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, EstructuraFormularioDto estructuraformularioDto) throws BaseDatosException, EstructuraFormularioNoEncontradoException {
+    public void actualizar(Long id, EstructuraFormularioDTO estructuraFormularioDTO) throws BaseDatosException, EstructuraFormularioNoEncontradoException {
         logeador.debug("actualizar() estructuraformulario");
-        estructuraformularioService.actualizar(id, estructuraformularioDto);
+        estructuraFormularioService.actualizar(id, estructuraFormularioDTO);
     }
 
     /**
@@ -60,7 +60,7 @@ public class EstructuraFormularioMobileService {
      */
     public void eliminar(Long id) throws BaseDatosException, EstructuraFormularioNoEncontradoException {
         logeador.debug("eliminar() estructuraformulario: {}", id);
-        estructuraformularioService.eliminar(id);
+        estructuraFormularioService.eliminar(id);
     }
 
     /**
@@ -70,9 +70,9 @@ public class EstructuraFormularioMobileService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws EstructuraFormularioNoEncontradoException Si EstructuraFormulario no es encontrado.
      */
-    public EstructuraFormularioDto encontrarPorClave(Long id) throws BaseDatosException, EstructuraFormularioNoEncontradoException {
+    public EstructuraFormularioDTO encontrarPorClave(Long id) throws BaseDatosException, EstructuraFormularioNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
-        return estructuraformularioService.encontrarPorClave(id);
+        return estructuraFormularioService.encontrarPorClave(id);
     }
 
     /**
@@ -80,8 +80,8 @@ public class EstructuraFormularioMobileService {
      * @return Una lista de todos EstructuraFormulario DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<EstructuraFormularioDto> obtenerTodos() throws BaseDatosException {
+    public List<EstructuraFormularioDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
-        return estructuraformularioService.obtenerTodos();
+        return estructuraFormularioService.obtenerTodos();
     }
 }

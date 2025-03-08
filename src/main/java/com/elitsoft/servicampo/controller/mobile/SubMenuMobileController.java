@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.SubMenuDto;
+import com.elitsoft.servicampo.domain.dto.core.SubMenuDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.SubMenuMobileService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -36,7 +36,7 @@ public class SubMenuMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody SubMenuDto submenuDto) {
+    public ResponseEntity<String> agregar(@RequestBody SubMenuDTO submenuDto) {
         logeador.debug("agregar() submenu");
 
         try {
@@ -56,7 +56,7 @@ public class SubMenuMobileController {
             @ApiResponse(responseCode = "404", description = "SubMenu no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SubMenuDto submenuDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SubMenuDTO submenuDto) {
         logeador.debug("actualizar() submenu");
 
         try {
@@ -100,11 +100,11 @@ public class SubMenuMobileController {
             @ApiResponse(responseCode = "404", description = "SubMenu no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<SubMenuDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<SubMenuDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            SubMenuDto submenuDto = submenuMobileService.encontrarPorClave(id);
+            SubMenuDTO submenuDto = submenuMobileService.encontrarPorClave(id);
             if (submenuDto != null) {
                 return ResponseEntity.ok(submenuDto);
             } else {
@@ -126,10 +126,10 @@ public class SubMenuMobileController {
             @ApiResponse(responseCode = "200", description = "SubMenus obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<SubMenuDto>> obtenerTodos() {
+    public ResponseEntity<List<SubMenuDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<SubMenuDto> submenus = null;
+        List<SubMenuDTO> submenus = null;
 
         try {
             submenus = submenuMobileService.obtenerTodos();

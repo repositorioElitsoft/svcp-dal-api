@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoEmpleadoDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoEmpleadoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.TipoEmpleadoMobileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +36,7 @@ public class TipoEmpleadoMobileController {
             @ApiResponse(responseCode = "409", description = "TipoEmpleado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TipoEmpleadoDto> agregar(@RequestBody TipoEmpleadoDto tipoEmpleadoDto) {
+    public ResponseEntity<TipoEmpleadoDTO> agregar(@RequestBody TipoEmpleadoDTO tipoEmpleadoDto) {
         logeador.debug("agregar() tipoempleado");
 
         try {
@@ -62,7 +62,7 @@ public class TipoEmpleadoMobileController {
             @ApiResponse(responseCode = "409", description = "TipoEmpleado ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<TipoEmpleadoDto> tipoEmpleadoLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<TipoEmpleadoDTO> tipoEmpleadoLoteDto) {
         logeador.debug("agregarLote() tipoempleado");
 
         try {
@@ -89,7 +89,7 @@ public class TipoEmpleadoMobileController {
             @ApiResponse(responseCode = "404", description = "TipoEmpleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoEmpleadoDto tipoEmpleadoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoEmpleadoDTO tipoEmpleadoDto) {
         logeador.debug("actualizar() tipoempleado");
 
         try {
@@ -113,7 +113,7 @@ public class TipoEmpleadoMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoEmpleadoDto> tipoEmpleadoLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoEmpleadoDTO> tipoEmpleadoLoteDto) {
         logeador.debug("actualizarLote() tipoempleado");
 
         try {
@@ -190,11 +190,11 @@ public class TipoEmpleadoMobileController {
             @ApiResponse(responseCode = "404", description = "TipoEmpleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TipoEmpleadoDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<TipoEmpleadoDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            TipoEmpleadoDto tipoempleadoDto = tipoEmpleadoMobileService.encontrarPorClave(id);
+            TipoEmpleadoDTO tipoempleadoDto = tipoEmpleadoMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(tipoempleadoDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -209,10 +209,10 @@ public class TipoEmpleadoMobileController {
             @ApiResponse(responseCode = "200", description = "TipoEmpleados obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<TipoEmpleadoDto>> obtenerTodos() {
+    public ResponseEntity<List<TipoEmpleadoDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<TipoEmpleadoDto> tipoempleados = null;
+        List<TipoEmpleadoDTO> tipoempleados = null;
 
         try {
             tipoempleados = tipoEmpleadoMobileService.obtenerTodos();

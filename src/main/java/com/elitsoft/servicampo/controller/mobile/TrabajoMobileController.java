@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TrabajoDto;
+import com.elitsoft.servicampo.domain.dto.core.TrabajoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.TrabajoMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,7 +37,7 @@ public class TrabajoMobileController {
             @ApiResponse(responseCode = "409", description = "Trabajo ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TrabajoDto> agregar(@RequestBody TrabajoDto trabajoDto) {
+    public ResponseEntity<TrabajoDTO> agregar(@RequestBody TrabajoDTO trabajoDto) {
         logeador.debug("agregar() trabajo");
 
         try {
@@ -64,7 +63,7 @@ public class TrabajoMobileController {
             @ApiResponse(responseCode = "409", description = "Trabajo ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<TrabajoDto> trabajoLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<TrabajoDTO> trabajoLoteDto) {
         logeador.debug("agregarLote() trabajo");
 
         try {
@@ -91,7 +90,7 @@ public class TrabajoMobileController {
             @ApiResponse(responseCode = "404", description = "Trabajo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TrabajoDto trabajoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TrabajoDTO trabajoDto) {
         logeador.debug("actualizar() trabajo");
 
         try {
@@ -115,7 +114,7 @@ public class TrabajoMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<TrabajoDto> trabajoLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TrabajoDTO> trabajoLoteDto) {
         logeador.debug("actualizarLote() trabajo");
 
         try {
@@ -184,11 +183,11 @@ public class TrabajoMobileController {
             @ApiResponse(responseCode = "404", description = "Trabajo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TrabajoDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<TrabajoDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            TrabajoDto trabajoDto = trabajoMobileService.encontrarPorClave(id);
+            TrabajoDTO trabajoDto = trabajoMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(trabajoDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -203,10 +202,10 @@ public class TrabajoMobileController {
             @ApiResponse(responseCode = "200", description = "Trabajos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<TrabajoDto>> obtenerTodos() {
+    public ResponseEntity<List<TrabajoDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<TrabajoDto> trabajoLista = null;
+        List<TrabajoDTO> trabajoLista = null;
 
         try {
             trabajoLista = trabajoMobileService.obtenerTodos();

@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.RegionDto;
+import com.elitsoft.servicampo.domain.dto.core.RegionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.RegionMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,7 +37,7 @@ public class RegionMobileController {
             @ApiResponse(responseCode = "409", description = "Region ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<RegionDto> agregar(@RequestBody RegionDto regionDto) {
+    public ResponseEntity<RegionDTO> agregar(@RequestBody RegionDTO regionDto) {
         logeador.debug("agregar() region");
 
         try {
@@ -64,7 +63,7 @@ public class RegionMobileController {
             @ApiResponse(responseCode = "409", description = "Region ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<RegionDto> regionLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<RegionDTO> regionLoteDto) {
         logeador.debug("agregarLote() region");
 
         try {
@@ -91,7 +90,7 @@ public class RegionMobileController {
             @ApiResponse(responseCode = "404", description = "Region no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody RegionDto regionDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody RegionDTO regionDto) {
         logeador.debug("actualizar() region");
 
         try {
@@ -115,7 +114,7 @@ public class RegionMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<RegionDto> regionLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<RegionDTO> regionLoteDto) {
         logeador.debug("actualizarLote() region");
 
         try {
@@ -184,11 +183,11 @@ public class RegionMobileController {
             @ApiResponse(responseCode = "404", description = "Region no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<RegionDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<RegionDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            RegionDto regionDto = regionMobileService.encontrarPorClave(id);
+            RegionDTO regionDto = regionMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(regionDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -203,10 +202,10 @@ public class RegionMobileController {
             @ApiResponse(responseCode = "200", description = "Regions obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<RegionDto>> obtenerTodos(@PathVariable Long paisId) {
+    public ResponseEntity<List<RegionDTO>> obtenerTodos(@PathVariable Long paisId) {
         logeador.debug("obtenerTodos()");
 
-        List<RegionDto> regionLista = null;
+        List<RegionDTO> regionLista = null;
 
         try {
             regionLista = regionMobileService.obtenerTodos(paisId);

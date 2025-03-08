@@ -27,7 +27,7 @@ import java.util.List;
 public class TipoProductoFiltroController {
 
     @Autowired
-    private TipoProductoFiltroService tipoproductoFiltroService; //Logica de Negocio de Filtrado del Core Service
+    private TipoProductoFiltroService tipoProductoFiltroService; //Logica de Negocio de Filtrado del Core Service
 
     private static final Logger logeador = LoggerFactory.getLogger(TipoProductoFiltroController.class); //Logback
 
@@ -41,10 +41,10 @@ public class TipoProductoFiltroController {
         logeador.debug("filtrar()");
 
         try {
-            List<TipoProductoDTO> tipoProductoLista = tipoproductoFiltroService.filtrar(filtro, paginado);
-            int totalFiltro = tipoproductoFiltroService.contarFiltrar(filtro);
+            List<TipoProductoDTO> tipoProductoDTOLista = tipoProductoFiltroService.filtrar(filtro, paginado);
+            int totalFiltro = tipoProductoFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<TipoProductoDTO> response = PaginationUtils.createPagedResponse(tipoProductoLista, totalFiltro, paginado);
+            PagedResponse<TipoProductoDTO> response = PaginationUtils.createPagedResponse(tipoProductoDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDto;
+import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.ClasificacionClienteMobileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,11 +37,11 @@ public class ClasificacionClienteMobileController {
             @ApiResponse(responseCode = "409", description = "ClasificacionCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ClasificacionClienteDto> agregar(@RequestBody ClasificacionClienteDto clasificacionClienteDto) {
+    public ResponseEntity<ClasificacionClienteDTO> agregar(@RequestBody ClasificacionClienteDTO clasificacionClienteDTO) {
         logeador.debug("agregar() clasificacioncliente");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(clasificacionClienteMobileService.agregar(clasificacionClienteDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(clasificacionClienteMobileService.agregar(clasificacionClienteDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -63,11 +63,11 @@ public class ClasificacionClienteMobileController {
             @ApiResponse(responseCode = "409", description = "ClasificacionCliente ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<ClasificacionClienteDto> clasificacionClienteLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<ClasificacionClienteDTO> clasificacionClienteDTOLote) {
         logeador.debug("agregarLote() clasificacioncliente");
 
         try {
-            clasificacionClienteMobileService.agregarLote(clasificacionClienteLoteDto);
+            clasificacionClienteMobileService.agregarLote(clasificacionClienteDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -90,11 +90,11 @@ public class ClasificacionClienteMobileController {
             @ApiResponse(responseCode = "404", description = "ClasificacionCliente no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ClasificacionClienteDto clasificacionClienteDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ClasificacionClienteDTO clasificacionClienteDTO) {
         logeador.debug("actualizar() clasificacioncliente");
 
         try {
-            clasificacionClienteMobileService.actualizar(id, clasificacionClienteDto);
+            clasificacionClienteMobileService.actualizar(id, clasificacionClienteDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -114,11 +114,11 @@ public class ClasificacionClienteMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<ClasificacionClienteDto> clasificacionClienteLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<ClasificacionClienteDTO> clasificacionClienteDTOLote) {
         logeador.debug("actualizarLote() clasificacioncliente");
 
         try {
-            clasificacionClienteMobileService.actualizarLote(clasificacionClienteLoteDto);
+            clasificacionClienteMobileService.actualizarLote(clasificacionClienteDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -183,11 +183,11 @@ public class ClasificacionClienteMobileController {
             @ApiResponse(responseCode = "404", description = "ClasificacionCliente no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ClasificacionClienteDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ClasificacionClienteDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ClasificacionClienteDto clasificacionclienteDto = clasificacionClienteMobileService.encontrarPorClave(id);
+            ClasificacionClienteDTO clasificacionclienteDto = clasificacionClienteMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(clasificacionclienteDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -202,10 +202,10 @@ public class ClasificacionClienteMobileController {
             @ApiResponse(responseCode = "200", description = "ClasificacionClientes obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<ClasificacionClienteDto>> obtenerTodos() {
+    public ResponseEntity<List<ClasificacionClienteDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<ClasificacionClienteDto> clasificacionclientes = null;
+        List<ClasificacionClienteDTO> clasificacionclientes = null;
 
         try {
             clasificacionclientes = clasificacionClienteMobileService.obtenerTodos();

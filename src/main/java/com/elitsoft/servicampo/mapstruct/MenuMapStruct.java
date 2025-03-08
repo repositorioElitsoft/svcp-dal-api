@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.MenuDto;
+import com.elitsoft.servicampo.domain.dto.core.MenuDTO;
 import com.elitsoft.servicampo.domain.entity.Menu;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface MenuMapStruct {
 
     /**
-     * Convierte un entidad Menu a MenuDto.
+     * Convierte un entidad Menu a MenuDTO.
      * @param entity La entidad Menu.
-     * @return El MenuDto.
+     * @return El MenuDTO.
      */
-    MenuDto toDto(Menu entity);
+    MenuDTO toDto(Menu entity);
 
     /**
-     * Convierte un MenuDto a entidad Menu.
-     * @param dto El MenuDto.
+     * Convierte un MenuDTO a entidad Menu.
+     * @param dto El MenuDTO.
      * @return La entidad Menu.
      */
-    Menu toEntity(MenuDto dto);
+    Menu toEntity(MenuDTO dto);
 
     /**
      * Convierte una lista de entidades Menu a una lista de MenuDtos.
      * @param entities La lista de entidades Menu.
      * @return The list of MenuDtos.
      */
-    List<MenuDto> toDtoList(List<Menu> entities);
+    List<MenuDTO> toDtoList(List<Menu> entities);
 
     /**
      * Convierte una lista de MenuDtos a una lista de entidades Menu entities.
      * @param dtos The list of MenuDtos.
      * @return The list of Menu entities.
      */
-    List<Menu> toEntityList(List<MenuDto> dtos);
+    List<Menu> toEntityList(List<MenuDTO> dtos);
 }

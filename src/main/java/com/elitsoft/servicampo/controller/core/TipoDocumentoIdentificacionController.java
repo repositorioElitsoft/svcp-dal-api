@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.core;
 import com.elitsoft.servicampo.domain.dto.core.TipoDocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.TipoDocumentoIdentificacionService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ import java.util.List;
 public class TipoDocumentoIdentificacionController {
 
     @Autowired
-    private TipoDocumentoIdentificacionService tipodocumentoidentificacionService;
+    private TipoDocumentoIdentificacionService tipoDocumentoIdentificacionService;
 
     private static final Logger logeador = LoggerFactory.getLogger(TipoDocumentoIdentificacionController.class); //Logback
 
@@ -38,11 +37,11 @@ public class TipoDocumentoIdentificacionController {
             @ApiResponse(responseCode = "409", description = "TipoDocumentoIdentificacion ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<TipoDocumentoIdentificacionDTO> agregar(@RequestBody TipoDocumentoIdentificacionDTO tipodocumentoidentificacionDTO) {
+    public ResponseEntity<TipoDocumentoIdentificacionDTO> agregar(@RequestBody TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTO) {
         logeador.debug("agregar() tipodocumentoidentificacion");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(tipodocumentoidentificacionService.agregar(tipodocumentoidentificacionDTO)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(tipoDocumentoIdentificacionService.agregar(tipoDocumentoIdentificacionDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -64,11 +63,11 @@ public class TipoDocumentoIdentificacionController {
             @ApiResponse(responseCode = "409", description = "TipoDocumentoIdentificacion ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<TipoDocumentoIdentificacionDTO> tipodocumentoidentificacionLoteDTO) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<TipoDocumentoIdentificacionDTO> tipoDocumentoIdentificacionDTOLote) {
         logeador.debug("agregarLote() tipodocumentoidentificacion");
 
         try {
-            tipodocumentoidentificacionService.agregarLote (tipodocumentoidentificacionLoteDTO);
+            tipoDocumentoIdentificacionService.agregarLote (tipoDocumentoIdentificacionDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -91,11 +90,11 @@ public class TipoDocumentoIdentificacionController {
             @ApiResponse(responseCode = "404", description = "TipoDocumentoIdentificacion no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoDocumentoIdentificacionDTO tipodocumentoidentificacionDTO) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTO) {
         logeador.debug("actualizar() tipodocumentoidentificacion");
 
         try {
-            tipodocumentoidentificacionService.actualizar(id, tipodocumentoidentificacionDTO);
+            tipoDocumentoIdentificacionService.actualizar(id, tipoDocumentoIdentificacionDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -115,11 +114,11 @@ public class TipoDocumentoIdentificacionController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoDocumentoIdentificacionDTO> tipodocumentoidentificacionLoteDTO) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<TipoDocumentoIdentificacionDTO> tipodocumentoidentificacionDTOLote) {
         logeador.debug("actualizarLote() tipodocumentoidentificacion");
 
         try {
-            tipodocumentoidentificacionService.actualizarLote(tipodocumentoidentificacionLoteDTO);
+            tipoDocumentoIdentificacionService.actualizarLote(tipodocumentoidentificacionDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -142,7 +141,7 @@ public class TipoDocumentoIdentificacionController {
         logeador.debug("eliminar() tipodocumentoidentificacion: {}", id);
 
         try {
-            tipodocumentoidentificacionService.eliminar(id);
+            tipoDocumentoIdentificacionService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -166,7 +165,7 @@ public class TipoDocumentoIdentificacionController {
         logeador.debug("eliminarLote() tipodocumentoidentificacion");
 
         try {
-            tipodocumentoidentificacionService.eliminarLote(idLote);
+            tipoDocumentoIdentificacionService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -188,7 +187,7 @@ public class TipoDocumentoIdentificacionController {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            TipoDocumentoIdentificacionDTO tipodocumentoidentificacionDTO = tipodocumentoidentificacionService.encontrarPorClave(id);
+            TipoDocumentoIdentificacionDTO tipodocumentoidentificacionDTO = tipoDocumentoIdentificacionService.encontrarPorClave(id);
             return ResponseEntity.ok(tipodocumentoidentificacionDTO); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -209,7 +208,7 @@ public class TipoDocumentoIdentificacionController {
 
         try {
             List<TipoDocumentoIdentificacionDTO> tipodocumentoidentificacionLista = null;
-            tipodocumentoidentificacionLista = tipodocumentoidentificacionService.obtenerTodos();
+            tipodocumentoidentificacionLista = tipoDocumentoIdentificacionService.obtenerTodos();
             return ResponseEntity.ok(tipodocumentoidentificacionLista);  // Retorna  200
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error

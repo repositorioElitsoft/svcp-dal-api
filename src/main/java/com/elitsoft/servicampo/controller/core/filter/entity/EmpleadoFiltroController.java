@@ -41,10 +41,10 @@ public class EmpleadoFiltroController {
         logeador.debug("filtrar()");
 
         try {
-            List<EmpleadoDTO> empleadoLista = empleadoFiltroService.filtrar(filtro, paginado);
+            List<EmpleadoDTO> empleadoDTOLista = empleadoFiltroService.filtrar(filtro, paginado);
             int totalFiltro = empleadoFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<EmpleadoDTO> response = PaginationUtils.createPagedResponse(empleadoLista, totalFiltro, paginado);
+            PagedResponse<EmpleadoDTO> response = PaginationUtils.createPagedResponse(empleadoDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

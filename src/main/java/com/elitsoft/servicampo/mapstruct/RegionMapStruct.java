@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.RegionDto;
+import com.elitsoft.servicampo.domain.dto.core.RegionDTO;
 import com.elitsoft.servicampo.domain.entity.Region;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -14,30 +13,30 @@ import java.util.List;
 public interface RegionMapStruct {
 
     /**
-     * Convierte un entidad Region a RegionDto.
+     * Convierte un entidad Region a RegionDTO.
      * @param entity La entidad Region.
-     * @return El RegionDto.
+     * @return El RegionDTO.
      */
-    RegionDto toDto(Region entity);
+    RegionDTO toDto(Region entity);
 
     /**
-     * Convierte un RegionDto a entidad Region.
-     * @param dto El RegionDto.
+     * Convierte un RegionDTO a entidad Region.
+     * @param dto El RegionDTO.
      * @return La entidad Region.
      */
-    Region toEntity(RegionDto dto);
+    Region toEntity(RegionDTO dto);
 
     /**
      * Convierte una lista de entidades Region a una lista de RegionDtos.
      * @param entities La lista de entidades Region.
      * @return The list of RegionDtos.
      */
-    List<RegionDto> toDtoList(List<Region> entities);
+    List<RegionDTO> toDtoList(List<Region> entities);
 
     /**
      * Convierte una lista de RegionDtos a una lista de entidades Region entities.
      * @param dtos The list of RegionDtos.
      * @return The list of Region entities.
      */
-    List<Region> toEntityList(List<RegionDto> dtos);
+    List<Region> toEntityList(List<RegionDTO> dtos);
 }

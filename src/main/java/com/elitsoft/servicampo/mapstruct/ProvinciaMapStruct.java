@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.ProvinciaDto;
+import com.elitsoft.servicampo.domain.dto.core.ProvinciaDTO;
 import com.elitsoft.servicampo.domain.entity.Provincia;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface ProvinciaMapStruct {
 
     /**
-     * Convierte un entidad Provincia a ProvinciaDto.
+     * Convierte un entidad Provincia a ProvinciaDTO.
      * @param entity La entidad Provincia.
-     * @return El ProvinciaDto.
+     * @return El ProvinciaDTO.
      */
-    ProvinciaDto toDto(Provincia entity);
+    ProvinciaDTO toDto(Provincia entity);
 
     /**
-     * Convierte un ProvinciaDto a entidad Provincia.
-     * @param dto El ProvinciaDto.
+     * Convierte un ProvinciaDTO a entidad Provincia.
+     * @param dto El ProvinciaDTO.
      * @return La entidad Provincia.
      */
-    Provincia toEntity(ProvinciaDto dto);
+    Provincia toEntity(ProvinciaDTO dto);
 
     /**
      * Convierte una lista de entidades Provincia a una lista de ProvinciaDtos.
      * @param entities La lista de entidades Provincia.
      * @return The list of ProvinciaDtos.
      */
-    List<ProvinciaDto> toDtoList(List<Provincia> entities);
+    List<ProvinciaDTO> toDtoList(List<Provincia> entities);
 
     /**
      * Convierte una lista de ProvinciaDtos a una lista de entidades Provincia entities.
      * @param dtos The list of ProvinciaDtos.
      * @return The list of Provincia entities.
      */
-    List<Provincia> toEntityList(List<ProvinciaDto> dtos);
+    List<Provincia> toEntityList(List<ProvinciaDTO> dtos);
 }

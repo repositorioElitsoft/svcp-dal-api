@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDto;
+import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.AgrupacionComercialFiltro;
 import com.elitsoft.servicampo.mapper.AgrupacionComercialMapper;
@@ -32,7 +32,7 @@ public class AgrupacionComercialFiltroService {
      * @return List<AgrupacionComercialDto> lista de entidades AgrupacionComercial
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<AgrupacionComercialDto> filtrar(AgrupacionComercialFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<AgrupacionComercialDTO> filtrar(AgrupacionComercialFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {

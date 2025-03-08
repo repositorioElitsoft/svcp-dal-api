@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.PermisoDto;
+import com.elitsoft.servicampo.domain.dto.core.PermisoDTO;
 import com.elitsoft.servicampo.domain.entity.Permiso;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.PermisoMapper;
@@ -32,19 +32,19 @@ public class PermisoService {
 
     /**
      * Agrega un nuevo Permiso.
-     * @param permisoDto El Permiso DTO.
+     * @param permisoDTO El Permiso DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(PermisoDto permisoDto) throws BaseDatosException {
+    public void agregar(PermisoDTO permisoDTO) throws BaseDatosException {
         logeador.debug("agregar() permiso");
 
 
         try {
-            Permiso permiso = mapper.toEntity(permisoDto);
+            Permiso permiso = mapper.toEntity(permisoDTO);
             Long nuevoId = permisoMapper.agregar(permiso);
             logeador.info("Permiso agregado exitosamente id: {}", nuevoId);
         } catch (DataAccessException e) {
-            logeador.error(Constantes.PERMISO_AGREGAR_EXECPTION + ": {}", permisoDto.toString(), e);
+            logeador.error(Constantes.PERMISO_AGREGAR_EXECPTION + ": {}", permisoDTO.toString(), e);
             throw new BaseDatosException(Constantes.PERMISO_AGREGAR_EXECPTION, e);
         }
     }
@@ -52,36 +52,36 @@ public class PermisoService {
     /**
      * Actualiza un Permiso existente.
      * @param id La Clave de Permiso a actualizar.
-     * @param permisoDto El Permiso DTO con informacion actualizada.
+     * @param permisoDTO El Permiso DTO con informacion actualizada.
      * @throws PermisoNoEncontradoException Si Permiso no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, PermisoDto permisoDto) throws PermisoNoEncontradoException, BaseDatosException, EntradaInvalidadException {
+    public void actualizar(Long id, PermisoDTO permisoDTO) throws PermisoNoEncontradoException, BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizar() permiso");
 
         //  Valida Entrada
-        if (id == null || permisoDto == null || permisoDto.getId() == null) {
-            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((permisoDto != null) ? permisoDto.toString() : null  ));
+        if (id == null || permisoDTO == null || permisoDTO.getId() == null) {
+            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((permisoDTO != null) ? permisoDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
-        if (!id.equals(permisoDto.getId())) {
-            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  permisoDto.toString());
+        if (!id.equals(permisoDTO.getId())) {
+            logeador.error(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  permisoDTO.toString());
             throw new EntradaInvalidadException(Constantes.ESTADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            PermisoDto permisoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe
+            PermisoDTO permisoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe
 
-            Permiso permiso = mapper.toEntity(permisoDto);
+            Permiso permiso = mapper.toEntity(permisoDTO);
             permiso.setId(id);
             int registrosActualizados = permisoMapper.actualizar(permiso);
             logeador.info("permiso actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (PermisoNoEncontradoException e) {
             throw e;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.PERMISO_ACTUALIZAR_EXECPTION + ": id={} {}", id, permisoDto.toString(), e);
+            logeador.error(Constantes.PERMISO_ACTUALIZAR_EXECPTION + ": id={} {}", id, permisoDTO.toString(), e);
             throw new BaseDatosException(Constantes.PERMISO_ACTUALIZAR_EXECPTION, e);
         }
     }
@@ -96,7 +96,7 @@ public class PermisoService {
         logeador.debug("eliminar() permiso: {}", id);
 
         try {
-            PermisoDto permisoDto = this.encontrarPorClave(id); // Verifica si existe
+            PermisoDTO permisoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = permisoMapper.eliminar(id);
             logeador.info("permiso eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (PermisoNoEncontradoException e) {
@@ -115,20 +115,20 @@ public class PermisoService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws PermisoNoEncontradoException Si Permiso no es encontrado.
      */
-    public PermisoDto encontrarPorClave(Long id) throws BaseDatosException, PermisoNoEncontradoException {
+    public PermisoDTO encontrarPorClave(Long id) throws BaseDatosException, PermisoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            PermisoDto permisoDto = mapper.toDto(permisoMapper.encontrarPorClave(id));
+            PermisoDTO permisoDTO = mapper.toDto(permisoMapper.encontrarPorClave(id));
 
-            if (permisoDto != null) {
+            if (permisoDTO != null) {
                 logeador.info("permiso encontrado por clave : {}", id);
             } else {
                 logeador.info("permiso clave:{} no encontrado", id);
                 throw new PermisoNoEncontradoException(Constantes.PERMISO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return permisoDto;
+            return permisoDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.PERMISO_ENCONTRAR_POR_CLAVE_EXECPTION + " {}", id, e);
             throw new BaseDatosException(Constantes.PERMISO_ENCONTRAR_POR_CLAVE_EXECPTION, e);
@@ -140,13 +140,13 @@ public class PermisoService {
      * @return Una lista de todos Permiso DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<PermisoDto> obtenerTodos() throws BaseDatosException {
+    public List<PermisoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<PermisoDto> permisoList = mapper.toDtoList(permisoMapper.obtenerTodos());
+            List<PermisoDTO> permisoLista = mapper.toDtoList(permisoMapper.obtenerTodos());
             logeador.info("permisos obtenidos");
-            return permisoList;
+            return permisoLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.PERMISO_OBTENER_TODOS_EXECPTION, e);
             throw new BaseDatosException(Constantes.PERMISO_OBTENER_TODOS_EXECPTION, e);

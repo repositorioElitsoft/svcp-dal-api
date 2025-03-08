@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoServicioDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO;
 import com.elitsoft.servicampo.domain.entity.TipoServicio;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.TipoServicioMapper;
@@ -23,7 +23,7 @@ import java.util.List;
 public class TipoServicioService {
 
     @Autowired
-    private TipoServicioMapper tiposervicioMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private TipoServicioMapper tipoServicioMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
     private TipoServicioMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
@@ -33,56 +33,56 @@ public class TipoServicioService {
 
     /**
      * Agrega un nuevo TipoServicio.
-     * @param tiposervicioDto el TipoServicio DTO.
+     * @param tipoServicioDTO el TipoServicio DTO.
      * @return el TipoServicio DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoServicio ya existe.
      */
-    public TipoServicioDto agregar(TipoServicioDto tiposervicioDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public TipoServicioDTO agregar(TipoServicioDTO tipoServicioDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() TipoServicio");
 
         //  Valida Entrada
-        if (tiposervicioDto == null) {
+        if (tipoServicioDTO == null) {
             logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            TipoServicio tiposervicio = mapper.toEntity(tiposervicioDto);
-            tiposervicio = tiposervicioMapper.agregar(tiposervicio);
-            logeador.info("TipoServicio agregado exitosamente id: {}", tiposervicio.getId());
-            return mapper.toDto(tiposervicio);
+            TipoServicio tipoServicio = mapper.toEntity(tipoServicioDTO);
+            tipoServicio = tipoServicioMapper.agregar(tipoServicio);
+            logeador.info("TipoServicio agregado exitosamente id: {}", tipoServicio.getId());
+            return mapper.toDto(tipoServicio);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.TIPOSERVICIO_DUPLICADO_MENSAGE + ": {}", tiposervicioDto.getId());
+            logeador.error(Constantes.TIPOSERVICIO_DUPLICADO_MENSAGE + ": {}", tipoServicioDTO.getId());
             throw new RecursoDuplicadoException(Constantes.TIPOSERVICIO_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.TIPOSERVICIO_AGREGAR_MENSAJE + ": {}", tiposervicioDto.toString(), e);
+            logeador.error(Constantes.TIPOSERVICIO_AGREGAR_MENSAJE + ": {}", tipoServicioDTO.toString(), e);
             throw new BaseDatosException(Constantes.TIPOSERVICIO_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos TipoServicio.
-     * @param tiposervicioLoteDto lista de TipoServicio DTO a agregar.
+     * @param tipoServicioLoteDTO lista de TipoServicio DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      * @throws RecursoDuplicadoException si el recurso tiposervicio ya existe.
      */
-    public void agregarLote(List<TipoServicioDto> tiposervicioLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TipoServicioDTO> tipoServicioLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() tiposervicio");
 
         //  Valida Entrada
-        if (tiposervicioLoteDto.isEmpty()) {
+        if (tipoServicioLoteDTO.isEmpty()) {
             logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<TipoServicio> tiposervicioLote = mapper.toEntityList(tiposervicioLoteDto);
+            List<TipoServicio> tipoServicioLote = mapper.toEntityList(tipoServicioLoteDTO);
 
-            int registrosAgregados =  tiposervicioMapper.agregarLote(tiposervicioLote);
+            int registrosAgregados =  tipoServicioMapper.agregarLote(tipoServicioLote);
             logeador.info("Lote TipoServicio agregados exitosamente,  registros agregados: {}", registrosAgregados);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOSERVICIO_DUPLICADO_MENSAGE);
@@ -96,56 +96,56 @@ public class TipoServicioService {
     /**
      * Actualiza un TipoServicio existente.
      * @param id la clave de TipoServicio a actualizar.
-     * @param tiposervicioDto el TipoServicio DTO con informacion actualizada.
+     * @param tipoServicioDTO el TipoServicio DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoServicio no es encontrado.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      */
-    public void actualizar(Long id, TipoServicioDto tiposervicioDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, TipoServicioDTO tipoServicioDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() tiposervicio");
 
         //  Valida Entrada
-        if (id == null || tiposervicioDto == null || tiposervicioDto.getId() == null) {
-            logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((tiposervicioDto != null) ? tiposervicioDto.toString() : null  ));
+        if (id == null || tipoServicioDTO == null || tipoServicioDTO.getId() == null) {
+            logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((tipoServicioDTO != null) ? tipoServicioDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
-        if (!id.equals(tiposervicioDto.getId())) {
-            logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tiposervicioDto.toString());
+        if (!id.equals(tipoServicioDTO.getId())) {
+            logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tipoServicioDTO.toString());
             throw new EntradaInvalidadException(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            TipoServicioDto tiposervicioDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            TipoServicio tiposervicio = mapper.toEntity(tiposervicioDto);
-            tiposervicio.setId(id);
-            int registrosActualizados = tiposervicioMapper.actualizar(tiposervicio);
+            TipoServicioDTO tipoServicioDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            TipoServicio tipoServicio = mapper.toEntity(tipoServicioDTO);
+            tipoServicio.setId(id);
+            int registrosActualizados = tipoServicioMapper.actualizar(tipoServicio);
             logeador.info("tiposervicio actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.TIPOSERVICIO_ACTUALIZAR_MENSAJE + ": id={} {}", id, tiposervicioDto.toString(), e);
+            logeador.error(Constantes.TIPOSERVICIO_ACTUALIZAR_MENSAJE + ": id={} {}", id, tipoServicioDTO.toString(), e);
             throw new BaseDatosException(Constantes.TIPOSERVICIO_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de TipoServicio existentes.
-     * @param tiposervicioLoteDto lista de TipoServicio DTO con datos a actualizar.
+     * @param tipoServicioLoteDTO lista de TipoServicio DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      */
-    public void actualizarLote(List<TipoServicioDto> tiposervicioLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoServicioDTO> tipoServicioLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tiposervicio");
 
         //  Valida Entrada
-        if (tiposervicioLoteDto.isEmpty()) {
+        if (tipoServicioLoteDTO.isEmpty()) {
             logeador.error(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<TipoServicio> tiposervicioLote = mapper.toEntityList(tiposervicioLoteDto);
-            int registrosActualizados = tiposervicioMapper.actualizarLote(tiposervicioLote);
+            List<TipoServicio> tipoServicioLote = mapper.toEntityList(tipoServicioLoteDTO);
+            int registrosActualizados = tipoServicioMapper.actualizarLote(tipoServicioLote);
             logeador.info("Lote tiposervicio actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOSERVICIO_ACTUALIZAR_MENSAJE, e);
@@ -163,8 +163,8 @@ public class TipoServicioService {
         logeador.debug("eliminar() tiposervicio: {}", id);
 
         try {
-            TipoServicioDto tiposervicioDto = this.encontrarPorClave(id); // Verifica si existe
-            int registrosEliminados = tiposervicioMapper.eliminar(id);
+            TipoServicioDTO tipoServicioDTO = this.encontrarPorClave(id); // Verifica si existe
+            int registrosEliminados = tipoServicioMapper.eliminar(id);
             logeador.info("tiposervicio eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOSERVICIO_ELIMINAR_MENSAJE + ": {}", id, e);
@@ -188,7 +188,7 @@ public class TipoServicioService {
         }
 
         try {
-            int registrosEliminados = tiposervicioMapper.eliminarLote(idLote);
+            int registrosEliminados = tipoServicioMapper.eliminarLote(idLote);
             logeador.info("Lote tiposervicio eliminados exitosamente, registros eliminados: {}", registrosEliminados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOSERVICIO_ELIMINAR_MENSAJE,  e);
@@ -203,20 +203,20 @@ public class TipoServicioService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoServicio no es encontrado.
      */
-    public TipoServicioDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public TipoServicioDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            TipoServicioDto tiposervicioDto = mapper.toDto(tiposervicioMapper.encontrarPorClave(id));
+            TipoServicioDTO tipoServicioDTO = mapper.toDto(tipoServicioMapper.encontrarPorClave(id));
 
-            if (tiposervicioDto != null) {
+            if (tipoServicioDTO != null) {
                 logeador.info("tiposervicio encontrado por clave : {}", id);
             } else {
                 logeador.info("tiposervicio clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.TIPOSERVICIO_NO_ENCONTRADO_MENSAGE);
             }
 
-            return tiposervicioDto;
+            return tipoServicioDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOSERVICIO_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.TIPOSERVICIO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -228,13 +228,13 @@ public class TipoServicioService {
      * @return una lista de todos TipoServicio DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<TipoServicioDto> obtenerTodos() throws BaseDatosException {
+    public List<TipoServicioDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TipoServicioDto> tiposervicioList = mapper.toDtoList(tiposervicioMapper.obtenerTodos());
+            List<TipoServicioDTO> tipoServicioLista = mapper.toDtoList(tipoServicioMapper.obtenerTodos());
             logeador.info("tiposervicios obtenidos");
-            return tiposervicioList;
+            return tipoServicioLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOSERVICIO_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.TIPOSERVICIO_OBTENER_TODOS_MENSAJE, e);

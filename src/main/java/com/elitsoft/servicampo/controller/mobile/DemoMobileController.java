@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.DemoDto;
+import com.elitsoft.servicampo.domain.dto.core.DemoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.DemoMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,7 +36,7 @@ public class DemoMobileController {
             @ApiResponse(responseCode = "409", description = "Demo ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody DemoDto demoDto) {
+    public ResponseEntity<String> agregar(@RequestBody DemoDTO demoDto) {
         logeador.debug("agregar() demo");
 
         try {
@@ -64,7 +63,7 @@ public class DemoMobileController {
             @ApiResponse(responseCode = "409", description = "Demo ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<DemoDto> demosDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<DemoDTO> demosDto) {
         logeador.debug("agregarLote() demo");
 
         try {
@@ -91,7 +90,7 @@ public class DemoMobileController {
             @ApiResponse(responseCode = "404", description = "Demo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody DemoDto demoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody DemoDTO demoDto) {
         logeador.debug("actualizar() demo");
 
         try {
@@ -115,7 +114,7 @@ public class DemoMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<DemoDto> demoLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<DemoDTO> demoLoteDto) {
         logeador.debug("actualizarLote() demo");
 
         try {
@@ -184,11 +183,11 @@ public class DemoMobileController {
             @ApiResponse(responseCode = "404", description = "Demo no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<DemoDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<DemoDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            DemoDto demoDto = demoMobileService.encontrarPorClave(id);
+            DemoDTO demoDto = demoMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(demoDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -204,11 +203,11 @@ public class DemoMobileController {
             @ApiResponse(responseCode = "200", description = "Demos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<DemoDto>> obtenerTodos() {
+    public ResponseEntity<List<DemoDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<DemoDto> demos = null;
+            List<DemoDTO> demos = null;
             demos = demoMobileService.obtenerTodos();
             return ResponseEntity.ok(demos);  // Retorna  200
         } catch (BaseDatosException e) {

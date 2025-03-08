@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoServicioDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.TipoServicioFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.TipoServicioFiltroService;
@@ -27,7 +27,7 @@ import java.util.List;
 public class TipoServicioFiltroController {
 
     @Autowired
-    private TipoServicioFiltroService tiposervicioFiltroService; //Logica de Negocio de Filtrado del Core Service
+    private TipoServicioFiltroService tipoServicioFiltroService; //Logica de Negocio de Filtrado del Core Service
 
     private static final Logger logeador = LoggerFactory.getLogger(TipoServicioFiltroController.class); //Logback
 
@@ -37,14 +37,14 @@ public class TipoServicioFiltroController {
             @ApiResponse(responseCode = "200", description = "TipoServicio Filtrado exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PagedResponse<TipoServicioDto>> filtrar(@ModelAttribute TipoServicioFiltro filtro, PagingAndSorting paginado) {
+    public ResponseEntity<PagedResponse<TipoServicioDTO>> filtrar(@ModelAttribute TipoServicioFiltro filtro, PagingAndSorting paginado) {
         logeador.debug("filtrar()");
 
         try {
-            List<TipoServicioDto> tipoServicioLista = tiposervicioFiltroService.filtrar(filtro, paginado);
-            int totalFiltro = tiposervicioFiltroService.contarFiltrar(filtro);
+            List<TipoServicioDTO> tipoServicioDTOLista = tipoServicioFiltroService.filtrar(filtro, paginado);
+            int totalFiltro = tipoServicioFiltroService.contarFiltrar(filtro);
 
-            PagedResponse<TipoServicioDto> response = PaginationUtils.createPagedResponse(tipoServicioLista, totalFiltro, paginado);
+            PagedResponse<TipoServicioDTO> response = PaginationUtils.createPagedResponse(tipoServicioDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
         }  catch (BaseDatosException e) {

@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.SectorDto;
+import com.elitsoft.servicampo.domain.dto.core.SectorDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.SectorService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,11 +36,11 @@ public class SectorController {
             @ApiResponse(responseCode = "409", description = "Sector ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<SectorDto> agregar(@RequestBody SectorDto sectorDto) {
+    public ResponseEntity<SectorDTO> agregar(@RequestBody SectorDTO sectorDTO) {
         logeador.debug("agregar() sector");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(sectorService.agregar(sectorDto)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(sectorService.agregar(sectorDTO)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
@@ -64,11 +63,11 @@ public class SectorController {
             @ApiResponse(responseCode = "409", description = "Sector ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<SectorDto> sectorLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<SectorDTO> sectorDtoLote) {
         logeador.debug("agregarLote() sector");
 
         try {
-            sectorService.agregarLote (sectorLoteDto);
+            sectorService.agregarLote (sectorDtoLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -91,11 +90,11 @@ public class SectorController {
             @ApiResponse(responseCode = "404", description = "Sector no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SectorDto sectorDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody SectorDTO sectorDTO) {
         logeador.debug("actualizar() sector");
 
         try {
-            sectorService.actualizar(id, sectorDto);
+            sectorService.actualizar(id, sectorDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -115,11 +114,11 @@ public class SectorController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<SectorDto> sectorLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<SectorDTO> sectorDTOLote) {
         logeador.debug("actualizarLote() sector");
 
         try {
-            sectorService.actualizarLote(sectorLoteDto);
+            sectorService.actualizarLote(sectorDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -184,11 +183,11 @@ public class SectorController {
             @ApiResponse(responseCode = "404", description = "Sector no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<SectorDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<SectorDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            SectorDto sectorDto = sectorService.encontrarPorClave(id);
+            SectorDTO sectorDto = sectorService.encontrarPorClave(id);
             return ResponseEntity.ok(sectorDto); // Retorna  200
         }
         catch (BaseDatosException e) {
@@ -204,11 +203,11 @@ public class SectorController {
             @ApiResponse(responseCode = "200", description = "Sectors obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<SectorDto>> obtenerTodos() {
+    public ResponseEntity<List<SectorDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<SectorDto> sectors = null;
+            List<SectorDTO> sectors = null;
             sectors = sectorService.obtenerTodos();
             return ResponseEntity.ok(sectors);  // Retorna  200
         } catch (BaseDatosException e) {

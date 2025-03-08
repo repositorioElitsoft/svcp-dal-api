@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.ZonaMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,7 +36,7 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "409", description = "Zona ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ZonaDto> agregar(@RequestBody ZonaDto zonaDto) {
+    public ResponseEntity<ZonaDTO> agregar(@RequestBody ZonaDTO zonaDto) {
         logeador.debug("agregar() zona");
 
         try {
@@ -63,7 +62,7 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "409", description = "Zona ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<ZonaDto> zonaLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<ZonaDTO> zonaLoteDto) {
         logeador.debug("agregarLote() zona");
 
         try {
@@ -90,7 +89,7 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "404", description = "Zona no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ZonaDto zonaDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ZonaDTO zonaDto) {
         logeador.debug("actualizar() zona");
 
         try {
@@ -114,7 +113,7 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<ZonaDto> zonaLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<ZonaDTO> zonaLoteDto) {
         logeador.debug("actualizarLote() zona");
 
         try {
@@ -191,11 +190,11 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "404", description = "Zona no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ZonaDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ZonaDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ZonaDto zonaDto = zonaMobileService.encontrarPorClave(id);
+            ZonaDTO zonaDto = zonaMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(zonaDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -210,10 +209,10 @@ public class ZonaMobileController {
             @ApiResponse(responseCode = "200", description = "Zonas obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<ZonaDto>> obtenerTodos() {
+    public ResponseEntity<List<ZonaDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<ZonaDto> zonas = null;
+        List<ZonaDTO> zonas = null;
 
         try {
             zonas = zonaMobileService.obtenerTodos();

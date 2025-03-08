@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.controller.core;
 
-import com.elitsoft.servicampo.domain.dto.core.PermisoDto;
+import com.elitsoft.servicampo.domain.dto.core.PermisoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.PermisoService;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -36,11 +36,11 @@ public class PermisoController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregar(@RequestBody PermisoDto permisoDto) {
+    public ResponseEntity<String> agregar(@RequestBody PermisoDTO permisoDTO) {
         logeador.debug("agregar() permiso");
 
         try {
-            permisoService.agregar(permisoDto);
+            permisoService.agregar(permisoDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();
@@ -56,11 +56,11 @@ public class PermisoController {
             @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PermisoDto permisoDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PermisoDTO permisoDTO) {
         logeador.debug("actualizar() permiso");
 
         try {
-            permisoService.actualizar(id, permisoDto);
+            permisoService.actualizar(id, permisoDTO);
             return ResponseEntity.noContent().build();
         }
         catch (EntradaInvalidadException e) {
@@ -99,11 +99,11 @@ public class PermisoController {
             @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PermisoDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<PermisoDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            PermisoDto permisoDto = permisoService.encontrarPorClave(id);
+            PermisoDTO permisoDto = permisoService.encontrarPorClave(id);
             return ResponseEntity.ok(permisoDto);
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build();
@@ -118,10 +118,10 @@ public class PermisoController {
             @ApiResponse(responseCode = "200", description = "Permisos obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<PermisoDto>> obtenerTodos() {
+    public ResponseEntity<List<PermisoDTO>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<PermisoDto> permisos = null;
+        List<PermisoDTO> permisos = null;
 
         try {
             permisos = permisoService.obtenerTodos();

@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core.filter.entity;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoServicioDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.TipoServicioFiltro;
 import com.elitsoft.servicampo.mapper.TipoServicioMapper;
@@ -29,10 +29,10 @@ public class TipoServicioFiltroService {
     /** Ejecuta filtro dinamico y paginacion para TipoServicio
      * @param filtro clase que tiene los atributos a filtrar
      * @param paginado clase que tiene los atributos de paginacion
-     * @return List<TipoServicioDto> lista de entidades TipoServicio
+     * @return List<TipoServicioDTO> lista de entidades TipoServicio
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
      */
-    public List<TipoServicioDto> filtrar(TipoServicioFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+    public List<TipoServicioDTO> filtrar(TipoServicioFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
         logeador.debug("filtrar()");
 
         try {

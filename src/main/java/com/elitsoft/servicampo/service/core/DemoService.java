@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.DemoDto;
+import com.elitsoft.servicampo.domain.dto.core.DemoDTO;
 import com.elitsoft.servicampo.domain.entity.Demo;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.DemoMapper;
@@ -32,31 +32,31 @@ public class DemoService {
 
     /**
      * Agrega un nuevo Demo.
-     * @param demoDto El Demo DTO.
+     * @param demoDTO El Demo DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      * @throws EntradaInvalidadException Si la entrada Demo tiene errores.
      * @throws RecursoDuplicadoException Si el recurso demo ya existe.
      */
-    public void agregar(DemoDto demoDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregar(DemoDTO demoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() demo");
 
         //  Valida Entrada
-        if (demoDto == null || demoDto.getDmoId()== null) {
-            logeador.error(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((demoDto != null) ? demoDto.toString() : null  ));
+        if (demoDTO == null || demoDTO.getDmoId()== null) {
+            logeador.error(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((demoDTO != null) ? demoDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Demo demo = mapper.toEntity(demoDto);
+            Demo demo = mapper.toEntity(demoDTO);
             Long nuevoId = demoMapper.agregar(demo);
             logeador.info("Demo agregado exitosamente id: {}", nuevoId);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.DEMO_DUPLICADO_MENSAGE + ": {}", demoDto.getDmoId());
+            logeador.error(Constantes.DEMO_DUPLICADO_MENSAGE + ": {}", demoDTO.getDmoId());
             throw new RecursoDuplicadoException(Constantes.DEMO_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.DEMO_AGREGAR_MENSAJE + ": {}", demoDto.toString(), e);
+            logeador.error(Constantes.DEMO_AGREGAR_MENSAJE + ": {}", demoDTO.toString(), e);
             throw new BaseDatosException(Constantes.DEMO_AGREGAR_MENSAJE, e);
         }
     }
@@ -64,21 +64,21 @@ public class DemoService {
 
     /**
      * Agrega Lote nuevos Demo.
-     * @param demoLoteDto Lista de Demo DTO a agregar.
+     * @param demoLoteDTO Lista de Demo DTO a agregar.
      * @throws BaseDatosException  Si ocurre un error de base de datos.
      * @throws EntradaInvalidadException Si la entrada Demo tiene errores.
      * @throws RecursoDuplicadoException Si el recurso demo ya existe.
      */
-    public void agregarLote(List<DemoDto> demoLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<DemoDTO> demoLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() demo Todos");
 
         //  Valida Entrada
-        if (demoLoteDto.isEmpty()) {
+        if (demoLoteDTO.isEmpty()) {
             logeador.error(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Demo> demoLote = mapper.toEntityList(demoLoteDto);
+            List<Demo> demoLote = mapper.toEntityList(demoLoteDTO);
 
             int registrosAgregados =  demoMapper.agregarLote(demoLote);
             logeador.info("Lote Demo agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -94,49 +94,49 @@ public class DemoService {
     /**
      * Actualiza un Demo existente.
      * @param id La Clave de Demo a actualizar.
-     * @param demoDto El Demo DTO con informacion actualizada.
+     * @param demoDTO El Demo DTO con informacion actualizada.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException Si Demo no es encontrado.
      * @throws EntradaInvalidadException Si la entrada Demo tiene errores.
      */
-    public void actualizar(Long id, DemoDto demoDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, DemoDTO demoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() demo");
 
         //  Valida Entrada
-        if (id == null || demoDto == null || demoDto.getDmoId()== null) {
-            logeador.error(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((demoDto != null) ? demoDto.toString() : null  ));
+        if (id == null || demoDTO == null || demoDTO.getDmoId()== null) {
+            logeador.error(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((demoDTO != null) ? demoDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            DemoDto demoDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Demo demo = mapper.toEntity(demoDto);
+            DemoDTO demoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Demo demo = mapper.toEntity(demoDTO);
             demo.setDmoId(id);
             int registrosActualizados = demoMapper.actualizar(demo);
             logeador.info("demo actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.DEMO_ACTUALIZAR_MENSAJE + ": id={} {}", id, demoDto.toString(), e);
+            logeador.error(Constantes.DEMO_ACTUALIZAR_MENSAJE + ": id={} {}", id, demoDTO.toString(), e);
             throw new BaseDatosException(Constantes.DEMO_ACTUALIZAR_MENSAJE, e);
         }
     }
 
     /**
      * Actualiza Lote de Demo existentes.
-     * @param demoLoteDto Lista de Demo DTO con datos a actualizar.
+     * @param demoLoteDTO Lista de Demo DTO con datos a actualizar.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      * @throws EntradaInvalidadException Si la entrada Demo tiene errores.
      */
-    public void actualizarLote(List<DemoDto> demoLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<DemoDTO> demoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() demo");
 
         //  Valida Entrada
-        if (demoLoteDto.isEmpty()) {
+        if (demoLoteDTO.isEmpty()) {
             logeador.error(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.DEMO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Demo> demoLote = mapper.toEntityList(demoLoteDto);
+            List<Demo> demoLote = mapper.toEntityList(demoLoteDTO);
             int registrosActualizados = demoMapper.actualizarLote(demoLote);
             logeador.info("Lote demo actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -156,7 +156,7 @@ public class DemoService {
         logeador.debug("eliminar() demo: {}", id);
 
         try {
-            DemoDto demoDto = this.encontrarPorClave(id); // Verifica si existe
+            DemoDTO demoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = demoMapper.eliminar(id);
             logeador.info("demo eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -199,11 +199,11 @@ public class DemoService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException Si Demo no es encontrado.
      */
-    public DemoDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public DemoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            DemoDto demoDto = mapper.toDto(demoMapper.encontrarPorClave(id));
+            DemoDTO demoDto = mapper.toDto(demoMapper.encontrarPorClave(id));
 
             if (demoDto != null) {
                 logeador.info("demo encontrado por clave : {}", id);
@@ -224,13 +224,13 @@ public class DemoService {
      * @return Una lista de todos Demo DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<DemoDto> obtenerTodos() throws BaseDatosException {
+    public List<DemoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<DemoDto> demoList = mapper.toDtoList(demoMapper.obtenerTodos());
+            List<DemoDTO> demoLista = mapper.toDtoList(demoMapper.obtenerTodos());
             logeador.info("demos obtenidos");
-            return demoList;
+            return demoLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.DEMO_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.DEMO_OBTENER_TODOS_MENSAJE, e);

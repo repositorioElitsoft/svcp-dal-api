@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoServicioDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -22,10 +22,10 @@ import java.util.List;
 public class TipoServicioMobileService {
 
     @Autowired
-    private TipoServicioMapper tiposervicioMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
+    private TipoServicioMapper tipoServicioMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
-    private TipoServicioService tiposervicioService; //Logica de Negocio del Core Service
+    private TipoServicioService tipoServicioService; //Logica de Negocio del Core Service
 
     @Autowired
     private TipoServicioMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDto())
@@ -35,55 +35,55 @@ public class TipoServicioMobileService {
 
     /**
      * Agrega un nuevo TipoServicio.
-     * @param tiposervicioDto el TipoServicio DTO.
+     * @param tipoServicioDTO el TipoServicio DTO.
      * @return el TipoServicio DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoServicio ya existe.
      */
-    public TipoServicioDto agregar(TipoServicioDto tiposervicioDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public TipoServicioDTO agregar(TipoServicioDTO tipoServicioDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() tiposervicio");
 
-        return tiposervicioService.agregar(tiposervicioDto);
+        return tipoServicioService.agregar(tipoServicioDTO);
     }
 
     /**
      * Agrega Lote nuevos TipoServicio.
-     * @param tiposervicioLoteDto lista de TipoServicio DTO a agregar.
+     * @param tipoServicioLoteDTO lista de TipoServicio DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoServicio ya existe.
      */
-    public void agregarLote(List<TipoServicioDto> tiposervicioLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<TipoServicioDTO> tipoServicioLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() tiposervicio");
 
-        tiposervicioService.agregarLote(tiposervicioLoteDto);
+        tipoServicioService.agregarLote(tipoServicioLoteDTO);
     }
 
     /**
      * Actualiza un TipoServicio existente.
      * @param id la Clave de TipoServicio a actualizar.
-     * @param tiposervicioDto el TipoServicio DTO con informacion actualizada.
+     * @param tipoServicioDTO el TipoServicio DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoServicio no es encontrado.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      */
-    public void actualizar(Long id, TipoServicioDto tiposervicioDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TipoServicioDTO tipoServicioDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() tiposervicio");
 
-        tiposervicioService.actualizar(id, tiposervicioDto);
+        tipoServicioService.actualizar(id, tipoServicioDTO);
     }
 
     /**
      * Actualiza Lote de TipoServicio existentes.
-     * @param tiposervicioLoteDto lista de TipoServicio DTO con datos a actualizar.
+     * @param tipoServicioLoteDTO lista de TipoServicio DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      */
-    public void actualizarLote(List<TipoServicioDto> tiposervicioLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoServicioDTO> tipoServicioLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tiposervicio");
 
-        tiposervicioService.actualizarLote(tiposervicioLoteDto);
+        tipoServicioService.actualizarLote(tipoServicioLoteDTO);
     }
 
     /**
@@ -94,7 +94,7 @@ public class TipoServicioMobileService {
      */
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tiposervicio: {}", id);
-        tiposervicioService.eliminar(id);
+        tipoServicioService.eliminar(id);
     }
 
     /**
@@ -106,7 +106,7 @@ public class TipoServicioMobileService {
     public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("eliminarLote()");
 
-        tiposervicioService.eliminarLote(idLote);
+        tipoServicioService.eliminarLote(idLote);
     }
 
     /**
@@ -116,9 +116,9 @@ public class TipoServicioMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoServicio no es encontrado.
      */
-    public TipoServicioDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public TipoServicioDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
-        return tiposervicioService.encontrarPorClave(id);
+        return tipoServicioService.encontrarPorClave(id);
     }
 
     /**
@@ -126,8 +126,8 @@ public class TipoServicioMobileService {
      * @return lista de todos TipoServicio DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<TipoServicioDto> obtenerTodos() throws BaseDatosException {
+    public List<TipoServicioDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
-        return tiposervicioService.obtenerTodos();
+        return tipoServicioService.obtenerTodos();
     }
 }

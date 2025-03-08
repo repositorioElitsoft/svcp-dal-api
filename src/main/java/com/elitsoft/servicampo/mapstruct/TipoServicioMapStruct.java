@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.mapstruct;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoServicioDto;
+import com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO;
 import com.elitsoft.servicampo.domain.entity.TipoServicio;
 import org.mapstruct.Mapper;
 
@@ -13,30 +13,30 @@ import java.util.List;
 public interface TipoServicioMapStruct {
 
     /**
-     * Convierte un entidad TipoServicio a TipoServicioDto.
+     * Convierte un entidad TipoServicio a TipoServicioDTO.
      * @param entity La entidad TipoServicio.
-     * @return El TipoServicioDto.
+     * @return El TipoServicioDTO.
      */
-    TipoServicioDto toDto(TipoServicio entity);
+    TipoServicioDTO toDto(TipoServicio entity);
 
     /**
-     * Convierte un TipoServicioDto a entidad TipoServicio.
-     * @param dto El TipoServicioDto.
+     * Convierte un TipoServicioDTO a entidad TipoServicio.
+     * @param dto El TipoServicioDTO.
      * @return La entidad TipoServicio.
      */
-    TipoServicio toEntity(TipoServicioDto dto);
+    TipoServicio toEntity(TipoServicioDTO dto);
 
     /**
      * Convierte una lista de entidades TipoServicio a una lista de TipoServicioDtos.
      * @param entities La lista de entidades TipoServicio.
      * @return The list of TipoServicioDtos.
      */
-    List<TipoServicioDto> toDtoList(List<TipoServicio> entities);
+    List<TipoServicioDTO> toDtoList(List<TipoServicio> entities);
 
     /**
      * Convierte una lista de TipoServicioDtos a una lista de entidades TipoServicio entities.
      * @param dtos The list of TipoServicioDtos.
      * @return The list of TipoServicio entities.
      */
-    List<TipoServicio> toEntityList(List<TipoServicioDto> dtos);
+    List<TipoServicio> toEntityList(List<TipoServicioDTO> dtos);
 }

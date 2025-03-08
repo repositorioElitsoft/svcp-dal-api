@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ComunaDto;
+import com.elitsoft.servicampo.domain.dto.core.ComunaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -35,55 +35,55 @@ public class ComunaMobileService {
 
     /**
      * Agrega un nuevo Comuna.
-     * @param comunaDto el Comuna DTO.
+     * @param comunaDTO el Comuna DTO.
      * @return el Comuna DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      * @throws RecursoDuplicadoException si el recurso Comuna ya existe.
      */
-    public ComunaDto agregar(ComunaDto comunaDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ComunaDTO agregar(ComunaDTO comunaDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() comuna");
 
-        return comunaService.agregar(comunaDto);
+        return comunaService.agregar(comunaDTO);
     }
 
     /**
      * Agrega Lote nuevos Comuna.
-     * @param comunaLoteDto lista de Comuna DTO a agregar.
+     * @param comunaLoteDTO lista de Comuna DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      * @throws RecursoDuplicadoException si el recurso Comuna ya existe.
      */
-    public void agregarLote(List<ComunaDto> comunaLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<ComunaDTO> comunaLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() comuna");
 
-        comunaService.agregarLote(comunaLoteDto);
+        comunaService.agregarLote(comunaLoteDTO);
     }
 
     /**
      * Actualiza un Comuna existente.
      * @param id la Clave de Comuna a actualizar.
-     * @param comunaDto el Comuna DTO con informacion actualizada.
+     * @param comunaDTO el Comuna DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Comuna no es encontrado.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      */
-    public void actualizar(Long id, ComunaDto comunaDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, ComunaDTO comunaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
         logeador.debug("actualizar() comuna");
 
-        comunaService.actualizar(id, comunaDto);
+        comunaService.actualizar(id, comunaDTO);
     }
 
     /**
      * Actualiza Lote de Comuna existentes.
-     * @param comunaLoteDto lista de Comuna DTO con datos a actualizar.
+     * @param comunaLoteDTO lista de Comuna DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Comuna tiene errores.
      */
-    public void actualizarLote(List<ComunaDto> comunaLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ComunaDTO> comunaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() comuna");
 
-        comunaService.actualizarLote(comunaLoteDto);
+        comunaService.actualizarLote(comunaLoteDTO);
     }
 
     /**
@@ -116,7 +116,7 @@ public class ComunaMobileService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Comuna no es encontrado.
      */
-    public ComunaDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public ComunaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return comunaService.encontrarPorClave(id);
     }
@@ -127,7 +127,7 @@ public class ComunaMobileService {
      * @return lista de todos Comuna DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<ComunaDto> obtenerTodos(Long provinciaId) throws BaseDatosException {
+    public List<ComunaDTO> obtenerTodos(Long provinciaId) throws BaseDatosException {
         logeador.debug("obtenerTodos() {}",provinciaId);
         return comunaService.obtenerTodos(provinciaId);
     }

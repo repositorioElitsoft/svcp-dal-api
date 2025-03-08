@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.core;
 
-import com.elitsoft.servicampo.domain.dto.core.ZonaDto;
+import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import com.elitsoft.servicampo.domain.entity.Sector;
 import com.elitsoft.servicampo.domain.entity.Zona;
 import com.elitsoft.servicampo.exceptions.*;
@@ -38,54 +38,54 @@ public class ZonaService {
 
     /**
      * Agrega un nuevo Zona.
-     * @param zonaDto el Zona DTO.
+     * @param zonaDTO el Zona DTO.
      * @return el Zona DTO agregado con campo auto generado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      * @throws RecursoDuplicadoException si el recurso Zona ya existe.
      */
-    public ZonaDto agregar(ZonaDto zonaDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ZonaDTO agregar(ZonaDTO zonaDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Zona");
 
         //  Valida Entrada
-        if (zonaDto == null) {
+        if (zonaDTO == null) {
             logeador.error(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            Zona zona = mapper.toEntity(zonaDto);
+            Zona zona = mapper.toEntity(zonaDTO);
             zona = zonaMapper.agregar(zona);
             logeador.info("Zona agregado exitosamente id: {}", zona.getId());
             return mapper.toDto(zona);
         }
         catch (DuplicateKeyException e) {
-            logeador.error(Constantes.ZONA_DUPLICADO_MENSAGE + ": {}", zonaDto.getId());
+            logeador.error(Constantes.ZONA_DUPLICADO_MENSAGE + ": {}", zonaDTO.getId());
             throw new RecursoDuplicadoException(Constantes.ZONA_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
-            logeador.error(Constantes.ZONA_AGREGAR_MENSAJE + ": {}", zonaDto.toString(), e);
+            logeador.error(Constantes.ZONA_AGREGAR_MENSAJE + ": {}", zonaDTO.toString(), e);
             throw new BaseDatosException(Constantes.ZONA_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Zona.
-     * @param zonaLoteDto lista de Zona DTO a agregar.
+     * @param zonaLoteDTO lista de Zona DTO a agregar.
      * @throws BaseDatosException  si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      * @throws RecursoDuplicadoException si el recurso zona ya existe.
      */
-    public void agregarLote(List<ZonaDto> zonaLoteDto) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public void agregarLote(List<ZonaDTO> zonaLoteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregarLote() zona");
 
         //  Valida Entrada
-        if (zonaLoteDto.isEmpty()) {
+        if (zonaLoteDTO.isEmpty()) {
             logeador.error(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
-            List<Zona> zonaLote = mapper.toEntityList(zonaLoteDto);
+            List<Zona> zonaLote = mapper.toEntityList(zonaLoteDTO);
 
             int registrosAgregados =  zonaMapper.agregarLote(zonaLote);
             logeador.info("Lote Zona agregados exitosamente,  registros agregados: {}", registrosAgregados);
@@ -101,55 +101,55 @@ public class ZonaService {
     /**
      * Actualiza un Zona existente.
      * @param id la clave de Zona a actualizar.
-     * @param zonaDto el Zona DTO con informacion actualizada.
+     * @param zonaDTO el Zona DTO con informacion actualizada.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Zona no es encontrado.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      */
-    public void actualizar(Long id, ZonaDto zonaDto) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, ZonaDTO zonaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() zona");
 
         //  Valida Entrada
-        if (id == null || zonaDto == null || zonaDto.getId() == null) {
-            logeador.error(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((zonaDto != null) ? zonaDto.toString() : null  ));
+        if (id == null || zonaDTO == null || zonaDTO.getId() == null) {
+            logeador.error(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((zonaDTO != null) ? zonaDTO.toString() : null  ));
             throw new EntradaInvalidadException(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
-        if (!id.equals(zonaDto.getId())) {
-            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  zonaDto.toString());
+        if (!id.equals(zonaDTO.getId())) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  zonaDTO.toString());
             throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            ZonaDto zonaDtoEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            Zona zona = mapper.toEntity(zonaDto);
+            ZonaDTO zonaDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            Zona zona = mapper.toEntity(zonaDTO);
             zona.setId(id);
             int registrosActualizados = zonaMapper.actualizar(zona);
             logeador.info("zona actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.ZONA_ACTUALIZAR_MENSAJE + ": id={} {}", id, zonaDto.toString(), e);
+            logeador.error(Constantes.ZONA_ACTUALIZAR_MENSAJE + ": id={} {}", id, zonaDTO.toString(), e);
             throw new BaseDatosException(Constantes.ZONA_ACTUALIZAR_MENSAJE, e);
         }
     }
 
    /**
      * Actualiza Lote de Zona existentes.
-     * @param zonaLoteDto lista de Zona DTO con datos a actualizar.
+     * @param zonaLoteDTO lista de Zona DTO con datos a actualizar.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      */
-    public void actualizarLote(List<ZonaDto> zonaLoteDto) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ZonaDTO> zonaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() zona");
 
         //  Valida Entrada
-        if (zonaLoteDto.isEmpty()) {
+        if (zonaLoteDTO.isEmpty()) {
             logeador.error(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            List<Zona> zonaLote = mapper.toEntityList(zonaLoteDto);
+            List<Zona> zonaLote = mapper.toEntityList(zonaLoteDTO);
             int registrosActualizados = zonaMapper.actualizarLote(zonaLote);
             logeador.info("Lote zona actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -172,7 +172,7 @@ public class ZonaService {
         this.verificarIntegridadEliminar(id);
 
         try {
-            ZonaDto zonaDto = this.encontrarPorClave(id); // Verifica si existe
+            ZonaDTO zonaDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = zonaMapper.eliminar(id);
             logeador.info("zona eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
@@ -218,20 +218,20 @@ public class ZonaService {
      * @throws BaseDatosException si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Zona no es encontrado.
      */
-    public ZonaDto encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+    public ZonaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            ZonaDto zonaDto = mapper.toDto(zonaMapper.encontrarPorClave(id));
+            ZonaDTO zonaDTO = mapper.toDto(zonaMapper.encontrarPorClave(id));
 
-            if (zonaDto != null) {
+            if (zonaDTO != null) {
                 logeador.info("zona encontrado por clave : {}", id);
             } else {
                 logeador.info("zona clave:{} no encontrado", id);
                 throw new RecursoNoEncontradoException(Constantes.ZONA_NO_ENCONTRADO_MENSAGE);
             }
 
-            return zonaDto;
+            return zonaDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.ZONA_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
             throw new BaseDatosException(Constantes.ZONA_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -243,13 +243,13 @@ public class ZonaService {
      * @return una lista de todos Zona DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<ZonaDto> obtenerTodos() throws BaseDatosException {
+    public List<ZonaDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<ZonaDto> zonaList = mapper.toDtoList(zonaMapper.obtenerTodos());
+            List<ZonaDTO> zonaLista = mapper.toDtoList(zonaMapper.obtenerTodos());
             logeador.info("zonas obtenidos");
-            return zonaList;
+            return zonaLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.ZONA_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(Constantes.ZONA_OBTENER_TODOS_MENSAJE, e);

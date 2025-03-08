@@ -1,9 +1,8 @@
 package com.elitsoft.servicampo.controller.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ProvinciaDto;
+import com.elitsoft.servicampo.domain.dto.core.ProvinciaDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.ProvinciaMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,7 +36,7 @@ public class ProvinciaMobileController {
             @ApiResponse(responseCode = "409", description = "Provincia ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ProvinciaDto> agregar(@RequestBody ProvinciaDto provinciaDto) {
+    public ResponseEntity<ProvinciaDTO> agregar(@RequestBody ProvinciaDTO provinciaDto) {
         logeador.debug("agregar() provincia");
 
         try {
@@ -63,7 +62,7 @@ public class ProvinciaMobileController {
             @ApiResponse(responseCode = "409", description = "Provincia ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> agregarLote(@RequestBody List<ProvinciaDto> provinciaLoteDto) {
+    public ResponseEntity<String> agregarLote(@RequestBody List<ProvinciaDTO> provinciaLoteDto) {
         logeador.debug("agregarLote() provincia");
 
         try {
@@ -90,7 +89,7 @@ public class ProvinciaMobileController {
             @ApiResponse(responseCode = "404", description = "Provincia no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ProvinciaDto provinciaDto) {
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody ProvinciaDTO provinciaDto) {
         logeador.debug("actualizar() provincia");
 
         try {
@@ -114,7 +113,7 @@ public class ProvinciaMobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarLote(@RequestBody List<ProvinciaDto> provinciaLoteDto) {
+    public ResponseEntity<String> actualizarLote(@RequestBody List<ProvinciaDTO> provinciaLoteDto) {
         logeador.debug("actualizarLote() provincia");
 
         try {
@@ -183,11 +182,11 @@ public class ProvinciaMobileController {
             @ApiResponse(responseCode = "404", description = "Provincia no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ProvinciaDto> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ProvinciaDTO> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            ProvinciaDto provinciaDto = provinciaMobileService.encontrarPorClave(id);
+            ProvinciaDTO provinciaDto = provinciaMobileService.encontrarPorClave(id);
             return ResponseEntity.ok(provinciaDto);  // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
@@ -202,10 +201,10 @@ public class ProvinciaMobileController {
             @ApiResponse(responseCode = "200", description = "Provincias obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<ProvinciaDto>> obtenerTodos(@PathVariable Long regionId) {
+    public ResponseEntity<List<ProvinciaDTO>> obtenerTodos(@PathVariable Long regionId) {
         logeador.debug("obtenerTodos() {}",regionId);
 
-        List<ProvinciaDto> provinciaLista = null;
+        List<ProvinciaDTO> provinciaLista = null;
 
         try {
             provinciaLista = provinciaMobileService.obtenerTodos(regionId);

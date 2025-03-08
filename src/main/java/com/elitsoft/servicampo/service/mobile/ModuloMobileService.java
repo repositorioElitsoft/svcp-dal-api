@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ModuloDto;
+import com.elitsoft.servicampo.domain.dto.core.ModuloDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.ModuloNoEncontradoException;
 import com.elitsoft.servicampo.mapper.ModuloMapper;
@@ -32,24 +32,24 @@ public class ModuloMobileService {
 
     /**
      * Agrega un nuevo Modulo.
-     * @param moduloDto El Modulo DTO.
+     * @param moduloDTO El Modulo DTO.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void agregar(ModuloDto moduloDto) throws BaseDatosException {
+    public void agregar(ModuloDTO moduloDTO) throws BaseDatosException {
         logeador.debug("agregar() modulo");
-        moduloService.agregar(moduloDto);
+        moduloService.agregar(moduloDTO);
     }
 
     /**
      * Actualiza un Modulo existente.
      * @param id La Clave de Modulo a actualizar.
-     * @param moduloDto El Modulo DTO con informacion actualizada.
+     * @param moduloDTO El Modulo DTO con informacion actualizada.
      * @throws ModuloNoEncontradoException Si Modulo no es encontrado.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public void actualizar(Long id, ModuloDto moduloDto) throws BaseDatosException, ModuloNoEncontradoException {
+    public void actualizar(Long id, ModuloDTO moduloDTO) throws BaseDatosException, ModuloNoEncontradoException {
         logeador.debug("actualizar() modulo");
-        moduloService.actualizar(id, moduloDto);
+        moduloService.actualizar(id, moduloDTO);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ModuloMobileService {
      * @throws BaseDatosException Si Ocurre un error de base de datos.
      * @throws ModuloNoEncontradoException Si Modulo no es encontrado.
      */
-    public ModuloDto encontrarPorClave(Long id) throws BaseDatosException, ModuloNoEncontradoException {
+    public ModuloDTO encontrarPorClave(Long id) throws BaseDatosException, ModuloNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return moduloService.encontrarPorClave(id);
     }
@@ -80,7 +80,7 @@ public class ModuloMobileService {
      * @return Una lista de todos Modulo DTOs.
      * @throws BaseDatosException Si ocurre un error de base de datos.
      */
-    public List<ModuloDto> obtenerTodos() throws BaseDatosException {
+    public List<ModuloDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return moduloService.obtenerTodos();
     }
