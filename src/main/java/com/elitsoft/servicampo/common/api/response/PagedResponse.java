@@ -1,4 +1,4 @@
-package com.elitsoft.servicampo.utils;
+package com.elitsoft.servicampo.common.api.response;
 
 import java.io.Serial;
 import java.io.Serializable;
