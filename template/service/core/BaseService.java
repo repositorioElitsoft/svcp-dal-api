@@ -6,7 +6,7 @@ import com.elitsoft.#app_name#.exceptions.*;
 import com.elitsoft.#app_name#.mapper.#Base#Mapper;
 import com.elitsoft.#app_name#.mapstruct.#Base#MapStruct;
 import com.elitsoft.#app_name#.utils.Constantes;
-import com.elitsoft.servicampo.utils.GeneralError;
+import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.service.error.#Base#Error;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;

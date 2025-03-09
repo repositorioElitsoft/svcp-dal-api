@@ -345,5 +345,17 @@ public class Constantes {
     public static final String TIPODIRECCION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPODIRECCION";
     public static final String TIPODIRECCION_FILTRAR_MENSAJE = "Error filtrando TIPODIRECCION";
 
+    public static final String CONTACTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de CONTACTO invalida.";
+    public static final String CONTACTO_DUPLICADO_MENSAGE = "Recurso  CONTACTO ya existe.";
+    public static final String CONTACTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CONTACTO viola Integridad. INTGVIOLADA001";
+    public static final String CONTACTO_NO_ENCONTRADO_MENSAGE = "Recurso CONTACTO no  encontrado";
+    public static final String CONTACTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso CONTACTO";
+    public static final String CONTACTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CONTACTO";
+    public static final String CONTACTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTACTO";
+    public static final String CONTACTO_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTACTO";
+    public static final String CONTACTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTACTO por clave :";
+    public static final String CONTACTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTACTO:";
+    public static final String CONTACTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTACTO";
+    public static final String CONTACTO_FILTRAR_MENSAJE = "Error filtrando CONTACTO";
 }
 

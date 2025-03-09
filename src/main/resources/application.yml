@@ -4,6 +4,10 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: servi  # Replace with your PostgreSQL username
     password: JG4n0Lvn0$Zfp2Zf  # Replace with your PostgreSQL password
+  hikari:
+    connection-timeout: 30000
+    maximum-pool-size: 10
+    minimum-idle: 5
   jpa:
     hibernate:
       ddl-auto: none # Important: Use a proper DDL strategy for production! (e.g., validate, update)
