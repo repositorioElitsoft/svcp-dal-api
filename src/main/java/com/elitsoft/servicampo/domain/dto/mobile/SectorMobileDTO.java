@@ -1,6 +1,5 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +15,5 @@ public class SectorMobileDTO implements Serializable {
 
     private Long id;
     private String descripcionSector;
-    private ZonaDTO zona;
+    private ZonaMobileDTO zona;
 }

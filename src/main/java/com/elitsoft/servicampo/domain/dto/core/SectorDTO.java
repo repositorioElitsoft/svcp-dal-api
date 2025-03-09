@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.core;
 
-import com.elitsoft.servicampo.domain.entity.Zona;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +15,5 @@ public class SectorDTO implements Serializable {
     private static final long serialVersionUID = 5346232492548509729L;
     private Long id;
     private String descripcionSector;
-    private Zona zona;
+    private ZonaDTO zona;
 }

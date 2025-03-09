@@ -1,5 +1,6 @@
 package com.elitsoft.servicampo.utils;
 
+import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import org.springframework.data.domain.*;
 
 import java.util.List;

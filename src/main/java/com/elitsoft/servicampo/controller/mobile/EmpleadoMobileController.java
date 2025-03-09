@@ -1,5 +1,6 @@
 package com.elitsoft.servicampo.controller.mobile;
 
+import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.EmpleadoDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.EmpleadoMobileService;
@@ -35,26 +36,26 @@ public class EmpleadoMobileController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Empleado agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "Empleado ya Existe"),
+            @ApiResponse(responseCode = "409", description = "Empleado/Correo ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<EmpleadoDTO> agregar(@RequestBody EmpleadoDTO empleadoDTO) {
+    public ResponseEntity<ApiEnityResponse<EmpleadoDTO>> agregar(@RequestBody EmpleadoDTO empleadoDTO) {
         logeador.debug("agregar() empleado");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(empleadoMobileService.agregar(empleadoDTO)); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(empleadoMobileService.agregar(empleadoDTO))); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Retorna  400 Bad Request
+            return ResponseEntity.badRequest().body(new ApiEnityResponse<>(empleadoDTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
         catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(empleadoDTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         }
         catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna  409 Conflict
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(empleadoDTO, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
         }
         catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
         }
 
     }
@@ -68,7 +69,7 @@ public class EmpleadoMobileController {
             @ApiResponse(responseCode = "404", description = "Empleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody EmpleadoDTO empleadoDTO) {
+    public ResponseEntity<ApiEnityResponse<String>> actualizar(@PathVariable Long id, @RequestBody EmpleadoDTO empleadoDTO) {
         logeador.debug("actualizar() empleado");
 
         try {
@@ -76,12 +77,12 @@ public class EmpleadoMobileController {
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+            return ResponseEntity.badRequest().body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
         catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }
 
@@ -93,7 +94,7 @@ public class EmpleadoMobileController {
             @ApiResponse(responseCode = "404", description = "Empleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizarClave(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<ApiEnityResponse<String>> actualizarClave(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
         logeador.debug("actualizarClave() empleado");
 
         try {
@@ -102,12 +103,12 @@ public class EmpleadoMobileController {
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+            return ResponseEntity.badRequest().body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  400 Bad Request
         }
         catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }
 
@@ -119,7 +120,7 @@ public class EmpleadoMobileController {
             @ApiResponse(responseCode = "404", description = "Empleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> eliminar(@PathVariable Long id) {
+    public ResponseEntity<ApiEnityResponse<String>> eliminar(@PathVariable Long id) {
         logeador.debug("eliminar() empleado: {}", id);
 
         try {
@@ -127,12 +128,12 @@ public class EmpleadoMobileController {
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // Retorna  400 Bad Request
+            return ResponseEntity.badRequest().body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
         catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna  500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
         }
     }
 
@@ -144,16 +145,15 @@ public class EmpleadoMobileController {
             @ApiResponse(responseCode = "404", description = "Empleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<EmpleadoDTO> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ApiEnityResponse<EmpleadoDTO>> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            EmpleadoDTO empleadoDTO = empleadoMobileService.encontrarPorClave(id);
-            return ResponseEntity.ok(empleadoDTO);  // Retorna  200 OK
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(empleadoMobileService.encontrarPorClave(id))); // Retorna  200 OK
         } catch (BaseDatosException e) {
-            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
         } catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.notFound().build(); // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         }
     }
 
@@ -163,16 +163,15 @@ public class EmpleadoMobileController {
             @ApiResponse(responseCode = "200", description = "Empleados obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<EmpleadoDTO>> obtenerTodos() {
+    public ResponseEntity<ApiEnityResponse<List<EmpleadoDTO>>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         List<EmpleadoDTO> empleadoLista = null;
 
         try {
-            empleadoLista = empleadoMobileService.obtenerTodos();
-             return ResponseEntity.ok(empleadoLista); // Retorna  200 OK
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(empleadoMobileService.obtenerTodos())); // Retorna  200 OK
         } catch (BaseDatosException e) {
-            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
         }
        
     }

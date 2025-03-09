@@ -1,16 +1,22 @@
 package com.elitsoft.servicampo.exceptions;
 
 
+import lombok.Getter;
+
 import java.io.Serial;
 
 /**
  *
  */
+@Getter
 public class RecursoDuplicadoException extends IllegalArgumentException {
     @Serial
     private static final long serialVersionUID = -2549603805413106140L; // Or a more specific exception type
 
-    private  String codigoError;
+    /**
+     * -- GETTER --
+     */
+    private  String errorCode;
 
     /**
      * @param mensaje
@@ -20,12 +26,12 @@ public class RecursoDuplicadoException extends IllegalArgumentException {
     }
 
     /**
-     * @param codigoError
+     * @param errorCode
      * @param mensaje
      */
-    public RecursoDuplicadoException(String codigoError, String mensaje) {
+    public RecursoDuplicadoException(String errorCode, String mensaje) {
         super(mensaje);
-        this.codigoError = codigoError;
+        this.errorCode = errorCode;
     }
 
     /**
@@ -37,19 +43,13 @@ public class RecursoDuplicadoException extends IllegalArgumentException {
     }
 
     /**
-     * @param codigoError
+     * @param errorCode
      * @param mensaje
      * @param causa
      */
-    public RecursoDuplicadoException(String codigoError, String mensaje, Throwable causa) {
+    public RecursoDuplicadoException(String errorCode, String mensaje, Throwable causa) {
         super(mensaje, causa);
-        this.codigoError = codigoError;
+        this.errorCode = errorCode;
     }
 
-    /**
-     * @return
-     */
-    public String getCodigoError() {
-        return this.codigoError;
-    }
 }

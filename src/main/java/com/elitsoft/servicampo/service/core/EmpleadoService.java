@@ -8,8 +8,9 @@ import com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapper.EmpleadoMapper;
 import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.mapstruct.EmpleadoMapStruct;
+import com.elitsoft.servicampo.service.error.EmpleadoError;
+import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.utils.Constantes;
-import com.elitsoft.servicampo.utils.ErroresNegocio;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ public class EmpleadoService {
         // Agrega el Documento de Identificacion
         DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.agregar(empleadoDTO.getDocumentoIdentificacion());
 
-        Empleado empleadoCorreo =  this.encontrarPorCorreo(empleadoDTO.getEmail()); //Verifica Existencia de correo.
+        Empleado empleadoCorreo =  this.encontrarPorCorreo(empleadoDTO.getEmail()); //Busca Existencia de correo.
 
         this.valiacionesCorreo(empleadoDTO); //Valida existencia de correo
 
@@ -89,11 +90,13 @@ public class EmpleadoService {
         }
         catch (DuplicateKeyException e) {
             logeador.error(Constantes.EMPLEADO_DUPLICADO_MENSAGE + ": {}", empleadoDTO.getId());
-            throw new RecursoDuplicadoException(Constantes.EMPLEADO_DUPLICADO_MENSAGE);
+            throw new RecursoDuplicadoException(EmpleadoError.DUPLICADO.getCodigoError(),
+                                                Constantes.EMPLEADO_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException | RecursoNoEncontradoException e) {
             logeador.error(Constantes.EMPLEADO_AGREGAR_MENSAJE + ": {}", empleadoDTO.toString(), e);
-            throw new BaseDatosException(Constantes.EMPLEADO_AGREGAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.EMPLEADO_AGREGAR_MENSAJE, e);
     }
     }
 
@@ -111,7 +114,8 @@ public class EmpleadoService {
         //  Valida Entrada
         if (id == null || empleadoDTO == null || empleadoDTO.getId() == null) {
             logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((empleadoDTO != null) ? empleadoDTO.toString() : null  ));
-            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(EmpleadoError.ID_REQUERIDO.getCodigoError(),
+                                                Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //Valida Documento
@@ -123,7 +127,8 @@ public class EmpleadoService {
         //  Valida id
         if (!id.equals(empleadoDTO.getId())) {
             logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  empleadoDTO.toString());
-            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(EmpleadoError.ID_INVALIDO.getCodigoError(),
+                                                Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
 
@@ -135,7 +140,8 @@ public class EmpleadoService {
             logeador.info("empleado actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE + ": id={} {}", id, empleadoDTO.toString(), e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.EMPLEADO_ACTUALIZAR_MENSAJE, e);
         }
     }
 
@@ -151,9 +157,16 @@ public class EmpleadoService {
         logeador.debug("actualizarClave() empleado");
 
         //  Valida Entrada
-        if (id == null || contrasena.isEmpty()) {
-            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((id != null) ? id : null  ));
-            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        if (id == null) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE + " {}", EmpleadoError.ID_REQUERIDO.getCodigoError());
+            throw new EntradaInvalidadException(EmpleadoError.ID_REQUERIDO.getCodigoError(),
+                                                Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        if (contrasena == null || contrasena.isEmpty()  ) {
+            logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_CORRE0_MENSAGE);
+            throw new EntradaInvalidadException(EmpleadoError.CONTRASENA_REQUERIDO.getCodigoError(),
+                                                Constantes.EMPLEADO_ENTRADA_INVALIDA_CORRE0_MENSAGE);
         }
 
         try {
@@ -168,7 +181,7 @@ public class EmpleadoService {
             logeador.info("empleado clave actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE + ": id={}", id, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(), Constantes.EMPLEADO_ACTUALIZAR_MENSAJE, e);
         }
     }
 
@@ -188,7 +201,7 @@ public class EmpleadoService {
             logeador.info("empleado eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
             logeador.error(Constantes.EMPLEADO_ELIMINAR_MENSAJE + ": {}", id, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ELIMINAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(), Constantes.EMPLEADO_ELIMINAR_MENSAJE, e);
         }
     }
 
@@ -210,13 +223,15 @@ public class EmpleadoService {
                 logeador.info("empleado encontrado por clave : {}", id);
             } else {
                 logeador.info("empleado clave:{} no encontrado", id);
-                throw new RecursoNoEncontradoException(Constantes.EMPLEADO_NO_ENCONTRADO_MENSAGE);
+                throw new RecursoNoEncontradoException(EmpleadoError.NO_ENCONTRADO.getCodigoError(),
+                                                       Constantes.EMPLEADO_NO_ENCONTRADO_MENSAGE);
             }
 
             return empleadoDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.EMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                          Constantes.EMPLEADO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
@@ -235,7 +250,7 @@ public class EmpleadoService {
             return empleadoLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.EMPLEADO_OBTENER_TODOS_MENSAJE, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_OBTENER_TODOS_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(), Constantes.EMPLEADO_OBTENER_TODOS_MENSAJE, e);
         }
     }
 
@@ -252,7 +267,7 @@ public class EmpleadoService {
             return empleadoMapper.encontrarPorCorreo (email);
         } catch (DataAccessException e) {
             logeador.error(Constantes.EMPLEADO_ENCONTRAR_POR_CORREO_MENSAGE + " {}", email, e);
-            throw new BaseDatosException(Constantes.EMPLEADO_ENCONTRAR_POR_CORREO_MENSAGE, e);
+            throw new BaseDatosException(EmpleadoError.CORREO_NO_ENCONTRADO.getCodigoError(), Constantes.EMPLEADO_ENCONTRAR_POR_CORREO_MENSAGE, e);
         }
     }
 
@@ -270,7 +285,7 @@ public class EmpleadoService {
 
         if (empleado != null){
             logeador.error(Constantes.EMPLEADO_CORREO_DUPLICADO_MENSAGE);
-            throw new RecursoDuplicadoException(ErroresNegocio.EMPLEADO_CORREO_DUPLICADO.getCodigoError(),
+            throw new RecursoDuplicadoException(EmpleadoError.CORREO_DUPLICADO.getCodigoError(),
                     Constantes.EMPLEADO_CORREO_DUPLICADO_MENSAGE);
         }
     }
@@ -287,21 +302,22 @@ public class EmpleadoService {
         //  Valida Entrada
         if (empleadoDTO == null ) {
             logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(EmpleadoError.REQUERIDO.getCodigoError(),
+                                                Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //Solo para agregar clave
         if (contrasena) {
             if (empleadoDTO.getContrasena() == null || empleadoDTO.getContrasena().isEmpty()) {
                 logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
-                throw new EntradaInvalidadException(ErroresNegocio.EMPLEADO_CONTRASENA_REQUERIDO.getCodigoError(),
+                throw new EntradaInvalidadException(EmpleadoError.CONTRASENA_REQUERIDO.getCodigoError(),
                         Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
             }
         }
 
         if (empleadoDTO.getEmail() == null || empleadoDTO.getEmail().isEmpty()  ) {
             logeador.error(Constantes.EMPLEADO_ENTRADA_INVALIDA_CORRE0_MENSAGE);
-            throw new EntradaInvalidadException(ErroresNegocio.EMPLEADO_CORREO_REQUERIDO.getCodigoError(),
+            throw new EntradaInvalidadException(EmpleadoError.CORREO_REQUERIDO.getCodigoError(),
                                                 Constantes.EMPLEADO_ENTRADA_INVALIDA_CORRE0_MENSAGE);
         }
     }

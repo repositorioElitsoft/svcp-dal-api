@@ -332,5 +332,18 @@ public class Constantes {
     public static final String DIRECCIONEMPLEADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DIRECCIONEMPLEADO";
     public static final String DIRECCIONEMPLEADO_FILTRAR_MENSAJE = "Error filtrando DIRECCIONEMPLEADO";
 
+    public static final String TIPODIRECCION_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPODIRECCION invalida.";
+    public static final String TIPODIRECCION_DUPLICADO_MENSAGE = "Recurso  TIPODIRECCION ya existe.";
+    public static final String TIPODIRECCION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPODIRECCION viola Integridad. INTGVIOLADA001";
+    public static final String TIPODIRECCION_NO_ENCONTRADO_MENSAGE = "Recurso TIPODIRECCION no  encontrado";
+    public static final String TIPODIRECCION_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPODIRECCION";
+    public static final String TIPODIRECCION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPODIRECCION";
+    public static final String TIPODIRECCION_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPODIRECCION";
+    public static final String TIPODIRECCION_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPODIRECCION";
+    public static final String TIPODIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPODIRECCION por clave :";
+    public static final String TIPODIRECCION_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave TIPODIRECCION:";
+    public static final String TIPODIRECCION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPODIRECCION";
+    public static final String TIPODIRECCION_FILTRAR_MENSAJE = "Error filtrando TIPODIRECCION";
+
 }
 

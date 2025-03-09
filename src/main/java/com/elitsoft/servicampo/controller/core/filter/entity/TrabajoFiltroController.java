@@ -4,7 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.TrabajoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.TrabajoFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.TrabajoFiltroService;
-import com.elitsoft.servicampo.utils.PagedResponse;
+import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import com.elitsoft.servicampo.utils.PaginationUtils;
 import com.elitsoft.servicampo.utils.PagingAndSorting;
 import io.swagger.v3.oas.annotations.Operation;

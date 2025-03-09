@@ -1,6 +1,5 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.PaisDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +15,6 @@ public class RegionMobileDTO implements Serializable {
 
     private Long id;
     private String descripcionRegion;
-    private PaisDTO pais;
+    private PaisMobileDTO pais;
 
 }

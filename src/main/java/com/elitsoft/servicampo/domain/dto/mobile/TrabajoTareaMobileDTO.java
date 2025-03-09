@@ -1,7 +1,5 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TareaDTO;
-import com.elitsoft.servicampo.domain.dto.core.TrabajoDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -22,6 +20,6 @@ public class TrabajoTareaMobileDTO implements Serializable  {
     private Long trabajoId;
     private Long tareaId;
     private Integer ordenEjecucionTarea;
-    private TrabajoDTO trabajo;
-    private TareaDTO tarea;
+    private TrabajoMobileDTO trabajo;
+    private TareaMobileDTO tarea;
 }

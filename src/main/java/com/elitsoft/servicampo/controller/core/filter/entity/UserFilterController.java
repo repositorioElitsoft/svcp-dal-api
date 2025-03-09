@@ -8,7 +8,7 @@ import com.elitsoft.servicampo.utils.PagingAndSorting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.elitsoft.servicampo.utils.PagedResponse;
+import com.elitsoft.servicampo.common.api.response.PagedResponse;
 
 import java.util.List;
 

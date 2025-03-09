@@ -1,11 +1,22 @@
 package com.elitsoft.servicampo.exceptions;
 
+import lombok.Getter;
+
+import java.io.Serial;
+
 /**
  * Exception producida cuando un Demo no es encontrado.
  */
+@Getter
 public class RecursoNoEncontradoException extends Exception {
 
-    private  String codigoError;
+    @Serial
+    private static final long serialVersionUID = -3302872999292045132L;
+
+    /**
+     * -- GETTER --
+     * */
+    private  String errorCode;
 
     /**
      * Constructor para la exception.
@@ -18,18 +29,12 @@ public class RecursoNoEncontradoException extends Exception {
 
     /**
      *
-     * @param codigoError
+     * @param errorCode
      * @param mensaje
      */
-    public RecursoNoEncontradoException(String codigoError,String mensaje) {
+    public RecursoNoEncontradoException(String errorCode, String mensaje) {
         super(mensaje);
-        this.codigoError = codigoError;
+        this.errorCode = errorCode;
     }
 
-    /**
-     * @return
-     */
-    public String getCodigoError() {
-        return this.codigoError;
-    }
 }

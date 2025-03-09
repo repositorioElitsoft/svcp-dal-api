@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +17,6 @@ public class DocumentoIdentificacionMobileDTO implements Serializable {
     private Long id;
     private String numero;
     private Character digitoVerificador;
-    private TipoDocumentoIdentificacion tipoDocumentoIdentificacion;
+    private TipoDocumentoIdentificacionMobileDTO tipoDocumentoIdentificacion;
 
 }

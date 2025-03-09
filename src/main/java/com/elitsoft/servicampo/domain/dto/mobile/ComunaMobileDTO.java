@@ -1,6 +1,5 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ProvinciaDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +15,6 @@ public class ComunaMobileDTO implements Serializable {
 
     private Long id;
     private String descripcionComuna;
-    private ProvinciaDTO provincia;
+    private ProvinciaMobileDTO provincia;
 
 }

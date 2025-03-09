@@ -1,9 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
-import com.elitsoft.servicampo.domain.dto.core.EstadoDTO;
-import com.elitsoft.servicampo.domain.dto.core.RoleDTO;
-import com.elitsoft.servicampo.domain.dto.core.TipoEmpleadoDTO;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -30,8 +27,8 @@ public class EmpleadoMobileDTO implements Serializable {
     private LocalDate fechaNacimiento;
     private String email;
     private String nombreUsuario;
-    private TipoEmpleadoDTO tipoEmpleado;
-    private RoleDTO role;
-    private EstadoDTO estado;
-    private DocumentoIdentificacionDTO documentoIdentificacion;
+    private TipoEmpleadoMobileDTO tipoEmpleado;
+    private RoleMobileDTO role;
+    private EstadoMobileDTO estado;
+    private DocumentoIdentificacionMobileDTO documentoIdentificacion;
 }

@@ -1,16 +1,24 @@
 package com.elitsoft.servicampo.exceptions;
 
 
+import lombok.Getter;
+
 import java.io.Serial;
 
 /**
  *
  */
+@Getter
 public class EntradaInvalidadException extends IllegalArgumentException {
     @Serial
     private static final long serialVersionUID = -1656055939158112685L; // Or a more specific exception type
 
-    private  String codigoError;
+    /**
+     * -- GETTER --
+     *
+     * @return
+     */
+    private  String errorCode;
 
     /**
      * @param mensaje
@@ -20,12 +28,12 @@ public class EntradaInvalidadException extends IllegalArgumentException {
     }
 
     /**
-     * @param codigoError
+     * @param errorCode
      * @param mensaje
      */
-    public EntradaInvalidadException(String codigoError, String mensaje) {
+    public EntradaInvalidadException(String errorCode, String mensaje) {
         super(mensaje);
-        this.codigoError = codigoError;
+        this.errorCode = errorCode;
     }
 
     /**
@@ -37,19 +45,13 @@ public class EntradaInvalidadException extends IllegalArgumentException {
     }
 
     /**
-     * @param codigoError
+     * @param errorCode
      * @param mensaje
      * @param causa
      */
-    public EntradaInvalidadException(String codigoError, String mensaje, Throwable causa) {
+    public EntradaInvalidadException(String errorCode, String mensaje, Throwable causa) {
         super(mensaje, causa);
-        this.codigoError = codigoError;
+        this.errorCode = errorCode;
     }
 
-    /**
-     * @return
-     */
-    public String getCodigoError() {
-        return this.codigoError;
-    }
 }

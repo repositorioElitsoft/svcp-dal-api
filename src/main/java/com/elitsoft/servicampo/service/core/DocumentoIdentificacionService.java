@@ -6,8 +6,9 @@ import com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
+import com.elitsoft.servicampo.service.error.DocumentoIdentificacionError;
+import com.elitsoft.servicampo.service.error.TipoDocumentoIdentificacionError;
 import com.elitsoft.servicampo.utils.Constantes;
-import com.elitsoft.servicampo.utils.ErroresNegocio;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,7 @@ public class DocumentoIdentificacionService {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {} , {}",
                            documentoidentificacionDTO.getNumero(),
                            documentoidentificacionDTO.getDigitoVerificador());
-            throw new RecursoDuplicadoException(ErroresNegocio.IDENTIFICACION_DUPLICADO.getCodigoError() ,
+            throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError() ,
                                                 Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
         }
 
@@ -142,7 +143,7 @@ public class DocumentoIdentificacionService {
                 documentoidentificacionDTO.getDigitoVerificador());
 
         if (documentoIdentificacionExiste != null) {
-            throw new RecursoDuplicadoException(ErroresNegocio.IDENTIFICACION_DUPLICADO.codigoError(),
+            throw new RecursoDuplicadoException(GeneralError.IDENTIFICACION_DUPLICADO.codigoError(),
                     Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
         }
          */
@@ -302,7 +303,7 @@ public class DocumentoIdentificacionService {
         //Valida Numero de identificacion
         if (documentoIdentificacionDTO == null || documentoIdentificacionDTO.getNumero() == null || documentoIdentificacionDTO.getNumero().isEmpty() ) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE );
-            throw new EntradaInvalidadException(ErroresNegocio.IDENTIFICACION_NUMERO_REQUERIDO.getCodigoError(),
+            throw new EntradaInvalidadException(DocumentoIdentificacionError.NUMERO_REQUERIDO.getCodigoError(),
                                                 Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE);
         }
 
@@ -313,7 +314,7 @@ public class DocumentoIdentificacionService {
         if (tipoDocumentoIdentificacionDTO == null || tipoDocumentoIdentificacionDTO.getId() == null
                                                    || tipoDocumentoIdentificacionDTO.getId().toString().isEmpty()){
             logeador.error(Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE );
-            throw new EntradaInvalidadException(ErroresNegocio.TIPO_DOCUMENTO_IDENTIFICACION_ID_REQUERIDO.getCodigoError(),
+            throw new EntradaInvalidadException(TipoDocumentoIdentificacionError.ID_REQUERIDO.getCodigoError(),
                     Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE);
 
         }
@@ -327,7 +328,7 @@ public class DocumentoIdentificacionService {
                                                 && (documentoIdentificacionDTO.getDigitoVerificador () == null
                                                 || documentoIdentificacionDTO.getDigitoVerificador() == ' ') ) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE );
-            throw new EntradaInvalidadException(ErroresNegocio.IDENTIFICACION_DIGITO_VERIFICADOR_REQUERIDO.getCodigoError(),
+            throw new EntradaInvalidadException(DocumentoIdentificacionError.DIGITO_VERIFICADOR_REQUERIDO.getCodigoError(),
                     Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_DIGITO_VERIFICADOR_MENSAGE);
         }
 
