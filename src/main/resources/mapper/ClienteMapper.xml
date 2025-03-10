@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ClienteMapper">
+
+    <resultMap id="clienteResultMap" type="com.elitsoft.servicampo.domain.entity.Cliente">
+        <id property="id" column="clnt_id" />
+        <result property="nombre" column="clnt_nombre" />
+        <result property="apellidoPaterno" column="clnt_apellido_paterno" />
+        <result property="apellidoMaterno" column="clnt_apellido_materno" />
+        <result property="rut" column="clnt_rut" />
+        <result property="rutDv" column="clnt_rut_dv" />
+        <result property="fechaNacimiento" column="clnt_fecha_nacimiento" />
+        <result property="imagenPerfil" column="clnt_imagen_perfil" />
+        <result property="email" column="clnt_email" />
+        <result property="campo1" column="clnt_campo1" />
+        <result property="campo2" column="clnt_campo2" />
+        <result property="telefonoFijo" column="clnt_fono_fijo" />
+        <result property="telefonoMovil" column="clnt_fono_movil" />
+        <association property="tipoCliente" resultMap="com.elitsoft.servicampo.mapper.TipoClienteMapper.tipoClienteResultMap"/>
+        <association property="clasificacionCliente"  resultMap="com.elitsoft.servicampo.mapper.ClasificacionClienteMapper.clasificacionClienteResultMap"/>
+        <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+        <!-- <collection property="direcciones" ofType="com.elitsoft.servicampo.domain.entity.Direccion" column="clnt_id" select="com.elitsoft.servicampo.mapper.DireccionMapper.filtrarPorCliente"/> -->
+        <association property="agrupacionComercial"  resultMap="com.elitsoft.servicampo.mapper.AgrupacionComercialMapper.agrupacionComercialResultMap"/>
+        <association property="segmentacionCliente"  resultMap="com.elitsoft.servicampo.mapper.SegmentacionClienteMapper.segmentacionClienteResultMap"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT clnt.clnt_id    , clnt.clnt_nombre  , clnt.clnt_apellido_paterno  , clnt.clnt_apellido_materno  ,
+               clnt.clnt_rut   , clnt.clnt_rut_dv  , clnt.clnt_fecha_nacimiento  , clnt.clnt_imagen_perfil     ,
+               clnt.clnt_email , clnt.clnt_campo1  , clnt.clnt_campo2            , clnt.clnt_fono_fijo         ,
+               clnt.clnt_fono_movil  ,
+               tpcl.tpcl_id    , tpcl.tpcl_nombre  , clcl.clcl_id                , clcl.clcl_dsc               ,
+               estd.estd_id    , estd.estd_dsc     , grcm.grcm_id                , grcm.grcm_nombre            ,
+               sgcl.sgcl_id    , sgcl.sgcl_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}clientes as clnt
+        INNER JOIN  ${schema}tipos_clientes as tpcl ON clnt.tpcl_id = tpcl.tpcl_id
+        INNER JOIN  ${schema}clasificaciones_clientes as clcl ON clnt.clcl_id = clcl.clcl_id
+        INNER JOIN  ${schema}estados as estd ON clnt.estd_id = estd.estd_id
+        INNER JOIN  ${schema}agrupaciones_comerciales as grcm ON clnt.grcm_id = grcm.grcm_id
+        INNER JOIN  ${schema}segmentacion_clientes as sgcl ON clnt.sgcl_id = sgcl.sgcl_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="clienteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE clnt.clnt_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="clienteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="clienteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND clnt_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(clnt_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+                <if test="filtro.apellidoPaterno != null and filtro.apellidoPaterno != ''">
+                    AND LOWER(clnt_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
+                </if>
+                <if test="filtro.apellidoMaterno != null and filtro.apellidoMaterno != ''">
+                    AND LOWER(clnt_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
+                </if>
+                <if test="filtro.tipoClienteId != null">
+                    AND clnt.tpcl_id = #{filtro.tipoClienteId}
+                </if>
+                <if test="filtro.clasificacionClienteId != null">
+                    AND clnt.clcl_id = #{filtro.clasificacionClienteId}
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND clnt.estd_id = #{filtro.estadoId}
+                </if>
+                <if test="filtro.agrupacionComercialId != null">
+                    AND clnt.grcm_id = #{filtro.agrupacionComercialId}
+                </if>
+                <if test="filtro.segmentacionClienteId != null">
+                    AND clnt.sgcl_id = #{filtro.segmentacionClienteId}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY clnt.clnt_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombre'">ORDER BY clnt.clnt_nombre ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoPaterno'">ORDER BY clnt.clnt_apellido_paterno ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoMaterno'">ORDER BY clnt.clnt_apellido_materno ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoClienteId'">ORDER BY clnt.tpcl_id ${direccionOrden}</when>
+                <when test="campoOrden == 'clasificacionClienteId'">ORDER BY clnt.clcl_id ${direccionOrden}</when>
+                <when test="campoOrden == 'estadoId'">ORDER BY clnt.estd_id ${direccionOrden}</when>
+                <when test="campoOrden == 'agrupacionComercialId'">ORDER BY clnt.grcm_id ${direccionOrden}</when>
+                <when test="campoOrden == 'segmentacionClienteId'">ORDER BY clnt.sgcl_id ${direccionOrden}</when>
+                <otherwise>ORDER BY clnt.clnt_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND clnt_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(clnt_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+                <if test="filtro.apellidoPaterno != null and filtro.apellidoPaterno != ''">
+                    AND LOWER(clnt_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
+                </if>
+                <if test="filtro.apellidoMaterno != null and filtro.apellidoMaterno != ''">
+                    AND LOWER(clnt_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
+                </if>
+                <if test="filtro.tipoClienteId != null">
+                    AND clnt.tpcl_id = #{filtro.tipoClienteId}
+                </if>
+                <if test="filtro.clasificacionClienteId != null">
+                    AND clnt.clcl_id = #{filtro.clasificacionClienteId}
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND clnt.estd_id = #{filtro.estadoId}
+                </if>
+                <if test="filtro.agrupacionComercialId != null">
+                    AND clnt.grcm_id = #{filtro.agrupacionComercialId}
+                </if>
+                <if test="filtro.segmentacionClienteId != null">
+                    AND clnt.sgcl_id = #{filtro.segmentacionClienteId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Cliente" affectData="true" flushCache="true">
+        INSERT INTO ${schema}clientes (
+                           clnt_nombre  , clnt_apellido_paterno  , clnt_apellido_materno  , clnt_rut     , clnt_rut_dv    ,
+                           clnt_email   , clnt_fecha_nacimiento  , clnt_campo1            , clnt_campo2  , clnt_fono_fijo ,
+                           clnt_fono_movil, tpcl_id              , clcl_id                , estd_id, grcm_id ,
+                           sgcl_id)
+                   VALUES (
+                           #{nombre}    , #{apellidoPaterno}     , #{apellidoMaterno}     , #{rut}       , #{rutDv}       ,
+                           #{email}     , #{fechaNacimiento}     , #{campo1}              , #{campo2}    , #{telefonoFijo},
+                           #{telefonoMovil}, #{tipoCliente.id}   , #{clasificacionCliente.id}, #{estado.id}, #{agrupacionComercial.id},
+                           #{segmentacionCliente.id})
+        returning clnt_id as id, clnt_nombre as nombre, clnt_apellido_paterno as apellidoPaterno
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Cliente">
+        UPDATE ${schema}clientes
+        SET clnt_nombre = #{nombre}, clnt_apellido_paterno = #{apellidoPaterno}, clnt_apellido_materno = #{apellidoMaterno},
+            clnt_rut    = #{rut}   , clnt_rut_dv           = #{rutDv}          , clnt_fecha_nacimiento = #{fechaNacimiento},
+            clnt_email  = #{email} , clnt_imagen_perfil    = #{imagenPerfil}   , clnt_campo1           = #{campo1}         ,
+            clnt_campo2 = #{campo2}, clnt_fono_fijo        = #{telefonoFijo}   , clnt_fono_movil       = #{telefonoMovil}  ,
+            tpcl_id     = #{tipoCliente.id} , clcl_id = #{clasificacionCliente.id} ,
+            estd_id     = #{estado.id}      , grcm_id = #{agrupacionComercial.id}  ,
+            sgcl_id     = #{segmentacionCliente.id}
+        WHERE clnt_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}clientes
+        WHERE clnt_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}clientes (
+                        clnt_nombre           , clnt_apellido_paterno  , clnt_apellido_materno  , clnt_rut   ,
+                        clnt_rut_dv , clnt_fecha_nacimiento , clnt_imagen_perfil     , clnt_email             , clnt_campo1 ,
+                        clnt_campo2 , clnt_fono_fijo        , clnt_fono_movil        , tpcl_id                ,
+                        clcl_id     , estd_id               , grcm_id                , sgcl_id) VALUES
+        <foreach item="cliente" collection="clienteLote" separator=",">
+            (#{cliente.nombre}           , #{cliente.apellidoPaterno} , #{cliente.apellidoMaterno}         , #{cliente.rut}     ,
+            #{cliente.rutDv}  , #{cliente.fechaNacimiento}  , #{cliente.imagenPerfil}    , #{cliente.email}                   , #{cliente.campo1}  ,
+            #{cliente.campo2} , #{cliente.telefonoFijo}     , #{cliente.telefonoMovil}   , #{cliente.tipoCliente.id}          ,
+            #{cliente.clasificacionCliente.id}              , #{cliente.estado.id}       , #{cliente.agrupacionComercial.id}  ,
+            #{cliente.segmentacionCliente.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='cliente' collection='clienteLote' separator=';'>
+            UPDATE ${schema}clientes
+            SET clnt_nombre = #{cliente.nombre} , clnt_apellido_paterno = #{cliente.apellidoPaterno}  , clnt_apellido_materno = #{cliente.apellidoMaterno} ,
+                clnt_rut    = #{cliente.rut}    , clnt_rut_dv           = #{cliente.rutDv}            , clnt_fecha_nacimiento = #{cliente.fechaNacimiento} ,
+                clnt_email  = #{cliente.email}  , clnt_imagen_perfil    = #{cliente.imagenPerfil}     , clnt_campo1           = #{cliente.campo1}          ,
+                clnt_campo2 = #{cliente.campo2} , clnt_fono_fijo        = #{cliente.telefonoFijo}     , clnt_fono_movil       = #{cliente.telefonoMovil}   ,
+                tpcl_id     = #{cliente.tipoCliente.id}, clcl_id        = #{cliente.clasificacionCliente.id}, estd_id         = #{cliente.estado.id}       ,
+                grcm_id     = #{cliente.agrupacionComercial.id}, sgcl_id = #{cliente.segmentacionCliente.id}
+            WHERE clnt_id = #{cliente.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}clientes WHERE clnt_id IN
+        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

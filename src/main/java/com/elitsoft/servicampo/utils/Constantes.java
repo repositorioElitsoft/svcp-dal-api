@@ -357,5 +357,19 @@ public class Constantes {
     public static final String CONTACTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTACTO:";
     public static final String CONTACTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTACTO";
     public static final String CONTACTO_FILTRAR_MENSAJE = "Error filtrando CONTACTO";
+    
+    public static final String CLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de CLIENTE invalida.";
+    public static final String CLIENTE_DUPLICADO_MENSAGE = "Recurso  CLIENTE ya existe.";
+    public static final String CLIENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CLIENTE viola Integridad. INTGVIOLADA001";
+    public static final String CLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso CLIENTE no  encontrado";
+    public static final String CLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso CLIENTE";
+    public static final String CLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CLIENTE";
+    public static final String CLIENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CLIENTE";
+    public static final String CLIENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso CLIENTE";
+    public static final String CLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CLIENTE por clave :";
+    public static final String CLIENTE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CLIENTE:";
+    public static final String CLIENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CLIENTE";
+    public static final String CLIENTE_FILTRAR_MENSAJE = "Error filtrando CLIENTE";
+
 }
 

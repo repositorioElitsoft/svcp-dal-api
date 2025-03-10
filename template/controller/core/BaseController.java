@@ -4,7 +4,6 @@ import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.#app_name#.domain.dto.core.#Base#DTO;
 import com.elitsoft.#app_name#.exceptions.*;
 import com.elitsoft.#app_name#.service.core.#Base#Service;
-import com.elitsoft.#app_name#.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
