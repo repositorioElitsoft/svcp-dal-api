@@ -371,5 +371,17 @@ public class Constantes {
     public static final String CLIENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CLIENTE";
     public static final String CLIENTE_FILTRAR_MENSAJE = "Error filtrando CLIENTE";
 
+    public static final String DIRECCION_ENTRADA_INVALIDA_MENSAGE = "Entrada de DIRECCION invalida.";
+    public static final String DIRECCION_DUPLICADO_MENSAGE = "Recurso  DIRECCION ya existe.";
+    public static final String DIRECCION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  DIRECCION viola Integridad. INTGVIOLADA001";
+    public static final String DIRECCION_NO_ENCONTRADO_MENSAGE = "Recurso DIRECCION no  encontrado";
+    public static final String DIRECCION_AGREGAR_MENSAJE = "Error Interno agregando Recurso DIRECCION";
+    public static final String DIRECCION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos DIRECCION";
+    public static final String DIRECCION_ACTUALIZAR_MENSAJE = "Error actualizando Recurso DIRECCION";
+    public static final String DIRECCION_ELIMINAR_MENSAJE = "Error eliminando Recurso DIRECCION";
+    public static final String DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso DIRECCION por clave :";
+    public static final String DIRECCION_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave DIRECCION:";
+    public static final String DIRECCION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DIRECCION";
+    public static final String DIRECCION_FILTRAR_MENSAJE = "Error filtrando DIRECCION";
 }
 

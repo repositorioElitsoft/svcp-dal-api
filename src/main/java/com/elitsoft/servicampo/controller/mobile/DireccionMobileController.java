@@ -1,9 +1,9 @@
-package com.elitsoft.#app_name#.controller.core;
+package com.elitsoft.servicampo.controller.mobile;
 
 import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
-import com.elitsoft.#app_name#.domain.dto.core.#Base#DTO;
-import com.elitsoft.#app_name#.exceptions.*;
-import com.elitsoft.#app_name#.service.core.#Base#Service;
+import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
+import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.service.mobile.DireccionMobileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,66 +18,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Gestiona las peticiones y respuestas http relativas a #Base#
+ * Gestiona las peticiones y respuestas http relativas a Direccion para la version mobile
  */
 @RestController
-@RequestMapping("/#base#")
-public class #Base#Controller {
+@RequestMapping("/mobile/direcciones")
+public class DireccionMobileController {
 
     @Autowired
-    private #Base#Service #base#Service;
+    private DireccionMobileService direccionMobileService;
 
-    private static final Logger logeador = LoggerFactory.getLogger(#Base#Controller.class); //Logback
+    private static final Logger logeador = LoggerFactory.getLogger(DireccionMobileController.class); //Logback
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega un #base#", description = "Agrega un nuevo #base#")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "#Base# agregado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
-    })
-    public ResponseEntity<ApiEnityResponse<String>> agregar(@RequestBody #Base#DTO #base#DTO) {
-        logeador.debug("agregar() #base#");
-
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(#base#Service.agregar(#base#DTO))); // Retorna  201 Created
-        }
-        catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
-        }
-        catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
-        }
-        catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
-        }
-        catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
-        }
-
-    }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega un #base#", description = "Agrega un nuevo #base#")
+    @Operation(summary = "Agrega un direccion", description = "Agrega un nuevo direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "#Base# agregado exitosamente"),
+            @ApiResponse(responseCode = "201", description = "Direccion agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
+            @ApiResponse(responseCode = "409", description = "Direccion ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<#Base#DTO>> agregar(@RequestBody #Base#DTO #base#DTO) {
-        logeador.debug("agregar() #base#");
+    public ResponseEntity<ApiEnityResponse<DireccionDTO>> agregar(@RequestBody DireccionDTO direccionDTO) {
+        logeador.debug("agregar() direccion");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(#base#Service.agregar(#base#DTO))); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(direccionMobileService.agregar(direccionDTO))); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(direccionDTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
-        catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
-        }
+//        catch (RecursoNoEncontradoException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(direccionDTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+//        }
         catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
         }
@@ -88,18 +60,18 @@ public class #Base#Controller {
     }
 
     @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega lista de #base#", description = "Agrega una lista de nuevos #base#")
+    @Operation(summary = "Agrega lista de direccion", description = "Agrega una lista de nuevos direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Lista #Base# agregados exitosamente"),
+            @ApiResponse(responseCode = "201", description = "Lista Direccion agregados exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
+            @ApiResponse(responseCode = "409", description = "Direccion ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> agregarLote(@RequestBody List<#Base#DTO> #base#DTOLote) {
-        logeador.debug("agregarLote() #base#");
+    public ResponseEntity<ApiEnityResponse<String>> agregarLote(@RequestBody List<DireccionDTO> direccionLoteDTO) {
+        logeador.debug("agregarLote() direccion");
 
         try {
-            #base#Service.agregarLote (#base#DTOLote);
+            direccionMobileService.agregarLote(direccionLoteDTO); 
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -114,19 +86,19 @@ public class #Base#Controller {
 
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Actualiza un #base#", description = "Actualiza un #base#")
+    @PutMapping(value = "/{id}/clientes/{clienteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Actualiza un direccion", description = "Actualiza un direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "#Base# actualizado exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Direccion actualizado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
+            @ApiResponse(responseCode = "404", description = "Direccion no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> actualizar(@PathVariable Long id, @RequestBody #Base#DTO #base#DTO) {
-        logeador.debug("actualizar() #base#");
+    public ResponseEntity<ApiEnityResponse<String>> actualizar(@PathVariable Long id, @PathVariable Long clienteId, @RequestBody DireccionDTO direccionDTO) {
+        logeador.debug("actualizar() direccion");
 
         try {
-            #base#Service.actualizar(id, #base#DTO);
+            direccionMobileService.actualizar(clienteId, id, direccionDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -135,53 +107,53 @@ public class #Base#Controller {
         catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         }
-        catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
-        } 
+//        catch (RecursoDuplicadoException e) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
+//        }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }
 
     @PutMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Actualiza lista de #base#", description = "Actualiza una lista de #base#")
+    @Operation(summary = "Actualiza lista de direccion", description = "Actualiza una lista de direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Lote #Base# actualizados exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Lote Direccion actualizados exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> actualizarLote(@RequestBody List<#Base#DTO> #base#DTOLote) {
-        logeador.debug("actualizarLote() #base#");
+    public ResponseEntity<ApiEnityResponse<String>> actualizarLote(@RequestBody List<DireccionDTO> direccionLoteDTO) {
+        logeador.debug("actualizarLote() direccion");
 
         try {
-            #base#Service.actualizarLote(#base#DTOLote);
+            direccionMobileService.actualizarLote(direccionLoteDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
-        catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
-        }
+//        catch (RecursoNoEncontradoException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+//        }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }
 
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Elimina un #base#", description = "Elimina un #base#")
+    @DeleteMapping(value = "/{id}/clientes/{clienteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Elimina un direccion", description = "Elimina un direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "#Base# eliminado exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Direccion eliminado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
-            @ApiResponse(responseCode = "460", description = "#Base# Viola integridad referencial"),
+            @ApiResponse(responseCode = "404", description = "Direccion no encontrado"),
+            @ApiResponse(responseCode = "460", description = "Direccion Viola integridad referencial"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> eliminar(@PathVariable Long id) {
-        logeador.debug("eliminar() #base#: {}", id);
+    public ResponseEntity<ApiEnityResponse<String>> eliminar(@PathVariable Long id, @PathVariable Long clienteId) {
+        logeador.debug("eliminar() direccion: {}", id);
 
         try {
-            #base#Service.eliminar(id);
+            direccionMobileService.eliminar(clienteId, id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -199,18 +171,18 @@ public class #Base#Controller {
     }
 
     @DeleteMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Elimina Lista de #base#", description = "Elimina una Lista de #base#")
+    @Operation(summary = "Elimina Lista de direccion", description = "Elimina una Lista de direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Lista #Base# eliminados exitosamente"),
+            @ApiResponse(responseCode = "204", description = "Lista Direccion eliminados exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "460", description = "#Base# Viola integridad referencial"),
+            @ApiResponse(responseCode = "460", description = "Direccion Viola integridad referencial"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> eliminarLote(@RequestBody List<Long> idLote) {
-        logeador.debug("eliminarLote() #base#");
+    public ResponseEntity<ApiEnityResponse<String>> eliminarLote(@RequestBody List<DireccionDTO> direccionDTOLote) {
+        logeador.debug("eliminarLote() direccion");
 
         try {
-            #base#Service.eliminarLote(idLote);
+            direccionMobileService.eliminarLote(direccionDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -224,18 +196,18 @@ public class #Base#Controller {
         }
     }
 
-    @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Encuentra un #base#", description = "Encuentra un #base# por su clave")
+    @GetMapping(value = "/{id}/clientes/{clienteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Encuentra un direccion", description = "Encuentra un direccion por su clave")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "#Base# encontrado exitosamente"),
-            @ApiResponse(responseCode = "404", description = "#Base# no encontrado"),
+            @ApiResponse(responseCode = "200", description = "Direccion encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Direccion no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<#Base#DTO>> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ApiEnityResponse<DireccionDTO>> encontrarPorClave(@PathVariable Long id,  @PathVariable Long clienteId) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(#base#Service.encontrarPorClave(id))); // Retorna  200 OK
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(direccionMobileService.encontrarPorClave(clienteId, id))); // Retorna  200 OK
         }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
@@ -246,18 +218,19 @@ public class #Base#Controller {
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Obtiene todos  los #base#", description = "Obtiene todos los #base#")
+    @Operation(summary = "Obtiene todos  los direccion", description = "Obtiene todos los direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "#Base#s obtenidos exitosamente"),
+            @ApiResponse(responseCode = "200", description = "Direccions obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<List<#Base#DTO>>> obtenerTodos() {
+    public ResponseEntity<ApiEnityResponse<List<DireccionDTO>>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(#base#Service.obtenerTodos())); // Retorna  200 OK
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(direccionMobileService.obtenerTodos())); // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
         }
+       
     }
 }

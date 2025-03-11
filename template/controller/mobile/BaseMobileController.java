@@ -137,7 +137,8 @@ public class #Base#MobileController {
         }
         catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
-        } catch (BaseDatosException e) {
+        } 
+        catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.DireccionMapper">
+
+    <resultMap id="direccionResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
+        <id property="id" column="drcc_id" />
+        <result property="descripcion" column="drcc_dsc" />
+        <result property="calle" column="drcc_calle" />
+        <result property="numeracion" column="drcc_numeracion" />
+        <result property="referencia" column="drcc_referencia" />
+        <result property="imagenPerfil" column="drcc_imagen_perfil" />
+        <result property="latitud" column="drcc_latitud" />
+        <result property="longitud" column="drcc_longitud" />
+        <result property="flagEvidencia" column="drcc_flag_evidencia" />
+        <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
+        <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
+        <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
+        <association property="contacto" resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+        <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
+        <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+    </resultMap>
+
+    <resultMap id="direccionLazyResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
+        <id property="id" column="drcc_id" />
+        <result property="descripcion" column="drcc_dsc" />
+        <result property="calle" column="drcc_calle" />
+        <result property="numeracion" column="drcc_numeracion" />
+        <result property="referencia" column="drcc_referencia" />
+        <result property="imagenPerfil" column="drcc_imagen_perfil" />
+        <result property="latitud" column="drcc_latitud" />
+        <result property="longitud" column="drcc_longitud" />
+        <result property="flagEvidencia" column="drcc_flag_evidencia" />
+        <association property="cliente" column="clnt_id" javaType="com.elitsoft.servicampo.domain.entity.Cliente" select="com.elitsoft.servicampo.mapper.ClienteMapper.encontrarPorClave"/>
+        <association property="comuna" column="cmna_id" javaType="com.elitsoft.servicampo.domain.entity.Comuna" select="com.elitsoft.servicampo.mapper.ComunaMapper.encontrarPorClave"/>
+        <association property="sector" column="sctr_id" javaType="com.elitsoft.servicampo.domain.entity.Sector" select="com.elitsoft.servicampo.mapper.SectorMapper.encontrarPorClave"/>
+        <association property="contacto" column="cntc_id" javaType="com.elitsoft.servicampo.domain.entity.Contacto" select="com.elitsoft.servicampo.mapper.ContactoMapper.encontrarPorClave"/>
+        <association property="tipoDireccion" column="tpdr_id" javaType="com.elitsoft.servicampo.domain.entity.TipoDireccion" select="com.elitsoft.servicampo.mapper.TipoDireccionMapper.encontrarPorClave"/>
+        <association property="estado" column="estd_id" javaType="com.elitsoft.servicampo.domain.entity.Estado" select="com.elitsoft.servicampo.mapper.EstadoMapper.encontrarPorClave"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
+               drcc.drcc_imagen_perfil,            drcc.drcc_latitud   , drcc.drcc_longitud     , drcc.drcc_flag_evidencia ,
+               clnt.clnt_id , clnt.clnt_nombre ,
+               cmna.cmna_id , cmna.cmna_dsc    ,
+               sctr.sctr_id , sctr.sctr_dsc    ,
+               cntc.cntc_id , cntc.cntc_nombre ,
+               tpdr.tpdr_id , tpdr.tpdr_dsc    ,
+               estd.estd_id , estd.estd_dsc
+    </sql>
+
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}direcciones     as drcc
+        INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
+        INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
+        INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
+        INNER JOIN ${schema}contactos as cntc ON drcc.cntc_id = cntc.cntc_id
+        INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
+        INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="direccionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE drcc.clnt_id = #{clientId}
+          AND drcc.drcc_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="direccionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="direccionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.clienteId != null">
+                    AND drcc.clnt_id = #{filtro.clienteId}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(drcc.drcc_dsc ) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.calle != null and filtro.calle != ''">
+                    AND LOWER(drcc.drcc_calle) LIKE '%' || LOWER(#{filtro.calle}) || '%'
+                </if>
+                <if test="filtro.comunaId != null">
+                    AND drcc.cmna_id = #{filtro.comunaId}
+                </if>
+                <if test="filtro.sectorId != null">
+                    AND drcc.sctr_id = #{filtro.sectorId}
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND drcc.estd_id = #{filtro.estadoId}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'clienteId'">ORDER BY drcc.clnt_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY drcc.drcc_dsc  ${direccionOrden}</when>
+                <when test="campoOrden == 'calle'">ORDER BY drcc.drcc_calle ${direccionOrden}</when>
+                <when test="campoOrden == 'comunaId'">ORDER BY drcc.cmna_id ${direccionOrden}</when>
+                <when test="campoOrden == 'sectorId'">ORDER BY drcc.sctr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'estadoId'">ORDER BY drcc.estd_id ${direccionOrden}</when>
+                <otherwise>ORDER BY drcc.clnt_id, drcc.drcc_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.clienteId != null">
+                    AND drcc.clnt_id = #{filtro.clienteId}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(drcc.drcc_dsc ) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.calle != null and filtro.calle != ''">
+                    AND LOWER(drcc.drcc_calle) LIKE '%' || LOWER(#{filtro.calle}) || '%'
+                </if>
+                <if test="filtro.comunaId != null">
+                    AND drcc.cmna_id = #{filtro.comunaId}
+                </if>
+                <if test="filtro.sectorId != null">
+                    AND drcc.sctr_id = #{filtro.sectorId}
+                </if>
+                <if test="filtro.estadoId != null">
+                    AND drcc.estd_id = #{filtro.estadoId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Direccion" affectData="true" flushCache="true">
+        INSERT INTO ${schema}direcciones (clnt_id , drcc_dsc, drcc_calle, drcc_numeracion, drcc_referencia,
+                                          cmna_id , sctr_id   , cntc_id        , tpdr_id        ,
+                                          drcc_imagen_perfil  , drcc_latitud   , drcc_longitud  ,
+                                          estd_id ,             drcc_flag_evidencia)
+                                VALUES  (#{cliente.id}, #{descripcion}, #{calle}, #{numeracion}, #{referencia},
+                                         #{comuna.id}        ,  #{sector.id}   , #{contacto.id},  #{tipoDireccion.id} ,
+                                         #{imagenPerfil}     ,  #{latitud}     , #{longitud}    ,
+                                         #{estado.id}        ,  #{flagEvidencia}
+                                        )
+        returning drcc_id as id, drcc_dsc as descripcion, drcc_calle as calle, drcc_numeracion as numeracion, drcc_referencia as referencia
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Direccion">
+        UPDATE ${schema}direcciones
+        SET  drcc_dsc        = #{descripcion}         , drcc_calle    = #{calle}           , drcc_numeracion    = #{numeracion}  ,
+             drcc_referencia = #{referencia}          , cmna_id       = #{comuna.id}       , sctr_id            = #{sector.id}   ,
+             cntc_id         = #{contacto.id}         , tpdr_id       = #{tipoDireccion.id}, drcc_imagen_perfil = #{imagenPerfil},
+             drcc_latitud    = #{latitud}             , drcc_longitud = #{longitud}        , estd_id            = #{estado.id}   ,
+             drcc_flag_evidencia = #{flagEvidencia}
+        WHERE clnt_id = #{cliente.id}
+          AND drcc_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}direcciones
+        WHERE clnt_id = #{clienteId}
+          AND drcc_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}direcciones (clnt_id , drcc_dsc , drcc_calle, drcc_numeracion, drcc_referencia   ,
+                                          cmna_id , sctr_id  , cntc_id   , tpdr_id        , drcc_imagen_perfil,
+                                          drcc_latitud, drcc_longitud    , estd_id        , drcc_flag_evidencia
+                                         ) VALUES
+        <foreach item="direccion" collection="direccionLote" separator=",">
+                                        (#{direccion.cliente.id}, #{direccion.descripcion}, #{direccion.calle}      , #{direccion.numeracion}      , #{direccion.referencia}  ,
+                                         #{direccion.comuna.id} , #{direccion.sector.id}           , #{direccion.contacto.id}, #{direccion.tipoDireccion.id}, #{direccion.imagenPerfil},
+                                         #{direccion.latitud}   , #{direccion.longitud}            , #{direccion.estado.id}  , #{direccion.flagEvidencia}
+                                        )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='direccion' collection='direccionLote' separator=';'>
+            UPDATE ${schema}direcciones
+            SET  drcc_dsc           = #{direccion.descripcion}, drcc_calle      = #{direccion.calle}            ,
+                 drcc_numeracion    = #{direccion.numeracion}          , drcc_referencia = #{direccion.referencia}       ,
+                 cmna_id            = #{direccion.comuna.id}           , sctr_id         = #{direccion.sector.id}        ,
+                 cntc_id            = #{direccion.contacto.id}         , tpdr_id         = #{direccion.tipoDireccion.id} ,
+                 drcc_imagen_perfil = #{direccion.imagenPerfil}        , drcc_latitud    = #{direccion.latitud}          ,
+                 drcc_longitud      = #{direccion.longitud}            , estd_id         = #{direccion.estado.id}        ,
+            drcc_flag_evidencia     = #{direccion.flagEvidencia}
+            WHERE clnt_id = #{direccion.cliente.id}
+             AND  drcc_id = #{direccion.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}direcciones WHERE (clnt_id, drcc_id) IN
+        <foreach item='direccion' collection='direccionLote' open='(' separator=',' close=')'>
+            (#{direccion.cliente.id}, #{direccion.id})
+        </foreach>
+    </delete>
+</mapper>
