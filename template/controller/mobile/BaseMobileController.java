@@ -46,9 +46,9 @@ public class #Base#MobileController {
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
-        catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
-        }
+        //catch (RecursoNoEncontradoException e) {
+        //    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+        //}
         catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         }
@@ -75,9 +75,9 @@ public class #Base#MobileController {
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
-        catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
-        }
+        //catch (RecursoNoEncontradoException e) {
+        //    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+        //}
         catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
         }
@@ -206,11 +206,11 @@ public class #Base#MobileController {
             @ApiResponse(responseCode = "460", description = "#Base# Viola integridad referencial"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> eliminarLote(@RequestBody List<Long> idLote) {
+    public ResponseEntity<ApiEnityResponse<String>> eliminarLote(@RequestBody List<#Base#DTO> #base#DTOLote) {
         logeador.debug("eliminarLote() #base#");
 
         try {
-            #base#MobileService.eliminarLote(idLote);
+            #base#MobileService.eliminarLote(#base#DTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {

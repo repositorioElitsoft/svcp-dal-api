@@ -63,7 +63,7 @@ public class #Base#Service {
         }
         catch (DataAccessException e) {
             logeador.error(Constantes.#BASE#_AGREGAR_MENSAJE + ": {}, codigoError:{}", #base#DTO.toString(),
-                           GeneralError.ERROR_INTERNO.getCodigoError() e);
+                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.#BASE#_AGREGAR_MENSAJE, e);
         }
@@ -102,7 +102,7 @@ public class #Base#Service {
         }
         catch (DataAccessException e) {
             logeador.error(Constantes.#BASE#_AGREGAR_MENSAJE + ": {}, codigoError:{}", #base#DTO.toString(),
-                           GeneralError.ERROR_INTERNO.getCodigoError() e);
+                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.#BASE#_AGREGAR_MENSAJE, e);
         }
@@ -137,7 +137,7 @@ public class #Base#Service {
                                                 Constantes.#BASE#_DUPLICADO_MENSAGE);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.#BASE#_AGREGAR_LOTE_MENSAJE + " codigoError:{}",
-                           GeneralError.ERROR_INTERNO.getCodigoError() e);
+                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                         Constantes.#BASE#_AGREGAR_LOTE_MENSAJE, e);
         }
@@ -178,7 +178,7 @@ public class #Base#Service {
             logeador.info("#base# actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.#BASE#_ACTUALIZAR_MENSAJE + ": id={} {} codigoError:{}", id, #base#DTO.toString(),
-                           GeneralError.ERROR_INTERNO.getCodigoError() e);
+                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.#BASE#_ACTUALIZAR_MENSAJE, e);
         }
@@ -207,7 +207,7 @@ public class #Base#Service {
             logeador.info("Lote #base# actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.#BASE#_ACTUALIZAR_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError() e);
+                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.#BASE#_ACTUALIZAR_MENSAJE, e);
         }
@@ -223,7 +223,7 @@ public class #Base#Service {
         logeador.debug("eliminar() #base#: {}", id);
 
         //Verifica integridad referencial
-        this.verificarIntegridadEliminar(id);
+        //this.verificarIntegridadEliminar(id);
 
         try {
             #Base#DTO #base#DTO = this.encontrarPorClave(id); // Verifica si existe
@@ -239,16 +239,16 @@ public class #Base#Service {
 
     /**
      * Elimina Lote #Base# por Clave.
-     * @param idLote lista de claves de #Base# a eliminar.
+     * @param #base#DTOLote lista de claves de #Base# a eliminar.
      * @throws EntradaInvalidadException si la lista  #Base# esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<#Base#DTO> #base#DTOLote) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("eliminarLote()");
 
 
         //  Valida Entrada
-        if (idLote.isEmpty()) {
+        if (#base#DTOLote.isEmpty()) {
             logeador.error(Constantes.#BASE#_ENTRADA_INVALIDA_MENSAGE + " codigoError:{}",
                            #Base#Error.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(#Base#Error.REQUERIDO.getCodigoError(),
@@ -256,16 +256,16 @@ public class #Base#Service {
         }
 
         //Verifica integridad referencial
-        for (Long id : idLote) {
-            this.verificarIntegridadEliminar(id);
-        }
+        //for (Long id : idLote) {
+        //    this.verificarIntegridadEliminar(id);
+        //}
 
         try {
-            int registrosEliminados = #base#Mapper.eliminarLote(idLote);
+            int registrosEliminados = #base#Mapper.eliminarLote(mapper.toEntityList(#base#DTOLote));
             logeador.info("Lote #base# eliminados exitosamente, registros eliminados: {}", registrosEliminados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.#BASE#_ELIMINAR_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError()  e);
+                           GeneralError.ERROR_INTERNO.getCodigoError(),  e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                         Constantes.#BASE#_ELIMINAR_MENSAJE, e);
         }
@@ -287,7 +287,7 @@ public class #Base#Service {
             if (#base#DTO != null) {
                 logeador.info("#base# encontrado por clave : {}", id);
             } else {
-                logeador.info("#base# clave:{} no encontrado codigoError:{}", id
+                logeador.info("#base# clave:{} no encontrado codigoError:{}", id,
                               #Base#Error.NO_ENCONTRADO.getCodigoError());
                 throw new RecursoNoEncontradoException(#Base#Error.NO_ENCONTRADO.getCodigoError(),
                                                        Constantes.#BASE#_NO_ENCONTRADO_MENSAGE);
@@ -296,7 +296,7 @@ public class #Base#Service {
             return #base#DTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.#BASE#_ENCONTRAR_POR_CLAVE_MENSAGE + " {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError() e);
+                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.#BASE#_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
@@ -328,6 +328,7 @@ public class #Base#Service {
      * @throws RecursoEliminarException
      * @throws BaseDatosException
      */
+    /*
     public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
         logeador.debug("verificarIntegridadEliminar() #base#: {}", id);
 
@@ -349,6 +350,7 @@ public class #Base#Service {
         }
 
     }
+    */
 
     /**
      * Buscar #Base# que tengan EntityRelacionado.
@@ -356,6 +358,7 @@ public class #Base#Service {
      * @return boolean #Base# tiene o no registros asociados
      * @throws BaseDatosException
      */
+    /*
     public boolean entityRelacionadoPor#Base#(Long id) throws  BaseDatosException {
         logeador.debug("entityRelacionadoPor#Base#() #base#: {}", id);
 
@@ -375,4 +378,5 @@ public class #Base#Service {
                                          Constantes.#BASE#_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
+    */
 }

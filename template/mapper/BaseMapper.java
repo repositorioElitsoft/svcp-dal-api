@@ -57,10 +57,10 @@ public interface #Base#Mapper {
 
     /**
      * Elimina Lote #Base# en la base de datos.
-     * @param idLote Lista de claves de entidad #Base# a eliminar.
+     * @param #base#Lote Lista entidad #Base# a eliminar.
      * @return int cantidad de registros eliminados.
      */
-    int eliminarLote(List<Long> idLote);
+    int eliminarLote(List<#Base#> #base#Lote);
 
     /**
      * Encuentra un #Base# en la base de datos por su clave.
@@ -75,7 +75,7 @@ public interface #Base#Mapper {
      * @param limite si ejerce un limite de registros o no en los resultados
      * @return Lista entidad #Base# encontrado, o null si no es encontrado.
      */
-    List<#Base#>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
+    //List<#Base#>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
 
 
     /**

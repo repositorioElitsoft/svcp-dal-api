@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ServicioMapper">
+
+    <resultMap id="servicioResultMap" type="com.elitsoft.servicampo.domain.entity.Servicio">
+        <id property="id" column="svcs_id" />
+        <result property="descripcion" column="svcs_dsc" />
+        <association property="estado"  resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+        <association property="tipoServicio"  resultMap="com.elitsoft.servicampo.mapper.TipoServicioMapper.tipoServicioResultMap"/>
+        <!-- <collection property="servicioTrabajos" ofType="com.elitsoft.servicampo.domain.entity.ServicioTrabajo" column="svcs_id" select="com.elitsoft.servicampo.mapper.ServicioTrabajoMapper.encontrarPorServicioId"/> -->
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT svcs.svcs_id   ,   svcs.svcs_dsc ,
+               estd.estd_id   ,   estd.estd_dsc ,
+               tpsev.tpsev_id ,   tpsev.tpsev_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}servicios svcs
+        INNER JOIN ${schema}estados         as estd  ON svcs.estd_id  = estd.estd_id
+        INNER JOIN ${schema}tipos_servicios as tpsev ON svcs.tpsev_id = tpsev.tpsev_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="servicioResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE svcs.svcs_id  = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="servicioResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="servicioResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND svcs.svcs_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(svcs.svcs_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.estado != null">
+                    AND svcs.estd_id  = #{filtro.estado}
+                </if>
+                <if test="filtro.tipoServicio != null">
+                    AND svcs.tpsev_id  = #{filtro.tipoServicio}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY svcs.svcs_id  ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY svcs.svcs_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'estado'">ORDER BY svcs.estd_id  ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoServicio'">ORDER BY svcs.tpsev_id ${direccionOrden}</when>
+                <otherwise>ORDER BY svcs.svcs_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND svcs.svcs_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(svcs.svcs_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.estado != null">
+                    AND svcs.estd_id  = #{filtro.estado}
+                </if>
+                <if test="filtro.tipoServicio != null">
+                    AND svcs.tpsev_id  = #{filtro.tipoServicio}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Servicio" affectData="true" flushCache="true">
+        INSERT INTO ${schema}servicios (svcs_dsc, estd_id, tpsev_id )
+        VALUES (#{descripcion}, #{estado.id}, #{tipoServicio.id})
+        returning svcs_id as id, svcs_dsc as descripcion, estd_id as estadoId
+    </select>
+
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Servicio">
+        UPDATE ${schema}servicios
+        SET svcs_dsc = #{descripcion} , estd_id = #{estado.id} , tpsev_id = #{tipoServicio.id}
+        WHERE svcs_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}servicios
+        WHERE svcs_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}servicios (svcs_dsc, estd_id, tpsev_id ) VALUES
+        <foreach item="servicio" collection="servicioLote" separator=",">
+            (#{servicio.descripcion}, #{servicio.estado.id}, #{servicio.tipoServicio.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='servicio' collection='servicioLote' separator=';'>
+            UPDATE ${schema}servicios
+            SET svcs_dsc  = #{servicio.descripcion},
+                estd_id   = #{servicio.estado.id} ,
+                tpsev_id  = #{servicio.tipoServicio.id}
+            WHERE svcs_id = #{servicio.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}servicios WHERE svcs_id IN
+        <foreach item='servicio' collection='servicioLote' open='(' separator=',' close=')'>
+            #{servicio.id}
+        </foreach>
+    </delete>
+</mapper>

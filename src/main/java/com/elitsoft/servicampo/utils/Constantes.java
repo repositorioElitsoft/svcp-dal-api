@@ -383,5 +383,18 @@ public class Constantes {
     public static final String DIRECCION_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave DIRECCION:";
     public static final String DIRECCION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos DIRECCION";
     public static final String DIRECCION_FILTRAR_MENSAJE = "Error filtrando DIRECCION";
+
+    public static final String SERVICIO_ENTRADA_INVALIDA_MENSAGE = "Entrada de SERVICIO invalida.";
+    public static final String SERVICIO_DUPLICADO_MENSAGE = "Recurso  SERVICIO ya existe.";
+    public static final String SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  SERVICIO viola Integridad. INTGVIOLADA001";
+    public static final String SERVICIO_NO_ENCONTRADO_MENSAGE = "Recurso SERVICIO no  encontrado";
+    public static final String SERVICIO_AGREGAR_MENSAJE = "Error Interno agregando Recurso SERVICIO";
+    public static final String SERVICIO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SERVICIO";
+    public static final String SERVICIO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso SERVICIO";
+    public static final String SERVICIO_ELIMINAR_MENSAJE = "Error eliminando Recurso SERVICIO";
+    public static final String SERVICIO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso SERVICIO por clave :";
+    public static final String SERVICIO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave SERVICIO:";
+    public static final String SERVICIO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SERVICIO";
+    public static final String SERVICIO_FILTRAR_MENSAJE = "Error filtrando SERVICIO";
 }
 
