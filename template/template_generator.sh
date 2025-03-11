@@ -45,6 +45,7 @@ mkdir -p "$dest_java_dir/mapper"
 mkdir -p "$dest_java_dir/mapstruct"
 mkdir -p "$dest_java_dir/security"
 mkdir -p "$dest_java_dir/service/core"
+mkdir -p "$dest_java_dir/service/error"
 mkdir -p "$dest_java_dir/service/core/filter/entity"
 mkdir -p "$dest_java_dir/service/mobile"
 mkdir -p "$dest_java_dir/service/mobile/filter/entity"
@@ -66,6 +67,7 @@ files=(
     "service/core/filter/entity/BaseFiltroService.java $dest_java_dir/service/core/filter/entity/${entity_name}FiltroService.java 1"
     "service/mobile/BaseMobileService.java $dest_java_dir/service/mobile/${entity_name}MobileService.java 1"
     "service/mobile/filter/entity/BaseFiltroMobileService.java $dest_java_dir/service/mobile/filter/entity/${entity_name}FiltroMobileService.java 1"
+    "service/error/BaseError.java $dest_java_dir/service/error/${entity_name}Error.java 1"
     "resources/mapper/BaseMapper.xml $dest_resource_dir/${entity_name}Mapper.xml 1"
 )
 
