@@ -435,5 +435,18 @@ public class Constantes {
     public static final String RUTA_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave RUTA:";
     public static final String RUTA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos RUTA";
     public static final String RUTA_FILTRAR_MENSAJE = "Error filtrando RUTA";
+
+    public static final String TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOCOMPONENTE invalida.";
+    public static final String TIPOCOMPONENTE_DUPLICADO_MENSAGE = "Recurso  TIPOCOMPONENTE ya existe.";
+    public static final String TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOCOMPONENTE viola Integridad. INTGVIOLADA001";
+    public static final String TIPOCOMPONENTE_NO_ENCONTRADO_MENSAGE = "Recurso TIPOCOMPONENTE no  encontrado";
+    public static final String TIPOCOMPONENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOCOMPONENTE";
+    public static final String TIPOCOMPONENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOCOMPONENTE";
+    public static final String TIPOCOMPONENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPOCOMPONENTE";
+    public static final String TIPOCOMPONENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPOCOMPONENTE";
+    public static final String TIPOCOMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOCOMPONENTE por clave :";
+    public static final String TIPOCOMPONENTE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave TIPOCOMPONENTE:";
+    public static final String TIPOCOMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOCOMPONENTE";
+    public static final String TIPOCOMPONENTE_FILTRAR_MENSAJE = "Error filtrando TIPOCOMPONENTE";
 }
 

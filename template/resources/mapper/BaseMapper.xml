@@ -133,8 +133,8 @@
     <!-- Sentencia SQL de Eliminar LOTE-->
     <delete id="eliminarLote" parameterType="java.util.List" >
         DELETE FROM ${schema}#base# WHERE dmo_id IN
-        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
-            #{id}
+        <foreach item="#base#" collection="#base#Lote" open='(' separator=',' close=')'>
+            #{#base#.id}
         </foreach>
     </delete>
 </mapper>
