@@ -41,16 +41,17 @@ public class #Base#Controller {
         logeador.debug("agregar() #base#");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(#base#Service.agregar(#base#DTO))); // Retorna  201 Created
+            #base#Service.agregar(#base#DTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(null)); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
         //catch (RecursoNoEncontradoException e) {
         //    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         //}
         catch (RecursoDuplicadoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(#base#DTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error

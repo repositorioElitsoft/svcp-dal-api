@@ -448,5 +448,19 @@ public class Constantes {
     public static final String TIPOCOMPONENTE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave TIPOCOMPONENTE:";
     public static final String TIPOCOMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOCOMPONENTE";
     public static final String TIPOCOMPONENTE_FILTRAR_MENSAJE = "Error filtrando TIPOCOMPONENTE";
+
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOPRODUCTOTIPOCOMPONENTE invalida.";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_DUPLICADO_MENSAGE = "Recurso  TIPOPRODUCTOTIPOCOMPONENTE ya existe.";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOPRODUCTOTIPOCOMPONENTE viola Integridad. INTGVIOLADA001";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_NO_ENCONTRADO_MENSAGE = "Recurso TIPOPRODUCTOTIPOCOMPONENTE no  encontrado";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOPRODUCTOTIPOCOMPONENTE";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOPRODUCTOTIPOCOMPONENTE";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso TIPOPRODUCTOTIPOCOMPONENTE";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso TIPOPRODUCTOTIPOCOMPONENTE";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso TIPOPRODUCTOTIPOCOMPONENTE por clave :";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave TIPOPRODUCTOTIPOCOMPONENTE:";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOPRODUCTOTIPOCOMPONENTE";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_FILTRAR_MENSAJE = "Error filtrando TIPOPRODUCTOTIPOCOMPONENTE";
+
 }
 

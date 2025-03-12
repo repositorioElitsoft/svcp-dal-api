@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.TipoProductoTipoComponenteMapper">
+
+    <resultMap id="tipoProductoTipoComponenteResultMap" type="com.elitsoft.servicampo.domain.entity.TipoProductoTipoComponente">
+        <id property="tipoComponente.id" column="tpcm_id" />
+        <id property="tipoProducto.id" column="tppr_id" />
+        <result property="cantidad" column="tptc_cant" />
+        <association property="tipoComponente"  resultMap="com.elitsoft.servicampo.mapper.TipoComponenteMapper.tipoComponenteResultMap"/>
+        <association property="tipoProducto"  resultMap="com.elitsoft.servicampo.mapper.TipoProductoMapper.tipoProductoResultMap"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT tpcm.tpcm_id, tpcm.tpcm_nombre, tpcm.tpcm_dsc,
+               tppr.tppr_id, tppr.tppr_dsc,
+               tptc.tptc_cant
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}tipos_productos_tipos_componentes as tptc
+        INNER JOIN ${schema}tipos_componentes as tpcm ON  tptc.tpcm_id = tpcm.tpcm_id
+        INNER JOIN ${schema}tipos_productos   as tppr ON  tptc.tppr_id = tppr.tppr_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="tipoProductoTipoComponenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        AND tptc.tpcm_id = #{tipoComponenteId}
+        AND tptc.tppr_id = #{tipoProductoId}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="tipoProductoTipoComponenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="tipoProductoTipoComponenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.tipoComponente != null">
+                    AND tptc.tpcm_id = #{filtro.tipoComponente}
+                </if>
+                <if test="filtro.tipoProducto != null">
+                    AND tptc.tppr_id = #{filtro.tipoProducto}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'tipoComponente'">ORDER BY tptc.tpcm_id ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoProducto'">ORDER BY tptc.tppr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'cantidad'">ORDER BY tptc.tptc_cant ${direccionOrden}</when>
+                <otherwise>ORDER BY tptc.tpcm_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.tipoComponente != null">
+                    AND tptc.tpcm_id = #{filtro.tipoComponente}
+                </if>
+                <if test="filtro.tipoProducto != null">
+                    AND tptc.tppr_id = #{filtro.tipoProducto}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProductoTipoComponente">
+        INSERT INTO ${schema}tipos_productos_tipos_componentes (tpcm_id, tppr_id, tptc_cant )  VALUES
+        ( #{tipoComponente.id}, #{tipoProducto.id}, #{cantidad} )
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TipoProductoTipoComponente">
+        UPDATE ${schema}tipos_productos_tipos_componentes
+        SET   tptc_cant = #{tipoProductoTipoComponente.cantidad}
+        WHERE tpcm_id = #{tipoComponenteId}
+        AND tppr_id = #{tipoProductoId}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}tipos_productos_tipos_componentes
+        WHERE tpcm_id = #{tipoComponenteId}
+        AND tppr_id = #{tipoProductoId}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}tipos_productos_tipos_componentes (tpcm_id, tppr_id, tptc_cant ) VALUES
+        <foreach item="tipoProductoTipoComponente" collection="tipoProductoTipoComponenteLote" separator=",">
+            (#{tipoProductoTipoComponente.tipoComponente.id}, #{tipoProductoTipoComponente.tipoProducto.id}, #{tipoProductoTipoComponente.cantidad} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='tipoProductoTipoComponente' collection='tipoProductoTipoComponenteLote' separator=';'>
+            UPDATE ${schema}tipos_productos_tipos_componentes
+            SET   tptc_cant =  #{tipoProductoTipoComponente.cantidad}
+            WHERE tpcm_id = #{tipoProductoTipoComponente.tipoComponente.id}
+              AND tppr_id = #{tipoProductoTipoComponente.tipoProducto.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}tipos_productos_tipos_componentes WHERE (tpcm_id,tppr_id) IN
+        <foreach item="tipoProductoTipoComponente" collection="tipoProductoTipoComponenteLote" open='(' separator=',' close=')'>
+            ( #{tipoProductoTipoComponente.tipoComponente.id} , #{tipoProductoTipoComponente.tipoProducto.id} )
+        </foreach>
+    </delete>
+</mapper>
