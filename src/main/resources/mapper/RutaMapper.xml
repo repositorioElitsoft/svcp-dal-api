@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.RutaMapper">
+
+    <resultMap id="rutaResultMap" type="com.elitsoft.servicampo.domain.entity.Ruta">
+        <id property="id" column="ruta_id" />
+        <result property="descripcion" column="ruta_dsc" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT ruta_id, ruta_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}rutas
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="rutaResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE ruta_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="rutaResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="rutaResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND ruta_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(ruta_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY ruta_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY ruta_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY ruta_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND ruta_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(ruta_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Ruta" affectData="true" flushCache="true">
+        INSERT INTO ${schema}rutas (ruta_dsc)
+        VALUES (#{descripcion})
+        returning ruta_id as id, ruta_dsc as descripcion
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Ruta">
+        UPDATE ${schema}rutas
+        SET  ruta_dsc = #{descripcion}
+        WHERE ruta_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}rutas
+        WHERE ruta_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}rutas (ruta_dsc) VALUES
+        <foreach item="ruta" collection="rutaLote" separator=",">
+            (#{ruta.descripcion} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='ruta' collection='rutaLote' separator=';'>
+            UPDATE ${schema}rutas
+            SET ruta_dsc = #{ruta.descripcion}
+            WHERE ruta_id = #{ruta.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}rutas WHERE ruta_id IN
+        <foreach item='ruta' collection='rutaLote' open='(' separator=',' close=')'>
+            #{ruta.id}
+        </foreach>
+    </delete>
+</mapper>

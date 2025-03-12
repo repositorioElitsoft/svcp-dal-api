@@ -422,5 +422,18 @@ public class Constantes {
     public static final String ESTADOPRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave ESTADOPRODUCTO:";
     public static final String ESTADOPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ESTADOPRODUCTO";
     public static final String ESTADOPRODUCTO_FILTRAR_MENSAJE = "Error filtrando ESTADOPRODUCTO";
+
+    public static final String RUTA_ENTRADA_INVALIDA_MENSAGE = "Entrada de RUTA invalida.";
+    public static final String RUTA_DUPLICADO_MENSAGE = "Recurso  RUTA ya existe.";
+    public static final String RUTA_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  RUTA viola Integridad. INTGVIOLADA001";
+    public static final String RUTA_NO_ENCONTRADO_MENSAGE = "Recurso RUTA no  encontrado";
+    public static final String RUTA_AGREGAR_MENSAJE = "Error Interno agregando Recurso RUTA";
+    public static final String RUTA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos RUTA";
+    public static final String RUTA_ACTUALIZAR_MENSAJE = "Error actualizando Recurso RUTA";
+    public static final String RUTA_ELIMINAR_MENSAJE = "Error eliminando Recurso RUTA";
+    public static final String RUTA_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso RUTA por clave :";
+    public static final String RUTA_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave RUTA:";
+    public static final String RUTA_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos RUTA";
+    public static final String RUTA_FILTRAR_MENSAJE = "Error filtrando RUTA";
 }
 
