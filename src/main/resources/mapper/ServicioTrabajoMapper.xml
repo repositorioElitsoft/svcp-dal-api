@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ServicioTrabajoMapper">
+
+    <resultMap id="servicioTrabajoResultMap" type="com.elitsoft.servicampo.domain.entity.ServicioTrabajo">
+        <id property="servicio.id" column="svcs_id"/>
+        <id property="trabajo.id" column="trbj_id"/>
+        <result property="secuencia" column="svtr_secuencia" />
+        <association property="servicio"  resultMap="com.elitsoft.servicampo.mapper.ServicioMapper.servicioResultMap"/>
+        <association property="trabajo"  resultMap="com.elitsoft.servicampo.mapper.TrabajoMapper.trabajoResultMap"/>
+    </resultMap>
+
+    <!--
+    <resultMap id="servicioTrabajoResultMap" type="com.elitsoft.servicampo.domain.entity.ServicioTrabajo">
+        <id property="servicio.id" column="svcs_id"/>
+        <id property="trabajo.id" column="trbj_id"/>
+        <result property="secuencia" column="svtr_secuencia" />
+        <association property="servicio" column="svcs_id" javaType="com.elitsoft.servicampo.domain.entity.Servicio" select="com.elitsoft.servicampo.mapper.ServicioMapper.encontrarPorClave"/>
+        <association property="trabajo" column="trbj_id" javaType="com.elitsoft.servicampo.domain.entity.Trabajo" select="com.elitsoft.servicampo.mapper.TrabajoMapper.encontrarPorClave"/>
+    </resultMap>
+-->
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT svcs.svcs_id , svcs.svcs_dsc ,
+               trbj.trbj_id , trbj.trbj_dsc ,
+               svtr.svtr_secuencia
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}servicios_trabajos as svtr
+        INNER JOIN ${schema}servicios as svcs ON svtr.svcs_id = svcs.svcs_id
+        INNER JOIN ${schema}trabajos as trbj ON svtr.trbj_id = trbj.trbj_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="servicioTrabajoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE svtr.svcs_id = #{servicioId}
+          AND svtr.trbj_id = #{trabajoId}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="servicioTrabajoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="servicioTrabajoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.servicio != null">
+                    AND svtr.svcs_id = #{filtro.servicio}
+                </if>
+                <if test="filtro.trabajo != null">
+                    AND svtr.trbj_id  = #{filtro.trabajo}
+                </if>
+                <if test="filtro.secuencia != null">
+                    AND svtr.svtr_secuencia = #{filtro.secuencia}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'servicio'">ORDER BY svtr.svcs_id ${direccionOrden}</when>
+                <when test="campoOrden == 'trabajo'">ORDER BY svtr.trbj_id ${direccionOrden}</when>
+                <when test="campoOrden == 'secuencia'">ORDER BY svtr.svtr_secuencia ${direccionOrden}</when>
+                <otherwise>ORDER BY svtr.svcs_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.servicio != null">
+                    AND svtr.svcs_id = #{filtro.servicio}
+                </if>
+                <if test="filtro.trabajo != null">
+                    AND svtr.trbj_id  = #{filtro.trabajo}
+                </if>
+                <if test="filtro.secuencia != null">
+                    AND svtr.svtr_secuencia = #{filtro.secuencia}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.ServicioTrabajo">
+        INSERT INTO ${schema}servicios_trabajos (svcs_id, trbj_id, svtr_secuencia) VALUES (#{servicio.id}, #{trabajo.id}, #{secuencia})
+    </insert>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.ServicioTrabajo" affectData="true" flushCache="true">
+        INSERT INTO ${schema}servicios_trabajos (nombre, color)
+        VALUES (#{dmoNom}, #{dmoCorreo}, #{dmoStatus})
+        returning dmo_id as dmoId, dmo_nom as dmoNom, dmo_correo as dmoCorreo, dmo_status as dmoStatus
+    </select>
+    -->
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ServicioTrabajo">
+        UPDATE ${schema}servicios_trabajos
+           SET svtr_secuencia = #{secuencia}
+        WHERE svcs_id = #{servicio.id}
+          AND trbj_id = #{trabajo.id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}servicios_trabajos
+        WHERE svcs_id = #{servicioId}
+          AND trbj_id = #{trabajoId}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}servicios_trabajos (svcs_id, trbj_id, svtr_secuencia) VALUES
+        <foreach item="servicioTrabajo" collection="servicioTrabajoLote" separator=",">
+            (#{servicioTrabajo.servicio.id}, #{servicioTrabajo.trabajo.id}, #{servicioTrabajo.secuencia})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='servicioTrabajo' collection='servicioTrabajoLote' separator=';'>
+            UPDATE ${schema}servicios_trabajos
+               SET svtr_secuencia = #{servicioTrabajo.secuencia}
+            WHERE svcs_id = #{servicioTrabajo.servicio.id}
+              AND trbj_id = #{servicioTrabajo.trabajo.id}
+        </foreach>
+    </update>
+
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}servicios_trabajos WHERE (svcs_id,trbj_id) IN
+        <foreach item='servicioTrabajo' collection='servicioTrabajoLote' open='(' separator=',' close=')'>
+            (#{servicioTrabajo.servicio.id}, #{servicioTrabajo.trabajo.id})
+        </foreach>
+    </delete>
+</mapper>

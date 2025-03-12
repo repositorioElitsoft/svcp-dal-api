@@ -396,5 +396,18 @@ public class Constantes {
     public static final String SERVICIO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave SERVICIO:";
     public static final String SERVICIO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SERVICIO";
     public static final String SERVICIO_FILTRAR_MENSAJE = "Error filtrando SERVICIO";
+
+    public static final String SERVICIOTRABAJO_ENTRADA_INVALIDA_MENSAGE = "Entrada de SERVICIOTRABAJO invalida.";
+    public static final String SERVICIOTRABAJO_DUPLICADO_MENSAGE = "Recurso  SERVICIOTRABAJO ya existe.";
+    public static final String SERVICIOTRABAJO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  SERVICIOTRABAJO viola Integridad. INTGVIOLADA001";
+    public static final String SERVICIOTRABAJO_NO_ENCONTRADO_MENSAGE = "Recurso SERVICIOTRABAJO no  encontrado";
+    public static final String SERVICIOTRABAJO_AGREGAR_MENSAJE = "Error Interno agregando Recurso SERVICIOTRABAJO";
+    public static final String SERVICIOTRABAJO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SERVICIOTRABAJO";
+    public static final String SERVICIOTRABAJO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso SERVICIOTRABAJO";
+    public static final String SERVICIOTRABAJO_ELIMINAR_MENSAJE = "Error eliminando Recurso SERVICIOTRABAJO";
+    public static final String SERVICIOTRABAJO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso SERVICIOTRABAJO por clave :";
+    public static final String SERVICIOTRABAJO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave SERVICIOTRABAJO:";
+    public static final String SERVICIOTRABAJO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SERVICIOTRABAJO";
+    public static final String SERVICIOTRABAJO_FILTRAR_MENSAJE = "Error filtrando SERVICIOTRABAJO";
 }
 

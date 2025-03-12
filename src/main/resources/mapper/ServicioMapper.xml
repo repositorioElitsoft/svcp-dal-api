@@ -19,7 +19,7 @@
 
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
-        FROM ${schema}servicios svcs
+        FROM ${schema}servicios as svcs
         INNER JOIN ${schema}estados         as estd  ON svcs.estd_id  = estd.estd_id
         INNER JOIN ${schema}tipos_servicios as tpsev ON svcs.tpsev_id = tpsev.tpsev_id
     </sql>

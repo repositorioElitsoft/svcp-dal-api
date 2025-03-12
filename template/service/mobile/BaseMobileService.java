@@ -111,7 +111,6 @@ public class #Base#MobileService {
 
     /**
      * Elimina Lote #Base# por Clave.
-     * @param idLote lista de claves de #Base# a eliminar.
      * @param #base#DTOLote lista de claves de #Base# a eliminar.
      * @throws EntradaInvalidadException si la lista  #Base# esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
