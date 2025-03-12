@@ -409,5 +409,18 @@ public class Constantes {
     public static final String SERVICIOTRABAJO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave SERVICIOTRABAJO:";
     public static final String SERVICIOTRABAJO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos SERVICIOTRABAJO";
     public static final String SERVICIOTRABAJO_FILTRAR_MENSAJE = "Error filtrando SERVICIOTRABAJO";
+
+    public static final String ESTADOPRODUCTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de ESTADOPRODUCTO invalida.";
+    public static final String ESTADOPRODUCTO_DUPLICADO_MENSAGE = "Recurso  ESTADOPRODUCTO ya existe.";
+    public static final String ESTADOPRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ESTADOPRODUCTO viola Integridad. INTGVIOLADA001";
+    public static final String ESTADOPRODUCTO_NO_ENCONTRADO_MENSAGE = "Recurso ESTADOPRODUCTO no  encontrado";
+    public static final String ESTADOPRODUCTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso ESTADOPRODUCTO";
+    public static final String ESTADOPRODUCTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ESTADOPRODUCTO";
+    public static final String ESTADOPRODUCTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso ESTADOPRODUCTO";
+    public static final String ESTADOPRODUCTO_ELIMINAR_MENSAJE = "Error eliminando Recurso ESTADOPRODUCTO";
+    public static final String ESTADOPRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso ESTADOPRODUCTO por clave :";
+    public static final String ESTADOPRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave ESTADOPRODUCTO:";
+    public static final String ESTADOPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ESTADOPRODUCTO";
+    public static final String ESTADOPRODUCTO_FILTRAR_MENSAJE = "Error filtrando ESTADOPRODUCTO";
 }
 

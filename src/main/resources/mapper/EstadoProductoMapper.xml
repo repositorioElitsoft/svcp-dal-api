@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.EstadoProductoMapper">
+
+    <resultMap id="estadoProductoResultMap" type="com.elitsoft.servicampo.domain.entity.EstadoProducto">
+        <id property="id" column="espr_id" />
+        <result property="descripcion" column="espr_dsc" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT espr_id, espr_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}estados_productos
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="estadoProductoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE espr_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="estadoProductoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="estadoProductoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND espr_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(espr_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY espr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY espr_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY espr_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND espr_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(espr_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.EstadoProducto" affectData="true" flushCache="true">
+          INSERT INTO ${schema}estados_productos (espr_dsc)
+          VALUES (#{descripcion})
+          returning espr_id as id, espr_dsc as descripcion
+    </select>
+
+
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.EstadoProducto">
+        UPDATE ${schema}estados_productos
+        SET espr_dsc = #{descripcion}
+        WHERE espr_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}estados_productos
+        WHERE espr_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}estados_productos (espr_dsc) VALUES
+        <foreach item="estadoProducto" collection="estadoProductoLote" separator=",">
+            (#{estadoProducto.descripcion})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='estadoProducto' collection='estadoProductoLote' separator=';'>
+            UPDATE ${schema}estados_productos SET espr_dsc = #{estadoProducto.descripcion}
+            WHERE espr_id = #{estadoProducto.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}estados_productos WHERE espr_id IN
+        <foreach item='estadoProducto' collection='estadoProductoLote' open='(' separator=',' close=')'>
+            #{estadoProducto.id}
+        </foreach>
+    </delete>
+</mapper>
