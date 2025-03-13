@@ -462,5 +462,17 @@ public class Constantes {
     public static final String TIPOPRODUCTOTIPOCOMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos TIPOPRODUCTOTIPOCOMPONENTE";
     public static final String TIPOPRODUCTOTIPOCOMPONENTE_FILTRAR_MENSAJE = "Error filtrando TIPOPRODUCTOTIPOCOMPONENTE";
 
+    public static final String PRODUCTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de PRODUCTO invalida.";
+    public static final String PRODUCTO_DUPLICADO_MENSAGE = "Recurso  PRODUCTO ya existe.";
+    public static final String PRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  PRODUCTO viola Integridad. INTGVIOLADA001";
+    public static final String PRODUCTO_NO_ENCONTRADO_MENSAGE = "Recurso PRODUCTO no  encontrado";
+    public static final String PRODUCTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso PRODUCTO";
+    public static final String PRODUCTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos PRODUCTO";
+    public static final String PRODUCTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso PRODUCTO";
+    public static final String PRODUCTO_ELIMINAR_MENSAJE = "Error eliminando Recurso PRODUCTO";
+    public static final String PRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso PRODUCTO por clave :";
+    public static final String PRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave PRODUCTO:";
+    public static final String PRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos PRODUCTO";
+    public static final String PRODUCTO_FILTRAR_MENSAJE = "Error filtrando PRODUCTO";
 }
 

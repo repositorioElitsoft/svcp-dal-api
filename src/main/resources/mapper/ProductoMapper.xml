@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ProductoMapper">
+    
+    <resultMap id="productoResultMap" type="com.elitsoft.servicampo.domain.entity.Producto">
+        <id property="id" column="prod_id" />
+        <result property="descripcion" column="prod_dsc" />
+        <result property="fechaInicioVigencia" column="prod_fec_ini_vig" />
+        <result property="fechaFinVigencia" column="prod_fec_fin_vig" />
+        <result property="imagenPerfil" column="prod_imagen_perfil" />
+        <association property="tipoProducto" resultMap="com.elitsoft.servicampo.mapper.TipoProductoMapper.tipoProductoResultMap"/>
+        <association property="tipoComponente" resultMap="com.elitsoft.servicampo.mapper.TipoComponenteMapper.tipoComponenteResultMap"/>
+        <association property="estadoProducto" resultMap="com.elitsoft.servicampo.mapper.EstadoProductoMapper.estadoProductoResultMap"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT prod.prod_id, prod.prod_dsc,  prod.prod_fec_ini_vig, prod.prod_fec_fin_vig, prod.prod_imagen_perfil,
+               tppr.tppr_id, tppr.tppr_dsc,
+               tpcm.tpcm_id, tpcm.tpcm_nombre, tpcm.tpcm_dsc,
+               espr.espr_id, espr.espr_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}productos as prod
+        INNER JOIN ${schema}tipos_productos   as tppr ON prod.tppr_id = tppr.tppr_id
+        INNER JOIN ${schema}tipos_componentes as tpcm ON prod.tpcm_id = tpcm.tpcm_id
+        INNER JOIN ${schema}estados_productos as espr ON prod.espr_id = espr.espr_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="productoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE prod.prod_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="productoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="productoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND prod.prod_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(prod.prod_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.tipoProducto != null">
+                    AND prod.tppr_id = #{filtro.tipoProducto}
+                </if>
+                <if test="filtro.tipoComponente != null">
+                    AND prod.tpcm_id = #{filtro.tipoComponente}
+                </if>
+                <if test="filtro.estadoProducto != null">
+                    AND prod.espr_id = #{filtro.estadoProducto}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY prod.prod_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY prod.prod_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoProducto'">ORDER BY prod.tppr_id  ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoComponente'">ORDER BY prod.tpcm_id  ${direccionOrden}</when>
+                <when test="campoOrden == 'estadoProducto'">ORDER BY prod.espr_id  ${direccionOrden}</when>
+                <when test="campoOrden == 'fechaInicioVigencia'">ORDER BY prod.prod_fec_ini_vig  ${direccionOrden}</when>
+                <when test="campoOrden == 'fechaFinVigencia'">ORDER BY prod.prod_fec_fin_vig  ${direccionOrden}</when>
+                <otherwise>ORDER BY prod.prod_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND prod.prod_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(prod.prod_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.tipoProducto != null">
+                    AND prod.tppr_id = #{filtro.tipoProducto}
+                </if>
+                <if test="filtro.tipoComponente != null">
+                    AND prod.tpcm_id = #{filtro.tipoComponente}
+                </if>
+                <if test="filtro.estadoProducto != null">
+                    AND prod.espr_id = #{filtro.estadoProducto}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Producto" affectData="true" flushCache="true">
+        INSERT INTO ${schema}productos (prod_dsc, tppr_id, tpcm_id, espr_id, prod_fec_ini_vig, prod_fec_fin_vig, prod_imagen_perfil)
+        VALUES (#{descripcion}, #{tipoProducto.id}, #{tipoComponente.id}, #{estadoProducto.id}, #{fechaInicioVigencia}, #{fechaFinVigencia}, #{imagenPerfil})
+        returning prod_id as id,  prod_dsc as descripcion
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Producto">
+        UPDATE ${schema}productos
+        SET    prod_dsc = #{descripcion}   ,        tppr_id = #{tipoProducto.id}       ,   tpcm_id = #{tipoComponente.id}     ,
+               espr_id  = #{estadoProducto.id}, prod_fec_ini_vig = #{fechaInicioVigencia}, prod_fec_fin_vig = #{fechaFinVigencia},
+               prod_imagen_perfil = #{imagenPerfil}
+        WHERE prod_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}productos
+        WHERE prod_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}productos (prod_dsc, tppr_id, tpcm_id, espr_id, prod_fec_ini_vig, prod_fec_fin_vig, prod_imagen_perfil) VALUES
+        <foreach item="producto" collection="productoLote" separator=",">
+            (#{producto.descripcion}, #{producto.tipoProducto.id}, #{producto.tipoComponente.id}, #{producto.estadoProducto.id},
+            #{producto.fechaInicioVigencia}, #{producto.fechaFinVigencia}, #{producto.imagenPerfil})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='producto' collection='productoLote' separator=';'>
+            UPDATE ${schema}productos
+            SET    prod_dsc = #{producto.descripcion}   ,        tppr_id = #{producto.tipoProducto.id}       ,   tpcm_id = #{producto.tipoComponente.id}  ,
+            espr_id  = #{producto.estadoProducto.id},  prod_fec_ini_vig = #{producto.fechaInicioVigencia}, prod_fec_fin_vig = #{producto.fechaFinVigencia} ,
+            prod_imagen_perfil = #{producto.imagenPerfil}
+            WHERE prod_id = #{producto.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}productos WHERE prod_id IN
+        <foreach item="producto" collection="productoLote" open='(' separator=',' close=')'>
+            #{producto.id}
+        </foreach>
+    </delete>
+</mapper>
