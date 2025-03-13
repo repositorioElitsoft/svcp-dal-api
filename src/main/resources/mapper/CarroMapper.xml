@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.CarroMapper">
+
+    <resultMap id="carroResultMap" type="com.elitsoft.servicampo.domain.entity.Carro">
+        <id property="id" column="prod_id" />
+        <result property="numero" column="carr_num" />
+        <result property="modelo" column="carr_modelo" />
+        <result property="caracteristica" column="carr_caracteristica" />
+        <result property="proveedor" column="carr_proveedor" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT prod_id, carr_num, carr_modelo, carr_caracteristica, carr_proveedor
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}carros
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="carroResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE prod_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="carroResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="carroResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND prod_id = #{filtro.id}
+                </if>
+                <if test="filtro.numero != null and filtro.numero != ''">
+                    AND LOWER(carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
+                </if>
+                <if test="filtro.modelo != null and filtro.modelo != ''">
+                    AND LOWER(carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY prod_id ${direccionOrden}</when>
+                <when test="campoOrden == 'numero'">ORDER BY carr_num ${direccionOrden}</when>
+                <when test="campoOrden == 'modelo'">ORDER BY carr_modelo ${direccionOrden}</when>
+                <when test="campoOrden == 'caracteristica'">ORDER BY carr_caracteristica ${direccionOrden}</when>
+                <when test="campoOrden == 'proveedor'">ORDER BY carr_proveedor ${direccionOrden}</when>
+                <otherwise>ORDER BY prod_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND prod_id = #{filtro.id}
+                </if>
+                <if test="filtro.numero != null and filtro.numero != ''">
+                    AND LOWER(carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
+                </if>
+                <if test="filtro.modelo != null and filtro.modelo != ''">
+                    AND LOWER(carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Carro">
+        INSERT INTO ${schema}carros (prod_id, carr_num, carr_modelo, carr_caracteristica, carr_proveedor )
+                             VALUES (#{id}, #{numero}, #{modelo}, #{caracteristica}, #{proveedor} )
+    </insert>
+
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Carro">
+        UPDATE ${schema}carros
+        SET  carr_num = #{numero} , carr_modelo = #{modelo} ,
+             carr_caracteristica = #{caracteristica} , carr_proveedor = #{proveedor}
+        WHERE prod_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}carros
+        WHERE prod_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}carros (prod_id, carr_num, carr_modelo, carr_caracteristica, carr_proveedor ) VALUES
+        <foreach item="carro" collection="carroLote" separator=",">
+            (#{carro.id}, #{carro.numero}, #{carro.modelo}, #{carro.caracteristica}, #{carro.proveedor} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='carro' collection='carroLote' separator=';'>
+            UPDATE ${schema}carros
+            SET carr_num = #{carro.numero}, carr_modelo = #{carro.modelo},
+                carr_caracteristica =  #{carro.caracteristica}, carr_proveedor = #{carro.proveedor}
+            WHERE prod_id = #{carro.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}carros WHERE prod_id IN
+        <foreach item="carro" collection="carroLote" open='(' separator=',' close=')'>
+            #{carro.id}
+        </foreach>
+    </delete>
+</mapper>

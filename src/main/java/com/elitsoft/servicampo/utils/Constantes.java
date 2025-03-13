@@ -106,7 +106,7 @@ public class Constantes {
 
     public static final String ZONA_ENTRADA_INVALIDA_MENSAGE = "Entrada de ZONA invalida.";
     public static final String ZONA_DUPLICADO_MENSAGE = "Recurso  ZONA ya existe.";
-    public static final String ZONA_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ZONA viola Integridad. INTGVIOLADA001";
+    public static final String ZONA_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ZONA viola Integridad. ";
     public static final String ZONA_NO_ENCONTRADO_MENSAGE = "Recurso ZONA no  encontrado";
     public static final String ZONA_AGREGAR_MENSAJE = "Error Interno agregando Recurso ZONA";
     public static final String ZONA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ZONA";
@@ -334,7 +334,7 @@ public class Constantes {
 
     public static final String TIPODIRECCION_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPODIRECCION invalida.";
     public static final String TIPODIRECCION_DUPLICADO_MENSAGE = "Recurso  TIPODIRECCION ya existe.";
-    public static final String TIPODIRECCION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPODIRECCION viola Integridad. INTGVIOLADA001";
+    public static final String TIPODIRECCION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPODIRECCION viola Integridad. ";
     public static final String TIPODIRECCION_NO_ENCONTRADO_MENSAGE = "Recurso TIPODIRECCION no  encontrado";
     public static final String TIPODIRECCION_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPODIRECCION";
     public static final String TIPODIRECCION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPODIRECCION";
@@ -347,7 +347,7 @@ public class Constantes {
 
     public static final String CONTACTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de CONTACTO invalida.";
     public static final String CONTACTO_DUPLICADO_MENSAGE = "Recurso  CONTACTO ya existe.";
-    public static final String CONTACTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CONTACTO viola Integridad. INTGVIOLADA001";
+    public static final String CONTACTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CONTACTO viola Integridad. ";
     public static final String CONTACTO_NO_ENCONTRADO_MENSAGE = "Recurso CONTACTO no  encontrado";
     public static final String CONTACTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso CONTACTO";
     public static final String CONTACTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CONTACTO";
@@ -360,7 +360,7 @@ public class Constantes {
     
     public static final String CLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de CLIENTE invalida.";
     public static final String CLIENTE_DUPLICADO_MENSAGE = "Recurso  CLIENTE ya existe.";
-    public static final String CLIENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CLIENTE viola Integridad. INTGVIOLADA001";
+    public static final String CLIENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CLIENTE viola Integridad. ";
     public static final String CLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso CLIENTE no  encontrado";
     public static final String CLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso CLIENTE";
     public static final String CLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CLIENTE";
@@ -373,7 +373,7 @@ public class Constantes {
 
     public static final String DIRECCION_ENTRADA_INVALIDA_MENSAGE = "Entrada de DIRECCION invalida.";
     public static final String DIRECCION_DUPLICADO_MENSAGE = "Recurso  DIRECCION ya existe.";
-    public static final String DIRECCION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  DIRECCION viola Integridad. INTGVIOLADA001";
+    public static final String DIRECCION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  DIRECCION viola Integridad. ";
     public static final String DIRECCION_NO_ENCONTRADO_MENSAGE = "Recurso DIRECCION no  encontrado";
     public static final String DIRECCION_AGREGAR_MENSAJE = "Error Interno agregando Recurso DIRECCION";
     public static final String DIRECCION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos DIRECCION";
@@ -386,7 +386,7 @@ public class Constantes {
 
     public static final String SERVICIO_ENTRADA_INVALIDA_MENSAGE = "Entrada de SERVICIO invalida.";
     public static final String SERVICIO_DUPLICADO_MENSAGE = "Recurso  SERVICIO ya existe.";
-    public static final String SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  SERVICIO viola Integridad. INTGVIOLADA001";
+    public static final String SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  SERVICIO viola Integridad. ";
     public static final String SERVICIO_NO_ENCONTRADO_MENSAGE = "Recurso SERVICIO no  encontrado";
     public static final String SERVICIO_AGREGAR_MENSAJE = "Error Interno agregando Recurso SERVICIO";
     public static final String SERVICIO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SERVICIO";
@@ -399,7 +399,7 @@ public class Constantes {
 
     public static final String SERVICIOTRABAJO_ENTRADA_INVALIDA_MENSAGE = "Entrada de SERVICIOTRABAJO invalida.";
     public static final String SERVICIOTRABAJO_DUPLICADO_MENSAGE = "Recurso  SERVICIOTRABAJO ya existe.";
-    public static final String SERVICIOTRABAJO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  SERVICIOTRABAJO viola Integridad. INTGVIOLADA001";
+    public static final String SERVICIOTRABAJO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  SERVICIOTRABAJO viola Integridad. ";
     public static final String SERVICIOTRABAJO_NO_ENCONTRADO_MENSAGE = "Recurso SERVICIOTRABAJO no  encontrado";
     public static final String SERVICIOTRABAJO_AGREGAR_MENSAJE = "Error Interno agregando Recurso SERVICIOTRABAJO";
     public static final String SERVICIOTRABAJO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SERVICIOTRABAJO";
@@ -412,7 +412,7 @@ public class Constantes {
 
     public static final String ESTADOPRODUCTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de ESTADOPRODUCTO invalida.";
     public static final String ESTADOPRODUCTO_DUPLICADO_MENSAGE = "Recurso  ESTADOPRODUCTO ya existe.";
-    public static final String ESTADOPRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ESTADOPRODUCTO viola Integridad. INTGVIOLADA001";
+    public static final String ESTADOPRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ESTADOPRODUCTO viola Integridad. ";
     public static final String ESTADOPRODUCTO_NO_ENCONTRADO_MENSAGE = "Recurso ESTADOPRODUCTO no  encontrado";
     public static final String ESTADOPRODUCTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso ESTADOPRODUCTO";
     public static final String ESTADOPRODUCTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ESTADOPRODUCTO";
@@ -425,7 +425,7 @@ public class Constantes {
 
     public static final String RUTA_ENTRADA_INVALIDA_MENSAGE = "Entrada de RUTA invalida.";
     public static final String RUTA_DUPLICADO_MENSAGE = "Recurso  RUTA ya existe.";
-    public static final String RUTA_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  RUTA viola Integridad. INTGVIOLADA001";
+    public static final String RUTA_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  RUTA viola Integridad. ";
     public static final String RUTA_NO_ENCONTRADO_MENSAGE = "Recurso RUTA no  encontrado";
     public static final String RUTA_AGREGAR_MENSAJE = "Error Interno agregando Recurso RUTA";
     public static final String RUTA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos RUTA";
@@ -438,7 +438,7 @@ public class Constantes {
 
     public static final String TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOCOMPONENTE invalida.";
     public static final String TIPOCOMPONENTE_DUPLICADO_MENSAGE = "Recurso  TIPOCOMPONENTE ya existe.";
-    public static final String TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOCOMPONENTE viola Integridad. INTGVIOLADA001";
+    public static final String TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOCOMPONENTE viola Integridad. ";
     public static final String TIPOCOMPONENTE_NO_ENCONTRADO_MENSAGE = "Recurso TIPOCOMPONENTE no  encontrado";
     public static final String TIPOCOMPONENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOCOMPONENTE";
     public static final String TIPOCOMPONENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOCOMPONENTE";
@@ -451,7 +451,7 @@ public class Constantes {
 
     public static final String TIPOPRODUCTOTIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOPRODUCTOTIPOCOMPONENTE invalida.";
     public static final String TIPOPRODUCTOTIPOCOMPONENTE_DUPLICADO_MENSAGE = "Recurso  TIPOPRODUCTOTIPOCOMPONENTE ya existe.";
-    public static final String TIPOPRODUCTOTIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOPRODUCTOTIPOCOMPONENTE viola Integridad. INTGVIOLADA001";
+    public static final String TIPOPRODUCTOTIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOPRODUCTOTIPOCOMPONENTE viola Integridad. ";
     public static final String TIPOPRODUCTOTIPOCOMPONENTE_NO_ENCONTRADO_MENSAGE = "Recurso TIPOPRODUCTOTIPOCOMPONENTE no  encontrado";
     public static final String TIPOPRODUCTOTIPOCOMPONENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOPRODUCTOTIPOCOMPONENTE";
     public static final String TIPOPRODUCTOTIPOCOMPONENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOPRODUCTOTIPOCOMPONENTE";
@@ -464,7 +464,7 @@ public class Constantes {
 
     public static final String PRODUCTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de PRODUCTO invalida.";
     public static final String PRODUCTO_DUPLICADO_MENSAGE = "Recurso  PRODUCTO ya existe.";
-    public static final String PRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  PRODUCTO viola Integridad. INTGVIOLADA001";
+    public static final String PRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  PRODUCTO viola Integridad. ";
     public static final String PRODUCTO_NO_ENCONTRADO_MENSAGE = "Recurso PRODUCTO no  encontrado";
     public static final String PRODUCTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso PRODUCTO";
     public static final String PRODUCTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos PRODUCTO";
@@ -474,5 +474,18 @@ public class Constantes {
     public static final String PRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave PRODUCTO:";
     public static final String PRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos PRODUCTO";
     public static final String PRODUCTO_FILTRAR_MENSAJE = "Error filtrando PRODUCTO";
+
+    public static final String CARRO_ENTRADA_INVALIDA_MENSAGE = "Entrada de CARRO invalida.";
+    public static final String CARRO_DUPLICADO_MENSAGE = "Recurso  CARRO ya existe.";
+    public static final String CARRO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CARRO viola Integridad. ";
+    public static final String CARRO_NO_ENCONTRADO_MENSAGE = "Recurso CARRO no  encontrado";
+    public static final String CARRO_AGREGAR_MENSAJE = "Error Interno agregando Recurso CARRO";
+    public static final String CARRO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CARRO";
+    public static final String CARRO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CARRO";
+    public static final String CARRO_ELIMINAR_MENSAJE = "Error eliminando Recurso CARRO";
+    public static final String CARRO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CARRO por clave :";
+    public static final String CARRO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CARRO:";
+    public static final String CARRO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CARRO";
+    public static final String CARRO_FILTRAR_MENSAJE = "Error filtrando CARRO";
 }
 

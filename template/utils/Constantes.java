@@ -8,7 +8,7 @@ public class Constantes {
 
     public static final String #Base#_ENTRADA_INVALIDA_MENSAGE = "Entrada de #Base# invalida.";
     public static final String #Base#_DUPLICADO_MENSAGE = "Recurso  #Base# ya existe.";
-    public static final String #Base#_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  #Base# viola Integridad. INTGVIOLADA001";
+    public static final String #Base#_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  #Base# viola Integridad. ";
     public static final String #Base#_NO_ENCONTRADO_MENSAGE = "Recurso #Base# no  encontrado";
     public static final String #Base#_AGREGAR_MENSAJE = "Error Interno agregando Recurso #Base#";
     public static final String #Base#_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos #Base#";
