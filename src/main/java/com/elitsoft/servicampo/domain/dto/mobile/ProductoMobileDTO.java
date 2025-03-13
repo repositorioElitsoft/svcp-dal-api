@@ -24,6 +24,5 @@ public class ProductoMobileDTO implements Serializable {
     private EstadoProductoMobileDTO estadoProducto;
     private LocalDate fechaInicioVigencia;
     private LocalDate fechaFinVigencia;
-    private String imagenPerfil;
 
 }

@@ -24,8 +24,5 @@ public class Producto implements Serializable {
     private EstadoProducto estadoProducto;
     private LocalDate fechaInicioVigencia;
     private LocalDate fechaFinVigencia;
-    private String imagenPerfil;
-
-
 
 }

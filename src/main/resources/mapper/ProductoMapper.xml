@@ -7,7 +7,6 @@
         <result property="descripcion" column="prod_dsc" />
         <result property="fechaInicioVigencia" column="prod_fec_ini_vig" />
         <result property="fechaFinVigencia" column="prod_fec_fin_vig" />
-        <result property="imagenPerfil" column="prod_imagen_perfil" />
         <association property="tipoProducto" resultMap="com.elitsoft.servicampo.mapper.TipoProductoMapper.tipoProductoResultMap"/>
         <association property="tipoComponente" resultMap="com.elitsoft.servicampo.mapper.TipoComponenteMapper.tipoComponenteResultMap"/>
         <association property="estadoProducto" resultMap="com.elitsoft.servicampo.mapper.EstadoProductoMapper.estadoProductoResultMap"/>
@@ -15,7 +14,7 @@
 
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
-        SELECT prod.prod_id, prod.prod_dsc,  prod.prod_fec_ini_vig, prod.prod_fec_fin_vig, prod.prod_imagen_perfil,
+        SELECT prod.prod_id, prod.prod_dsc,  prod.prod_fec_ini_vig, prod.prod_fec_fin_vig,
                tppr.tppr_id, tppr.tppr_dsc,
                tpcm.tpcm_id, tpcm.tpcm_nombre, tpcm.tpcm_dsc,
                espr.espr_id, espr.espr_dsc
@@ -109,8 +108,8 @@
 
     <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
     <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Producto" affectData="true" flushCache="true">
-        INSERT INTO ${schema}productos (prod_dsc, tppr_id, tpcm_id, espr_id, prod_fec_ini_vig, prod_fec_fin_vig, prod_imagen_perfil)
-        VALUES (#{descripcion}, #{tipoProducto.id}, #{tipoComponente.id}, #{estadoProducto.id}, #{fechaInicioVigencia}, #{fechaFinVigencia}, #{imagenPerfil})
+        INSERT INTO ${schema}productos (prod_dsc, tppr_id, tpcm_id, espr_id, prod_fec_ini_vig, prod_fec_fin_vig)
+        VALUES (#{descripcion}, #{tipoProducto.id}, #{tipoComponente.id}, #{estadoProducto.id}, #{fechaInicioVigencia}, #{fechaFinVigencia})
         returning prod_id as id,  prod_dsc as descripcion
     </select>
 
@@ -118,8 +117,7 @@
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Producto">
         UPDATE ${schema}productos
         SET    prod_dsc = #{descripcion}   ,        tppr_id = #{tipoProducto.id}       ,   tpcm_id = #{tipoComponente.id}     ,
-               espr_id  = #{estadoProducto.id}, prod_fec_ini_vig = #{fechaInicioVigencia}, prod_fec_fin_vig = #{fechaFinVigencia},
-               prod_imagen_perfil = #{imagenPerfil}
+               espr_id  = #{estadoProducto.id}, prod_fec_ini_vig = #{fechaInicioVigencia}, prod_fec_fin_vig = #{fechaFinVigencia}
         WHERE prod_id = #{id}
     </update>
 
@@ -131,10 +129,10 @@
 
     <!-- Sentencia SQL de Insertar LOTE-->
     <insert id="agregarLote" parameterType="java.util.List" >
-        INSERT INTO ${schema}productos (prod_dsc, tppr_id, tpcm_id, espr_id, prod_fec_ini_vig, prod_fec_fin_vig, prod_imagen_perfil) VALUES
+        INSERT INTO ${schema}productos (prod_dsc, tppr_id, tpcm_id, espr_id, prod_fec_ini_vig, prod_fec_fin_vig) VALUES
         <foreach item="producto" collection="productoLote" separator=",">
             (#{producto.descripcion}, #{producto.tipoProducto.id}, #{producto.tipoComponente.id}, #{producto.estadoProducto.id},
-            #{producto.fechaInicioVigencia}, #{producto.fechaFinVigencia}, #{producto.imagenPerfil})
+            #{producto.fechaInicioVigencia}, #{producto.fechaFinVigencia})
         </foreach>
     </insert>
 
@@ -143,8 +141,7 @@
         <foreach item='producto' collection='productoLote' separator=';'>
             UPDATE ${schema}productos
             SET    prod_dsc = #{producto.descripcion}   ,        tppr_id = #{producto.tipoProducto.id}       ,   tpcm_id = #{producto.tipoComponente.id}  ,
-            espr_id  = #{producto.estadoProducto.id},  prod_fec_ini_vig = #{producto.fechaInicioVigencia}, prod_fec_fin_vig = #{producto.fechaFinVigencia} ,
-            prod_imagen_perfil = #{producto.imagenPerfil}
+            espr_id  = #{producto.estadoProducto.id},  prod_fec_ini_vig = #{producto.fechaInicioVigencia}, prod_fec_fin_vig = #{producto.fechaFinVigencia}
             WHERE prod_id = #{producto.id}
         </foreach>
     </update>

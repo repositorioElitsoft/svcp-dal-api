@@ -26,6 +26,5 @@ public class ProductoFiltro implements Serializable {
     //ordenamiento
     private LocalDate fechaInicioVigencia;
     private LocalDate fechaFinVigencia;
-    private String imagenPerfil;
 
 }
