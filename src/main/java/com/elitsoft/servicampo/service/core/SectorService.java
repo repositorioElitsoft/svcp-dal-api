@@ -226,14 +226,15 @@ public class SectorService {
 
     /**
      * Obtiene todos los Sectors.
+     * @param zonaId La clave de Zona a encontrar.
      * @return una lista de todos Sector DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<SectorDTO> obtenerTodos() throws BaseDatosException {
+    public List<SectorDTO> obtenerTodos(Long zonaId) throws BaseDatosException {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<SectorDTO> sectorLista = mapper.toDtoList(sectorMapper.obtenerTodos());
+            List<SectorDTO> sectorLista = mapper.toDtoList(sectorMapper.obtenerTodos(zonaId));
             logeador.info("sectors obtenidos");
             return sectorLista;
         } catch (DataAccessException e) {

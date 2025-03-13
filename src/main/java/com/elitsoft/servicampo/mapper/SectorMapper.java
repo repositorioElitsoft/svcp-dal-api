@@ -73,9 +73,10 @@ public interface SectorMapper {
 
     /**
      * Obtiene todos los Sector desde la base de datos.
+     * @param zonaId La clave de Zona a encontrar.
      * @return List<Sector> Una lista de todos los entidades Sector.
      */
-    List<Sector> obtenerTodos();
+    List<Sector> obtenerTodos(Long zonaId);
 
     /**
      * Hace filtro dinamico y paginacion para Sector

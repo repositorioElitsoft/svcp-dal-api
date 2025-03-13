@@ -197,19 +197,19 @@ public class SectorMobileController {
         }
     }
 
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/zonas/{zonaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Obtiene todos  los sector", description = "Obtiene todos los sector")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sectors obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<List<SectorDTO>> obtenerTodos() {
-        logeador.debug("obtenerTodos()");
+    public ResponseEntity<List<SectorDTO>> obtenerTodos(@PathVariable Long zonaId) {
+        logeador.debug("obtenerTodos() {}", zonaId);
 
         List<SectorDTO> sectors = null;
 
         try {
-            sectors = sectorMobileService.obtenerTodos();
+            sectors = sectorMobileService.obtenerTodos(zonaId);
              return ResponseEntity.ok(sectors); // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error

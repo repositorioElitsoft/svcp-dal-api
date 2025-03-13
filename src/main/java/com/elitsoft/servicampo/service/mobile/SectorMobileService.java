@@ -124,11 +124,12 @@ public class SectorMobileService {
 
     /**
      * Obtiene todos los Sectors.
+     * @param zonaId La clave de Zona a encontrar.
      * @return lista de todos Sector DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public List<SectorDTO> obtenerTodos() throws BaseDatosException {
+    public List<SectorDTO> obtenerTodos(Long zonaId) throws BaseDatosException {
         logeador.debug("obtenerTodos()");
-        return sectorService.obtenerTodos();
+        return sectorService.obtenerTodos(zonaId);
     }
 }

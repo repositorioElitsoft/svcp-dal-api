@@ -5,28 +5,41 @@
     <resultMap id="sectorResultMap" type="com.elitsoft.servicampo.domain.entity.Sector">
         <id property="id" column="sctr_id" />
         <result property="descripcionSector" column="sctr_dsc" />
-        <association property="zona" column="znas_id" fetchType="lazy"  javaType="com.elitsoft.servicampo.domain.entity.Zona" select="com.elitsoft.servicampo.mapper.ZonaMapper.encontrarPorClave"/>
+        <association property="zona"  resultMap="com.elitsoft.servicampo.mapper.ZonaMapper.zonaResultMap"/>
     </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT sctr.sctr_id, sctr.sctr_dsc,
+               znas.znas_id, znas.znas_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}sectores sctr
+        INNER JOIN ${schema}zonas znas ON sctr.znas_id = znas.znas_id
+    </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="sectorResultMap">
-        SELECT sctr_id, sctr_dsc, znas_id
-        FROM ${schema}sectores
-        WHERE sctr_id = #{id}
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE sctr.sctr_id = #{id}
     </select>
 
     <!-- Sentencia SQL de Obtener todos-->
-    <select id="obtenerTodos" resultMap="sectorResultMap">
-        SELECT sctr_id, sctr_dsc, znas_id
-        FROM ${schema}sectores
+    <select id="obtenerTodos" parameterType="long" resultMap="sectorResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE znas.znas_id = #{zonaId}
+        order by sctr.sctr_dsc
     </select>
 
     <!-- Sentencia SQL de Encontrar por Zona -->
     <select id="encontrarPorZona"  resultMap="sectorResultMap">
-        SELECT sctr.sctr_id, sctr.sctr_dsc, sctr.znas_id
-        FROM ${schema}sectores sctr INNER JOIN ${schema}zonas znas
-        ON sctr.znas_id = znas.znas_id
-        AND znas.znas_id = #{zonaId}
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE znas.znas_id = #{zonaId}
 
         <!-- Para limitar el tamaño del resultado-->
         <if test="limite">
