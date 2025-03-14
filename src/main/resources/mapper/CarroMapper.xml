@@ -12,7 +12,7 @@
 
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
-        SELECT prod_id, carr_num, carr_modelo, carr_caracteristica, carr_proveedor
+        SELECT carr.prod_id, carr.carr_num, carr.carr_modelo, carr.carr_caracteristica, carr.carr_proveedor
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
@@ -24,7 +24,7 @@
     <select id="encontrarPorClave" parameterType="long" resultMap="carroResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE prod_id = #{id}
+        WHERE carr.prod_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
@@ -40,24 +40,24 @@
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND prod_id = #{filtro.id}
+                    AND carr.prod_id = #{filtro.id}
                 </if>
                 <if test="filtro.numero != null and filtro.numero != ''">
-                    AND LOWER(carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
+                    AND LOWER(carr.carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
                 </if>
                 <if test="filtro.modelo != null and filtro.modelo != ''">
-                    AND LOWER(carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
+                    AND LOWER(carr.carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
                 </if>
             </if>
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY prod_id ${direccionOrden}</when>
-                <when test="campoOrden == 'numero'">ORDER BY carr_num ${direccionOrden}</when>
-                <when test="campoOrden == 'modelo'">ORDER BY carr_modelo ${direccionOrden}</when>
-                <when test="campoOrden == 'caracteristica'">ORDER BY carr_caracteristica ${direccionOrden}</when>
-                <when test="campoOrden == 'proveedor'">ORDER BY carr_proveedor ${direccionOrden}</when>
-                <otherwise>ORDER BY prod_id ASC</otherwise>
+                <when test="campoOrden == 'id'">ORDER BY carr.prod_id ${direccionOrden}</when>
+                <when test="campoOrden == 'numero'">ORDER BY carr.carr_num ${direccionOrden}</when>
+                <when test="campoOrden == 'modelo'">ORDER BY carr.carr_modelo ${direccionOrden}</when>
+                <when test="campoOrden == 'caracteristica'">ORDER BY carr.carr_caracteristica ${direccionOrden}</when>
+                <when test="campoOrden == 'proveedor'">ORDER BY carr.carr_proveedor ${direccionOrden}</when>
+                <otherwise>ORDER BY carr.prod_id ASC</otherwise>
             </choose>
         </if>
         <if test="limite != null and desplazamiento != null">
@@ -72,13 +72,13 @@
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND prod_id = #{filtro.id}
+                    AND carr.prod_id = #{filtro.id}
                 </if>
                 <if test="filtro.numero != null and filtro.numero != ''">
-                    AND LOWER(carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
+                    AND LOWER(carr.carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
                 </if>
                 <if test="filtro.modelo != null and filtro.modelo != ''">
-                    AND LOWER(carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
+                    AND LOWER(carr.carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
                 </if>
             </if>
         </where>

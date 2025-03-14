@@ -19,6 +19,7 @@ public class Producto implements Serializable {
 
     private Long id;
     private String descripcion;
+    private Carro carro;
     private TipoProducto tipoProducto;
     private TipoComponente tipoComponente;
     private EstadoProducto estadoProducto;

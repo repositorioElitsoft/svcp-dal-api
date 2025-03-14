@@ -1,8 +1,5 @@
 package com.elitsoft.servicampo.domain.dto.core;
 
-import com.elitsoft.servicampo.domain.entity.EstadoProducto;
-import com.elitsoft.servicampo.domain.entity.TipoComponente;
-import com.elitsoft.servicampo.domain.entity.TipoProducto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +16,7 @@ public class ProductoDTO implements Serializable {
 
     private Long id;
     private String descripcion;
+    private CarroDTO carro;
     private TipoProductoDTO tipoProducto;
     private TipoComponenteDTO tipoComponente;
     private EstadoProductoDTO estadoProducto;
