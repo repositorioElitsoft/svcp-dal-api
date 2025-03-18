@@ -8,6 +8,7 @@
         <association property="provincia" javaType="com.elitsoft.servicampo.domain.entity.Provincia">
             <id property="id" column="prvs_id" />
             <result property="descripcionCiudad" column="prvs_dsc" />
+            <association property="region" resultMap="com.elitsoft.servicampo.mapper.RegionMapper.regionResultMap"/>
         </association>
     </resultMap>
 

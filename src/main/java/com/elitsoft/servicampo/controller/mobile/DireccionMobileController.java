@@ -326,7 +326,7 @@ public class DireccionMobileController {
     @GetMapping(value = "/clientes/{clienteId}/contactos", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Obtiene todos  los direccion por cliente con lista contactos", description = "Obtiene todos los direccion por cliente con lista contactos")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Direccions obtenidos exitosamente"),
+            @ApiResponse(responseCode = "200", description = "Direccion obtenidos exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<ApiEnityResponse<List<DireccionDTO>>> obtenerTodosPorClienteConContactos(@PathVariable Long clienteId) {

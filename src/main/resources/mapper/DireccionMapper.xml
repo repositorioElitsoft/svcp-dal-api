@@ -77,13 +77,29 @@
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
         SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
-               drcc.drcc_imagen_perfil,            drcc.drcc_latitud   , drcc.drcc_longitud     , drcc.drcc_flag_evidencia ,
+               drcc.drcc_imagen_perfil, drcc.drcc_latitud   , drcc.drcc_longitud     , drcc.drcc_flag_evidencia ,
                clnt.clnt_id , clnt.clnt_nombre ,
                cmna.cmna_id , cmna.cmna_dsc    ,
                sctr.sctr_id , sctr.sctr_dsc    ,
                cntc.cntc_id , cntc.cntc_nombre ,
                tpdr.tpdr_id , tpdr.tpdr_dsc    ,
                estd.estd_id , estd.estd_dsc
+    </sql>
+
+    <!-- Sentencia SQL de Columnas, incluye detalle de  Provincia, Region, Pais, Zona -->
+    <sql id="selectDetallado">
+        SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
+        drcc.drcc_imagen_perfil,  drcc.drcc_latitud   , drcc.drcc_longitud     , drcc.drcc_flag_evidencia ,
+        clnt.clnt_id , clnt.clnt_nombre ,
+        cmna.cmna_id , cmna.cmna_dsc    ,
+        prvs.prvs_id , prvs.prvs_dsc    ,
+        rgns.rgns_id , rgns.rgns_dsc    ,
+        pses.pses_id , pses.pses_dsc    ,
+        sctr.sctr_id , sctr.sctr_dsc    ,
+        znas.znas_id , znas.znas_dsc    ,
+        cntc.cntc_id , cntc.cntc_nombre ,
+        tpdr.tpdr_id , tpdr.tpdr_dsc    ,
+        estd.estd_id , estd.estd_dsc
     </sql>
 
 
@@ -93,6 +109,21 @@
         INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
         INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
         INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
+        INNER JOIN ${schema}contactos as cntc ON drcc.cntc_id = cntc.cntc_id
+        INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
+        INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="fromDetallado">
+        FROM ${schema}direcciones     as drcc
+        INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
+        INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
+        INNER JOIN ${schema}provincias as prvs ON cmna.prvs_id = prvs.prvs_id
+        INNER JOIN ${schema}regiones  as rgns ON prvs.rgns_id = rgns.rgns_id
+        INNER JOIN ${schema}paises    as pses ON rgns.pses_id = pses.pses_id
+        INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
+        INNER JOIN ${schema}zonas     as znas ON sctr.znas_id = znas.znas_id
         INNER JOIN ${schema}contactos as cntc ON drcc.cntc_id = cntc.cntc_id
         INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
         INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
@@ -113,8 +144,8 @@
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="direccionResultMap">
-        <include refid="select"/>
-        <include refid="from"/>
+        <include refid="selectDetallado"/>
+        <include refid="fromDetallado"/>
         WHERE drcc.clnt_id = #{clientId}
           AND drcc.drcc_id = #{id}
     </select>
