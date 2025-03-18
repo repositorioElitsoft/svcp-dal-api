@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ContactoDireccionMapper">
+
+    <!--
+    <resultMap id="contactoDireccionResultMap" type="com.elitsoft.servicampo.domain.entity.ContactoDireccion">
+        <result property="contacto" column="cntc_id" />
+        <result property="cliente" column="clnt_id" />
+        <result property="direccion" column="drcc_id" />
+    </resultMap>
+
+
+    <sql id="select">
+        SELECT cntc_id, clnt_id, drcc_id
+    </sql>
+
+
+    <sql id="from">
+        FROM ${schema}contatos_direcciones
+    </sql>
+
+
+    <select id="encontrarPorClave" parameterType="long" resultMap="contactodireccionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        AND cntc_id = #{contacto}
+    </select>
+
+
+    <select id="obtenerTodos" resultMap="contactodireccionResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+-->
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.ContactoDireccion">
+        INSERT INTO ${schema}contatos_direcciones (cntc_id, clnt_id, drcc_id )  VALUES 
+                                                 (#{contacto.id}, #{cliente.id}, #{direccion.id})
+    </insert>
+
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ContactoDireccion">
+        UPDATE ${schema}contatos_direcciones
+        SET  clnt_id = #{cliente.id}, drcc_id = #{direccion.id}
+        WHERE cntc_id = #{contacto.id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}contatos_direcciones
+        WHERE cntc_id = #{contacto.id}
+          AND clnt_id = #{cliente.id}
+          AND drcc_id = #{direccion.id}
+    </delete>
+    
+</mapper>

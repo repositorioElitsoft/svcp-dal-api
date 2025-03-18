@@ -1,11 +1,19 @@
 package com.elitsoft.servicampo.service.core;
 
+import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
 import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
+import com.elitsoft.servicampo.domain.entity.Cliente;
+import com.elitsoft.servicampo.domain.entity.Contacto;
+import com.elitsoft.servicampo.domain.entity.ContactoDireccion;
 import com.elitsoft.servicampo.domain.entity.Direccion;
 import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.mapper.ContactoDireccionMapper;
 import com.elitsoft.servicampo.mapper.DireccionMapper;
+import com.elitsoft.servicampo.mapstruct.ClienteMapStruct;
+import com.elitsoft.servicampo.mapstruct.ContactoMapStruct;
 import com.elitsoft.servicampo.mapstruct.DireccionMapStruct;
 import com.elitsoft.servicampo.service.error.ClienteError;
+import com.elitsoft.servicampo.service.error.ContactoError;
 import com.elitsoft.servicampo.utils.Constantes;
 import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.service.error.DireccionError;
@@ -16,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,7 +38,20 @@ public class DireccionService {
     private DireccionMapper direccionMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
+    private ContactoDireccionMapper contactoDireccionMapper; //Acceso a la base de datos con MyBatis, actua como un repositorio
+
+    @Autowired
+    private ContactoService contactoService;
+
+    @Autowired
     private DireccionMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
+
+    @Autowired
+    private ContactoMapStruct contactoMapStruct; // MapStruct Mapper (ToEntity(), ToDTO())
+
+    @Autowired
+    private ClienteMapStruct clienteMapStruct; // MapStruct Mapper (ToEntity(), ToDTO())
+
 
     private static final Logger logeador = LoggerFactory.getLogger(DireccionService.class); //Logback
 
@@ -71,6 +93,72 @@ public class DireccionService {
                            GeneralError.ERROR_INTERNO.getCodigoError(),  e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.DIRECCION_AGREGAR_MENSAJE, e);
+        }
+    }
+
+    /**
+     * Agrega un nuevo Contacto a una Direccion existente.
+     * @param  id clave de Direccion a eliminar.
+     * @param clienteId La clave de Cliente a eliminar.
+     * @param contactoDTO el Contacto DTO.
+     * @return el Direccion DTO existente con Contacto DTO agregado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
+     * @throws RecursoDuplicadoException si el recurso Direccion ya existe.
+     */
+    @Transactional
+    public ContactoDTO agregarContacto(Long id, Long clienteId, ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+        logeador.debug("agregarContacto() Direccion Contacto");
+
+        //  Valida Entrada Direccion
+        if (id == null ) {
+            logeador.error(Constantes.DIRECCION_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ",
+                    DireccionError.REQUERIDO.getCodigoError());
+            throw new EntradaInvalidadException(DireccionError.REQUERIDO.getCodigoError(),
+                    Constantes.DIRECCION_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+        //  Valida Entrada Cliente
+        if (clienteId == null ) {
+            logeador.error(Constantes.CLIENTE_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ",
+                    ClienteError.REQUERIDO.getCodigoError());
+            throw new EntradaInvalidadException(ClienteError.REQUERIDO.getCodigoError(),
+                    Constantes.CLIENTE_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+
+        try {
+
+            Cliente cliente = new Cliente();
+            cliente.setId(clienteId);
+
+            Direccion direccion = new Direccion();
+            direccion.setId(id);
+
+            //1. Agregar Contacto
+            ContactoDTO contactoDTONuevo =  contactoService.agregar(contactoDTO);
+            ContactoDireccion contactoDireccion = ContactoDireccion.builder()
+                                                                .contacto(contactoMapStruct.toEntity(contactoDTONuevo))
+                                                                .cliente(cliente)
+                                                                .direccion(direccion)
+                                                                .build();
+            //2. Agregar relacion Contacto<-->Direccion
+            contactoDireccionMapper.agregar(contactoDireccion);
+            logeador.info("Contacto agregado exitosamente a Direccion y Cliente, contacto:{}, cliente: {}, direccion: {}", contactoDTONuevo.getId(),
+                                            contactoDireccion.getCliente().getId(), contactoDireccion.getDireccion().getId());
+            return contactoDTONuevo;
+        }
+        catch (DuplicateKeyException e) {
+            logeador.error(Constantes.DIRECCION_DUPLICADO_MENSAGE + ": contacto:{}, cliente: {}, direccion: {}, codigoError:{}", contactoDTO.getNombre(),
+                        clienteId, id, DireccionError.DUPLICADO.getCodigoError());
+            throw new RecursoDuplicadoException(DireccionError.DUPLICADO.getCodigoError(),
+                    Constantes.DIRECCION_DUPLICADO_MENSAGE);
+        }
+        catch (DataAccessException e) {
+            logeador.error(Constantes.DIRECCION_AGREGAR_MENSAJE + ": contacto:{}, cliente: {}, direccion: {}, codigoError:{}", contactoDTO.getNombre(),
+                    clienteId, id, GeneralError.ERROR_INTERNO.getCodigoError(),  e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DIRECCION_AGREGAR_MENSAJE, e);
         }
     }
 
@@ -159,6 +247,60 @@ public class DireccionService {
         }
     }
 
+    /**
+     * Actualiza un Contact existente asociado a Direccion
+     * @param clienteId La clave de Cliente a actualizar.
+     * @param id la clave de Direccion a actualizar.
+     * @param contactoId la clave de Contacto a actualizar.
+     * @param contactoDTO el Contacto DTO con informacion actualizada.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Direccion no es encontrado.
+     * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
+     */
+    public void actualizarContacto(Long clienteId, Long id, Long contactoId, ContactoDTO contactoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+        logeador.debug("actualizarContacto() direccion");
+
+        //  Valida Entrada
+        if (id == null || id.toString().isEmpty()  || clienteId == null || clienteId.toString().isEmpty() || contactoDTO == null ) {
+            logeador.error(Constantes.DIRECCION_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}", ((contactoDTO != null) ? contactoDTO.toString() : null  ),
+                    DireccionError.REQUERIDO.getCodigoError());
+            throw new EntradaInvalidadException(DireccionError.REQUERIDO.getCodigoError(),
+                    Constantes.DIRECCION_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+
+        try {
+
+            DireccionDTO direccionDTOEncontrado = this.encontrarPorClave(clienteId, id); // Verifica si existe la direccione
+
+            Cliente cliente = new Cliente();
+            cliente.setId(clienteId);
+
+            Direccion direccion = new Direccion();
+            direccion.setId(id);
+
+            //1. Actualiza Contacto
+            contactoService.actualizar(contactoId,contactoDTO);
+            ContactoDireccion contactoDireccion = ContactoDireccion.builder()
+                    .contacto(contactoMapStruct.toEntity(contactoDTO))
+                    .cliente(cliente)
+                    .direccion(direccion)
+                    .build();
+
+            //2. Actualiza relacion Contacto<-->Direccion
+            contactoDireccionMapper.actualizar(contactoDireccion);
+
+            logeador.info("direccion actualizado exitosamente: contacto:{}, cliente: {}, direccion: {}", contactoDTO.getId(),
+                          clienteId, id);
+        } catch (DataAccessException | BindingException e) {
+            logeador.error(Constantes.DIRECCION_ACTUALIZAR_MENSAJE + ": contacto:{}, cliente: {}, direccion: {}, codigoError:{} ", contactoDTO.getId(),
+                    clienteId, id, GeneralError.ERROR_INTERNO.getCodigoError() , e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DIRECCION_ACTUALIZAR_MENSAJE, e);
+        }
+    }
+
+
    /**
      * Actualiza Lote de Direccion existentes.
      * @param direccionDTOLote lista de Direccion DTO con datos a actualizar.
@@ -190,13 +332,13 @@ public class DireccionService {
 
     /**
      * Elimina Direccion por Clave.
-     * @param clienteId La clave de Cliente a eliminar.
      * @param  id clave de Direccion a eliminar.
+     * @param clienteId La clave de Cliente a eliminar.
      * @throws RecursoNoEncontradoException si el Direccion no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long clienteId, Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
-        logeador.debug("eliminar() direccion: {}, {}", clienteId, id  );
+    public void eliminar(Long id, Long clienteId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+        logeador.debug("eliminar() direccion: {}, {}", id, clienteId  );
 
         //Verifica integridad referencial
 //        this.verificarIntegridadEliminar(id);
@@ -210,6 +352,58 @@ public class DireccionService {
                            GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.DIRECCION_ELIMINAR_MENSAJE, e);
+        }
+    }
+
+    /**
+     * Elimina Contacto asociado a Direccion por Clave.
+     * @param  id clave de Direccion a eliminar.
+     * @param clienteId La clave de Cliente a eliminar.
+     * @param contactoId La clave de Contacto a eliminar.
+     * @throws RecursoNoEncontradoException si el Direccion no es encontrado.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    @Transactional
+    public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+        logeador.debug("eliminarContacto() direccion contacto: {}, {}, {}}", id, clienteId,  contactoId );
+
+        //Verifica integridad referencial
+//        this.verificarIntegridadEliminar(id);
+
+        //  Valida Entrada
+        if (id == null || id.toString().isEmpty()  || clienteId == null || clienteId.toString().isEmpty() || contactoId == null ) {
+            logeador.error(Constantes.DIRECCION_ENTRADA_INVALIDA_MENSAGE + ": codigoError:{}",
+                    DireccionError.REQUERIDO.getCodigoError());
+            throw new EntradaInvalidadException(DireccionError.REQUERIDO.getCodigoError(),
+                    Constantes.DIRECCION_ENTRADA_INVALIDA_MENSAGE);
+        }
+
+
+        try {
+            Contacto contacto = new Contacto();
+            contacto.setId(contactoId);
+
+            Direccion direccion = new Direccion();
+            direccion.setId(id);
+
+            Cliente cliente = new Cliente();
+            cliente.setId(clienteId);
+
+            ContactoDireccion contactoDireccion = ContactoDireccion.builder()
+                                                                    .contacto(contacto)
+                                                                    .cliente(cliente)
+                                                                    .direccion(direccion).build();
+            //1. Elimina relacion Contacto<-->Direccion
+            contactoDireccionMapper.eliminar(contactoDireccion);
+
+            //2. Elimina Contacto
+            contactoService.eliminar(contactoId);
+            logeador.info("contacto / direccion eliminado: contacto:{}, cliente: {}, direccion: {}", contactoId, clienteId, id);
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.DIRECCION_ELIMINAR_MENSAJE + ": contacto:{}, cliente: {}, direccion: {}, codigoError:{}",
+                    contactoId, clienteId, id, GeneralError.ERROR_INTERNO.getCodigoError(), e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DIRECCION_ELIMINAR_MENSAJE, e);
         }
     }
 
@@ -279,74 +473,78 @@ public class DireccionService {
     }
 
     /**
-     * Obtiene todos los Direccions.
-     * @return una lista de todos Direccion DTOs.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * Encuentra un Direccion en la base de datos por su clave con Lista de Contacto
+     * @param clientId La clave de Cliente a encontrar.
+     * @param id La clave de Direccion a encontrar.
+     * @return el Direccion DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */
-    public List<DireccionDTO> obtenerTodos() throws BaseDatosException {
-        logeador.debug("obtenerTodos()");
+    public DireccionDTO encontrarPorClaveConContactos(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("encontrarPorClaveConContactos(): {}, {}", clientId, id);
 
         try {
-            List<DireccionDTO> direccionLista = mapper.toDTOList(direccionMapper.obtenerTodos());
-            logeador.info("direccions obtenidos");
-            return direccionLista;
+            DireccionDTO direccionDTO = mapper.toDTO(direccionMapper.encontrarPorClave(clientId,id));
+
+            if (direccionDTO != null) {
+                logeador.info("direccion encontrado por clave cliente: {}, id: {}", clientId, id );
+            } else {
+                logeador.info("direccion clave:{}, {} no encontrado codigoError:{}", clientId, id,
+                        DireccionError.NO_ENCONTRADO.getCodigoError());
+                throw new RecursoNoEncontradoException(DireccionError.NO_ENCONTRADO.getCodigoError(),
+                        Constantes.DIRECCION_NO_ENCONTRADO_MENSAGE);
+            }
+
+            return direccionDTO;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.DIRECCION_OBTENER_TODOS_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+            logeador.error(Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE + " cliente: {}, id: {}, codigoError:{} ", clientId, id,
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                        Constantes.DIRECCION_OBTENER_TODOS_MENSAJE, e);
+                    Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de Direccion
-     * @param id la clave Direccion a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-//    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-//        logeador.debug("verificarIntegridadEliminar() direccion: {}", id);
-//
-//        boolean entityRelacionadoPorDireccion = false;
-//
-//        try {
-//            entityRelacionadoPorDireccion = this.entityRelacionadoPorDireccion(id);
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.DIRECCION_ELIMINAR_MENSAJE + ": {}", id, e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.DIRECCION_ELIMINAR_MENSAJE, e);
-//        }
-//
-//        //Verifca la integridad con sectores
-//        if (entityRelacionadoPorDireccion) {
-//            throw new RecursoEliminarException(DireccionError.INTEGRIDAD_VIOLADA.getCodigoError(),
-//                                               Constantes.DIRECCION_VIOLACION_INTEGRIDAD_MENSAGE);
-//        }
-//
-//    }
 
     /**
-     * Buscar Direccion que tengan EntityRelacionado.
-     * @param id la clave Direccion a encontrar.
-     * @return boolean Direccion tiene o no registros asociados
-     * @throws BaseDatosException
+     * Obtiene todos los Direccion desde la base de datos filtrado por Cliente
+     * @param clientId clave Cliente a filtrar
+     * @return una lista de todos Direccion DTOs.
+     * @throws BaseDatosException si ocurre un error de base de datos.
      */
-//    public boolean entityRelacionadoPorDireccion(Long id) throws  BaseDatosException {
-//        logeador.debug("entityRelacionadoPorDireccion() direccion: {}", id);
-//
-//        try {
-//            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorDireccion(id); // Verifica si tiene EntityRelacionado  asociados
-//            if (!entitys.isEmpty()) {
-//                logeador.info("direccion  tiene #EntityRelacionado# asociados");
-//                return true;
-//            } else{
-//                logeador.info("direccion no tiene #EntityRelacionado# asociados");
-//                return false;
-//            }
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.DIRECCION_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}", id, e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.DIRECCION_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-//        }
-//    }
+    public List<DireccionDTO> obtenerTodosPorCliente(Long clientId) throws BaseDatosException {
+        logeador.debug("obtenerTodosPorCliente() {}",clientId);
+
+        try {
+            List<DireccionDTO> direccionLista = mapper.toDTOList(direccionMapper.obtenerTodosPorCliente(clientId));
+            logeador.info("direccions por cliente obtenidos");
+            return direccionLista;
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.DIRECCION_OBTENER_TODOS_MENSAJE + " codigoError:{} ",
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DIRECCION_OBTENER_TODOS_MENSAJE, e);
+        }
+    }
+
+    /**
+     * Obtiene todos los Direccion desde la base de datos filtrado por Cliente con Lista de Contacto
+     * @param clientId clave Cliente a filtrar
+     * @return una lista de todos Direccion DTOs.
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    public List<DireccionDTO> obtenerTodosPorClienteConContactos(Long clientId) throws BaseDatosException {
+        logeador.debug("obtenerTodosPorClienteConContactos()");
+
+        try {
+            List<DireccionDTO> direccionLista = mapper.toDTOList(direccionMapper.obtenerTodosPorCliente(clientId));
+            logeador.info("direccions por cliente con contactos obtenidos");
+            return direccionLista;
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.DIRECCION_OBTENER_TODOS_MENSAJE + " codigoError:{} ",
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DIRECCION_OBTENER_TODOS_MENSAJE, e);
+        }
+    }
+
 }

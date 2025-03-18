@@ -487,5 +487,18 @@ public class Constantes {
     public static final String CARRO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CARRO:";
     public static final String CARRO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CARRO";
     public static final String CARRO_FILTRAR_MENSAJE = "Error filtrando CARRO";
+
+    public static final String CONTACTODIRECCION_ENTRADA_INVALIDA_MENSAGE = "Entrada de CONTACTODIRECCION invalida.";
+    public static final String CONTACTODIRECCION_DUPLICADO_MENSAGE = "Recurso  CONTACTODIRECCION ya existe.";
+    public static final String CONTACTODIRECCION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CONTACTODIRECCION viola Integridad. ";
+    public static final String CONTACTODIRECCION_NO_ENCONTRADO_MENSAGE = "Recurso CONTACTODIRECCION no  encontrado";
+    public static final String CONTACTODIRECCION_AGREGAR_MENSAJE = "Error Interno agregando Recurso CONTACTODIRECCION";
+    public static final String CONTACTODIRECCION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CONTACTODIRECCION";
+    public static final String CONTACTODIRECCION_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTACTODIRECCION";
+    public static final String CONTACTODIRECCION_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTACTODIRECCION";
+    public static final String CONTACTODIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTACTODIRECCION por clave :";
+    public static final String CONTACTODIRECCION_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTACTODIRECCION:";
+    public static final String CONTACTODIRECCION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTACTODIRECCION";
+    public static final String CONTACTODIRECCION_FILTRAR_MENSAJE = "Error filtrando CONTACTODIRECCION";
 }
 

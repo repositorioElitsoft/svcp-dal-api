@@ -15,10 +15,46 @@
         <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
         <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
         <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
-        <association property="contacto" resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
         <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
         <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
     </resultMap>
+
+    <resultMap id="direccionPorClienteResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
+        <id property="id" column="drcc_id" />
+        <result property="descripcion" column="drcc_dsc" />
+        <result property="calle" column="drcc_calle" />
+        <result property="numeracion" column="drcc_numeracion" />
+        <result property="referencia" column="drcc_referencia" />
+        <result property="imagenPerfil" column="drcc_imagen_perfil" />
+        <result property="latitud" column="drcc_latitud" />
+        <result property="longitud" column="drcc_longitud" />
+        <result property="flagEvidencia" column="drcc_flag_evidencia" />
+        <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
+        <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
+        <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
+        <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
+        <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+        <collection  property="contactos" resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+    </resultMap>
+
+    <resultMap id="direccionPorClienteConContactosResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
+        <id property="id" column="drcc_id" />
+        <result property="descripcion" column="drcc_dsc" />
+        <result property="calle" column="drcc_calle" />
+        <result property="numeracion" column="drcc_numeracion" />
+        <result property="referencia" column="drcc_referencia" />
+        <result property="imagenPerfil" column="drcc_imagen_perfil" />
+        <result property="latitud" column="drcc_latitud" />
+        <result property="longitud" column="drcc_longitud" />
+        <result property="flagEvidencia" column="drcc_flag_evidencia" />
+        <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
+        <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
+        <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
+        <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
+        <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+        <collection  property="contactos" resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+    </resultMap>
+
 
     <resultMap id="direccionLazyResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
         <id property="id" column="drcc_id" />
@@ -62,6 +98,19 @@
         INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
     </sql>
 
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="fromClienteConContacto">
+        FROM ${schema}direcciones     as drcc
+        INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
+        INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
+        INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
+        LEFT  JOIN ${schema}contatos_direcciones as cntc_drcc ON drcc.clnt_id = cntc_drcc.clnt_id
+          AND  drcc.drcc_id = cntc_drcc.drcc_id
+        LEFT  JOIN ${schema}contactos as cntc ON cntc_drcc.cntc_id = cntc.cntc_id
+        INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
+        INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
+    </sql>
+
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="direccionResultMap">
         <include refid="select"/>
@@ -70,10 +119,32 @@
           AND drcc.drcc_id = #{id}
     </select>
 
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClaveConContactos" parameterType="long" resultMap="direccionPorClienteConContactosResultMap">
+        <include refid="select"/>
+        <include refid="fromClienteConContacto"/>
+        WHERE drcc.clnt_id = #{clientId}
+        AND drcc.drcc_id = #{id}
+    </select>
+
    <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="direccionResultMap">
         <include refid="select"/>
         <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos Por Cliente-->
+    <select id="obtenerTodosPorCliente" resultMap="direccionPorClienteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE drcc.clnt_id = #{clientId}
+    </select>
+
+    <!-- Sentencia SQL de Obtener todos Por Cliente con Lista de Contacto-->
+    <select id="obtenerTodosPorClienteConContactos" resultMap="direccionPorClienteConContactosResultMap">
+        <include refid="select"/>
+        <include refid="fromClienteConContacto"/>
+        WHERE drcc.clnt_id = #{clientId}
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->

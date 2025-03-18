@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class DireccionDTO implements Serializable {
     private String referencia;
     private ComunaDTO comuna;
     private SectorDTO sector;
-    private ContactoDTO contacto;
+    private List<ContactoDTO> contactos;
     private TipoDireccionDTO tipoDireccion;
     private String imagenPerfil;
     private Double latitud;

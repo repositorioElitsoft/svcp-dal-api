@@ -66,6 +66,14 @@ public interface DireccionMapper {
     Direccion encontrarPorClave(Long clientId, Long id);
 
     /**
+     * Encuentra un Direccion en la base de datos por su clave con Lista de Contacto
+     * @param clientId La clave de Cliente a encontrar.
+     * @param id La clave de Direccion a encontrar.
+     * @return La entidad Direccion encontrado, o null si no es encontrado.
+     */
+    Direccion encontrarPorClaveConContactos(Long clientId, Long id);
+
+    /**
      * Encuentra lista Direccion en la base de datos asociados a #EntityRelacionado#.
      * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
      * @param limite si ejerce un limite de registros o no en los resultados
@@ -79,6 +87,20 @@ public interface DireccionMapper {
      * @return List<Direccion> Una lista de todos los entidades Direccion.
      */
     List<Direccion> obtenerTodos();
+
+    /**
+     * Obtiene todos los Direccion desde la base de datos filtrado por Cliente
+     * @param clientId clave Cliente a filtrar
+     * @return List<Direccion> Una lista de todos los entidades Direccion.
+     */
+    List<Direccion> obtenerTodosPorCliente(Long clientId);
+
+    /**
+     * Obtiene todos los Direccion desde la base de datos filtrado por Cliente con Lista de Contacto
+     * @param clientId clave Cliente a filtrar
+     * @return List<Direccion> Una lista de todos los entidades Direccion.
+     */
+    List<Direccion> obtenerTodosPorClienteConContactos(Long clientId);
 
     /**
      * Hace filtro dinamico y paginacion para Direccion
