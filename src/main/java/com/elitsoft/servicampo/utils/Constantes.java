@@ -500,5 +500,18 @@ public class Constantes {
     public static final String CONTACTODIRECCION_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTACTODIRECCION:";
     public static final String CONTACTODIRECCION_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTACTODIRECCION";
     public static final String CONTACTODIRECCION_FILTRAR_MENSAJE = "Error filtrando CONTACTODIRECCION";
+
+    public static final String CONTRATO_ENTRADA_INVALIDA_MENSAGE = "Entrada de CONTRATO invalida.";
+    public static final String CONTRATO_DUPLICADO_MENSAGE = "Recurso  CONTRATO ya existe.";
+    public static final String CONTRATO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CONTRATO viola Integridad. ";
+    public static final String CONTRATO_NO_ENCONTRADO_MENSAGE = "Recurso CONTRATO no  encontrado";
+    public static final String CONTRATO_AGREGAR_MENSAJE = "Error Interno agregando Recurso CONTRATO";
+    public static final String CONTRATO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CONTRATO";
+    public static final String CONTRATO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTRATO";
+    public static final String CONTRATO_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTRATO";
+    public static final String CONTRATO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTRATO por clave :";
+    public static final String CONTRATO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATO:";
+    public static final String CONTRATO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATO";
+    public static final String CONTRATO_FILTRAR_MENSAJE = "Error filtrando CONTRATO";
 }
 

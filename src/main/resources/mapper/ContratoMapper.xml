@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ContratoMapper">
+
+    <resultMap id="contratoResultMap" type="com.elitsoft.servicampo.domain.entity.Contrato">
+        <id property="id" column="ctts_id" />
+        <result property="fechaCreacion" column="ctts_fecha_creacion" />
+        <result property="fechaInicio" column="ctts_fecha_inicio" />
+        <result property="fechaFin" column="ctts_fecha_fin" />
+        <association property="estado"  resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+        <association property="contacto"  resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+        <association property="cliente"  resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
+        <!-- <collection property="contratosDetalle"  select="com.elitsoft.servicampo.mapper.ContratoDetalleMapper.encontrarPorContratoId"/> -->
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT ctts.ctts_id, ctts.ctts_fecha_creacion, ctts.ctts_fecha_inicio, ctts.ctts_fecha_fin,
+            estd.estd_id , estd.estd_dsc    ,
+            cntc.cntc_id , cntc.cntc_nombre ,
+            clnt.clnt_id , clnt.clnt_nombre
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}contratos as ctts
+        INNER JOIN ${schema}estados   as estd ON ctts.estd_id = estd.estd_id
+        LEFT JOIN ${schema}contactos as cntc ON ctts.cntc_id = cntc.cntc_id
+        INNER JOIN ${schema}clientes  as clnt ON ctts.clnt_id = clnt.clnt_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="contratoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE ctts.ctts_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="contratoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="contratoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND ctts.ctts_id = #{filtro.id}
+                </if>
+                <if test="filtro.fechaCreacion != null">
+                    AND ctts.ctts_fecha_creacion = #{filtro.fechaCreacion}
+                </if>
+                <if test="filtro.fechaInicio != null">
+                    AND ctts.ctts_fecha_inicio = #{filtro.fechaInicio}
+                </if>
+                <if test="filtro.fechaFin != null">
+                    AND ctts.ctts_fecha_fin = #{filtro.fechaFin}
+                </if>
+                <if test="filtro.estado != null">
+                    AND ctts.estd_id = #{filtro.estado}
+                </if>
+                <if test="filtro.contacto != null">
+                    AND ctts.cntc_id = #{filtro.contacto}
+                </if>
+                <if test="filtro.cliente != null">
+                    AND ctts.clnt_id = #{filtro.cliente}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY ctts.ctts_id ${direccionOrden}</when>
+                <when test="campoOrden == 'fechaCreacion'">ORDER BY ctts.ctts_fecha_creacion ${direccionOrden}</when>
+                <when test="campoOrden == 'fechaInicio'">ORDER BY ctts.ctts_fecha_inicio ${direccionOrden}</when>
+                <when test="campoOrden == 'fechaFin'">ORDER BY ctts.ctts_fecha_fin ${direccionOrden}</when>
+                <when test="campoOrden == 'estado'">ORDER BY ctts.estd_id ${direccionOrden}</when>
+                <when test="campoOrden == 'contacto'">ORDER BY ctts.cntc_id ${direccionOrden}</when>
+                <when test="campoOrden == 'cliente'">ORDER BY ctts.clnt_id ${direccionOrden}</when>
+                <otherwise>ORDER BY ctts.ctts_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND ctts.ctts_id = #{filtro.id}
+                </if>
+                <if test="filtro.fechaCreacion != null">
+                    AND ctts.ctts_fecha_creacion = #{filtro.fechaCreacion}
+                </if>
+                <if test="filtro.fechaInicio != null">
+                    AND ctts.ctts_fecha_inicio = #{filtro.fechaInicio}
+                </if>
+                <if test="filtro.fechaFin != null">
+                    AND ctts.ctts_fecha_fin = #{filtro.fechaFin}
+                </if>
+                <if test="filtro.estado != null">
+                    AND ctts.estd_id = #{filtro.estado}
+                </if>
+                <if test="filtro.contacto != null">
+                    AND ctts.cntc_id = #{filtro.contacto}
+                </if>
+                <if test="filtro.cliente != null">
+                    AND ctts.clnt_id = #{filtro.cliente}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Contrato" affectData="true" flushCache="true">
+        INSERT INTO ${schema}contratos (ctts_fecha_creacion, ctts_fecha_inicio, ctts_fecha_fin, estd_id, cntc_id, clnt_id)
+        VALUES (#{fechaCreacion}, #{fechaInicio}, #{fechaFin}, #{estado.id}, #{contacto.id}, #{cliente.id})
+        returning ctts_id as id, ctts_fecha_creacion as fechaCreacion, ctts_fecha_inicio as fechaInicio, ctts_fecha_fin as fechaFin, estd_id as estadoId
+    </select>
+
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Contrato">
+        UPDATE ${schema}contratos
+        SET ctts_fecha_inicio = #{fechaInicio}, ctts_fecha_fin = #{fechaFin},
+            estd_id = #{estado.id}, cntc_id = #{contacto.id}, clnt_id = #{cliente.id}
+        WHERE ctts_id = #{id}
+    </update>
+
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}contratos
+        WHERE ctts_id = #{id}
+    </delete>
+
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}contratos WHERE ctts_id IN
+        <foreach item="contrato" collection="contratoLote" open='(' separator=',' close=')'>
+            #{contrato.id}
+        </foreach>
+    </delete>
+</mapper>
