@@ -49,26 +49,27 @@
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="sectorResultMap">
-        SELECT * FROM ${schema}sectores
+        <include refid="select"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND sctr_id = #{filtro.id}
+                    AND sctr.sctr_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
-                    AND LOWER(sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
+                    AND LOWER(sctr.sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
                 </if>
                 <if test="filtro.zonaId != null">
-                    AND znas_id = #{filtro.zonaId}
+                    AND sctr.znas_id = #{filtro.zonaId}
                 </if>
             </if>
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY sctr_id ${direccionOrden}</when>
-                <when test="campoOrden == 'descripcionSector'">ORDER BY sctr_dsc ${direccionOrden}</when>
-                <when test="campoOrden == 'zonaId'">ORDER BY znas_id ${direccionOrden}</when>
-                <otherwise>ORDER BY sctr_id ASC</otherwise>
+                <when test="campoOrden == 'id'">ORDER BY sctr.sctr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionSector'">ORDER BY sctr.sctr_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'zonaId'">ORDER BY sctr.znas_id ${direccionOrden}</when>
+                <otherwise>ORDER BY sctr.sctr_id ASC</otherwise>
             </choose>
         </if>
         <if test="limite != null and desplazamiento != null">
@@ -78,17 +79,18 @@
 
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
-        SELECT COUNT(*) FROM ${schema}sectores
+        SELECT COUNT(*)
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND sctr_id = #{filtro.id}
+                    AND sctr.sctr_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
-                    AND LOWER(sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
+                    AND LOWER(sctr.sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
                 </if>
                 <if test="filtro.zonaId != null">
-                    AND znas_id = #{filtro.zonaId}
+                    AND sctr.znas_id = #{filtro.zonaId}
                 </if>
             </if>
         </where>
