@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ContratoDetalleMapper">
+
+    <resultMap id="contratoDetalleResultMap" type="com.elitsoft.servicampo.domain.entity.ContratoDetalle">
+        <id property="id" column="ctdt_id" />
+        <association property="contrato" resultMap="com.elitsoft.servicampo.mapper.ContratoMapper.contratoResultMap"/>
+        <association property="direccion" resultMap="com.elitsoft.servicampo.mapper.DireccionMapper.direccionResultMap"/>
+        <association property="servicio"  resultMap="com.elitsoft.servicampo.mapper.ServicioMapper.servicioResultMap"/>
+    </resultMap>
+
+    <resultMap id="contratoDetalleLazyResultMap" type="com.elitsoft.servicampo.domain.entity.ContratoDetalle">
+        <id property="id" column="ctdt_id" />
+        <association property="contrato" column="ctts_id" javaType="com.elitsoft.servicampo.domain.entity.Contrato" select="com.elitsoft.servicampo.mapper.ContratoMapper.encontrarPorClave"/>
+        <association property="cliente" column="clnt_id" javaType="com.elitsoft.servicampo.domain.entity.Cliente" select="com.elitsoft.servicampo.mapper.ClienteMapper.encontrarPorClave"/>
+        <association property="contacto" column="cntc_id" javaType="com.elitsoft.servicampo.domain.entity.Contacto" select="com.elitsoft.servicampo.mapper.ContactoMapper.encontrarPorClave"/>
+        <association property="direccion" column="drcc_id" javaType="com.elitsoft.servicampo.domain.entity.Direccion" select="com.elitsoft.servicampo.mapper.DireccionMapper.encontrarPorClave"/>
+        <association property="servicio" column="svcs_id" javaType="com.elitsoft.servicampo.domain.entity.Servicio" select="com.elitsoft.servicampo.mapper.ServicioMapper.encontrarPorClave"/>
+        <collection property="ordenesTrabajo" ofType="com.elitsoft.servicampo.domain.entity.OrdenTrabajo" column="ctdt_id" select="com.elitsoft.servicampo.mapper.OrdenTrabajoMapper.encontrarPorContratoDetalleId"/>
+        <collection property="contratosDetalleTipoProducto" ofType="com.elitsoft.servicampo.domain.entity.ContratoDetalleTipoProducto" column="ctdt_id" select="com.elitsoft.servicampo.mapper.ContratoDetalleTipoProductoMapper.encontrarPorContratoDetalleId"/>
+        <collection property="contratosDetalleProducto" ofType="com.elitsoft.servicampo.domain.entity.ContratoDetalleProducto" column="ctdt_id" select="com.elitsoft.servicampo.mapper.ContratoDetalleProductoMapper.encontrarPorContratoDetalleId"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT ctdt.ctdt_id ,
+               ctts.ctts_id , ctts.ctts_fecha_creacion ,
+               ctdt.clnt_id , clnt.clnt_nombre  ,
+               drcc.drcc_id , drcc.drcc_dsc  , drcc.drcc_calle     , drcc.drcc_numeracion,
+               svcs.svcs_id , svcs.svcs_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}contratos_detalles as ctdt
+        INNER JOIN ${schema}contratos as ctts ON ctdt.ctts_id = ctts.ctts_id
+        INNER JOIN ${schema}direcciones as drcc ON  ctdt.drcc_id = drcc.drcc_id
+        INNER JOIN ${schema}clientes  as clnt ON ctdt.clnt_id = clnt.clnt_id
+               AND clnt.clnt_id = drcc.clnt_id
+        INNER JOIN ${schema}servicios as svcs ON ctdt.svcs_id = svcs.svcs_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="contratoDetalleResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE ctdt.ctdt_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="contratoDetalleResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="contratoDetalleResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND ctdt.ctdt_id = #{filtro.id}
+                </if>
+                <if test="filtro.contrato != null">
+                    AND ctdt.ctts_id = #{filtro.contrato}
+                </if>
+                <if test="filtro.cliente != null ">
+                    AND ctdt.clnt_id = #{filtro.cliente}
+                </if>
+                <if test="filtro.servicio != null">
+                    AND ctdt.svcs_id = #{filtro.servicio}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY ctdt.ctdt_id ${direccionOrden}</when>
+                <when test="campoOrden == 'contrato'">ORDER BY ctdt.ctts_id ${direccionOrden}</when>
+                <when test="campoOrden == 'cliente'">ORDER BY ctdt.clnt_id ${direccionOrden}</when>
+                <when test="campoOrden == 'direccion'">ORDER BY ctdt.drcc_id ${direccionOrden}</when>
+                <when test="campoOrden == 'servicio'">ORDER BY ctdt.svcs_id ${direccionOrden}</when>
+                <otherwise>ORDER BY ctdt.ctdt_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND ctdt.ctdt_id = #{filtro.id}
+                </if>
+                <if test="filtro.contrato != null">
+                    AND ctdt.ctts_id = #{filtro.contrato}
+                </if>
+                <if test="filtro.cliente != null ">
+                    AND ctdt.clnt_id = #{filtro.cliente}
+                </if>
+                <if test="filtro.servicio != null">
+                    AND ctdt.svcs_id = #{filtro.servicio}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.ContratoDetalle" affectData="true" flushCache="true">
+        INSERT INTO ${schema}contratos_detalles (ctts_id, clnt_id, drcc_id, svcs_id)
+        VALUES (#{contrato.id}, #{direccion.cliente.id}, #{direccion.id}, #{servicio.id})
+        returning ctdt_id as id, ctts_id as contrato
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ContratoDetalle">
+        UPDATE ${schema}contratos_detalles
+        SET ctts_id = #{contrato.id} , clnt_id = #{direccion.cliente.id} , drcc_id = #{direccion.id} ,
+            svcs_id = #{servicio.id}
+        WHERE ctdt_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}contratos_detalles
+        WHERE ctdt_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}contratos_detalles WHERE ctdt_id IN
+        <foreach item="contratoDetalle" collection="contratoDetalleLote" open='(' separator=',' close=')'>
+            #{contratoDetalle.id}
+        </foreach>
+    </delete>
+</mapper>
