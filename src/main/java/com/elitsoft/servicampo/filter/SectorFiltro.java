@@ -14,6 +14,6 @@ public class SectorFiltro implements Serializable {
 
     private Long id;
     private String descripcionSector;
-    private Long zonaId;
+    private Long zona;
 
 }

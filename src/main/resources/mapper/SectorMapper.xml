@@ -31,7 +31,7 @@
     <select id="obtenerTodos" parameterType="long" resultMap="sectorResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE znas.znas_id = #{zonaId}
+        WHERE znas.znas_id = #{zona}
         order by sctr.sctr_dsc
     </select>
 
@@ -39,7 +39,7 @@
     <select id="encontrarPorZona"  resultMap="sectorResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE znas.znas_id = #{zonaId}
+        WHERE znas.znas_id = #{zona}
 
         <!-- Para limitar el tamaño del resultado-->
         <if test="limite">
@@ -59,8 +59,8 @@
                 <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
                     AND LOWER(sctr.sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
                 </if>
-                <if test="filtro.zonaId != null">
-                    AND sctr.znas_id = #{filtro.zonaId}
+                <if test="filtro.zona != null">
+                    AND sctr.znas_id = #{filtro.zona}
                 </if>
             </if>
         </where>
@@ -68,7 +68,7 @@
             <choose>
                 <when test="campoOrden == 'id'">ORDER BY sctr.sctr_id ${direccionOrden}</when>
                 <when test="campoOrden == 'descripcionSector'">ORDER BY sctr.sctr_dsc ${direccionOrden}</when>
-                <when test="campoOrden == 'zonaId'">ORDER BY sctr.znas_id ${direccionOrden}</when>
+                <when test="campoOrden == 'zona'">ORDER BY sctr.znas_id ${direccionOrden}</when>
                 <otherwise>ORDER BY sctr.sctr_id ASC</otherwise>
             </choose>
         </if>
@@ -89,8 +89,8 @@
                 <if test="filtro.descripcionSector != null and filtro.descripcionSector != ''">
                     AND LOWER(sctr.sctr_dsc) LIKE '%' || LOWER(#{filtro.descripcionSector}) || '%'
                 </if>
-                <if test="filtro.zonaId != null">
-                    AND sctr.znas_id = #{filtro.zonaId}
+                <if test="filtro.zona != null">
+                    AND sctr.znas_id = #{filtro.zona}
                 </if>
             </if>
         </where>
@@ -101,7 +101,7 @@
    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Sector" affectData="true" flushCache="true">
        INSERT INTO ${schema}sectores (sctr_dsc, znas_id)
        VALUES (#{descripcionSector}, #{zona.id})
-       returning sctr_id as id, sctr_dsc as descripcionSector, znas_id as zonaId
+       returning sctr_id as id, sctr_dsc as descripcionSector, znas_id as zona
    </select>
 
    <!-- Sentencia SQL de Actualizar-->
