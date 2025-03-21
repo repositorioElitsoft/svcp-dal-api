@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.entity.*;
+
 import lombok.Getter;
 import lombok.Setter;
 

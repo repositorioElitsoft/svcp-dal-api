@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.core;
 
-import com.elitsoft.servicampo.domain.entity.TipoDocumentoIdentificacion;
+
 import lombok.Getter;
 import lombok.Setter;
 

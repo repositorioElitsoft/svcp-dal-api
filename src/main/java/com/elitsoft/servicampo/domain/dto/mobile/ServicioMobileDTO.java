@@ -1,7 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO;
-import com.elitsoft.servicampo.domain.entity.Estado;
+
 import lombok.Getter;
 import lombok.Setter;
 

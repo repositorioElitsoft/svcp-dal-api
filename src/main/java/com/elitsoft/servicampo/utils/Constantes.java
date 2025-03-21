@@ -526,5 +526,18 @@ public class Constantes {
     public static final String CONTRATODETALLE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATODETALLE:";
     public static final String CONTRATODETALLE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATODETALLE";
     public static final String CONTRATODETALLE_FILTRAR_MENSAJE = "Error filtrando CONTRATODETALLE";
+
+    public static final String CONTRATODETALLETIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de CONTRATODETALLETIPOPRODUCTO invalida.";
+    public static final String CONTRATODETALLETIPOPRODUCTO_DUPLICADO_MENSAGE = "Recurso  CONTRATODETALLETIPOPRODUCTO ya existe.";
+    public static final String CONTRATODETALLETIPOPRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CONTRATODETALLETIPOPRODUCTO viola Integridad. ";
+    public static final String CONTRATODETALLETIPOPRODUCTO_NO_ENCONTRADO_MENSAGE = "Recurso CONTRATODETALLETIPOPRODUCTO no  encontrado";
+    public static final String CONTRATODETALLETIPOPRODUCTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso CONTRATODETALLETIPOPRODUCTO";
+    public static final String CONTRATODETALLETIPOPRODUCTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CONTRATODETALLETIPOPRODUCTO";
+    public static final String CONTRATODETALLETIPOPRODUCTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTRATODETALLETIPOPRODUCTO";
+    public static final String CONTRATODETALLETIPOPRODUCTO_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTRATODETALLETIPOPRODUCTO";
+    public static final String CONTRATODETALLETIPOPRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTRATODETALLETIPOPRODUCTO por clave :";
+    public static final String CONTRATODETALLETIPOPRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATODETALLETIPOPRODUCTO:";
+    public static final String CONTRATODETALLETIPOPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATODETALLETIPOPRODUCTO";
+    public static final String CONTRATODETALLETIPOPRODUCTO_FILTRAR_MENSAJE = "Error filtrando CONTRATODETALLETIPOPRODUCTO";
 }
 
