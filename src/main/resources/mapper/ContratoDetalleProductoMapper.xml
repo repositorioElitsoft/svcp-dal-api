@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ContratoDetalleProductoMapper">
+
+    <resultMap id="contratoDetalleProductoResultMap" type="com.elitsoft.servicampo.domain.entity.ContratoDetalleProducto">
+        <id property="correlativo" column="cdpr_correlativo" />
+        <id property="contratoDetalle.id" column="ctdt_id" />
+        <id property="tipoProducto.id" column="tppr_id" />
+        <result property="valorReferencia" column="cdpr_valor_ref" />
+        <association property="contratoDetalle" resultMap="com.elitsoft.servicampo.mapper.ContratoDetalleMapper.contratoDetalleResultMap"/>
+        <association property="tipoProducto"  resultMap="com.elitsoft.servicampo.mapper.TipoProductoMapper.tipoProductoResultMap"/>
+        <association property="producto" resultMap="com.elitsoft.servicampo.mapper.ProductoMapper.productoResultMap"/>
+    </resultMap>
+
+    <resultMap id="contratoDetalleProductoLazyResultMap" type="com.elitsoft.servicampo.domain.entity.ContratoDetalleProducto">
+        <id property="correlativo" column="cdpr_correlativo" />
+        <id property="contratoDetalle.id" column="ctdt_id" />
+        <id property="tipoProducto.id" column="tppr_id" />
+        <result property="valorReferencia" column="cdpr_valor_ref" />
+        <association property="contratoDetalle" column="ctdt_id" javaType="com.elitsoft.servicampo.domain.entity.ContratoDetalle" select="com.elitsoft.servicampo.mapper.ContratoDetalleMapper.encontrarPorClave"/>
+        <association property="tipoProducto" column="tppr_id" javaType="com.elitsoft.servicampo.domain.entity.TipoProducto" select="com.elitsoft.servicampo.mapper.TipoProductoMapper.encontrarPorClave"/>
+        <association property="producto" column="prod_id" javaType="com.elitsoft.servicampo.domain.entity.Producto" select="com.elitsoft.servicampo.mapper.ProductoMapper.encontrarPorClave"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT cdpr_correlativo,   cdpr_valor_ref,
+               ctdt.ctdt_id ,
+               tppr.tppr_id , tppr.tppr_dsc ,
+               prod.prod_id,  prod.prod_dsc
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}contratos_detalles_productos as cdpr
+        INNER JOIN ${schema}contratos_detalles_tipos_productos as cdtp ON cdpr.ctdt_id = cdtp.ctdt_id
+          AND cdpr.tppr_id = cdtp.tppr_id
+        INNER JOIN ${schema}contratos_detalles as ctdt ON cdpr.ctdt_id = ctdt.ctdt_id
+        INNER JOIN ${schema}tipos_productos    as tppr ON cdpr.tppr_id = tppr.tppr_id
+        INNER JOIN ${schema}productos          as prod ON cdpr.prod_id = prod.prod_id
+           AND cdpr.tppr_id = prod.tppr_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="contratoDetalleProductoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE  cdpr.ctdt_id = #{contratoDetalleId}
+          AND  cdpr.tppr_id = #{tipoProductoId}
+          AND  cdpr.cdpr_correlativo = #{correlativoId}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="contratoDetalleProductoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+
+    <select id="filtrar" resultMap="contratoDetalleProductoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.contratoDetalle != null">
+                    AND cdpr.ctdt_id = #{filtro.contratoDetalle}
+                </if>
+                <if test="filtro.tipoProducto != null">
+                    AND cdpr.tppr_id = #{filtro.tipoProducto}
+                </if>
+                <if test="filtro.correlativo != null">
+                    AND cdpr.cdpr_correlativo = #{filtro.correlativo}
+                </if>
+                <if test="filtro.producto != null">
+                    AND cdpr.prod_id = #{filtro.producto}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'correlativo'">ORDER BY cdpr.cdpr_correlativo ${direccionOrden}</when>
+                <when test="campoOrden == 'contratoDetalle'">ORDER BY cdpr.ctdt_id ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoProducto'">ORDER BY cdpr.tppr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'valorReferencia'">ORDER BY cdpr.cdpr_valor_ref ${direccionOrden}</when>
+                <when test="campoOrden == 'producto'">ORDER BY cdpr.prod_id ${direccionOrden}</when>
+                <otherwise>ORDER BY cdpr.cdpr_correlativo ASC, cdpr.ctdt_id ASC, cdpr.tppr_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.contratoDetalle != null">
+                    AND cdpr.ctdt_id = #{filtro.contratoDetalle}
+                </if>
+                <if test="filtro.tipoProducto != null">
+                    AND cdpr.tppr_id = #{filtro.tipoProducto}
+                </if>
+                <if test="filtro.correlativo != null">
+                    AND cdpr.cdpr_correlativo = #{filtro.correlativo}
+                </if>
+                <if test="filtro.producto != null">
+                    AND cdpr.prod_id = #{filtro.producto}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.ContratoDetalleProducto" affectData="true" flushCache="true">
+        INSERT INTO ${schema}contratos_detalles_productos (ctdt_id, tppr_id, cdpr_valor_ref, prod_id)
+        VALUES (#{contratoDetalle.id}, #{tipoProducto.id}, #{valorReferencia}, #{producto.id})
+        returning cdpr_correlativo as correlativo
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ContratoDetalleProducto">
+        UPDATE ${schema}contratos_detalles_productos
+        SET cdpr_valor_ref = #{valorReferencia}, prod_id = #{producto.id}
+        WHERE ctdt_id = #{contratoDetalle.id}
+          AND tppr_id = #{tipoProducto.id}
+          AND cdpr_correlativo = #{correlativo} AND
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" >
+        DELETE FROM ${schema}contratos_detalles_productos
+        WHERE  ctdt_id = #{contratoDetalleId}
+          AND  tppr_id = #{tipoProductoId}
+          AND  cdpr_correlativo = #{correlativoId}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List">
+        INSERT INTO ${schema}contratos_detalles_productos (ctdt_id, tppr_id, cdpr_valor_ref, prod_id) VALUES
+        <foreach item="contratoDetalleProducto" collection="contratoDetalleProductoLote" separator=",">
+            (#{contratoDetalleProducto.contratoDetalle.id}, #{contratoDetalleProducto.tipoProducto.id}, #{contratoDetalleProducto.valorReferencia}, #{contratoDetalleProducto.producto.id})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List">
+        <foreach item="contratoDetalleProducto" collection="contratoDetalleProductoLote" separator=";">
+            UPDATE ${schema}contratos_detalles_productos
+            SET cdpr_valor_ref = #{contratoDetalleProducto.valorReferencia}, prod_id = #{contratoDetalleProducto.producto.id}
+            WHERE ctdt_id = #{contratoDetalleProducto.contratoDetalle.id}
+              AND tppr_id = #{contratoDetalleProducto.tipoProducto.id}
+              AND cdpr_correlativo = #{contratoDetalleProducto.correlativo}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List">
+        DELETE FROM ${schema}contratos_detalles_productos WHERE (ctdt_id, tppr_id, cdpr_correlativo) IN
+        <foreach item="contratoDetalleProducto" collection="contratoDetalleProductoLote" open='(' separator=',' close=')'>
+            (#{contratoDetalleProducto.contratoDetalle.id}, #{contratoDetalleProducto.tipoProducto.id}, #{contratoDetalleProducto.correlativo})
+        </foreach>
+    </delete>
+
+</mapper>
