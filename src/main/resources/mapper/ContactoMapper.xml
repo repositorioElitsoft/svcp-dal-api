@@ -7,32 +7,35 @@
         <result property="nombre" column="cntc_nombre" />
         <result property="apellidoPaterno" column="cntc_apellido_paterno" />
         <result property="apellidoMaterno" column="cntc_apellido_materno" />
-        <result property="rut" column="cntc_rut" />
-        <result property="dv" column="cntc_rut_dv" />
         <result property="fechaNacimiento" column="cntc_fecha_nacimiento" />
         <result property="imagenPerfil" column="cntc_imagen_perfil" />
         <result property="correoElectronico" column="cntc_email" />
         <result property="telefonoFijo" column="cntc_fono_fijo" />
         <result property="telefonoMovil" column="cntc_fono_movil" />
+        <association property="documentoIdentificacion"  resultMap="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.documentoIdentificacionResultMap" />
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
-        SELECT cntc_id,  cntc_nombre, cntc_apellido_paterno, cntc_apellido_materno,
-               cntc_rut, cntc_rut_dv, cntc_imagen_perfil,    cntc_email,
-               cntc_fono_fijo, cntc_fono_movil, cntc_fecha_nacimiento
+        SELECT cntc.cntc_id ,           cntc.cntc_nombre , cntc.cntc_apellido_paterno, cntc.cntc_apellido_materno,
+               cntc.cntc_imagen_perfil, cntc.cntc_email  , cntc.cntc_fono_fijo       , cntc.cntc_fono_movil      ,
+               cntc.cntc_fecha_nacimiento,
+               doid.doid_id ,           doid.doid_num    , doid.doid_dv              ,
+               tpdi.tpdi_id ,           tpdi.tpdi_nombre , tpdi.tpdi_dsc
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
-        FROM ${schema}contactos
+        FROM ${schema}contactos as cntc
+        INNER JOIN ${schema}documentos_identificacion       as doid ON cntc.doid_id = doid.doid_id
+        INNER JOIN ${schema}tipos_documentos_identificacion as tpdi ON doid.tpdi_id = tpdi.tpdi_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="contactoResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE cntc_id = #{id}
+        WHERE cntc.cntc_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
@@ -48,34 +51,26 @@
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND cntc_id = #{filtro.id}
+                    AND cntc.cntc_id = #{filtro.id}
                 </if>
                 <if test="filtro.nombre != null and filtro.nombre != ''">
-                    AND LOWER(cntc_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                    AND LOWER(cntc.cntc_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
                 </if>
                 <if test="filtro.apellidoPaterno != null and filtro.apellidoPaterno != ''">
-                    AND LOWER(cntc_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
+                    AND LOWER(cntc.cntc_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
                 </if>
                 <if test="filtro.apellidoMaterno != null and filtro.apellidoMaterno != ''">
-                    AND LOWER(cntc_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
-                </if>
-                <if test="filtro.rut != null and filtro.rut != ''">
-                    AND cntc_rut = #{filtro.rut}
-                </if>
-                <if test="filtro.dv != null">
-                    AND cntc_rut_dv = #{filtro.dv}
+                    AND LOWER(cntc.cntc_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
                 </if>
             </if>
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY cntc_id ${direccionOrden}</when>
-                <when test="campoOrden == 'nombre'">ORDER BY cntc_nombre ${direccionOrden}</when>
-                <when test="campoOrden == 'apellidoPaterno'">ORDER BY cntc_apellido_paterno ${direccionOrden}</when>
-                <when test="campoOrden == 'apellidoMaterno'">ORDER BY cntc_apellido_materno ${direccionOrden}</when>
-                <when test="campoOrden == 'rut'">ORDER BY cntc_rut ${direccionOrden}</when>
-                <when test="campoOrden == 'dv'">ORDER BY cntc_rut_dv ${direccionOrden}</when>
-                <otherwise>ORDER BY cntc_id ASC</otherwise>
+                <when test="campoOrden == 'id'">ORDER BY cntc.cntc_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombre'">ORDER BY cntc.cntc_nombre ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoPaterno'">ORDER BY cntc.cntc_apellido_paterno ${direccionOrden}</when>
+                <when test="campoOrden == 'apellidoMaterno'">ORDER BY cntc.cntc_apellido_materno ${direccionOrden}</when>
+                <otherwise>ORDER BY cntc.cntc_id ASC</otherwise>
             </choose>
         </if>
         <if test="limite != null and desplazamiento != null">
@@ -90,22 +85,16 @@
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND cntc_id = #{filtro.id}
+                    AND cntc.cntc_id = #{filtro.id}
                 </if>
                 <if test="filtro.nombre != null and filtro.nombre != ''">
-                    AND LOWER(cntc_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                    AND LOWER(cntc.cntc_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
                 </if>
                 <if test="filtro.apellidoPaterno != null and filtro.apellidoPaterno != ''">
-                    AND LOWER(cntc_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
+                    AND LOWER(cntc.cntc_apellido_paterno) LIKE '%' || LOWER(#{filtro.apellidoPaterno}) || '%'
                 </if>
                 <if test="filtro.apellidoMaterno != null and filtro.apellidoMaterno != ''">
-                    AND LOWER(cntc_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
-                </if>
-                <if test="filtro.rut != null and filtro.rut != ''">
-                    AND cntc_rut = #{filtro.rut}
-                </if>
-                <if test="filtro.dv != null">
-                    AND cntc_rut_dv = #{filtro.dv}
+                    AND LOWER(cntc.cntc_apellido_materno) LIKE '%' || LOWER(#{filtro.apellidoMaterno}) || '%'
                 </if>
             </if>
         </where>
@@ -114,25 +103,24 @@
 
     <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
       <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Contacto" affectData="true" flushCache="true">
-        INSERT INTO ${schema}contactos (cntc_nombre       , cntc_apellido_paterno, cntc_apellido_materno, cntc_rut, cntc_rut_dv ,
-                                        cntc_imagen_perfil, cntc_email           , cntc_fono_fijo       , cntc_fono_movil       ,
-                                        cntc_fecha_nacimiento
+        INSERT INTO ${schema}contactos (cntc_nombre       , cntc_apellido_paterno, cntc_apellido_materno,  cntc_imagen_perfil    ,
+                                        cntc_email        , cntc_fono_fijo       , cntc_fono_movil       , cntc_fecha_nacimiento ,
+                                        doid_id
                                         )
-                                VALUES (#{nombre}         , #{apellidoPaterno}    , #{apellidoMaterno}   , #{rut} ,  #{dv}      ,
-                                        #{imagenPerfil}   , #{correoElectronico}  , #{telefonoFijo}      , #{telefonoMovil}     ,
-                                        #{fechaNacimiento} )
+                                VALUES (#{nombre}         , #{apellidoPaterno}    , #{apellidoMaterno}   , #{imagenPerfil}       ,
+                                       #{correoElectronico} , #{telefonoFijo}     , #{telefonoMovil}     , #{fechaNacimiento}    ,
+                                       #{documentoIdentificacion.id} )
         returning cntc_id as id, cntc_nombre as nombre, cntc_apellido_paterno as apellidoPaterno, cntc_apellido_materno as apellidoMaterno,
-                  cntc_rut as rut, cntc_rut_dv as dv, cntc_imagen_perfil as imagenPerfil, cntc_email as correoElectronico, cntc_fono_fijo as telefonoFijo,
+          cntc_imagen_perfil as imagenPerfil, cntc_email as correoElectronico, cntc_fono_fijo as telefonoFijo,
                   cntc_fono_movil as telefonoMovil, cntc_fecha_nacimiento as fechaNacimiento
     </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Contacto">
         UPDATE ${schema}contactos
-        SET  cntc_nombre = #{nombre}           , cntc_apellido_paterno = #{apellidoPaterno} ,  cntc_apellido_materno = #{apellidoMaterno} ,
-             cntc_rut    = #{rut}              , cntc_rut_dv           = #{dv}              ,  cntc_imagen_perfil    = #{imagenPerfil}    ,
-             cntc_email  = #{correoElectronico}, cntc_fono_fijo        = #{telefonoFijo}    ,  cntc_fono_movil       = #{telefonoMovil}   ,
-             cntc_fecha_nacimiento = #{fechaNacimiento}
+        SET  cntc_nombre = #{nombre}              , cntc_apellido_paterno = #{apellidoPaterno} ,  cntc_apellido_materno = #{apellidoMaterno} ,
+             cntc_imagen_perfil = #{imagenPerfil} , cntc_email  = #{correoElectronico}         , cntc_fono_fijo         = #{telefonoFijo}    ,
+             cntc_fono_movil    = #{telefonoMovil}, cntc_fecha_nacimiento = #{fechaNacimiento}
         WHERE cntc_id = #{id}
     </update>
 
@@ -145,14 +133,14 @@
     <!-- Sentencia SQL de Insertar LOTE-->
     <insert id="agregarLote" parameterType="java.util.List" >
         INSERT INTO ${schema}contactos
-                              (cntc_nombre       , cntc_apellido_paterno, cntc_apellido_materno, cntc_rut, cntc_rut_dv ,
-                               cntc_imagen_perfil, cntc_email           , cntc_fono_fijo       , cntc_fono_movil       ,
-                               cntc_fecha_nacimiento
+                              (cntc_nombre       , cntc_apellido_paterno, cntc_apellido_materno , cntc_imagen_perfil    ,
+                               cntc_email        , cntc_fono_fijo       , cntc_fono_movil       , cntc_fecha_nacimiento ,
+                               doid_id
                               ) VALUES
         <foreach item="contacto" collection="contactoLote" separator=",">
-                             (#{contacto.nombre}       , #{contacto.apellidoPaterno}   , #{contacto.apellidoMaterno} , #{contacto.rut} ,  #{contacto.dv} ,
-                              #{contacto.imagenPerfil} , #{contacto.correoElectronico} , #{contacto.telefonoFijo}    , #{contacto.telefonoMovil} ,
-                              #{contacto.fechaNacimiento}
+                             (#{contacto.nombre}       , #{contacto.apellidoPaterno}   , #{contacto.apellidoMaterno} , #{contacto.imagenPerfil} ,
+                              #{contacto.correoElectronico} , #{contacto.telefonoFijo} , #{contacto.telefonoMovil}   , #{contacto.fechaNacimiento},
+                              #{contacto.documentoIdentificacion.id}
                              )
         </foreach>
     </insert>
@@ -161,10 +149,9 @@
     <update id="actualizarLote" parameterType="java.util.List" >
         <foreach item='contacto' collection='contactoLote' separator=';'>
             UPDATE ${schema}contactos
-            SET  cntc_nombre = #{contacto.nombre}           , cntc_apellido_paterno = #{contacto.apellidoPaterno} ,  cntc_apellido_materno = #{contacto.apellidoMaterno} ,
-                 cntc_rut    = #{contacto.rut}              , cntc_rut_dv           = #{contacto.dv}              ,  cntc_imagen_perfil    = #{contacto.imagenPerfil}    ,
-                 cntc_email  = #{contacto.correoElectronico}, cntc_fono_fijo        = #{contacto.telefonoFijo}    ,  cntc_fono_movil       = #{contacto.telefonoMovil}   ,
-                 cntc_fecha_nacimiento = #{contacto.fechaNacimiento}
+            SET  cntc_nombre = #{contacto.nombre}             , cntc_apellido_paterno = #{contacto.apellidoPaterno} , cntc_apellido_materno = #{contacto.apellidoMaterno} ,
+                 cntc_imagen_perfil = #{contacto.imagenPerfil}, cntc_email  = #{contacto.correoElectronico}         , cntc_fono_fijo        = #{contacto.telefonoFijo}    ,
+                 cntc_fono_movil = #{contacto.telefonoMovil}  , cntc_fecha_nacimiento = #{contacto.fechaNacimiento}
             WHERE cntc_id = #{contacto.id}
         </foreach>
     </update>

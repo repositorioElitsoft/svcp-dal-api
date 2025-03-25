@@ -37,6 +37,7 @@ public class Cliente implements Serializable {
     //private List<Direccion> direcciones;
     private AgrupacionComercial agrupacionComercial;
     private SegmentacionCliente segmentacionCliente;
+    private DocumentoIdentificacion documentoIdentificacion;
 
 
 

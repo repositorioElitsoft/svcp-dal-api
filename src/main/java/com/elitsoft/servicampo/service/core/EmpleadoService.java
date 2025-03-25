@@ -33,17 +33,10 @@ public class EmpleadoService {
     private EmpleadoMapper empleadoMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
 
     @Autowired
-    private DocumentoIdentificacionMapper documentoIdentificacionMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
-
-    @Autowired
     private DocumentoIdentificacionService documentoIdentificacionService;
-
 
     @Autowired
     private EmpleadoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
-
-    @Autowired
-    private DocumentoIdentificacionMapStruct documentoIdentificacionMapStruct; // MapStruct Mapper (ToEntity(), ToDTO())
 
     private static final Logger logeador = LoggerFactory.getLogger(EmpleadoService.class); //Logback
 
@@ -62,14 +55,15 @@ public class EmpleadoService {
 
         this.valiacionesEntrada(empleadoDTO, true); //  Valida Entrada
 
-        // Agrega el Documento de Identificacion
-        DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.agregar(empleadoDTO.getDocumentoIdentificacion());
-
         Empleado empleadoCorreo =  this.encontrarPorCorreo(empleadoDTO.getEmail()); //Busca Existencia de correo.
 
         this.valiacionesCorreo(empleadoDTO); //Valida existencia de correo
 
+
         try {
+
+            // Agrega el Documento de Identificacion
+            DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.agregar(empleadoDTO.getDocumentoIdentificacion());
 
             // Asocia el documento de Identificacion creado al empleado
             empleadoDTO.setDocumentoIdentificacion(documentoIdentificacionDTO);
@@ -108,6 +102,7 @@ public class EmpleadoService {
      * @throws RecursoNoEncontradoException si Empleado no es encontrado.
      * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
      */
+    @Transactional
     public void actualizar(Long id, EmpleadoDTO empleadoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() empleado");
 
@@ -117,9 +112,6 @@ public class EmpleadoService {
             throw new EntradaInvalidadException(EmpleadoError.ID_REQUERIDO.getCodigoError(),
                                                 Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
-
-        //Valida Documento
-        documentoIdentificacionService.valiacionesEntrada(empleadoDTO.getDocumentoIdentificacion());
 
         //Valida Entrada
         this.valiacionesEntrada(empleadoDTO, false);
@@ -131,9 +123,10 @@ public class EmpleadoService {
                                                 Constantes.EMPLEADO_ENTRADA_INVALIDA_MENSAGE);
         }
 
-
         try {
             EmpleadoDTO empleadoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            // Actualiza el Documento de Identificacion
+            documentoIdentificacionService.actualizar (empleadoDTOEncontrado.getDocumentoIdentificacion().getId(), empleadoDTOEncontrado.getDocumentoIdentificacion());
             Empleado empleado = mapper.toEntity(empleadoDTO);
             empleado.setId(id);
             int registrosActualizados = empleadoMapper.actualizar(empleado);
@@ -192,12 +185,14 @@ public class EmpleadoService {
      * @throws RecursoNoEncontradoException si el Empleado no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
+    @Transactional
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() empleado: {}", id);
 
         try {
             EmpleadoDTO empleadoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = empleadoMapper.eliminar(id);
+            documentoIdentificacionService.eliminar(empleadoDTO.getDocumentoIdentificacion().getId());
             logeador.info("empleado eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
             logeador.error(Constantes.EMPLEADO_ELIMINAR_MENSAJE + ": {}", id, e);

@@ -77,9 +77,9 @@ public class DireccionMobileController {
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(contactoDTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
-//        catch (RecursoNoEncontradoException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(direccionDTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
-//        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(contactoDTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+        }
         catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
         }

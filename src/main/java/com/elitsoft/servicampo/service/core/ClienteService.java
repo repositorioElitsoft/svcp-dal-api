@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
+import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.Cliente;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.ClienteMapper;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +28,9 @@ public class ClienteService {
 
     @Autowired
     private ClienteMapper clienteMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+
+    @Autowired
+    private DocumentoIdentificacionService documentoIdentificacionService;
 
     @Autowired
     private ClienteMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
@@ -41,6 +46,7 @@ public class ClienteService {
      * @throws EntradaInvalidadException si la entrada Cliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso Cliente ya existe.
      */
+    @Transactional
     public ClienteDTO agregar(ClienteDTO clienteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregar() Cliente");
 
@@ -52,6 +58,12 @@ public class ClienteService {
         }
 
         try {
+            // Agrega el Documento de Identificacion
+            DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.agregar(clienteDTO.getDocumentoIdentificacion());
+
+            // Asocia el documento de Identificacion creado al empleado
+            clienteDTO.setDocumentoIdentificacion(documentoIdentificacionDTO);
+
             Cliente cliente = mapper.toEntity(clienteDTO);
             cliente = clienteMapper.agregar(cliente);
             logeador.info("Cliente agregado exitosamente id: {}", cliente.getId());
@@ -109,6 +121,7 @@ public class ClienteService {
      * @throws RecursoNoEncontradoException si Cliente no es encontrado.
      * @throws EntradaInvalidadException si la entrada Cliente tiene errores.
      */
+    @Transactional
     public void actualizar(Long id, ClienteDTO clienteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() cliente");
 
@@ -126,8 +139,11 @@ public class ClienteService {
                                                 Constantes.CLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
+
         try {
-            ClienteDTO clienteDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            this.encontrarPorClave(id); // Verifica si existe el recurso
+            // Actualiza el Documento de Identificacion
+            documentoIdentificacionService.actualizar (clienteDTO.getDocumentoIdentificacion().getId(), clienteDTO.getDocumentoIdentificacion());
             Cliente cliente = mapper.toEntity(clienteDTO);
             cliente.setId(id);
             int registrosActualizados = clienteMapper.actualizar(cliente);
@@ -172,6 +188,7 @@ public class ClienteService {
      * @throws RecursoNoEncontradoException si el Cliente no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
+    @Transactional
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() cliente: {}", id);
 
@@ -181,6 +198,7 @@ public class ClienteService {
         try {
             ClienteDTO clienteDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = clienteMapper.eliminar(id);
+            documentoIdentificacionService.eliminar(clienteDTO.getDocumentoIdentificacion().getId());
             logeador.info("cliente eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
             logeador.error(Constantes.CLIENTE_ELIMINAR_MENSAJE + ": {}", id, e);

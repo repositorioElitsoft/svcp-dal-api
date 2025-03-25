@@ -137,23 +137,38 @@ public class DocumentoIdentificacionService {
         //  Valida Entrada
         this.valiacionesEntrada(documentoidentificacionDTO);
 
-        /**
-        DocumentoIdentificacion documentoIdentificacionExiste =  encontrarPorIndentificacion(
-                documentoidentificacionDTO.getNumero(),
-                documentoidentificacionDTO.getDigitoVerificador());
-
-        if (documentoIdentificacionExiste != null) {
-            throw new RecursoDuplicadoException(GeneralError.IDENTIFICACION_DUPLICADO.codigoError(),
-                    Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
-        }
-         */
+        DocumentoIdentificacionDTO documentoidentificacionDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
 
         try {
-            DocumentoIdentificacionDTO documentoidentificacionDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
-            DocumentoIdentificacion documentoidentificacion = mapper.toEntity(documentoidentificacionDTO);
-            documentoidentificacion.setId(id);
-            int registrosActualizados = documentoIdentificacionMapper.actualizar(documentoidentificacion);
-            logeador.info("documentoidentificacion actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
+
+            //Verifica Documento actual vs Documento a Actualizar
+            if (!documentoidentificacionDTOEncontrado.getNumero().equals(documentoidentificacionDTO.getNumero()) ||
+                    !documentoidentificacionDTOEncontrado.getDigitoVerificador().equals(documentoidentificacionDTO.getDigitoVerificador()) ){
+
+                //El Documento nuevo es distinto al anterior, se procede a actualizarlo:
+
+                //Se verifica que el nuevo documento a actualizar no exista
+                DocumentoIdentificacion documentoIdentificacionExiste =  encontrarPorIndentificacion(
+                        documentoidentificacionDTO.getNumero(),
+                        documentoidentificacionDTO.getDigitoVerificador());
+
+                //Documento no existe
+                if (documentoIdentificacionExiste == null){
+                    DocumentoIdentificacion documentoidentificacion = mapper.toEntity(documentoidentificacionDTO);
+                    documentoidentificacion.setId(id);
+                    int registrosActualizados = documentoIdentificacionMapper.actualizar(documentoidentificacion);
+                    logeador.info("documentoidentificacion actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
+                } else {
+                    //Documento existe.
+                    logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {} , {}",
+                            documentoidentificacionDTO.getNumero(),
+                            documentoidentificacionDTO.getDigitoVerificador());
+                    throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError() ,
+                            Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
+                }
+            } else {
+                logeador.info("documento es igual al anterior");
+            }
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE + ": id={} {}", id, documentoidentificacionDTO.toString(), e);
             throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE, e);

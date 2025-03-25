@@ -107,7 +107,7 @@ public class DireccionService {
      * @throws RecursoDuplicadoException si el recurso Direccion ya existe.
      */
     @Transactional
-    public ContactoDTO agregarContacto(Long id, Long clienteId, ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ContactoDTO agregarContacto(Long id, Long clienteId, ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregarContacto() Direccion Contacto");
 
         //  Valida Entrada Direccion

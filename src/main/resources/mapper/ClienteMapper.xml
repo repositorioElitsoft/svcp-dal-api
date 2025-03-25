@@ -22,27 +22,32 @@
         <!-- <collection property="direcciones" ofType="com.elitsoft.servicampo.domain.entity.Direccion" column="clnt_id" select="com.elitsoft.servicampo.mapper.DireccionMapper.filtrarPorCliente"/> -->
         <association property="agrupacionComercial"  resultMap="com.elitsoft.servicampo.mapper.AgrupacionComercialMapper.agrupacionComercialResultMap"/>
         <association property="segmentacionCliente"  resultMap="com.elitsoft.servicampo.mapper.SegmentacionClienteMapper.segmentacionClienteResultMap"/>
+        <association property="documentoIdentificacion"  resultMap="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.documentoIdentificacionResultMap" />
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
         SELECT clnt.clnt_id    , clnt.clnt_nombre  , clnt.clnt_apellido_paterno  , clnt.clnt_apellido_materno  ,
-               clnt.clnt_rut   , clnt.clnt_rut_dv  , clnt.clnt_fecha_nacimiento  , clnt.clnt_imagen_perfil     ,
-               clnt.clnt_email , clnt.clnt_campo1  , clnt.clnt_campo2            , clnt.clnt_fono_fijo         ,
-               clnt.clnt_fono_movil  ,
+               clnt.clnt_fecha_nacimiento          , clnt.clnt_email             , clnt.clnt_fono_fijo         ,
+               clnt.clnt_fono_movil                , clnt.clnt_imagen_perfil     , clnt.clnt_campo1            ,
+               clnt.clnt_campo2 ,
                tpcl.tpcl_id    , tpcl.tpcl_nombre  , clcl.clcl_id                , clcl.clcl_dsc               ,
                estd.estd_id    , estd.estd_dsc     , grcm.grcm_id                , grcm.grcm_nombre            ,
-               sgcl.sgcl_id    , sgcl.sgcl_dsc
+               sgcl.sgcl_id    , sgcl.sgcl_dsc     ,
+               doid.doid_id    , doid.doid_num     , doid.doid_dv                ,
+               tpdi.tpdi_id    , tpdi.tpdi_nombre  , tpdi.tpdi_dsc
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
         FROM ${schema}clientes as clnt
-        INNER JOIN  ${schema}tipos_clientes as tpcl ON clnt.tpcl_id = tpcl.tpcl_id
-        INNER JOIN  ${schema}clasificaciones_clientes as clcl ON clnt.clcl_id = clcl.clcl_id
-        INNER JOIN  ${schema}estados as estd ON clnt.estd_id = estd.estd_id
-        INNER JOIN  ${schema}agrupaciones_comerciales as grcm ON clnt.grcm_id = grcm.grcm_id
-        INNER JOIN  ${schema}segmentacion_clientes as sgcl ON clnt.sgcl_id = sgcl.sgcl_id
+        INNER JOIN  ${schema}tipos_clientes                  as tpcl ON clnt.tpcl_id = tpcl.tpcl_id
+        INNER JOIN  ${schema}clasificaciones_clientes        as clcl ON clnt.clcl_id = clcl.clcl_id
+        INNER JOIN  ${schema}estados                         as estd ON clnt.estd_id = estd.estd_id
+        INNER JOIN  ${schema}agrupaciones_comerciales        as grcm ON clnt.grcm_id = grcm.grcm_id
+        INNER JOIN  ${schema}segmentacion_clientes           as sgcl ON clnt.sgcl_id = sgcl.sgcl_id
+        INNER JOIN  ${schema}documentos_identificacion       as doid ON clnt.doid_id = doid.doid_id
+        INNER JOIN  ${schema}tipos_documentos_identificacion as tpdi ON doid.tpdi_id = tpdi.tpdi_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
@@ -152,28 +157,27 @@
     <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
     <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Cliente" affectData="true" flushCache="true">
         INSERT INTO ${schema}clientes (
-                           clnt_nombre  , clnt_apellido_paterno  , clnt_apellido_materno  , clnt_rut     , clnt_rut_dv    ,
-                           clnt_email   , clnt_fecha_nacimiento  , clnt_campo1            , clnt_campo2  , clnt_fono_fijo ,
-                           clnt_fono_movil, tpcl_id              , clcl_id                , estd_id, grcm_id ,
-                           sgcl_id)
+                           clnt_nombre           , clnt_apellido_paterno , clnt_apellido_materno , clnt_fecha_nacimiento ,
+                           clnt_email            , clnt_fono_fijo        , clnt_fono_movil       , tpcl_id               ,
+                           clcl_id               , estd_id               , clnt_imagen_perfil    , grcm_id               ,
+                           clnt_campo1           , clnt_campo2           , sgcl_id               , doid_id)
                    VALUES (
-                           #{nombre}    , #{apellidoPaterno}     , #{apellidoMaterno}     , #{rut}       , #{rutDv}       ,
-                           #{email}     , #{fechaNacimiento}     , #{campo1}              , #{campo2}    , #{telefonoFijo},
-                           #{telefonoMovil}, #{tipoCliente.id}   , #{clasificacionCliente.id}, #{estado.id}, #{agrupacionComercial.id},
-                           #{segmentacionCliente.id})
+                           #{nombre}            , #{apellidoPaterno}     , #{apellidoMaterno}       , #{fechaNacimiento}        ,
+                           #{email}             , #{telefonoFijo}        , #{telefonoMovil}         , #{tipoCliente.id}         ,
+                           #{clasificacionCliente.id}, #{estado.id}      , #{imagenPerfil}          , #{agrupacionComercial.id} ,
+                           #{campo1}            , #{campo2}              , #{segmentacionCliente.id}, #{documentoIdentificacion.id})
+
         returning clnt_id as id, clnt_nombre as nombre, clnt_apellido_paterno as apellidoPaterno
     </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Cliente">
         UPDATE ${schema}clientes
-        SET clnt_nombre = #{nombre}, clnt_apellido_paterno = #{apellidoPaterno}, clnt_apellido_materno = #{apellidoMaterno},
-            clnt_rut    = #{rut}   , clnt_rut_dv           = #{rutDv}          , clnt_fecha_nacimiento = #{fechaNacimiento},
-            clnt_email  = #{email} , clnt_imagen_perfil    = #{imagenPerfil}   , clnt_campo1           = #{campo1}         ,
-            clnt_campo2 = #{campo2}, clnt_fono_fijo        = #{telefonoFijo}   , clnt_fono_movil       = #{telefonoMovil}  ,
-            tpcl_id     = #{tipoCliente.id} , clcl_id = #{clasificacionCliente.id} ,
-            estd_id     = #{estado.id}      , grcm_id = #{agrupacionComercial.id}  ,
-            sgcl_id     = #{segmentacionCliente.id}
+        SET clnt_nombre           = #{nombre}         , clnt_apellido_paterno = #{apellidoPaterno}, clnt_apellido_materno = #{apellidoMaterno}         ,
+            clnt_fecha_nacimiento = #{fechaNacimiento}, clnt_email            = #{email}          , clnt_fono_fijo        = #{telefonoFijo}            ,
+            clnt_fono_movil       = #{telefonoMovil}  , tpcl_id               = #{tipoCliente.id} , clcl_id               = #{clasificacionCliente.id} ,
+            estd_id               = #{estado.id}      , clnt_imagen_perfil    = #{imagenPerfil}   , grcm_id               = #{agrupacionComercial.id}  ,
+            clnt_campo1           = #{campo1}         , clnt_campo2           = #{campo2}         , sgcl_id               = #{segmentacionCliente.id}
         WHERE clnt_id = #{id}
     </update>
 
@@ -186,16 +190,16 @@
     <!-- Sentencia SQL de Insertar LOTE-->
     <insert id="agregarLote" parameterType="java.util.List" >
         INSERT INTO ${schema}clientes (
-                        clnt_nombre           , clnt_apellido_paterno  , clnt_apellido_materno  , clnt_rut   ,
-                        clnt_rut_dv , clnt_fecha_nacimiento , clnt_imagen_perfil     , clnt_email             , clnt_campo1 ,
-                        clnt_campo2 , clnt_fono_fijo        , clnt_fono_movil        , tpcl_id                ,
-                        clcl_id     , estd_id               , grcm_id                , sgcl_id) VALUES
+                                clnt_nombre           , clnt_apellido_paterno , clnt_apellido_materno , clnt_fecha_nacimiento ,
+                                clnt_email            , clnt_fono_fijo        , clnt_fono_movil       , tpcl_id               ,
+                                clcl_id               , estd_id               , clnt_imagen_perfil    , grcm_id               ,
+                                clnt_campo1           , clnt_campo2           , sgcl_id               , doid_id) VALUES
         <foreach item="cliente" collection="clienteLote" separator=",">
-            (#{cliente.nombre}           , #{cliente.apellidoPaterno} , #{cliente.apellidoMaterno}         , #{cliente.rut}     ,
-            #{cliente.rutDv}  , #{cliente.fechaNacimiento}  , #{cliente.imagenPerfil}    , #{cliente.email}                   , #{cliente.campo1}  ,
-            #{cliente.campo2} , #{cliente.telefonoFijo}     , #{cliente.telefonoMovil}   , #{cliente.tipoCliente.id}          ,
-            #{cliente.clasificacionCliente.id}              , #{cliente.estado.id}       , #{cliente.agrupacionComercial.id}  ,
-            #{cliente.segmentacionCliente.id})
+                             (#{cliente.nombre}        , #{cliente.apellidoPaterno}     , #{cliente.apellidoMaterno}         , #{cliente.fechaNacimiento}       ,
+                              #{cliente.email}         , #{cliente.telefonoFijo}        , #{cliente.telefonoMovil}           , #{cliente.tipoCliente.id}         ,
+                              #{cliente.clasificacionCliente.id} , #{cliente.estado.id} , #{cliente.imagenPerfil}            , #{cliente.agrupacionComercial.id} ,
+                              #{cliente.campo1}        , #{cliente.campo2}              ,  #{cliente.segmentacionCliente.id} , #{cliente.documentoIdentificacion.id})
+
         </foreach>
     </insert>
 
@@ -204,7 +208,7 @@
         <foreach item='cliente' collection='clienteLote' separator=';'>
             UPDATE ${schema}clientes
             SET clnt_nombre = #{cliente.nombre} , clnt_apellido_paterno = #{cliente.apellidoPaterno}  , clnt_apellido_materno = #{cliente.apellidoMaterno} ,
-                clnt_rut    = #{cliente.rut}    , clnt_rut_dv           = #{cliente.rutDv}            , clnt_fecha_nacimiento = #{cliente.fechaNacimiento} ,
+                 clnt_fecha_nacimiento = #{cliente.fechaNacimiento} ,
                 clnt_email  = #{cliente.email}  , clnt_imagen_perfil    = #{cliente.imagenPerfil}     , clnt_campo1           = #{cliente.campo1}          ,
                 clnt_campo2 = #{cliente.campo2} , clnt_fono_fijo        = #{cliente.telefonoFijo}     , clnt_fono_movil       = #{cliente.telefonoMovil}   ,
                 tpcl_id     = #{cliente.tipoCliente.id}, clcl_id        = #{cliente.clasificacionCliente.id}, estd_id         = #{cliente.estado.id}       ,

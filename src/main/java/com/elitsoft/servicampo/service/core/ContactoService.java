@@ -1,6 +1,8 @@
 package com.elitsoft.servicampo.service.core;
 
+import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
+import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.Contacto;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.ContactoMapper;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class ContactoService {
 
     @Autowired
     private ContactoMapper contactoMapper;  //Acceso a la base de datos con MyBatis, actua como un repositorio
+
+    @Autowired
+    private DocumentoIdentificacionService documentoIdentificacionService;
 
     @Autowired
     private ContactoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
@@ -41,7 +47,8 @@ public class ContactoService {
      * @throws EntradaInvalidadException si la entrada Contacto tiene errores.
      * @throws RecursoDuplicadoException si el recurso Contacto ya existe.
      */
-    public ContactoDTO agregar(ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    @Transactional
+    public ContactoDTO agregar(ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregar() Contacto");
 
         //  Valida Entrada
@@ -52,10 +59,17 @@ public class ContactoService {
         }
 
         try {
+            // Agrega el Documento de Identificacion
+            DocumentoIdentificacionDTO documentoIdentificacionDTO = documentoIdentificacionService.agregar(contactoDTO.getDocumentoIdentificacion());
+
+            // Asocia el documento de Identificacion creado al empleado
+            contactoDTO.setDocumentoIdentificacion(documentoIdentificacionDTO);
+
             Contacto contacto = mapper.toEntity(contactoDTO);
             contacto = contactoMapper.agregar(contacto);
+            ContactoDTO contactoDTOEncontrado =  this.encontrarPorClave(contacto.getId());
             logeador.info("Contacto agregado exitosamente id: {}", contacto.getId());
-            return mapper.toDTO(contacto);
+            return contactoDTOEncontrado;
         }
         catch (DuplicateKeyException e) {
             logeador.error(Constantes.CONTACTO_DUPLICADO_MENSAGE + ": {}", contactoDTO.getId());
@@ -109,6 +123,7 @@ public class ContactoService {
      * @throws RecursoNoEncontradoException si Contacto no es encontrado.
      * @throws EntradaInvalidadException si la entrada Contacto tiene errores.
      */
+    @Transactional
     public void actualizar(Long id, ContactoDTO contactoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizar() contacto");
 
@@ -127,7 +142,9 @@ public class ContactoService {
         }
 
         try {
-            ContactoDTO contactoDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            this.encontrarPorClave(id); // Verifica si existe el recurso
+            // Actualiza el Documento de Identificacion
+            documentoIdentificacionService.actualizar (contactoDTO.getDocumentoIdentificacion().getId(), contactoDTO.getDocumentoIdentificacion());
             Contacto contacto = mapper.toEntity(contactoDTO);
             contacto.setId(id);
             int registrosActualizados = contactoMapper.actualizar(contacto);
@@ -172,6 +189,7 @@ public class ContactoService {
      * @throws RecursoNoEncontradoException si el Contacto no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
+    @Transactional
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() contacto: {}", id);
 
@@ -181,6 +199,7 @@ public class ContactoService {
         try {
             ContactoDTO contactoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = contactoMapper.eliminar(id);
+            documentoIdentificacionService.eliminar(contactoDTO.getDocumentoIdentificacion().getId());
             logeador.info("contacto eliminado: {}, registros eliminados: {}", id, registrosEliminados);
         } catch (DataAccessException e) {
             logeador.error(Constantes.CONTACTO_ELIMINAR_MENSAJE + ": {}", id, e);

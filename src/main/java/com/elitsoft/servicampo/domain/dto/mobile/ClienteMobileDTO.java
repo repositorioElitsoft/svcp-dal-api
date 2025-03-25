@@ -19,8 +19,6 @@ public class ClienteMobileDTO implements Serializable {
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private Integer rut;
-    private Character rutDv;
     private LocalDate fechaNacimiento;
     private String imagenPerfil;
     private String email;
@@ -34,5 +32,6 @@ public class ClienteMobileDTO implements Serializable {
     //private List<Direccion> direcciones;
     private AgrupacionComercialMobileDTO agrupacionComercial;
     private SegmentacionClienteMobileDTO segmentacionCliente;
+    private DocumentoIdentificacionMobileDTO documentoIdentificacion;
 
 }

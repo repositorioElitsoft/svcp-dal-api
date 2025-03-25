@@ -18,8 +18,6 @@ public class ClienteDTO implements Serializable {
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private Integer rut;
-    private Character rutDv;
     private LocalDate fechaNacimiento;
     private String imagenPerfil;
     private String email;
@@ -33,5 +31,6 @@ public class ClienteDTO implements Serializable {
     //private List<Direccion> direcciones;
     private AgrupacionComercialDTO agrupacionComercial;
     private SegmentacionClienteDTO segmentacionCliente;
+    private DocumentoIdentificacionDTO documentoIdentificacion;
 
 }

@@ -48,16 +48,18 @@
                tpem.tpem_id               , tpem.tpem_dsc              ,
                rles.rles_id               , rles.rles_nom              ,
                estd.estd_id               , estd.estd_dsc              ,
-               doid.doid_id               , doid.doid_num              , doid.doid_dv
+               doid.doid_id               , doid.doid_num              , doid.doid_dv               ,
+               tpdi.tpdi_id               , tpdi.tpdi_nombre           , tpdi.tpdi_dsc
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
         FROM ${schema}empleados as empl
-        LEFT JOIN  ${schema}tipos_empleados as tpem ON empl.tpem_id = tpem.tpem_id
-        LEFT JOIN  ${schema}roles as rles ON empl.rles_id = rles.rles_id
-        LEFT JOIN  ${schema}estados as estd ON empl.estd_id = estd.estd_id
-        LEFT JOIN  ${schema}documentos_identificacion  as doid ON empl.doid_id = doid.doid_id
+        INNER JOIN  ${schema}tipos_empleados                 as tpem ON empl.tpem_id = tpem.tpem_id
+        INNER JOIN  ${schema}roles                           as rles ON empl.rles_id = rles.rles_id
+        INNER JOIN  ${schema}estados                         as estd ON empl.estd_id = estd.estd_id
+        INNER JOIN  ${schema}documentos_identificacion       as doid ON empl.doid_id = doid.doid_id
+        INNER JOIN  ${schema}tipos_documentos_identificacion as tpdi ON doid.tpdi_id = tpdi.tpdi_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->

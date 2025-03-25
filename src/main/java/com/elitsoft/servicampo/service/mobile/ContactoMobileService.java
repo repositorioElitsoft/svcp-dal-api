@@ -41,7 +41,7 @@ public class ContactoMobileService {
      * @throws EntradaInvalidadException si la entrada Contacto tiene errores.
      * @throws RecursoDuplicadoException si el recurso Contacto ya existe.
      */
-    public ContactoDTO agregar(ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
+    public ContactoDTO agregar(ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregar() contacto");
 
         return contactoService.agregar(contactoDTO);

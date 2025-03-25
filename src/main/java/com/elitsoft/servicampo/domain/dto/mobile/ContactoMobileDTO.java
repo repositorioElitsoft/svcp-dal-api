@@ -18,12 +18,11 @@ public class ContactoMobileDTO implements Serializable {
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private String rut;
-    private Character dv;
     private LocalDate fechaNacimiento;
     private String imagenPerfil;
     private String correoElectronico;
     private Long telefonoFijo;
     private Long telefonoMovil;
+    private DocumentoIdentificacionMobileDTO documentoIdentificacion;
 
 }
