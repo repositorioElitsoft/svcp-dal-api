@@ -31,7 +31,7 @@
     <select id="obtenerTodos" parameterType="long" resultMap="sectorResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE znas.znas_id = #{zona}
+        WHERE znas.znas_id = #{zonaId}
         order by sctr.sctr_dsc
     </select>
 
@@ -39,7 +39,7 @@
     <select id="encontrarPorZona"  resultMap="sectorResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE znas.znas_id = #{zona}
+        WHERE znas.znas_id = #{zonaId}
 
         <!-- Para limitar el tamaño del resultado-->
         <if test="limite">
