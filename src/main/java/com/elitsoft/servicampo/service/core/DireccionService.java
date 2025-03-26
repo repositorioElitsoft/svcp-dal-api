@@ -64,6 +64,7 @@ public class DireccionService {
      * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
      * @throws RecursoDuplicadoException si el recurso Direccion ya existe.
      */
+    @Transactional
     public DireccionDTO agregar(DireccionDTO direccionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException {
         logeador.debug("agregar() Direccion");
 
@@ -257,6 +258,7 @@ public class DireccionService {
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
      */
+    @Transactional
     public void actualizarContacto(Long clienteId, Long id, Long contactoId, ContactoDTO contactoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
         logeador.debug("actualizarContacto() direccion");
 
@@ -484,7 +486,7 @@ public class DireccionService {
         logeador.debug("encontrarPorClaveConContactos(): {}, {}", clientId, id);
 
         try {
-            DireccionDTO direccionDTO = mapper.toDTO(direccionMapper.encontrarPorClave(clientId,id));
+            DireccionDTO direccionDTO = mapper.toDTO(direccionMapper.encontrarPorClaveConContactos(clientId,id));
 
             if (direccionDTO != null) {
                 logeador.info("direccion encontrado por clave cliente: {}, id: {}", clientId, id );
@@ -536,7 +538,7 @@ public class DireccionService {
         logeador.debug("obtenerTodosPorClienteConContactos()");
 
         try {
-            List<DireccionDTO> direccionLista = mapper.toDTOList(direccionMapper.obtenerTodosPorCliente(clientId));
+            List<DireccionDTO> direccionLista = mapper.toDTOList(direccionMapper.obtenerTodosPorClienteConContactos(clientId));
             logeador.info("direccions por cliente con contactos obtenidos");
             return direccionLista;
         } catch (DataAccessException e) {

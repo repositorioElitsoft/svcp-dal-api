@@ -30,4 +30,5 @@ public class DireccionDTO implements Serializable {
     private Double longitud;
     private EstadoDTO estado;
     private String flagEvidencia;
+    private RutaDTO ruta;
 }

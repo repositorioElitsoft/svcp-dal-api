@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.*;
+import com.elitsoft.servicampo.domain.entity.Ruta;
 import com.elitsoft.servicampo.domain.entity.Sector;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,5 +32,6 @@ public class DireccionMobileDTO implements Serializable {
     private Double longitud;
     private EstadoMobileDTO estado;
     private String flagEvidencia;
+    private RutaMobileDTO ruta;
 
 }

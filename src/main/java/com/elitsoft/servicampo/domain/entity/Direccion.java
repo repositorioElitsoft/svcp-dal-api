@@ -33,5 +33,6 @@ public class Direccion implements Serializable {
     private Estado estado;
     private String flagEvidencia;
     private List<ContactoDireccion> contactoDireccion;
+    private Ruta ruta;
 
 }

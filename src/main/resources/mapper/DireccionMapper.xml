@@ -17,6 +17,7 @@
         <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
         <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
         <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+        <association property="ruta" resultMap="com.elitsoft.servicampo.mapper.RutaMapper.rutaResultMap"/>
     </resultMap>
 
     <resultMap id="direccionPorClienteResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
@@ -34,7 +35,7 @@
         <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
         <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
         <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
-        <collection  property="contactos" resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+        <association property="ruta" resultMap="com.elitsoft.servicampo.mapper.RutaMapper.rutaResultMap"/>
     </resultMap>
 
     <resultMap id="direccionPorClienteConContactosResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
@@ -47,11 +48,12 @@
         <result property="latitud" column="drcc_latitud" />
         <result property="longitud" column="drcc_longitud" />
         <result property="flagEvidencia" column="drcc_flag_evidencia" />
-        <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
+        <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap" columnPrefix="clnt_"/>
         <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
         <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
         <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
         <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+        <association property="ruta" resultMap="com.elitsoft.servicampo.mapper.RutaMapper.rutaResultMap"/>
         <collection  property="contactos" resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
     </resultMap>
 
@@ -81,9 +83,9 @@
                clnt.clnt_id , clnt.clnt_nombre ,
                cmna.cmna_id , cmna.cmna_dsc    ,
                sctr.sctr_id , sctr.sctr_dsc    ,
-               cntc.cntc_id , cntc.cntc_nombre ,
                tpdr.tpdr_id , tpdr.tpdr_dsc    ,
-               estd.estd_id , estd.estd_dsc
+               estd.estd_id , estd.estd_dsc    ,
+               ruta.ruta_id , ruta.ruta_dsc
     </sql>
 
     <!-- Sentencia SQL de Columnas, incluye detalle de  Provincia, Region, Pais, Zona -->
@@ -97,11 +99,27 @@
         pses.pses_id , pses.pses_dsc    ,
         sctr.sctr_id , sctr.sctr_dsc    ,
         znas.znas_id , znas.znas_dsc    ,
-        cntc.cntc_id , cntc.cntc_nombre ,
         tpdr.tpdr_id , tpdr.tpdr_dsc    ,
-        estd.estd_id , estd.estd_dsc
+        estd.estd_id , estd.estd_dsc    ,
+        ruta.ruta_id , ruta.ruta_dsc
     </sql>
 
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="selectClienteConContacto">
+        SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
+        drcc.drcc_imagen_perfil, drcc.drcc_latitud   , drcc.drcc_longitud      , drcc.drcc_flag_evidencia ,
+        clnt.clnt_id as clnt_clnt_id    , clnt.clnt_nombre as clnt_clnt_nombre ,
+        cmna.cmna_id , cmna.cmna_dsc    ,
+        sctr.sctr_id , sctr.sctr_dsc    ,
+        cntc.cntc_id , cntc.cntc_nombre , cntc.cntc_apellido_paterno, cntc.cntc_apellido_materno,
+        cntc.cntc_imagen_perfil         , cntc.cntc_email           , cntc.cntc_fono_fijo       , cntc.cntc_fono_movil      ,
+        cntc.cntc_fecha_nacimiento      ,
+        doid.doid_id , doid.doid_num    , doid.doid_dv              ,
+        tpdi.tpdi_id , tpdi.tpdi_nombre , tpdi.tpdi_dsc             ,
+        tpdr.tpdr_id , tpdr.tpdr_dsc    ,
+        estd.estd_id , estd.estd_dsc    ,
+        ruta.ruta_id , ruta.ruta_dsc
+    </sql>
 
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
@@ -109,9 +127,9 @@
         INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
         INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
         INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
-        INNER JOIN ${schema}contactos as cntc ON drcc.cntc_id = cntc.cntc_id
         INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
         INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
+        INNER JOIN ${schema}rutas     as ruta ON drcc.ruta_id = ruta.ruta_id
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
@@ -124,9 +142,9 @@
         INNER JOIN ${schema}paises    as pses ON rgns.pses_id = pses.pses_id
         INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
         INNER JOIN ${schema}zonas     as znas ON sctr.znas_id = znas.znas_id
-        INNER JOIN ${schema}contactos as cntc ON drcc.cntc_id = cntc.cntc_id
         INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
         INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
+        INNER JOIN ${schema}rutas     as ruta ON drcc.ruta_id = ruta.ruta_id
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
@@ -138,8 +156,11 @@
         LEFT  JOIN ${schema}contatos_direcciones as cntc_drcc ON drcc.clnt_id = cntc_drcc.clnt_id
           AND  drcc.drcc_id = cntc_drcc.drcc_id
         LEFT  JOIN ${schema}contactos as cntc ON cntc_drcc.cntc_id = cntc.cntc_id
+        INNER JOIN ${schema}documentos_identificacion as doid ON cntc.doid_id = doid.doid_id
+        INNER JOIN ${schema}tipos_documentos_identificacion as tpdi ON doid.tpdi_id = tpdi.tpdi_id
         INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
         INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
+        INNER JOIN ${schema}rutas     as ruta ON drcc.ruta_id = ruta.ruta_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
@@ -152,7 +173,7 @@
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClaveConContactos" parameterType="long" resultMap="direccionPorClienteConContactosResultMap">
-        <include refid="select"/>
+        <include refid="selectClienteConContacto"/>
         <include refid="fromClienteConContacto"/>
         WHERE drcc.clnt_id = #{clientId}
         AND drcc.drcc_id = #{id}
@@ -173,7 +194,7 @@
 
     <!-- Sentencia SQL de Obtener todos Por Cliente con Lista de Contacto-->
     <select id="obtenerTodosPorClienteConContactos" resultMap="direccionPorClienteConContactosResultMap">
-        <include refid="select"/>
+        <include refid="selectClienteConContacto"/>
         <include refid="fromClienteConContacto"/>
         WHERE drcc.clnt_id = #{clientId}
     </select>
@@ -251,26 +272,25 @@
 
     <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
     <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Direccion" affectData="true" flushCache="true">
-        INSERT INTO ${schema}direcciones (clnt_id , drcc_dsc, drcc_calle, drcc_numeracion, drcc_referencia,
-                                          cmna_id , sctr_id   , cntc_id        , tpdr_id        ,
-                                          drcc_imagen_perfil  , drcc_latitud   , drcc_longitud  ,
-                                          estd_id ,             drcc_flag_evidencia)
-                                VALUES  (#{cliente.id}, #{descripcion}, #{calle}, #{numeracion}, #{referencia},
-                                         #{comuna.id}        ,  #{sector.id}   , #{contacto.id},  #{tipoDireccion.id} ,
-                                         #{imagenPerfil}     ,  #{latitud}     , #{longitud}    ,
-                                         #{estado.id}        ,  #{flagEvidencia}
-                                        )
+        INSERT INTO ${schema}direcciones (clnt_id           , drcc_dsc     , drcc_calle    , drcc_numeracion ,
+                                          drcc_referencia   , cmna_id      , sctr_id       , tpdr_id         ,
+                                          drcc_imagen_perfil, drcc_latitud , drcc_longitud , estd_id         ,
+                                          drcc_flag_evidencia, ruta_id)
+                                VALUES  (#{cliente.id}      , #{descripcion}  , #{calle}    , #{numeracion}      ,
+                                         #{referencia}      , #{comuna.id}    , #{sector.id}, #{tipoDireccion.id},
+                                         #{imagenPerfil}    , #{latitud}      , #{longitud} , #{estado.id}       ,
+                                         #{flagEvidencia}   , #{ruta.id})
         returning drcc_id as id, drcc_dsc as descripcion, drcc_calle as calle, drcc_numeracion as numeracion, drcc_referencia as referencia
     </select>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Direccion">
         UPDATE ${schema}direcciones
-        SET  drcc_dsc        = #{descripcion}         , drcc_calle    = #{calle}           , drcc_numeracion    = #{numeracion}  ,
-             drcc_referencia = #{referencia}          , cmna_id       = #{comuna.id}       , sctr_id            = #{sector.id}   ,
-             cntc_id         = #{contacto.id}         , tpdr_id       = #{tipoDireccion.id}, drcc_imagen_perfil = #{imagenPerfil},
-             drcc_latitud    = #{latitud}             , drcc_longitud = #{longitud}        , estd_id            = #{estado.id}   ,
-             drcc_flag_evidencia = #{flagEvidencia}
+        SET  drcc_dsc        = #{descripcion}         , drcc_calle    = #{calle}           ,  drcc_numeracion     = #{numeracion}    ,
+             drcc_referencia = #{referencia}          , cmna_id       = #{comuna.id}       ,  sctr_id             = #{sector.id}     ,
+             tpdr_id         = #{tipoDireccion.id}    , drcc_imagen_perfil = #{imagenPerfil}, drcc_latitud        = #{latitud}       ,
+             drcc_longitud   = #{longitud}            , estd_id        = #{estado.id}      ,  drcc_flag_evidencia = #{flagEvidencia} ,
+             ruta_id         = #{ruta.id}
         WHERE clnt_id = #{cliente.id}
           AND drcc_id = #{id}
     </update>
@@ -284,14 +304,16 @@
 
     <!-- Sentencia SQL de Insertar LOTE-->
     <insert id="agregarLote" parameterType="java.util.List" >
-        INSERT INTO ${schema}direcciones (clnt_id , drcc_dsc , drcc_calle, drcc_numeracion, drcc_referencia   ,
-                                          cmna_id , sctr_id  , cntc_id   , tpdr_id        , drcc_imagen_perfil,
-                                          drcc_latitud, drcc_longitud    , estd_id        , drcc_flag_evidencia
+        INSERT INTO ${schema}direcciones (clnt_id            , drcc_dsc    , drcc_calle    , drcc_numeracion,
+                                          drcc_referencia    , cmna_id     , sctr_id       , tpdr_id        ,
+                                          drcc_imagen_perfil , drcc_latitud, drcc_longitud , estd_id        ,
+                                          drcc_flag_evidencia, ruta_id
                                          ) VALUES
         <foreach item="direccion" collection="direccionLote" separator=",">
-                                        (#{direccion.cliente.id}, #{direccion.descripcion}, #{direccion.calle}      , #{direccion.numeracion}      , #{direccion.referencia}  ,
-                                         #{direccion.comuna.id} , #{direccion.sector.id}           , #{direccion.contacto.id}, #{direccion.tipoDireccion.id}, #{direccion.imagenPerfil},
-                                         #{direccion.latitud}   , #{direccion.longitud}            , #{direccion.estado.id}  , #{direccion.flagEvidencia}
+                                        (#{direccion.cliente.id}   , #{direccion.descripcion}, #{direccion.calle}      , #{direccion.numeracion}      ,
+                                         #{direccion.referencia}   , #{direccion.comuna.id}  , #{direccion.sector.id}  , #{direccion.tipoDireccion.id},
+                                         #{direccion.imagenPerfil} , #{direccion.latitud}    , #{direccion.longitud}   , #{direccion.estado.id}       ,
+                                         #{direccion.flagEvidencia}, #{direccion.ruta.id}
                                         )
         </foreach>
     </insert>
@@ -300,13 +322,13 @@
     <update id="actualizarLote" parameterType="java.util.List" >
         <foreach item='direccion' collection='direccionLote' separator=';'>
             UPDATE ${schema}direcciones
-            SET  drcc_dsc           = #{direccion.descripcion}, drcc_calle      = #{direccion.calle}            ,
-                 drcc_numeracion    = #{direccion.numeracion}          , drcc_referencia = #{direccion.referencia}       ,
-                 cmna_id            = #{direccion.comuna.id}           , sctr_id         = #{direccion.sector.id}        ,
-                 cntc_id            = #{direccion.contacto.id}         , tpdr_id         = #{direccion.tipoDireccion.id} ,
-                 drcc_imagen_perfil = #{direccion.imagenPerfil}        , drcc_latitud    = #{direccion.latitud}          ,
-                 drcc_longitud      = #{direccion.longitud}            , estd_id         = #{direccion.estado.id}        ,
-            drcc_flag_evidencia     = #{direccion.flagEvidencia}
+            SET  drcc_dsc        = #{direccion.descripcion}      , drcc_calle          = #{direccion.calle}         ,
+                 drcc_numeracion = #{direccion.numeracion}       , drcc_referencia     = #{direccion.referencia}    ,
+                 cmna_id         = #{direccion.comuna.id}        , sctr_id             = #{direccion.sector.id}     ,
+                 tpdr_id         = #{direccion.tipoDireccion.id} , drcc_imagen_perfil  = #{direccion.imagenPerfil}  ,
+                 drcc_latitud    = #{direccion.latitud}          , drcc_longitud       = #{direccion.longitud}      ,
+                 estd_id         = #{direccion.estado.id}        , drcc_flag_evidencia = #{direccion.flagEvidencia} ,
+                 ruta_id         = #{direccion.ruta.id}
             WHERE clnt_id = #{direccion.cliente.id}
              AND  drcc_id = #{direccion.id}
         </foreach>
