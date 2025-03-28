@@ -1,7 +1,11 @@
 package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.TipoClienteDTO;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TipoClienteMapper;
 import com.elitsoft.servicampo.mapstruct.TipoClienteMapStruct;
 import com.elitsoft.servicampo.service.core.TipoClienteService;
@@ -32,9 +36,10 @@ public class TipoClienteMobileService {
 
     /**
      * Agrega un nuevo TipoCliente.
+     *
      * @param tipoClienteDTO el TipoCliente DTO.
      * @return el TipoCliente DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoCliente ya existe.
      */
@@ -46,8 +51,9 @@ public class TipoClienteMobileService {
 
     /**
      * Agrega Lote nuevos TipoCliente.
+     *
      * @param tipoClienteLoteDTO lista de TipoCliente DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoCliente ya existe.
      */
@@ -59,13 +65,14 @@ public class TipoClienteMobileService {
 
     /**
      * Actualiza un TipoCliente existente.
-     * @param id la Clave de TipoCliente a actualizar.
+     *
+     * @param id             la Clave de TipoCliente a actualizar.
      * @param tipoClienteDTO el TipoCliente DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoCliente no es encontrado.
-     * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
+     * @throws EntradaInvalidadException    si la entrada TipoCliente tiene errores.
      */
-    public void actualizar(Long id, TipoClienteDTO tipoClienteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TipoClienteDTO tipoClienteDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() tipocliente");
 
         tipoClienteService.actualizar(id, tipoClienteDTO);
@@ -73,11 +80,12 @@ public class TipoClienteMobileService {
 
     /**
      * Actualiza Lote de TipoCliente existentes.
+     *
      * @param tipoClienteLoteDTO lista de TipoCliente DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoCliente tiene errores.
      */
-    public void actualizarLote(List<TipoClienteDTO> tipoClienteLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoClienteDTO> tipoClienteLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tipocliente");
 
         tipoClienteService.actualizarLote(tipoClienteLoteDTO);
@@ -85,10 +93,11 @@ public class TipoClienteMobileService {
 
     /**
      * Elimina TipoCliente por Clave.
+     *
      * @param id la clave de TipoCliente a eliminar.
      * @throws RecursoNoEncontradoException si el TipoCliente no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     * @throws RecursoEliminarException si TipoCliente esta asociado a otro recurso
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si TipoCliente esta asociado a otro recurso
      */
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipocliente: {}", id);
@@ -97,12 +106,13 @@ public class TipoClienteMobileService {
 
     /**
      * Elimina Lote TipoCliente por Clave.
+     *
      * @param idLote lista de claves de TipoCliente a eliminar.
      * @throws EntradaInvalidadException si la lista  TipoCliente esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     * @throws RecursoEliminarException si TipoCliente esta asociado a otro recurso
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si TipoCliente esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("eliminarLote()");
 
         tipoClienteService.eliminarLote(idLote);
@@ -110,9 +120,10 @@ public class TipoClienteMobileService {
 
     /**
      * Encuentra un TipoCliente por Clave.
+     *
      * @param id la clave TipoCliente a encontrar.
      * @return el TipoCliente DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoCliente no es encontrado.
      */
     public TipoClienteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -122,6 +133,7 @@ public class TipoClienteMobileService {
 
     /**
      * Obtiene todos los TipoClientes.
+     *
      * @return lista de todos TipoCliente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */

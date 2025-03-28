@@ -96,11 +96,11 @@ public class #Base#MobileController {
             @ApiResponse(responseCode = "409", description = "#Base# ya Existe"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> agregarLote(@RequestBody List<#Base#DTO> #base#LoteDTO) {
+    public ResponseEntity<ApiEnityResponse<String>> agregarLote(@RequestBody List<#Base#DTO> #base#DTOLote) {
         logeador.debug("agregarLote() #base#");
 
         try {
-            #base#MobileService.agregarLote(#base#LoteDTO); 
+            #base#MobileService.agregarLote(#base#DTOLote); 
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
@@ -151,11 +151,11 @@ public class #Base#MobileController {
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> actualizarLote(@RequestBody List<#Base#DTO> #base#LoteDTO) {
+    public ResponseEntity<ApiEnityResponse<String>> actualizarLote(@RequestBody List<#Base#DTO> #base#DTOLote) {
         logeador.debug("actualizarLote() #base#");
 
         try {
-            #base#MobileService.actualizarLote(#base#LoteDTO);
+            #base#MobileService.actualizarLote(#base#DTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
