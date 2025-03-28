@@ -219,6 +219,7 @@ public class Constantes {
 
     public static final String TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOCLIENTE invalida.";
     public static final String TIPOCLIENTE_DUPLICADO_MENSAGE = "Recurso  TIPOCLIENTE ya existe.";
+    public static final String TIPOCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOCLIENTE viola Integridad. ";
     public static final String TIPOCLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso TIPOCLIENTE no  encontrado";
     public static final String TIPOCLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOCLIENTE";
     public static final String TIPOCLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOCLIENTE";

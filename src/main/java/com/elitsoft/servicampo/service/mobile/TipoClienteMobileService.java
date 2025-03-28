@@ -1,10 +1,7 @@
 package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.TipoClienteDTO;
-import com.elitsoft.servicampo.exceptions.BaseDatosException;
-import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
-import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
-import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
+import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.TipoClienteMapper;
 import com.elitsoft.servicampo.mapstruct.TipoClienteMapStruct;
 import com.elitsoft.servicampo.service.core.TipoClienteService;
@@ -91,6 +88,7 @@ public class TipoClienteMobileService {
      * @param id la clave de TipoCliente a eliminar.
      * @throws RecursoNoEncontradoException si el TipoCliente no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si TipoCliente esta asociado a otro recurso
      */
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipocliente: {}", id);
@@ -102,8 +100,9 @@ public class TipoClienteMobileService {
      * @param idLote lista de claves de TipoCliente a eliminar.
      * @throws EntradaInvalidadException si la lista  TipoCliente esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si TipoCliente esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         tipoClienteService.eliminarLote(idLote);

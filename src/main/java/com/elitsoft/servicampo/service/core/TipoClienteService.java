@@ -5,12 +5,15 @@ import com.elitsoft.servicampo.domain.entity.TipoCliente;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.mapper.TipoClienteMapper;
 import com.elitsoft.servicampo.mapstruct.TipoClienteMapStruct;
+import com.elitsoft.servicampo.service.error.GeneralError;
+import com.elitsoft.servicampo.service.error.TipoClienteError;
 import com.elitsoft.servicampo.utils.Constantes;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +47,8 @@ public class TipoClienteService {
         //  Valida Entrada
         if (tipoClienteDTO == null) {
             logeador.error(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(TipoClienteError.REQUERIDO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -55,11 +59,13 @@ public class TipoClienteService {
         }
         catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOCLIENTE_DUPLICADO_MENSAGE + ": {}", tipoClienteDTO.getId());
-            throw new RecursoDuplicadoException(Constantes.TIPOCLIENTE_DUPLICADO_MENSAGE);
+            throw new RecursoDuplicadoException(TipoClienteError.DUPLICADO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_DUPLICADO_MENSAGE);
         }
         catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCLIENTE_AGREGAR_MENSAJE + ": {}", tipoClienteDTO.toString(), e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_AGREGAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_AGREGAR_MENSAJE, e);
         }
     }
 
@@ -76,7 +82,8 @@ public class TipoClienteService {
         //  Valida Entrada
         if (tipoClienteLoteDTO.isEmpty()) {
             logeador.error(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(TipoClienteError.REQUERIDO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
             List<TipoCliente> tipoclienteLote = mapper.toEntityList(tipoClienteLoteDTO);
@@ -85,10 +92,12 @@ public class TipoClienteService {
             logeador.info("Lote TipoCliente agregados exitosamente,  registros agregados: {}", registrosAgregados);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOCLIENTE_DUPLICADO_MENSAGE);
-            throw new RecursoDuplicadoException(Constantes.TIPOCLIENTE_DUPLICADO_MENSAGE);
+            throw new RecursoDuplicadoException(TipoClienteError.DUPLICADO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_DUPLICADO_MENSAGE);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCLIENTE_AGREGAR_LOTE_MENSAJE, e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_AGREGAR_LOTE_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_AGREGAR_LOTE_MENSAJE, e);
         }
     }
 
@@ -106,24 +115,27 @@ public class TipoClienteService {
         //  Valida Entrada
         if (id == null || tipoClienteDTO == null || tipoClienteDTO.getId() == null) {
             logeador.error(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}", ((tipoClienteDTO != null) ? tipoClienteDTO.toString() : null  ));
-            throw new EntradaInvalidadException(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(TipoClienteError.REQUERIDO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
         if (!id.equals(tipoClienteDTO.getId())) {
             logeador.error(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  tipoClienteDTO.toString());
-            throw new EntradaInvalidadException(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(TipoClienteError.ID_REQUERIDO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            TipoClienteDTO tipoClienteDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
+            this.encontrarPorClave(id); // Verifica si existe el recurso
             TipoCliente tipocliente = mapper.toEntity(tipoClienteDTO);
             tipocliente.setId(id);
             int registrosActualizados = tipoClienteMapper.actualizar(tipocliente);
             logeador.info("tipocliente actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCLIENTE_ACTUALIZAR_MENSAJE + ": id={} {}", id, tipoClienteDTO.toString(), e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_ACTUALIZAR_MENSAJE, e);
         }
     }
 
@@ -139,7 +151,8 @@ public class TipoClienteService {
         //  Valida Entrada
         if (tipoClienteLoteDTO.isEmpty()) {
             logeador.error(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(TipoClienteError.REQUERIDO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -148,7 +161,8 @@ public class TipoClienteService {
             logeador.info("Lote tipocliente actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCLIENTE_ACTUALIZAR_MENSAJE, e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_ACTUALIZAR_MENSAJE, e);
         }
     }
 
@@ -157,17 +171,23 @@ public class TipoClienteService {
      * @param id la clave de TipoCliente a eliminar.
      * @throws RecursoNoEncontradoException si el TipoCliente no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si TipoCliente esta asociado a otro recurso
      */
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipocliente: {}", id);
 
         try {
-            TipoClienteDTO tipoClienteDTO = this.encontrarPorClave(id); // Verifica si existe
+            this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = tipoClienteMapper.eliminar(id);
             logeador.info("tipocliente eliminado: {}, registros eliminados: {}", id, registrosEliminados);
-        } catch (DataAccessException e) {
+        }  catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.TIPOCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(TipoClienteError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                                               Constantes.TIPOCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE, e);
+        }  catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCLIENTE_ELIMINAR_MENSAJE + ": {}", id, e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_ELIMINAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_ELIMINAR_MENSAJE, e);
         }
     }
 
@@ -176,6 +196,7 @@ public class TipoClienteService {
      * @param idLote lista de claves de TipoCliente a eliminar.
      * @throws EntradaInvalidadException si la lista  TipoCliente esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si TipoCliente esta asociado a otro recurso
      */
     public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
         logeador.debug("eliminarLote()");
@@ -183,16 +204,23 @@ public class TipoClienteService {
         //  Valida Entrada
         if (idLote.isEmpty()) {
             logeador.error(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(TipoClienteError.REQUERIDO.getCodigoError(),
+                                                Constantes.TIPOCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
             int registrosEliminados = tipoClienteMapper.eliminarLote(idLote);
             logeador.info("Lote tipocliente eliminados exitosamente, registros eliminados: {}", registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.TIPOCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE,  e);
+            throw new RecursoEliminarException(TipoClienteError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                                               Constantes.TIPOCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCLIENTE_ELIMINAR_MENSAJE,  e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_ELIMINAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_ELIMINAR_MENSAJE, e);
         }
+
     }
 
     /**
@@ -212,13 +240,15 @@ public class TipoClienteService {
                 logeador.info("tipocliente encontrado por clave : {}", id);
             } else {
                 logeador.info("tipocliente clave:{} no encontrado", id);
-                throw new RecursoNoEncontradoException(Constantes.TIPOCLIENTE_NO_ENCONTRADO_MENSAGE);
+                throw new RecursoNoEncontradoException(TipoClienteError.NO_ENCONTRADO.getCodigoError(),
+                                                       Constantes.TIPOCLIENTE_NO_ENCONTRADO_MENSAGE);
             }
 
             return tipoClienteDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
@@ -236,7 +266,8 @@ public class TipoClienteService {
             return tipoClienteLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCLIENTE_OBTENER_TODOS_MENSAJE, e);
-            throw new BaseDatosException(Constantes.TIPOCLIENTE_OBTENER_TODOS_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.TIPOCLIENTE_OBTENER_TODOS_MENSAJE, e);
         }
     }
 }
