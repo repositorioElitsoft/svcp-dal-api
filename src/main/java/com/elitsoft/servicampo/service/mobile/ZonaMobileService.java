@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.ZonaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.ZonaMapper;
 import com.elitsoft.servicampo.mapstruct.ZonaMapStruct;
@@ -67,7 +68,7 @@ public class ZonaMobileService {
      * @throws RecursoNoEncontradoException si Zona no es encontrado.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      */
-    public void actualizar(Long id, ZonaDTO zonaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, ZonaDTO zonaDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() zona");
 
         zonaService.actualizar(id, zonaDTO);
@@ -79,7 +80,7 @@ public class ZonaMobileService {
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Zona tiene errores.
      */
-    public void actualizarLote(List<ZonaDTO> zonaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ZonaDTO> zonaLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() zona");
 
         zonaService.actualizarLote(zonaLoteDTO);
@@ -90,8 +91,9 @@ public class ZonaMobileService {
      * @param id la clave de Zona a eliminar.
      * @throws RecursoNoEncontradoException si el Zona no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si el Zona viola la integridad referencial.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() zona: {}", id);
         zonaService.eliminar(id);
     }
@@ -101,8 +103,9 @@ public class ZonaMobileService {
      * @param idLote lista de claves de Zona a eliminar.
      * @throws EntradaInvalidadException si la lista  Zona esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si el Zona viola la integridad referencial.
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         zonaService.eliminarLote(idLote);
