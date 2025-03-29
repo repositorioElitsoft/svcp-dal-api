@@ -244,6 +244,7 @@ public class Constantes {
 
     public static final String AGRUPACIONCOMERCIAL_ENTRADA_INVALIDA_MENSAGE = "Entrada de AGRUPACIONCOMERCIAL invalida.";
     public static final String AGRUPACIONCOMERCIAL_DUPLICADO_MENSAGE = "Recurso  AGRUPACIONCOMERCIAL ya existe.";
+    public static final String AGRUPACIONCOMERCIAL_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso AGRUPACIONCOMERCIAL viola Integridad.";
     public static final String AGRUPACIONCOMERCIAL_NO_ENCONTRADO_MENSAGE = "Recurso AGRUPACIONCOMERCIAL no  encontrado";
     public static final String AGRUPACIONCOMERCIAL_AGREGAR_MENSAJE = "Error Interno agregando Recurso AGRUPACIONCOMERCIAL";
     public static final String AGRUPACIONCOMERCIAL_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos AGRUPACIONCOMERCIAL";

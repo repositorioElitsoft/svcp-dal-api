@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.AgrupacionComercialMapper;
 import com.elitsoft.servicampo.mapstruct.AgrupacionComercialMapStruct;
@@ -67,7 +68,7 @@ public class AgrupacionComercialMobileService {
      * @throws RecursoNoEncontradoException si AgrupacionComercial no es encontrado.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      */
-    public void actualizar(Long id, AgrupacionComercialDTO agrupacionComercialDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, AgrupacionComercialDTO agrupacionComercialDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() agrupacioncomercial");
 
         agrupacionComercialService.actualizar(id, agrupacionComercialDTO);
@@ -79,7 +80,7 @@ public class AgrupacionComercialMobileService {
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada AgrupacionComercial tiene errores.
      */
-    public void actualizarLote(List<AgrupacionComercialDTO> agrupacionComercialLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<AgrupacionComercialDTO> agrupacionComercialLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() agrupacioncomercial");
 
         agrupacionComercialService.actualizarLote(agrupacionComercialLoteDTO);
@@ -90,8 +91,9 @@ public class AgrupacionComercialMobileService {
      * @param id la clave de AgrupacionComercial a eliminar.
      * @throws RecursoNoEncontradoException si el AgrupacionComercial no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si el AgrupacionComercial viola la integridad referencial.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() agrupacioncomercial: {}", id);
         agrupacionComercialService.eliminar(id);
     }
@@ -101,8 +103,9 @@ public class AgrupacionComercialMobileService {
      * @param idLote lista de claves de AgrupacionComercial a eliminar.
      * @throws EntradaInvalidadException si la lista  AgrupacionComercial esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si el AgrupacionComercial viola la integridad referencial.
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         agrupacionComercialService.eliminarLote(idLote);
