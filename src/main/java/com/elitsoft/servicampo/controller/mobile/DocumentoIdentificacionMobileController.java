@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.mobile;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.DocumentoIdentificacionMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

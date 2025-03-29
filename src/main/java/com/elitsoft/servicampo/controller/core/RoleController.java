@@ -3,7 +3,6 @@ package com.elitsoft.servicampo.controller.core;
 import com.elitsoft.servicampo.domain.dto.core.RoleDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.RoleService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

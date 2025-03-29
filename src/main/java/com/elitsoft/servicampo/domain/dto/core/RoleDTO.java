@@ -1,15 +1,16 @@
 package com.elitsoft.servicampo.domain.dto.core;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
+@Getter
 public class RoleDTO implements Serializable {
 
     @Serial

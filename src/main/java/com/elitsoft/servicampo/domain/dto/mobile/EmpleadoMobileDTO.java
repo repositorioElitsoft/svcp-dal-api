@@ -2,16 +2,17 @@ package com.elitsoft.servicampo.domain.dto.mobile;
 
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
+@Getter
 public class EmpleadoMobileDTO implements Serializable {
 
     @Serial

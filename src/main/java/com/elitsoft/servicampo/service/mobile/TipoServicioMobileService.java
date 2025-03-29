@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TipoServicioMapper;
 import com.elitsoft.servicampo.mapstruct.TipoServicioMapStruct;
@@ -35,9 +36,10 @@ public class TipoServicioMobileService {
 
     /**
      * Agrega un nuevo TipoServicio.
+     *
      * @param tipoServicioDTO el TipoServicio DTO.
      * @return el TipoServicio DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoServicio ya existe.
      */
@@ -49,8 +51,9 @@ public class TipoServicioMobileService {
 
     /**
      * Agrega Lote nuevos TipoServicio.
+     *
      * @param tipoServicioLoteDTO lista de TipoServicio DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoServicio ya existe.
      */
@@ -62,13 +65,14 @@ public class TipoServicioMobileService {
 
     /**
      * Actualiza un TipoServicio existente.
-     * @param id la Clave de TipoServicio a actualizar.
+     *
+     * @param id              la Clave de TipoServicio a actualizar.
      * @param tipoServicioDTO el TipoServicio DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoServicio no es encontrado.
-     * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
+     * @throws EntradaInvalidadException    si la entrada TipoServicio tiene errores.
      */
-    public void actualizar(Long id, TipoServicioDTO tipoServicioDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TipoServicioDTO tipoServicioDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() tiposervicio");
 
         tipoServicioService.actualizar(id, tipoServicioDTO);
@@ -76,11 +80,12 @@ public class TipoServicioMobileService {
 
     /**
      * Actualiza Lote de TipoServicio existentes.
+     *
      * @param tipoServicioLoteDTO lista de TipoServicio DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoServicio tiene errores.
      */
-    public void actualizarLote(List<TipoServicioDTO> tipoServicioLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoServicioDTO> tipoServicioLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tiposervicio");
 
         tipoServicioService.actualizarLote(tipoServicioLoteDTO);
@@ -88,22 +93,26 @@ public class TipoServicioMobileService {
 
     /**
      * Elimina TipoServicio por Clave.
+     *
      * @param id la clave de TipoServicio a eliminar.
      * @throws RecursoNoEncontradoException si el TipoServicio no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si TipoServicio esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() tiposervicio: {}", id);
         tipoServicioService.eliminar(id);
     }
 
     /**
      * Elimina Lote TipoServicio por Clave.
+     *
      * @param idLote lista de claves de TipoServicio a eliminar.
      * @throws EntradaInvalidadException si la lista  TipoServicio esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si TipoServicio esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         tipoServicioService.eliminarLote(idLote);
@@ -111,9 +120,10 @@ public class TipoServicioMobileService {
 
     /**
      * Encuentra un TipoServicio por Clave.
+     *
      * @param id la clave TipoServicio a encontrar.
      * @return el TipoServicio DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoServicio no es encontrado.
      */
     public TipoServicioDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -123,6 +133,7 @@ public class TipoServicioMobileService {
 
     /**
      * Obtiene todos los TipoServicios.
+     *
      * @return lista de todos TipoServicio DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */

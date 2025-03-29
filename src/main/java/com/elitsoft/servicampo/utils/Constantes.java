@@ -209,6 +209,7 @@ public class Constantes {
 
     public static final String TIPOSERVICIO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOSERVICIO invalida.";
     public static final String TIPOSERVICIO_DUPLICADO_MENSAGE = "Recurso  TIPOSERVICIO ya existe.";
+    public static final String TIPOSERVICIO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso TIPOSERVICIO viola Integridad. ";
     public static final String TIPOSERVICIO_NO_ENCONTRADO_MENSAGE = "Recurso TIPOSERVICIO no  encontrado";
     public static final String TIPOSERVICIO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOSERVICIO";
     public static final String TIPOSERVICIO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOSERVICIO";

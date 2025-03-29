@@ -148,7 +148,8 @@ public class TipoProductoController {
         }
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
-        } catch (RecursoEliminarException e) {
+        }
+        catch (RecursoEliminarException e) {
             return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  460 Integridad Violada
         }
         catch (RecursoNoEncontradoException e) {
@@ -172,9 +173,11 @@ public class TipoProductoController {
         try {
             tipoProductoService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
-        } catch (RecursoEliminarException e) {
+        }
+        catch (RecursoEliminarException e) {
             return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  460 Integridad Violada
-        } catch (EntradaInvalidadException e) {
+        }
+        catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
         }
         catch (BaseDatosException e) {

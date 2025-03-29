@@ -4,7 +4,6 @@ import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.TipoDireccionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.TipoDireccionMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
