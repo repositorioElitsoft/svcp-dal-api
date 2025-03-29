@@ -233,6 +233,7 @@ public class Constantes {
 
     public static final String SEGMENTACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de SEGMENTACIONCLIENTE invalida.";
     public static final String SEGMENTACIONCLIENTE_DUPLICADO_MENSAGE = "Recurso  SEGMENTACIONCLIENTE ya existe.";
+    public static final String SEGMENTACIONCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  SEGMENTACIONCLIENTE viola Integridad. ";
     public static final String SEGMENTACIONCLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso SEGMENTACIONCLIENTE no  encontrado";
     public static final String SEGMENTACIONCLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso SEGMENTACIONCLIENTE";
     public static final String SEGMENTACIONCLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SEGMENTACIONCLIENTE";

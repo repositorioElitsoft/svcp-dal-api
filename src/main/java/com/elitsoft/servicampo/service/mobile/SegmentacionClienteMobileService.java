@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.SegmentacionClienteDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.SegmentacionClienteMapper;
 import com.elitsoft.servicampo.mapstruct.SegmentacionClienteMapStruct;
@@ -34,9 +35,10 @@ public class SegmentacionClienteMobileService {
 
     /**
      * Agrega un nuevo SegmentacionCliente.
+     *
      * @param segmentacionClienteDTO el SegmentacionCliente DTO.
      * @return el SegmentacionCliente DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada SegmentacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso SegmentacionCliente ya existe.
      */
@@ -48,8 +50,9 @@ public class SegmentacionClienteMobileService {
 
     /**
      * Agrega Lote nuevos SegmentacionCliente.
+     *
      * @param segmentacionClienteLoteDTO lista de SegmentacionCliente DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada SegmentacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso SegmentacionCliente ya existe.
      */
@@ -61,13 +64,14 @@ public class SegmentacionClienteMobileService {
 
     /**
      * Actualiza un SegmentacionCliente existente.
-     * @param id la Clave de SegmentacionCliente a actualizar.
+     *
+     * @param id                     la Clave de SegmentacionCliente a actualizar.
      * @param segmentacionClienteDTO el SegmentacionCliente DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si SegmentacionCliente no es encontrado.
-     * @throws EntradaInvalidadException si la entrada SegmentacionCliente tiene errores.
+     * @throws EntradaInvalidadException    si la entrada SegmentacionCliente tiene errores.
      */
-    public void actualizar(Long id, SegmentacionClienteDTO segmentacionClienteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, SegmentacionClienteDTO segmentacionClienteDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() segmentacioncliente");
 
         segmentacionClienteService.actualizar(id, segmentacionClienteDTO);
@@ -75,11 +79,12 @@ public class SegmentacionClienteMobileService {
 
     /**
      * Actualiza Lote de SegmentacionCliente existentes.
+     *
      * @param segmentacionClienteLoteDTO lista de SegmentacionCliente DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada SegmentacionCliente tiene errores.
      */
-    public void actualizarLote(List<SegmentacionClienteDTO> segmentacionClienteLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<SegmentacionClienteDTO> segmentacionClienteLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() segmentacioncliente");
 
         segmentacionClienteService.actualizarLote(segmentacionClienteLoteDTO);
@@ -87,22 +92,26 @@ public class SegmentacionClienteMobileService {
 
     /**
      * Elimina SegmentacionCliente por Clave.
+     *
      * @param id la clave de SegmentacionCliente a eliminar.
      * @throws RecursoNoEncontradoException si el SegmentacionCliente no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si TipoProducto esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() segmentacioncliente: {}", id);
         segmentacionClienteService.eliminar(id);
     }
 
     /**
      * Elimina Lote SegmentacionCliente por Clave.
+     *
      * @param idLote lista de claves de SegmentacionCliente a eliminar.
      * @throws EntradaInvalidadException si la lista  SegmentacionCliente esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si TipoProducto esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         segmentacionClienteService.eliminarLote(idLote);
@@ -110,9 +119,10 @@ public class SegmentacionClienteMobileService {
 
     /**
      * Encuentra un SegmentacionCliente por Clave.
+     *
      * @param id la clave SegmentacionCliente a encontrar.
      * @return el SegmentacionCliente DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si SegmentacionCliente no es encontrado.
      */
     public SegmentacionClienteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -122,6 +132,7 @@ public class SegmentacionClienteMobileService {
 
     /**
      * Obtiene todos los SegmentacionClientes.
+     *
      * @return lista de todos SegmentacionCliente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
