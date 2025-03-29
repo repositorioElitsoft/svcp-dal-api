@@ -99,7 +99,7 @@ public class TipoClienteMobileService {
      * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoEliminarException     si TipoCliente esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() tipocliente: {}", id);
         tipoClienteService.eliminar(id);
     }
@@ -112,7 +112,7 @@ public class TipoClienteMobileService {
      * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws RecursoEliminarException  si TipoCliente esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         tipoClienteService.eliminarLote(idLote);

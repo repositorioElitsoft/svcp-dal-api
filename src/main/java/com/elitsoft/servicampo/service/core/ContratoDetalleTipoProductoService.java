@@ -206,7 +206,7 @@ public class ContratoDetalleTipoProductoService {
      * @throws RecursoNoEncontradoException si el ContratoDetalleTipoProducto no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long contratoDetalleId, Long tipoProductoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+    public void eliminar(Long contratoDetalleId, Long tipoProductoId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() contratodetalletipoproducto: {}, {}", contratoDetalleId, tipoProductoId);
 
         //Verifica integridad referencial

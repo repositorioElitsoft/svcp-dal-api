@@ -161,9 +161,9 @@ public class ContratoDetalleTipoProductoMobileController {
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
-        catch (RecursoEliminarException e) {
-            return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  460 Integridad Violada
-        }
+//        catch (RecursoEliminarException e) {
+//            return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  460 Integridad Violada
+//        }
         catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         } 
@@ -190,9 +190,9 @@ public class ContratoDetalleTipoProductoMobileController {
         catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
-        catch (RecursoEliminarException e) {
-            return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  460 Integridad Violada
-        }
+//        catch (RecursoEliminarException e) {
+//            return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  460 Integridad Violada
+//        }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
         }

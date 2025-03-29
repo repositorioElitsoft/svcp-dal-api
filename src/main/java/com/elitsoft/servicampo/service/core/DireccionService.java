@@ -339,7 +339,7 @@ public class DireccionService {
      * @throws RecursoNoEncontradoException si el Direccion no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id, Long clienteId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+    public void eliminar(Long id, Long clienteId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() direccion: {}, {}", id, clienteId  );
 
         //Verifica integridad referencial
@@ -366,7 +366,7 @@ public class DireccionService {
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
     @Transactional
-    public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+    public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminarContacto() direccion contacto: {}, {}, {}}", id, clienteId,  contactoId );
 
         //Verifica integridad referencial

@@ -185,7 +185,7 @@ public class TipoProductoTipoComponenteService {
      * @throws RecursoNoEncontradoException si el TipoProductoTipoComponente no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long tipoComponenteId, Long tipoProductoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+    public void eliminar(Long tipoComponenteId, Long tipoProductoId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipoproductotipocomponente: {}, {}", tipoComponenteId, tipoProductoId);
 
         //Verifica integridad referencial

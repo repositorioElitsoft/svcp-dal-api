@@ -190,7 +190,7 @@ public class ContactoService {
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
     @Transactional
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() contacto: {}", id);
 
         //Verifica integridad referencial

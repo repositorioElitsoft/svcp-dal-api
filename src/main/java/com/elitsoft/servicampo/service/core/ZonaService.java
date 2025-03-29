@@ -165,11 +165,10 @@ public class ZonaService {
      * @throws RecursoEliminarException si el Zona viola la integridad referencial.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, RecursoEliminarException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() zona: {}", id);
 
-        //Verifica integridad referencial
-        this.verificarIntegridadEliminar(id);
+
 
         try {
             ZonaDTO zonaDTO = this.encontrarPorClave(id); // Verifica si existe
@@ -188,7 +187,7 @@ public class ZonaService {
      * @throws RecursoEliminarException si el Zona viola la integridad referencial.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException  {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException  {
         logeador.debug("eliminarLote()");
 
         //  Valida Entrada
@@ -197,10 +196,6 @@ public class ZonaService {
             throw new EntradaInvalidadException(Constantes.ZONA_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-        for (Long id : idLote) {
-            this.verificarIntegridadEliminar(id);
-        }
 
         try {
             int registrosEliminados = zonaMapper.eliminarLote(idLote);

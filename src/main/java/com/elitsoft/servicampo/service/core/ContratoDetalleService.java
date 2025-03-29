@@ -121,7 +121,7 @@ public class ContratoDetalleService {
      * @throws RecursoNoEncontradoException si el ContratoDetalle no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() contratodetalle: {}", id);
 
         //Verifica integridad referencial

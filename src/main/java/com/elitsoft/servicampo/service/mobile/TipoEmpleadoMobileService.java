@@ -98,7 +98,7 @@ public class TipoEmpleadoMobileService {
      * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws RecursoEliminarException  si TipoEmpleado esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() tipoempleado: {}", id);
         tipoEmpleadoService.eliminar(id);
     }
@@ -111,7 +111,7 @@ public class TipoEmpleadoMobileService {
      * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws RecursoEliminarException  si TipoEmpleado esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         tipoEmpleadoService.eliminarLote(idLote);

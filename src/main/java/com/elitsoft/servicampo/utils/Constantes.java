@@ -119,6 +119,7 @@ public class Constantes {
 
     public static final String TIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOPRODUCTO invalida.";
     public static final String TIPOPRODUCTO_DUPLICADO_MENSAGE = "Recurso  TIPOPRODUCTO ya existe.";
+    public static final String TIPOPRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  TIPOCLIENTE viola Integridad. ";
     public static final String TIPOPRODUCTO_NO_ENCONTRADO_MENSAGE = "Recurso TIPOPRODUCTO no  encontrado";
     public static final String TIPOPRODUCTO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TIPOPRODUCTO";
     public static final String TIPOPRODUCTO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TIPOPRODUCTO";

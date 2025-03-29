@@ -225,7 +225,7 @@ public class ServicioTrabajoService {
      * @throws RecursoNoEncontradoException si el ServicioTrabajo no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long servicioId, Long trabajoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
+    public void eliminar(Long servicioId, Long trabajoId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() serviciotrabajo: {}, {} ", servicioId, trabajoId);
 
         //Verifica integridad referencial

@@ -9,7 +9,7 @@ import java.io.Serial;
  *
  */
 @Getter
-public class RecursoEliminarException extends IllegalArgumentException {
+public class RecursoEliminarException extends Exception {
     @Serial
     private static final long serialVersionUID = 406317230484498707L; // Or a more specific exception type
 

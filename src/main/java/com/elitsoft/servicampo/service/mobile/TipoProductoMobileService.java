@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TipoProductoMapper;
 import com.elitsoft.servicampo.mapstruct.TipoProductoMapStruct;
@@ -91,7 +92,7 @@ public class TipoProductoMobileService {
      * @throws RecursoNoEncontradoException si el TipoProducto no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() tipoproducto: {}", id);
         tipoProductoService.eliminar(id);
     }
@@ -102,7 +103,7 @@ public class TipoProductoMobileService {
      * @throws EntradaInvalidadException si la lista  TipoProducto esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         tipoProductoService.eliminarLote(idLote);
