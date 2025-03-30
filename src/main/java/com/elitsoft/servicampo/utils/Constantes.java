@@ -131,6 +131,7 @@ public class Constantes {
 
     public static final String TAREA_ENTRADA_INVALIDA_MENSAGE = "Entrada de TAREA invalida.";
     public static final String TAREA_DUPLICADO_MENSAGE = "Recurso  TAREA ya existe.";
+    public static final String TAREA_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso TAREA viola Integridad. ";
     public static final String TAREA_NO_ENCONTRADO_MENSAGE = "Recurso TAREA no  encontrado";
     public static final String TAREA_AGREGAR_MENSAJE = "Error Interno agregando Recurso TAREA";
     public static final String TAREA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TAREA";

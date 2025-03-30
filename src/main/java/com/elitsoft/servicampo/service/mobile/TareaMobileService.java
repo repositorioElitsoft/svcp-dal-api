@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.TareaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TareaMapper;
 import com.elitsoft.servicampo.mapstruct.TareaMapStruct;
@@ -35,9 +36,10 @@ public class TareaMobileService {
 
     /**
      * Agrega un nuevo Tarea.
+     *
      * @param tareaDTO el Tarea DTO.
      * @return el Tarea DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
      * @throws RecursoDuplicadoException si el recurso Tarea ya existe.
      */
@@ -49,8 +51,9 @@ public class TareaMobileService {
 
     /**
      * Agrega Lote nuevos Tarea.
+     *
      * @param tareaLoteDTO lista de Tarea DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
      * @throws RecursoDuplicadoException si el recurso Tarea ya existe.
      */
@@ -62,13 +65,14 @@ public class TareaMobileService {
 
     /**
      * Actualiza un Tarea existente.
-     * @param id la Clave de Tarea a actualizar.
+     *
+     * @param id       la Clave de Tarea a actualizar.
      * @param tareaDTO el Tarea DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Tarea no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Tarea tiene errores.
      */
-    public void actualizar(Long id, TareaDTO tareaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TareaDTO tareaDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() tarea");
 
         tareaService.actualizar(id, tareaDTO);
@@ -76,11 +80,12 @@ public class TareaMobileService {
 
     /**
      * Actualiza Lote de Tarea existentes.
+     *
      * @param tareaLoteDTO lista de Tarea DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Tarea tiene errores.
      */
-    public void actualizarLote(List<TareaDTO> tareaLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TareaDTO> tareaLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tarea");
 
         tareaService.actualizarLote(tareaLoteDTO);
@@ -88,32 +93,36 @@ public class TareaMobileService {
 
     /**
      * Elimina Tarea por Clave.
+     *
      * @param id la clave de Tarea a eliminar.
      * @throws RecursoNoEncontradoException si el Tarea no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Tarea esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() tarea: {}", id);
         tareaService.eliminar(id);
     }
 
     /**
      * Elimina Lote Tarea por Clave.
+     *
      * @param idLote lista de claves de Tarea a eliminar.
      * @throws EntradaInvalidadException si la lista  Tarea esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si Tarea esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
-
         tareaService.eliminarLote(idLote);
     }
 
     /**
      * Encuentra un Tarea por Clave.
+     *
      * @param id la clave Tarea a encontrar.
      * @return el Tarea DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Tarea no es encontrado.
      */
     public TareaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -123,6 +132,7 @@ public class TareaMobileService {
 
     /**
      * Obtiene todos los Tareas.
+     *
      * @return lista de todos Tarea DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
