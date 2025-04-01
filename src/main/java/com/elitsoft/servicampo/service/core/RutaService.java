@@ -2,17 +2,22 @@ package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.RutaDTO;
 import com.elitsoft.servicampo.domain.entity.Ruta;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.RutaMapper;
 import com.elitsoft.servicampo.mapstruct.RutaMapStruct;
-import com.elitsoft.servicampo.utils.Constantes;
 import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.service.error.RutaError;
+import com.elitsoft.servicampo.utils.Constantes;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +40,10 @@ public class RutaService {
 
     /**
      * Agrega un nuevo Ruta.
+     *
      * @param rutaDTO el Ruta DTO.
      * @return el Ruta DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
      * @throws RecursoDuplicadoException si el recurso Ruta ya existe.
      */
@@ -47,9 +53,9 @@ public class RutaService {
         //  Valida Entrada
         if (rutaDTO == null) {
             logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ",
-                           RutaError.REQUERIDO.getCodigoError());
+                    RutaError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(RutaError.REQUERIDO.getCodigoError(),
-                                                Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -57,25 +63,24 @@ public class RutaService {
             ruta = rutaMapper.agregar(ruta);
             logeador.info("Ruta agregado exitosamente id: {}", ruta.getId());
             return mapper.toDTO(ruta);
-        }
-        catch (DuplicateKeyException e) {
+        } catch (DuplicateKeyException e) {
             logeador.error(Constantes.RUTA_DUPLICADO_MENSAGE + ": {}, codigoError:{}", rutaDTO.getId(),
-                           RutaError.DUPLICADO.getCodigoError());
+                    RutaError.DUPLICADO.getCodigoError());
             throw new RecursoDuplicadoException(RutaError.DUPLICADO.getCodigoError(),
-                                                Constantes.RUTA_DUPLICADO_MENSAGE);
-        }
-        catch (DataAccessException e) {
+                    Constantes.RUTA_DUPLICADO_MENSAGE);
+        } catch (DataAccessException e) {
             logeador.error(Constantes.RUTA_AGREGAR_MENSAJE + ": {}, codigoError:{}", rutaDTO.toString(),
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.RUTA_AGREGAR_MENSAJE, e);
+                    Constantes.RUTA_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos Ruta.
+     *
      * @param rutaDTOLote lista de Ruta DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
      * @throws RecursoDuplicadoException si el recurso ruta ya existe.
      */
@@ -85,53 +90,54 @@ public class RutaService {
         //  Valida Entrada
         if (rutaDTOLote.isEmpty()) {
             logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + " codigoError:{}",
-                          RutaError.REQUERIDO.getCodigoError());
+                    RutaError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(RutaError.REQUERIDO.getCodigoError(),
-                                                Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
             List<Ruta> rutaLote = mapper.toEntityList(rutaDTOLote);
 
-            int registrosAgregados =  rutaMapper.agregarLote(rutaLote);
+            int registrosAgregados = rutaMapper.agregarLote(rutaLote);
             logeador.info("Lote Ruta agregados exitosamente,  registros agregados: {}", registrosAgregados);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.RUTA_DUPLICADO_MENSAGE + " codigoError:{}",
-                          RutaError.DUPLICADO.getCodigoError());
+                    RutaError.DUPLICADO.getCodigoError());
             throw new RecursoDuplicadoException(RutaError.DUPLICADO.getCodigoError(),
-                                                Constantes.RUTA_DUPLICADO_MENSAGE);
+                    Constantes.RUTA_DUPLICADO_MENSAGE);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.RUTA_AGREGAR_LOTE_MENSAJE + " codigoError:{}",
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                        Constantes.RUTA_AGREGAR_LOTE_MENSAJE, e);
+                    Constantes.RUTA_AGREGAR_LOTE_MENSAJE, e);
         }
     }
 
     /**
      * Actualiza un Ruta existente.
-     * @param id la clave de Ruta a actualizar.
+     *
+     * @param id      la clave de Ruta a actualizar.
      * @param rutaDTO el Ruta DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Ruta no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Ruta tiene errores.
      */
-    public void actualizar(Long id, RutaDTO rutaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, RutaDTO rutaDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() ruta");
 
         //  Valida Entrada
         if (id == null || rutaDTO == null || rutaDTO.getId() == null) {
-            logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}", ((rutaDTO != null) ? rutaDTO.toString() : null  ),
-                           RutaError.REQUERIDO.getCodigoError());
+            logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}", ((rutaDTO != null) ? rutaDTO.toString() : null),
+                    RutaError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(RutaError.REQUERIDO.getCodigoError(),
-                                                Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
         if (!id.equals(rutaDTO.getId())) {
-            logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}",  rutaDTO.toString(),
-                           RutaError.ID_INVALIDO.getCodigoError());
+            logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}", rutaDTO.toString(),
+                    RutaError.ID_INVALIDO.getCodigoError());
             throw new EntradaInvalidadException(RutaError.ID_INVALIDO.getCodigoError(),
-                                                Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -142,27 +148,28 @@ public class RutaService {
             logeador.info("ruta actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.RUTA_ACTUALIZAR_MENSAJE + ": id={} {} codigoError:{}", id, rutaDTO.toString(),
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.RUTA_ACTUALIZAR_MENSAJE, e);
+                    Constantes.RUTA_ACTUALIZAR_MENSAJE, e);
         }
     }
 
-   /**
+    /**
      * Actualiza Lote de Ruta existentes.
+     *
      * @param rutaDTOLote lista de Ruta DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
      */
-    public void actualizarLote(List<RutaDTO> rutaDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<RutaDTO> rutaDTOLote) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() ruta");
 
         //  Valida Entrada
         if (rutaDTOLote.isEmpty()) {
-            logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ", 
-                           RutaError.REQUERIDO.getCodigoError());
+            logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ",
+                    RutaError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(RutaError.REQUERIDO.getCodigoError(),
-                                                Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -171,75 +178,83 @@ public class RutaService {
             logeador.info("Lote ruta actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.RUTA_ACTUALIZAR_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.RUTA_ACTUALIZAR_MENSAJE, e);
+                    Constantes.RUTA_ACTUALIZAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina Ruta por Clave.
+     *
      * @param id la clave de Ruta a eliminar.
      * @throws RecursoNoEncontradoException si el Ruta no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Ruta esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() ruta: {}", id);
 
-        //Verifica integridad referencial
-        //this.verificarIntegridadEliminar(id);
 
         try {
-            RutaDTO rutaDTO = this.encontrarPorClave(id); // Verifica si existe
+            this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = rutaMapper.eliminar(id);
             logeador.info("ruta eliminado: {}, registros eliminados: {}", id, registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.RUTA_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(RutaError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.RUTA_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException e) {
             logeador.error(Constantes.RUTA_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(),  e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.RUTA_ELIMINAR_MENSAJE, e);
+                    Constantes.RUTA_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina Lote Ruta por Clave.
+     *
      * @param rutaDTOLote lista de claves de Ruta a eliminar.
      * @throws EntradaInvalidadException si la lista  Ruta esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si Ruta esta asociado a otro recurso
      */
-    public void eliminarLote(List<RutaDTO> rutaDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<RutaDTO> rutaDTOLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
 
         //  Valida Entrada
         if (rutaDTOLote.isEmpty()) {
             logeador.error(Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE + " codigoError:{}",
-                           RutaError.REQUERIDO.getCodigoError());
+                    RutaError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(RutaError.REQUERIDO.getCodigoError(),
-                                                Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.RUTA_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-        //for (Long id : idLote) {
-        //    this.verificarIntegridadEliminar(id);
-        //}
 
         try {
             int registrosEliminados = rutaMapper.eliminarLote(mapper.toEntityList(rutaDTOLote));
             logeador.info("Lote ruta eliminados exitosamente, registros eliminados: {}", registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.RUTA_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(RutaError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.RUTA_VIOLACION_INTEGRIDAD_MENSAGE, e);
+
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.RUTA_ELIMINAR_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError(),  e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                        Constantes.RUTA_ELIMINAR_MENSAJE, e);
+                    Constantes.RUTA_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Encuentra un Ruta por Clave.
+     *
      * @param id la clave Ruta a encontrar.
      * @return el Ruta DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Ruta no es encontrado.
      */
     public RutaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -252,22 +267,23 @@ public class RutaService {
                 logeador.info("ruta encontrado por clave : {}", id);
             } else {
                 logeador.info("ruta clave:{} no encontrado codigoError:{}", id,
-                              RutaError.NO_ENCONTRADO.getCodigoError());
+                        RutaError.NO_ENCONTRADO.getCodigoError());
                 throw new RecursoNoEncontradoException(RutaError.NO_ENCONTRADO.getCodigoError(),
-                                                       Constantes.RUTA_NO_ENCONTRADO_MENSAGE);
+                        Constantes.RUTA_NO_ENCONTRADO_MENSAGE);
             }
 
             return rutaDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.RUTA_ENCONTRAR_POR_CLAVE_MENSAGE + " {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.RUTA_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+                    Constantes.RUTA_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
     /**
      * Obtiene todos los Rutas.
+     *
      * @return una lista de todos Ruta DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
@@ -280,67 +296,10 @@ public class RutaService {
             return rutaLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.RUTA_OBTENER_TODOS_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                        Constantes.RUTA_OBTENER_TODOS_MENSAJE, e);
+                    Constantes.RUTA_OBTENER_TODOS_MENSAJE, e);
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de Ruta
-     * @param id la clave Ruta a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-    /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() ruta: {}", id);
-
-        boolean entityRelacionadoPorRuta = false;
-
-        try {
-            entityRelacionadoPorRuta = this.entityRelacionadoPorRuta(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.RUTA_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.RUTA_ELIMINAR_MENSAJE, e);
-        }
-
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorRuta) {
-            throw new RecursoEliminarException(RutaError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.RUTA_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }
-    */
-
-    /**
-     * Buscar Ruta que tengan EntityRelacionado.
-     * @param id la clave Ruta a encontrar.
-     * @return boolean Ruta tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorRuta(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorRuta() ruta: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorRuta(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("ruta  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("ruta no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.RUTA_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.RUTA_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }

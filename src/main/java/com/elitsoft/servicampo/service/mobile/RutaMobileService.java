@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.RutaDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.RutaMapper;
 import com.elitsoft.servicampo.mapstruct.RutaMapStruct;
@@ -35,9 +36,10 @@ public class RutaMobileService {
 
     /**
      * Agrega un nuevo Ruta.
+     *
      * @param rutaDTO el Ruta DTO.
      * @return el Ruta DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
      * @throws RecursoDuplicadoException si el recurso Ruta ya existe.
      */
@@ -49,8 +51,9 @@ public class RutaMobileService {
 
     /**
      * Agrega Lote nuevos Ruta.
+     *
      * @param rutaDTOLote lista de Ruta DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
      * @throws RecursoDuplicadoException si el recurso Ruta ya existe.
      */
@@ -62,13 +65,14 @@ public class RutaMobileService {
 
     /**
      * Actualiza un Ruta existente.
-     * @param id la Clave de Ruta a actualizar.
+     *
+     * @param id      la Clave de Ruta a actualizar.
      * @param rutaDTO el Ruta DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Ruta no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Ruta tiene errores.
      */
-    public void actualizar(Long id, RutaDTO rutaDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, RutaDTO rutaDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() ruta");
 
         rutaService.actualizar(id, rutaDTO);
@@ -76,11 +80,12 @@ public class RutaMobileService {
 
     /**
      * Actualiza Lote de Ruta existentes.
+     *
      * @param rutaDTOLote lista de Ruta DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Ruta tiene errores.
      */
-    public void actualizarLote(List<RutaDTO> rutaDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<RutaDTO> rutaDTOLote) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() ruta");
 
         rutaService.actualizarLote(rutaDTOLote);
@@ -88,22 +93,26 @@ public class RutaMobileService {
 
     /**
      * Elimina Ruta por Clave.
+     *
      * @param id la clave de Ruta a eliminar.
      * @throws RecursoNoEncontradoException si el Ruta no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Ruta esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() ruta: {}", id);
         rutaService.eliminar(id);
     }
 
     /**
      * Elimina Lote Ruta por Clave.
+     *
      * @param rutaDTOLote lista de claves de Ruta a eliminar.
      * @throws EntradaInvalidadException si la lista  Ruta esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si Ruta esta asociado a otro recurso
      */
-    public void eliminarLote(List<RutaDTO> rutaDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<RutaDTO> rutaDTOLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         rutaService.eliminarLote(rutaDTOLote);
@@ -111,9 +120,10 @@ public class RutaMobileService {
 
     /**
      * Encuentra un Ruta por Clave.
+     *
      * @param id la clave Ruta a encontrar.
      * @return el Ruta DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Ruta no es encontrado.
      */
     public RutaDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -123,6 +133,7 @@ public class RutaMobileService {
 
     /**
      * Obtiene todos los Rutas.
+     *
      * @return lista de todos Ruta DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
