@@ -5,6 +5,7 @@ import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.mapper.TrabajoMapper;
 import com.elitsoft.servicampo.mapstruct.TrabajoMapStruct;
 import com.elitsoft.servicampo.service.core.TrabajoService;
@@ -90,8 +91,9 @@ public class TrabajoMobileService {
      * @param id la clave de Trabajo a eliminar.
      * @throws RecursoNoEncontradoException si el Trabajo no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si Trabajo esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() trabajo: {}", id);
         trabajoService.eliminar(id);
     }
@@ -101,8 +103,9 @@ public class TrabajoMobileService {
      * @param idLote lista de claves de Trabajo a eliminar.
      * @throws EntradaInvalidadException si la lista  Trabajo esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si Trabajo esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         trabajoService.eliminarLote(idLote);

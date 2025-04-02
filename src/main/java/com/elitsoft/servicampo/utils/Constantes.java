@@ -146,6 +146,7 @@ public class Constantes {
 
     public static final String TRABAJO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TRABAJO invalida.";
     public static final String TRABAJO_DUPLICADO_MENSAGE = "Recurso  TRABAJO ya existe.";
+    public static final String TRABAJO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso TRABAJO viola Integridad. ";
     public static final String TRABAJO_NO_ENCONTRADO_MENSAGE = "Recurso TRABAJO no  encontrado";
     public static final String TRABAJO_AGREGAR_MENSAJE = "Error Interno agregando Recurso TRABAJO";
     public static final String TRABAJO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TRABAJO";
