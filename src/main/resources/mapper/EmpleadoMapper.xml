@@ -69,11 +69,28 @@
         WHERE empl.empl_id = #{id}
     </select>
 
+    <!-- Sentencia SQL de Encontrar por Clave (para login)-->
+    <select id="encontrarPorClaveEstado"  resultMap="empleadoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE empl.empl_id = #{id}
+          AND estd.estd_id = #{estadoId}
+    </select>
+
+
     <!-- Sentencia SQL de Filtrar por clave-->
     <select id="encontrarPorNombre" parameterType="string" resultMap="empleadoResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE empl.empl_nombre_usuario =  #{username}
+        WHERE empl.empl_nombre_usuario =  #{nombreUsuario}
+    </select>
+
+    <!-- Sentencia SQL de Filtrar por clave (para login) -->
+    <select id="encontrarPorNombreEstado"  resultMap="empleadoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE empl.empl_nombre_usuario =  #{nombreUsuario}
+          AND estd.estd_id = #{estadoId}
     </select>
 
     <!-- Sentencia SQL de Filtrar por clave-->

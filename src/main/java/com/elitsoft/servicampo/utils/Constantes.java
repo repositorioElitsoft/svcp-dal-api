@@ -7,6 +7,7 @@ package com.elitsoft.servicampo.utils;
 public class Constantes {
 
 
+    public static final Long ESTADO_HABILITADO = 1L;
     public static final Long TIPO_DOCUMENTO_INDENTIFICACION_RUT = 1L;
     public static final String MONEDA = "CLP";
     public static final int CARRITO_ARTICULO_MAXIMO = 15;
