@@ -64,15 +64,6 @@ public interface ContratoDetalleMapper {
     ContratoDetalle encontrarPorClave(Long id);
 
     /**
-     * Encuentra lista ContratoDetalle en la base de datos asociados a #EntityRelacionado#.
-     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
-     * @param limite si ejerce un limite de registros o no en los resultados
-     * @return Lista entidad ContratoDetalle encontrado, o null si no es encontrado.
-     */
-    //List<ContratoDetalle>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
-
-
-    /**
      * Obtiene todos los ContratoDetalle desde la base de datos.
      * @return List<ContratoDetalle> Una lista de todos los entidades ContratoDetalle.
      */

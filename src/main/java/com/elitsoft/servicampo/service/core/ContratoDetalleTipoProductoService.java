@@ -209,8 +209,7 @@ public class ContratoDetalleTipoProductoService {
     public void eliminar(Long contratoDetalleId, Long tipoProductoId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() contratodetalletipoproducto: {}, {}", contratoDetalleId, tipoProductoId);
 
-        //Verifica integridad referencial
-        //this.verificarIntegridadEliminar(id);
+
 
         //Valida la existencia
         contratoDetalleService.encontrarPorClave(contratoDetalleId);
@@ -246,10 +245,7 @@ public class ContratoDetalleTipoProductoService {
                                                 Constantes.CONTRATODETALLETIPOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-        //for (Long id : idLote) {
-        //    this.verificarIntegridadEliminar(id);
-        //}
+
 
         try {
             int registrosEliminados = contratodetalletipoproductoMapper.eliminarLote(mapper.toEntityList(contratodetalletipoproductoDTOLote));
@@ -313,62 +309,4 @@ public class ContratoDetalleTipoProductoService {
                                         Constantes.CONTRATODETALLETIPOPRODUCTO_OBTENER_TODOS_MENSAJE, e);
         }
     }
-
-        /**
-     * Verifica la violacion de integridad referencia de ContratoDetalleTipoProducto
-     * @param id la clave ContratoDetalleTipoProducto a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-    /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() contratodetalletipoproducto: {}", id);
-
-        boolean entityRelacionadoPorContratoDetalleTipoProducto = false;
-
-        try {
-            entityRelacionadoPorContratoDetalleTipoProducto = this.entityRelacionadoPorContratoDetalleTipoProducto(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.CONTRATODETALLETIPOPRODUCTO_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.CONTRATODETALLETIPOPRODUCTO_ELIMINAR_MENSAJE, e);
-        }
-
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorContratoDetalleTipoProducto) {
-            throw new RecursoEliminarException(ContratoDetalleTipoProductoError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.CONTRATODETALLETIPOPRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }
-    */
-
-    /**
-     * Buscar ContratoDetalleTipoProducto que tengan EntityRelacionado.
-     * @param id la clave ContratoDetalleTipoProducto a encontrar.
-     * @return boolean ContratoDetalleTipoProducto tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorContratoDetalleTipoProducto(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorContratoDetalleTipoProducto() contratodetalletipoproducto: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorContratoDetalleTipoProducto(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("contratodetalletipoproducto  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("contratodetalletipoproducto no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.CONTRATODETALLETIPOPRODUCTO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.CONTRATODETALLETIPOPRODUCTO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }

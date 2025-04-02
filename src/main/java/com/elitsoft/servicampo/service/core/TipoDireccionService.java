@@ -175,8 +175,6 @@ public class TipoDireccionService {
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipodireccion: {}", id);
 
-        //Verifica integridad referencial
-//        this.verificarIntegridadEliminar(id);
 
         try {
             TipoDireccionDTO tipodireccionDTO = this.encontrarPorClave(id); // Verifica si existe
@@ -206,10 +204,7 @@ public class TipoDireccionService {
                                                 Constantes.TIPODIRECCION_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-//        for (Long id : idLote) {
-//            this.verificarIntegridadEliminar(id);
-//        }
+
 
         try {
             int registrosEliminados = tipodireccionMapper.eliminarLote(idLote);
@@ -269,58 +264,7 @@ public class TipoDireccionService {
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de TipoDireccion
-     * @param id la clave TipoDireccion a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-        /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() tipodireccion: {}", id);
 
-        boolean entityRelacionadoPorTipoDireccion = false;
 
-        try {
-            entityRelacionadoPorTipoDireccion = this.entityRelacionadoPorTipoDireccion(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.TIPODIRECCION_ELIMINAR_MENSAJE + ": {}", id, e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPODIRECCION_ELIMINAR_MENSAJE, e);
-        }
 
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorTipoDireccion) {
-            throw new RecursoEliminarException(GeneralError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.TIPODIRECCION_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }*/
-
-    /**
-     * Buscar TipoDireccion que tengan EntityRelacionado.
-     * @param id la clave TipoDireccion a encontrar.
-     * @return boolean TipoDireccion tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorTipoDireccion(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorTipoDireccion() tipodireccion: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorTipoDireccion(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("tipodireccion  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("tipodireccion no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.TIPODIRECCION_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}", id, e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPODIRECCION_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }

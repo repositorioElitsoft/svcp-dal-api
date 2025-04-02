@@ -191,10 +191,7 @@ public class ClienteService {
     @Transactional
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() cliente: {}", id);
-
-        //Verifica integridad referencial
-//        this.verificarIntegridadEliminar(id);
-
+        
         try {
             ClienteDTO clienteDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = clienteMapper.eliminar(id);
@@ -224,10 +221,6 @@ public class ClienteService {
                                                 Constantes.CLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-//        for (Long id : idLote) {
-//            this.verificarIntegridadEliminar(id);
-//        }
 
         try {
             int registrosEliminados = clienteMapper.eliminarLote(idLote);
@@ -287,55 +280,5 @@ public class ClienteService {
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de Cliente
-     * @param id la clave Cliente a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-//    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-//        logeador.debug("verificarIntegridadEliminar() cliente: {}", id);
-//
-//        boolean entityRelacionadoPorCliente = false;
-//
-//        try {
-//            entityRelacionadoPorCliente = this.entityRelacionadoPorCliente(id);
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.CLIENTE_ELIMINAR_MENSAJE + ": {}", id, e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.CLIENTE_ELIMINAR_MENSAJE, e);
-//        }
-//
-//        //Verifca la integridad con sectores
-//        if (entityRelacionadoPorCliente) {
-//            throw new RecursoEliminarException(ClienteError.INTEGRIDAD_VIOLADA.getCodigoError(),
-//                                               Constantes.CLIENTE_VIOLACION_INTEGRIDAD_MENSAGE);
-//        }
-//
-//    }
 
-    /**
-     * Buscar Cliente que tengan EntityRelacionado.
-     * @param id la clave Cliente a encontrar.
-     * @return boolean Cliente tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-//    public boolean entityRelacionadoPorCliente(Long id) throws  BaseDatosException {
-//        logeador.debug("entityRelacionadoPorCliente() cliente: {}", id);
-//
-//        try {
-//            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorCliente(id); // Verifica si tiene EntityRelacionado  asociados
-//            if (!entitys.isEmpty()) {
-//                logeador.info("cliente  tiene #EntityRelacionado# asociados");
-//                return true;
-//            } else{
-//                logeador.info("cliente no tiene #EntityRelacionado# asociados");
-//                return false;
-//            }
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.CLIENTE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}", id, e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.CLIENTE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-//        }
-//    }
 }

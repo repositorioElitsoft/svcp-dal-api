@@ -73,14 +73,6 @@ public interface DireccionMapper {
      */
     Direccion encontrarPorClaveConContactos(Long clientId, Long id);
 
-    /**
-     * Encuentra lista Direccion en la base de datos asociados a #EntityRelacionado#.
-     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
-     * @param limite si ejerce un limite de registros o no en los resultados
-     * @return Lista entidad Direccion encontrado, o null si no es encontrado.
-     */
-//    List<Direccion>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
-
 
     /**
      * Obtiene todos los Direccion desde la base de datos.

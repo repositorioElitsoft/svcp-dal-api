@@ -192,10 +192,7 @@ public class ContactoService {
     @Transactional
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() contacto: {}", id);
-
-        //Verifica integridad referencial
-//        this.verificarIntegridadEliminar(id);
-
+        
         try {
             ContactoDTO contactoDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = contactoMapper.eliminar(id);
@@ -204,7 +201,7 @@ public class ContactoService {
         } catch (DataAccessException e) {
             logeador.error(Constantes.CONTACTO_ELIMINAR_MENSAJE + ": {}", id, e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.CONTACTO_ELIMINAR_MENSAJE, e);
+                    Constantes.CONTACTO_ELIMINAR_MENSAJE, e);
         }
     }
 
@@ -225,10 +222,7 @@ public class ContactoService {
                                                 Constantes.CONTACTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-//        for (Long id : idLote) {
-//            this.verificarIntegridadEliminar(id);
-//        }
+
 
         try {
             int registrosEliminados = contactoMapper.eliminarLote(idLote);
@@ -288,55 +282,5 @@ public class ContactoService {
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de Contacto
-     * @param id la clave Contacto a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-//    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-//        logeador.debug("verificarIntegridadEliminar() contacto: {}", id);
-//
-//        boolean entityRelacionadoPorContacto = false;
-//
-//        try {
-//            entityRelacionadoPorContacto = this.entityRelacionadoPorContacto(id);
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.CONTACTO_ELIMINAR_MENSAJE + ": {}", id, e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.CONTACTO_ELIMINAR_MENSAJE, e);
-//        }
-//
-//        //Verifca la integridad con sectores
-//        if (entityRelacionadoPorContacto) {
-//            throw new RecursoEliminarException(ContactoError.INTEGRIDAD_VIOLADA.getCodigoError(),
-//                                               Constantes.CONTACTO_VIOLACION_INTEGRIDAD_MENSAGE);
-//        }
-//
-//    }
 
-    /**
-     * Buscar Contacto que tengan EntityRelacionado.
-     * @param id la clave Contacto a encontrar.
-     * @return boolean Contacto tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-//    public boolean entityRelacionadoPorContacto(Long id) throws  BaseDatosException {
-//        logeador.debug("entityRelacionadoPorContacto() contacto: {}", id);
-//
-//        try {
-//            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorContacto(id); // Verifica si tiene EntityRelacionado  asociados
-//            if (!entitys.isEmpty()) {
-//                logeador.info("contacto  tiene #EntityRelacionado# asociados");
-//                return true;
-//            } else{
-//                logeador.info("contacto no tiene #EntityRelacionado# asociados");
-//                return false;
-//            }
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.CONTACTO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}", id, e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.CONTACTO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-//        }
-//    }
 }

@@ -64,15 +64,6 @@ public interface ContactoMapper {
     Contacto encontrarPorClave(Long id);
 
     /**
-     * Encuentra lista Contacto en la base de datos asociados a #EntityRelacionado#.
-     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
-     * @param limite si ejerce un limite de registros o no en los resultados
-     * @return Lista entidad Contacto encontrado, o null si no es encontrado.
-     */
-//    List<Contacto>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
-
-
-    /**
      * Obtiene todos los Contacto desde la base de datos.
      * @return List<Contacto> Una lista de todos los entidades Contacto.
      */

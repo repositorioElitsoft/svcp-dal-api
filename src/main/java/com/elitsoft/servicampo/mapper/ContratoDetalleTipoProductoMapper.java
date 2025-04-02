@@ -64,15 +64,7 @@ public interface ContratoDetalleTipoProductoMapper {
      */
     ContratoDetalleTipoProducto encontrarPorClave(Long contratoDetalleId, Long tipoProductoId);
 
-    /**
-     * Encuentra lista ContratoDetalleTipoProducto en la base de datos asociados a #EntityRelacionado#.
-     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
-     * @param limite si ejerce un limite de registros o no en los resultados
-     * @return Lista entidad ContratoDetalleTipoProducto encontrado, o null si no es encontrado.
-     */
-    //List<ContratoDetalleTipoProducto>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
-
-
+ 
     /**
      * Obtiene todos los ContratoDetalleTipoProducto desde la base de datos.
      * @return List<ContratoDetalleTipoProducto> Una lista de todos los entidades ContratoDetalleTipoProducto.

@@ -103,8 +103,9 @@ public class #Base#MobileService {
      * @param id la clave de #Base# a eliminar.
      * @throws RecursoNoEncontradoException si el #Base# no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si #Base# esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() #base#: {}", id);
         #base#Service.eliminar(id);
     }
@@ -114,8 +115,9 @@ public class #Base#MobileService {
      * @param #base#DTOLote lista de claves de #Base# a eliminar.
      * @throws EntradaInvalidadException si la lista  #Base# esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si #Base# esta asociado a otro recurso
      */
-    public void eliminarLote(List<#Base#DTO> #base#DTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<#Base#DTO> #base#DTOLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         #base#Service.eliminarLote(#base#DTOLote);

@@ -64,15 +64,6 @@ public interface ProductoMapper {
     Producto encontrarPorClave(Long id);
 
     /**
-     * Encuentra lista Producto en la base de datos asociados a #EntityRelacionado#.
-     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
-     * @param limite si ejerce un limite de registros o no en los resultados
-     * @return Lista entidad Producto encontrado, o null si no es encontrado.
-     */
-    //List<Producto>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
-
-
-    /**
      * Obtiene todos los Producto desde la base de datos.
      * @return List<Producto> Una lista de todos los entidades Producto.
      */

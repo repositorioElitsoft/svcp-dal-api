@@ -124,8 +124,6 @@ public class ContratoDetalleService {
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() contratodetalle: {}", id);
 
-        //Verifica integridad referencial
-        //this.verificarIntegridadEliminar(id);
 
         try {
             ContratoDetalleDTO contratoDetalleDTO = this.encontrarPorClave(id); // Verifica si existe
@@ -156,11 +154,7 @@ public class ContratoDetalleService {
             throw new EntradaInvalidadException(ContratoDetalleError.REQUERIDO.getCodigoError(),
                                                 Constantes.CONTRATODETALLE_ENTRADA_INVALIDA_MENSAGE);
         }
-
-        //Verifica integridad referencial
-        //for (Long id : idLote) {
-        //    this.verificarIntegridadEliminar(id);
-        //}
+        
 
         try {
             int registrosEliminados = contratoDetalleMapper.eliminarLote(mapper.toEntityList(contratoDetalleDTOLote));
@@ -223,62 +217,4 @@ public class ContratoDetalleService {
                                         Constantes.CONTRATODETALLE_OBTENER_TODOS_MENSAJE, e);
         }
     }
-
-        /**
-     * Verifica la violacion de integridad referencia de ContratoDetalle
-     * @param id la clave ContratoDetalle a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-    /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() contratodetalle: {}", id);
-
-        boolean entityRelacionadoPorContratoDetalle = false;
-
-        try {
-            entityRelacionadoPorContratoDetalle = this.entityRelacionadoPorContratoDetalle(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.CONTRATODETALLE_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.CONTRATODETALLE_ELIMINAR_MENSAJE, e);
-        }
-
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorContratoDetalle) {
-            throw new RecursoEliminarException(ContratoDetalleError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.CONTRATODETALLE_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }
-    */
-
-    /**
-     * Buscar ContratoDetalle que tengan EntityRelacionado.
-     * @param id la clave ContratoDetalle a encontrar.
-     * @return boolean ContratoDetalle tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorContratoDetalle(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorContratoDetalle() contratodetalle: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorContratoDetalle(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("contratodetalle  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("contratodetalle no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.CONTRATODETALLE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.CONTRATODETALLE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }

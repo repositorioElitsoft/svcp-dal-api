@@ -185,9 +185,6 @@ public class TipoComponenteService {
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipocomponente: {}", id);
 
-        //Verifica integridad referencial
-        //this.verificarIntegridadEliminar(id);
-
         try {
             TipoComponenteDTO tipocomponenteDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = tipocomponenteMapper.eliminar(id);
@@ -218,10 +215,6 @@ public class TipoComponenteService {
                                                 Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-        //for (Long id : idLote) {
-        //    this.verificarIntegridadEliminar(id);
-        //}
 
         try {
             int registrosEliminados = tipocomponenteMapper.eliminarLote(mapper.toEntityList(tipocomponenteDTOLote));
@@ -285,61 +278,4 @@ public class TipoComponenteService {
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de TipoComponente
-     * @param id la clave TipoComponente a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-    /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() tipocomponente: {}", id);
-
-        boolean entityRelacionadoPorTipoComponente = false;
-
-        try {
-            entityRelacionadoPorTipoComponente = this.entityRelacionadoPorTipoComponente(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE, e);
-        }
-
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorTipoComponente) {
-            throw new RecursoEliminarException(TipoComponenteError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }
-    */
-
-    /**
-     * Buscar TipoComponente que tengan EntityRelacionado.
-     * @param id la clave TipoComponente a encontrar.
-     * @return boolean TipoComponente tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorTipoComponente(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorTipoComponente() tipocomponente: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorTipoComponente(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("tipocomponente  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("tipocomponente no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.TIPOCOMPONENTE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOCOMPONENTE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }

@@ -186,9 +186,6 @@ public class ServicioService {
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() servicio: {}", id);
 
-        //Verifica integridad referencial
-//        this.verificarIntegridadEliminar(id);
-
         try {
             ServicioDTO servicioDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = servicioMapper.eliminar(id);
@@ -219,10 +216,7 @@ public class ServicioService {
                                                 Constantes.SERVICIO_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-//        for (Long id : idLote) {
-//            this.verificarIntegridadEliminar(id);
-//        }
+
 
         try {
             int registrosEliminados = servicioMapper.eliminarLote(mapper.toEntityList(servicioDTOLote));
@@ -286,57 +280,5 @@ public class ServicioService {
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de Servicio
-     * @param id la clave Servicio a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-//    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-//        logeador.debug("verificarIntegridadEliminar() servicio: {}", id);
-//
-//        boolean entityRelacionadoPorServicio = false;
-//
-//        try {
-//            entityRelacionadoPorServicio = this.entityRelacionadoPorServicio(id);
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.SERVICIO_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-//                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.SERVICIO_ELIMINAR_MENSAJE, e);
-//        }
-//
-//        //Verifca la integridad con sectores
-//        if (entityRelacionadoPorServicio) {
-//            throw new RecursoEliminarException(ServicioError.INTEGRIDAD_VIOLADA.getCodigoError(),
-//                                               Constantes.SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE);
-//        }
-//
-//    }
 
-    /**
-     * Buscar Servicio que tengan EntityRelacionado.
-     * @param id la clave Servicio a encontrar.
-     * @return boolean Servicio tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-//    public boolean entityRelacionadoPorServicio(Long id) throws  BaseDatosException {
-//        logeador.debug("entityRelacionadoPorServicio() servicio: {}", id);
-//
-//        try {
-//            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorServicio(id); // Verifica si tiene EntityRelacionado  asociados
-//            if (!entitys.isEmpty()) {
-//                logeador.info("servicio  tiene #EntityRelacionado# asociados");
-//                return true;
-//            } else{
-//                logeador.info("servicio no tiene #EntityRelacionado# asociados");
-//                return false;
-//            }
-//        } catch (DataAccessException e) {
-//            logeador.error(Constantes.SERVICIO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-//                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-//            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-//                                         Constantes.SERVICIO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-//        }
-//    }
 }

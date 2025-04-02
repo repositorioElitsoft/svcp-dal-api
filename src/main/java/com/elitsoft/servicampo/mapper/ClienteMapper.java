@@ -64,15 +64,6 @@ public interface ClienteMapper {
     Cliente encontrarPorClave(Long id);
 
     /**
-     * Encuentra lista Cliente en la base de datos asociados a #EntityRelacionado#.
-     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
-     * @param limite si ejerce un limite de registros o no en los resultados
-     * @return Lista entidad Cliente encontrado, o null si no es encontrado.
-     */
-//    List<Cliente>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
-
-
-    /**
      * Obtiene todos los Cliente desde la base de datos.
      * @return List<Cliente> Una lista de todos los entidades Cliente.
      */

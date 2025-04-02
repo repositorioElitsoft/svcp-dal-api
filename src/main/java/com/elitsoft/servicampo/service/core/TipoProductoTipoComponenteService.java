@@ -188,8 +188,6 @@ public class TipoProductoTipoComponenteService {
     public void eliminar(Long tipoComponenteId, Long tipoProductoId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() tipoproductotipocomponente: {}, {}", tipoComponenteId, tipoProductoId);
 
-        //Verifica integridad referencial
-        //this.verificarIntegridadEliminar(id);
 
         try {
             TipoProductoTipoComponenteDTO tipoproductotipocomponenteDTO = this.encontrarPorClave(tipoComponenteId, tipoProductoId); // Verifica si existe
@@ -221,10 +219,6 @@ public class TipoProductoTipoComponenteService {
                                                 Constantes.TIPOPRODUCTOTIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-        //for (Long id : idLote) {
-        //    this.verificarIntegridadEliminar(id);
-        //}
 
         try {
             int registrosEliminados = tipoproductotipocomponenteMapper.eliminarLote(mapper.toEntityList(tipoproductotipocomponenteDTOLote));
@@ -288,62 +282,4 @@ public class TipoProductoTipoComponenteService {
                                         Constantes.TIPOPRODUCTOTIPOCOMPONENTE_OBTENER_TODOS_MENSAJE, e);
         }
     }
-
-        /**
-     * Verifica la violacion de integridad referencia de TipoProductoTipoComponente
-     * @param id la clave TipoProductoTipoComponente a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-    /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() tipoproductotipocomponente: {}", id);
-
-        boolean entityRelacionadoPorTipoProductoTipoComponente = false;
-
-        try {
-            entityRelacionadoPorTipoProductoTipoComponente = this.entityRelacionadoPorTipoProductoTipoComponente(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.TIPOPRODUCTOTIPOCOMPONENTE_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOPRODUCTOTIPOCOMPONENTE_ELIMINAR_MENSAJE, e);
-        }
-
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorTipoProductoTipoComponente) {
-            throw new RecursoEliminarException(TipoProductoTipoComponenteError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.TIPOPRODUCTOTIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }
-    */
-
-    /**
-     * Buscar TipoProductoTipoComponente que tengan EntityRelacionado.
-     * @param id la clave TipoProductoTipoComponente a encontrar.
-     * @return boolean TipoProductoTipoComponente tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorTipoProductoTipoComponente(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorTipoProductoTipoComponente() tipoproductotipocomponente: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorTipoProductoTipoComponente(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("tipoproductotipocomponente  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("tipoproductotipocomponente no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.TIPOPRODUCTOTIPOCOMPONENTE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOPRODUCTOTIPOCOMPONENTE_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }

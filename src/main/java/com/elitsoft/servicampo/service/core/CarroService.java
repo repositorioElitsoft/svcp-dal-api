@@ -191,9 +191,6 @@ public class CarroService {
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() carro: {}", id);
 
-        //Verifica integridad referencial
-        //this.verificarIntegridadEliminar(id);
-
         try {
             CarroDTO carroDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = carroMapper.eliminar(id);
@@ -224,10 +221,6 @@ public class CarroService {
                                                 Constantes.CARRO_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-        //for (Long id : idLote) {
-        //    this.verificarIntegridadEliminar(id);
-        //}
 
         try {
             int registrosEliminados = carroMapper.eliminarLote(mapper.toEntityList(carroDTOLote));
@@ -290,62 +283,4 @@ public class CarroService {
                                         Constantes.CARRO_OBTENER_TODOS_MENSAJE, e);
         }
     }
-
-        /**
-     * Verifica la violacion de integridad referencia de Carro
-     * @param id la clave Carro a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-    /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() carro: {}", id);
-
-        boolean entityRelacionadoPorCarro = false;
-
-        try {
-            entityRelacionadoPorCarro = this.entityRelacionadoPorCarro(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.CARRO_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.CARRO_ELIMINAR_MENSAJE, e);
-        }
-
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorCarro) {
-            throw new RecursoEliminarException(CarroError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.CARRO_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }
-    */
-
-    /**
-     * Buscar Carro que tengan EntityRelacionado.
-     * @param id la clave Carro a encontrar.
-     * @return boolean Carro tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorCarro(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorCarro() carro: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorCarro(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("carro  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("carro no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.CARRO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.CARRO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }

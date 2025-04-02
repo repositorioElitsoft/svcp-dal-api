@@ -71,14 +71,6 @@ public interface ServicioTrabajoMapper {
      */
     ServicioTrabajo encontrarPorClave(Long servicioId, Long trabajoId);
 
-    /**
-     * Encuentra lista ServicioTrabajo en la base de datos asociados a #EntityRelacionado#.
-     * @param #entityRelacionado#Id La clave de #EntityRelacionado# a encontrar.
-     * @param limite si ejerce un limite de registros o no en los resultados
-     * @return Lista entidad ServicioTrabajo encontrado, o null si no es encontrado.
-     */
-    //List<ServicioTrabajo>  encontrarPor#EntityRelacionado#(Long #entityRelacionado#Id, boolean limite);
-
 
     /**
      * Obtiene todos los ServicioTrabajo desde la base de datos.

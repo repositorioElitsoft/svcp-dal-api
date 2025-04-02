@@ -186,8 +186,6 @@ public class EstadoProductoService {
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() estadoproducto: {}", id);
 
-        //Verifica integridad referencial
-        //this.verificarIntegridadEliminar(id);
 
         try {
             EstadoProductoDTO estadoproductoDTO = this.encontrarPorClave(id); // Verifica si existe
@@ -219,10 +217,6 @@ public class EstadoProductoService {
                                                 Constantes.ESTADOPRODUCTO_ENTRADA_INVALIDA_MENSAGE);
         }
 
-        //Verifica integridad referencial
-        //for (Long id : idLote) {
-        //    this.verificarIntegridadEliminar(id);
-        //}
 
         try {
             int registrosEliminados = estadoproductoMapper.eliminarLote(mapper.toEntityList(estadoproductoDTOLote));
@@ -286,61 +280,4 @@ public class EstadoProductoService {
         }
     }
 
-        /**
-     * Verifica la violacion de integridad referencia de EstadoProducto
-     * @param id la clave EstadoProducto a encontrar.
-     * @throws RecursoEliminarException
-     * @throws BaseDatosException
-     */
-    /*
-    public void verificarIntegridadEliminar(Long id) throws  RecursoEliminarException, BaseDatosException {
-        logeador.debug("verificarIntegridadEliminar() estadoproducto: {}", id);
-
-        boolean entityRelacionadoPorEstadoProducto = false;
-
-        try {
-            entityRelacionadoPorEstadoProducto = this.entityRelacionadoPorEstadoProducto(id);
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.ESTADOPRODUCTO_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.ESTADOPRODUCTO_ELIMINAR_MENSAJE, e);
-        }
-
-        //Verifca la integridad con sectores
-        if (entityRelacionadoPorEstadoProducto) {
-            throw new RecursoEliminarException(EstadoProductoError.INTEGRIDAD_VIOLADA.getCodigoError(),
-                                               Constantes.ESTADOPRODUCTO_VIOLACION_INTEGRIDAD_MENSAGE);
-        }
-
-    }
-    */
-
-    /**
-     * Buscar EstadoProducto que tengan EntityRelacionado.
-     * @param id la clave EstadoProducto a encontrar.
-     * @return boolean EstadoProducto tiene o no registros asociados
-     * @throws BaseDatosException
-     */
-    /*
-    public boolean entityRelacionadoPorEstadoProducto(Long id) throws  BaseDatosException {
-        logeador.debug("entityRelacionadoPorEstadoProducto() estadoproducto: {}", id);
-
-        try {
-            List<EntityRelacionado> entitys = entityRelacionadoMapper.encontrarPorEstadoProducto(id); // Verifica si tiene EntityRelacionado  asociados
-            if (!entitys.isEmpty()) {
-                logeador.info("estadoproducto  tiene #EntityRelacionado# asociados");
-                return true;
-            } else{
-                logeador.info("estadoproducto no tiene #EntityRelacionado# asociados");
-                return false;
-            }
-        } catch (DataAccessException e) {
-            logeador.error(Constantes.ESTADOPRODUCTO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
-            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.ESTADOPRODUCTO_SECTOR_ENCONTRAR_POR_CLAVE_MENSAGE, e);
-        }
-    }
-    */
 }
