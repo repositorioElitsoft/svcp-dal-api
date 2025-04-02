@@ -1,0 +1,44 @@
+entity:AgrupacionComercial.java         , table_name:agrupaciones_comerciales           , table_script:agrupaciones_comerciales.sql
+entity:Carro.java                       , table_name:carros                             , table_script:carros.sql
+entity:ClasificacionCliente.java        , table_name:clasificaciones_clientes           , table_script:clasificaciones_clientes.sql
+entity:Cliente.java                     , table_name:clientes                           , table_script:clientes.sql
+entity:Comuna.java                      , table_name:comunas                            , table_script:comunas.sql
+entity:Contacto.java                    , table_name:contactos                          , table_script:contactos.sql
+entity:ContactoDireccion.java           , table_name:contatos_direcciones               , table_script:contatos_direcciones.sql
+entity:Contrato.java                    , table_name:contratos                          , table_script:contratos.sql
+entity:ContratoDetalle.java             , table_name:contratos_detalles                 , table_script:contratos_detalles.sql
+entity:ContratoDetalleProducto.java     , table_name:contratos_detalles_productos       , table_script:contratos_detalles_productos.sql
+entity:ContratoDetalleTipoProducto.java , table_name:contratos_detalles_tipos_productos , table_script:contratos_detalles_tipos_productos.sql
+entity:Direccion.java                   , table_name:direcciones                        , table_script:direcciones.sql
+entity:DireccionEmpleado.java           , table_name:direcciones_empleados              , table_script:direcciones_empleados.sql
+entity:DocumentoIdentificacion.java     , table_name:documentos_identificacion          , table_script:documentos_identificacion.sql
+entity:Empleado.java                    , table_name:empleados                          , table_script:empleados.sql
+entity:Estado.java                      , table_name:estados                            , table_script:estados.sql
+entity:EstadoProducto.java              , table_name:estados_productos                  , table_script:estados_productos.sql
+entity:EstructuraFormulario.java        , table_name:myTable                            , table_script:myTable.sql , ignore:true
+entity:Menu.java                        , table_name:myTable                            , table_script:myTable.sql , ignore:true
+entity:Modulo.java                      , table_name:myTable                            , table_script:myTable.sql , ignore:true
+entity:Pais.java                        , table_name:Pais                               , table_script:Pais.sql
+entity:Permiso.java                     , table_name:myTable                            , table_script:myTable.sql , ignore:true
+entity:Producto.java                    , table_name:productos                          , table_script:productos.sql
+entity:Provincia.java                   , table_name:provincias                         , table_script:provincias.sql
+entity:Region.java                      , table_name:regiones                           , table_script:regiones.sql
+entity:Role.java                        , table_name:roles                              , table_script:roles.sql
+entity:Ruta.java                        , table_name:rutas                              , table_script:rutas.sql
+entity:Sector.java                      , table_name:sectores                           , table_script:sectores.sql
+entity:SegmentacionCliente.java         , table_name:segmentacion_clientes              , table_script:segmentacion_clientes.sql
+entity:Servicio.java                    , table_name:servicios                          , table_script:servicios.sql
+entity:ServicioTrabajo.java             , table_name:servicios_trabajos                 , table_script:servicios_trabajos.sql
+entity:SubMenu.java                     , table_name:myTable                            , table_script:myTable.sql , ignore:true
+entity:Tarea.java                       , table_name:tareas                             , table_script:tareas.sql
+entity:TipoCliente.java                 , table_name:tipos_clientes                     , table_script:tipos_clientes.sql
+entity:TipoComponente.java              , table_name:tipos_componentes                  , table_script:tipos_componentes.sql
+entity:TipoDireccion.java               , table_name:tipos_direcciones                  , table_script:tipos_direcciones.sql
+entity:TipoDocumentoIdentificacion.java , table_name:tipos_documentos_identificacion    , table_script:tipos_documentos_identificacion.sql
+entity:TipoEmpleado.java                , table_name:tipos_empleados                    , table_script:tipos_empleados.sql
+entity:TipoProducto.java                , table_name:tipos_productos                    , table_script:tipos_productos.sql
+entity:TipoProductoTipoComponente.java  , table_name:tipos_productos_tipos_componentes  , table_script:tipos_productos_tipos_componentes.sql
+entity:TipoServicio.java                , table_name:tipos_servicios                    , table_script:tipos_servicios.sql
+entity:Trabajo.java                     , table_name:trabajos                           , table_script:trabajos.sql
+entity:TrabajoTarea.java                , table_name:trabajos_tareas                    , table_script:trabajos_tareas.sql
+entity:Zona.java                        , table_name:zonas                              , table_script:zonas.sql
