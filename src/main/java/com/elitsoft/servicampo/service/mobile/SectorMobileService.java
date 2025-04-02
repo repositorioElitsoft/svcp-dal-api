@@ -5,6 +5,7 @@ import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.mapper.SectorMapper;
 import com.elitsoft.servicampo.mapstruct.SectorMapStruct;
 import com.elitsoft.servicampo.service.core.SectorService;
@@ -92,8 +93,9 @@ public class SectorMobileService {
      * @param id la clave de Sector a eliminar.
      * @throws RecursoNoEncontradoException si el Sector no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si ocurre una violación de integridad.
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() sector: {}", id);
         sectorService.eliminar(id);
     }
@@ -103,8 +105,9 @@ public class SectorMobileService {
      * @param idLote lista de claves de Sector a eliminar.
      * @throws EntradaInvalidadException si la lista  Sector esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si ocurre una violación de integridad.
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         sectorService.eliminarLote(idLote);

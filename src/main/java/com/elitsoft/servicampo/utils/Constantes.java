@@ -202,6 +202,7 @@ public class Constantes {
 
     public static final String SECTOR_ENTRADA_INVALIDA_MENSAGE = "Entrada de SECTOR invalida.";
     public static final String SECTOR_DUPLICADO_MENSAGE = "Recurso  SECTOR ya existe.";
+    public static final String SECTOR_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso SECTOR viola Integridad. ";
     public static final String SECTOR_NO_ENCONTRADO_MENSAGE = "Recurso SECTOR no  encontrado";
     public static final String SECTOR_AGREGAR_MENSAJE = "Error Interno agregando Recurso SECTOR";
     public static final String SECTOR_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos SECTOR";
