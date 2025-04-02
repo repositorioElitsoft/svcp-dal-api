@@ -36,6 +36,8 @@ public class Constantes {
     public static final String EMPLEADO_ENCONTRAR_POR_CORREO_MENSAGE = "Error encontrando Recurso EMPLEADO por correo :";
     public static final String EMPLEADO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos EMPLEADO";
     public static final String EMPLEADO_FILTRAR_MENSAJE = "Error filtrando EMPLEADO";
+    public static final String EMPLEADO_NO_AUTORIZADO_MENSAJE = "Error EMPLEADO no esta autorizado para hacer login";
+    public static final String EMPLEADO_NO_HABILITADO_MENSAJE = "Error EMPLEADO no esta habilitado para hacer login";
 
     public static final String TIPOEMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOEMPLEADO invalida.";
     public static final String TIPOEMPLEADO_DUPLICADO_MENSAGE = "Recurso  TIPOEMPLEADO ya existe.";
@@ -364,7 +366,7 @@ public class Constantes {
     public static final String CONTACTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTACTO:";
     public static final String CONTACTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTACTO";
     public static final String CONTACTO_FILTRAR_MENSAJE = "Error filtrando CONTACTO";
-    
+
     public static final String CLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de CLIENTE invalida.";
     public static final String CLIENTE_DUPLICADO_MENSAGE = "Recurso  CLIENTE ya existe.";
     public static final String CLIENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  CLIENTE viola Integridad. ";

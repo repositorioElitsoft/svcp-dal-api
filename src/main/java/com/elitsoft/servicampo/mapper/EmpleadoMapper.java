@@ -53,14 +53,6 @@ public interface EmpleadoMapper {
      */
     Empleado encontrarPorClave(Long id);
 
-    /**
-     * Encuentra un Empleado en la base de datos por su clave y su Estado
-     * @param id La clave de Empleado a encontrar.
-     * @param estadoId La clave de Estado a encontrar.
-     * @return La entidad Empleado encontrado, o null si no es encontrado.
-     */
-    Empleado encontrarPorClaveEstado(Long id, Long estadoId);
-
 
     /**
      * Encuentra lista Empleado en la base de datos asociados a TipoEmpleado.
@@ -77,13 +69,6 @@ public interface EmpleadoMapper {
      */
     Empleado encontrarPorNombre(String nombreUsuario);
 
-    /**
-     * Encuentra un Empleado en la base de datos por su nombre.
-     * @param nombreUsuario del Empleado a encontrar.
-     * @param estadoId La clave de Estado a encontrar.
-     * @return El objecto Empleado encontrado, o null si no es encontrado.
-     */
-    Empleado encontrarPorNombreEstado(String nombreUsuario, Long estadoId);
 
     /**
      * Encuentra un Empleado en la base de datos por su correo.

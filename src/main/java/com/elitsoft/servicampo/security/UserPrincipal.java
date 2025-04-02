@@ -1,10 +1,12 @@
 package com.elitsoft.servicampo.security;
 
 import com.elitsoft.servicampo.domain.entity.Empleado;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import com.elitsoft.servicampo.exceptions.EmpleadoAutenticacionException;
+import com.elitsoft.servicampo.service.error.EmpleadoError;
+import com.elitsoft.servicampo.utils.Constantes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -16,24 +18,26 @@ public class UserPrincipal implements UserDetails {
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities; // Roles/Permissions
+    private Empleado empleado;
 
     // Constructor (Important!)
-    public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities, Empleado empleado) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+        this.empleado = empleado;
     }
 
     public static UserPrincipal create(Empleado empleado) {  // Static factory method (Good Practice)
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + empleado.getRole().getNombreRol());
-
+        System.out.println("UserPrincipal() methods ");
         return new UserPrincipal(
                 empleado.getId(),
                 empleado.getNombre(),
-                empleado.getContrasena() ,
-                Collections.singletonList(authority)
-
+                empleado.getContrasena(),
+                Collections.singletonList(authority),
+                empleado
         );
     }
 
@@ -70,7 +74,10 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true; // Or implement logic based on your user entity
+        if (!empleado.getEstado().getId().equals(Constantes.ESTADO_HABILITADO)) {
+            throw new EmpleadoAutenticacionException(EmpleadoError.DESABILITADO.getCodigoError(), Constantes.EMPLEADO_NO_HABILITADO_MENSAJE);
+        }
+        return true;
     }
 
     public Long getId() { // Add a getter for the ID
