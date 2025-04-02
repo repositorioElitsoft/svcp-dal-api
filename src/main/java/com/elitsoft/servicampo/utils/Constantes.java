@@ -158,6 +158,7 @@ public class Constantes {
 
     public static final String TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE = "Entrada de TRABAJOTAREA invalida.";
     public static final String TRABAJOTAREA_DUPLICADO_MENSAGE = "Recurso  TRABAJOTAREA ya existe.";
+    public static final String TRABAJOTAREA_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso TRABAJOTAREA viola Integridad. ";
     public static final String TRABAJOTAREA_NO_ENCONTRADO_MENSAGE = "Recurso TRABAJOTAREA no  encontrado";
     public static final String TRABAJOTAREA_AGREGAR_MENSAJE = "Error Interno agregando Recurso TRABAJOTAREA";
     public static final String TRABAJOTAREA_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos TRABAJOTAREA";
