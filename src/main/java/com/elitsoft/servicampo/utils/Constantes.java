@@ -171,6 +171,7 @@ public class Constantes {
 
     public static final String CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de CLASIFICACIONCLIENTE invalida.";
     public static final String CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE = "Recurso  CLASIFICACIONCLIENTE ya existe.";
+    public static final String CLASIFICACIONCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso CLASIFICACIONCLIENTE viola Integridad. ";
     public static final String CLASIFICACIONCLIENTE_NO_ENCONTRADO_MENSAGE = "Recurso CLASIFICACIONCLIENTE no  encontrado";
     public static final String CLASIFICACIONCLIENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso CLASIFICACIONCLIENTE";
     public static final String CLASIFICACIONCLIENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos CLASIFICACIONCLIENTE";

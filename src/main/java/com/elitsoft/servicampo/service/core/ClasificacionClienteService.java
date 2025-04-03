@@ -2,15 +2,22 @@ package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.domain.entity.ClasificacionCliente;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.ClasificacionClienteMapper;
 import com.elitsoft.servicampo.mapstruct.ClasificacionClienteMapStruct;
+import com.elitsoft.servicampo.service.error.ClasificacionClienteError;
+import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.utils.Constantes;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +39,10 @@ public class ClasificacionClienteService {
 
     /**
      * Agrega un nuevo ClasificacionCliente.
+     *
      * @param clasificacionClienteDTO el ClasificacionCliente DTO.
      * @return el ClasificacionCliente DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
      */
@@ -44,7 +52,8 @@ public class ClasificacionClienteService {
         //  Valida Entrada
         if (clasificacionClienteDTO == null) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(ClasificacionClienteError.REQUERIDO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -52,22 +61,23 @@ public class ClasificacionClienteService {
             clasificacionCliente = clasificacionclienteMapper.agregar(clasificacionCliente);
             logeador.info("ClasificacionCliente agregado exitosamente id: {}", clasificacionCliente.getId());
             return mapper.toDto(clasificacionCliente);
-        }
-        catch (DuplicateKeyException e) {
+        } catch (DuplicateKeyException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE + ": {}", clasificacionClienteDTO.getId());
-            throw new RecursoDuplicadoException(Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE);
-        }
-        catch (DataAccessException e) {
+            throw new RecursoDuplicadoException(ClasificacionClienteError.DUPLICADO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE);
+        } catch (DataAccessException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_AGREGAR_MENSAJE + ": {}", clasificacionClienteDTO.toString(), e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_AGREGAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_AGREGAR_MENSAJE, e);
         }
     }
 
 
     /**
      * Agrega Lote nuevos ClasificacionCliente.
+     *
      * @param clasificacionclienteLoteDTO lista de ClasificacionCliente DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso clasificacioncliente ya existe.
      */
@@ -77,43 +87,49 @@ public class ClasificacionClienteService {
         //  Valida Entrada
         if (clasificacionclienteLoteDTO.isEmpty()) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(ClasificacionClienteError.REQUERIDO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
             List<ClasificacionCliente> clasificacionclienteLote = mapper.toEntityList(clasificacionclienteLoteDTO);
 
-            int registrosAgregados =  clasificacionclienteMapper.agregarLote(clasificacionclienteLote);
+            int registrosAgregados = clasificacionclienteMapper.agregarLote(clasificacionclienteLote);
             logeador.info("Lote ClasificacionCliente agregados exitosamente,  registros agregados: {}", registrosAgregados);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE);
-            throw new RecursoDuplicadoException(Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE);
+            throw new RecursoDuplicadoException(ClasificacionClienteError.DUPLICADO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_DUPLICADO_MENSAGE);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_AGREGAR_LOTE_MENSAJE, e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_AGREGAR_LOTE_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_AGREGAR_LOTE_MENSAJE, e);
         }
     }
 
     /**
      * Actualiza un ClasificacionCliente existente.
-     * @param id la clave de ClasificacionCliente a actualizar.
+     *
+     * @param id                      la clave de ClasificacionCliente a actualizar.
      * @param clasificacionClienteDTO el ClasificacionCliente DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si ClasificacionCliente no es encontrado.
-     * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
+     * @throws EntradaInvalidadException    si la entrada ClasificacionCliente tiene errores.
      */
-    public void actualizar(Long id, ClasificacionClienteDTO clasificacionClienteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, ClasificacionClienteDTO clasificacionClienteDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() clasificacioncliente");
 
         //  Valida Entrada
         if (id == null || clasificacionClienteDTO == null || clasificacionClienteDTO.getId() == null) {
-            logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}", ((clasificacionClienteDTO != null) ? clasificacionClienteDTO.toString() : null  ));
-            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}", ((clasificacionClienteDTO != null) ? clasificacionClienteDTO.toString() : null));
+            throw new EntradaInvalidadException(ClasificacionClienteError.REQUERIDO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
         if (!id.equals(clasificacionClienteDTO.getId())) {
-            logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  clasificacionClienteDTO.toString());
-            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id, clasificacionClienteDTO.toString());
+            throw new EntradaInvalidadException(ClasificacionClienteError.ID_INVALIDO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -124,23 +140,26 @@ public class ClasificacionClienteService {
             logeador.info("clasificacioncliente actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ACTUALIZAR_MENSAJE + ": id={} {}", id, clasificacionClienteDTO.toString(), e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ACTUALIZAR_MENSAJE, e);
         }
     }
 
-   /**
+    /**
      * Actualiza Lote de ClasificacionCliente existentes.
+     *
      * @param clasificacionclienteLoteDTO lista de ClasificacionCliente DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      */
-    public void actualizarLote(List<ClasificacionClienteDTO> clasificacionclienteLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ClasificacionClienteDTO> clasificacionclienteLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() clasificacioncliente");
 
         //  Valida Entrada
         if (clasificacionclienteLoteDTO.isEmpty()) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(ClasificacionClienteError.REQUERIDO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -149,58 +168,75 @@ public class ClasificacionClienteService {
             logeador.info("Lote clasificacioncliente actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ACTUALIZAR_MENSAJE, e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ACTUALIZAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina ClasificacionCliente por Clave.
+     *
      * @param id la clave de ClasificacionCliente a eliminar.
      * @throws RecursoNoEncontradoException si el ClasificacionCliente no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si ClasificacionCliente esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() clasificacioncliente: {}", id);
 
         try {
             ClasificacionClienteDTO clasificacionclienteDto = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = clasificacionclienteMapper.eliminar(id);
             logeador.info("clasificacioncliente eliminado: {}, registros eliminados: {}", id, registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.CLASIFICACIONCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(ClasificacionClienteError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE + ": {}", id, e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina Lote ClasificacionCliente por Clave.
+     *
      * @param idLote lista de claves de ClasificacionCliente a eliminar.
      * @throws EntradaInvalidadException si la lista  ClasificacionCliente esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si ClasificacionCliente esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         //  Valida Entrada
         if (idLote.isEmpty()) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(ClasificacionClienteError.REQUERIDO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
             int registrosEliminados = clasificacionclienteMapper.eliminarLote(idLote);
             logeador.info("Lote clasificacioncliente eliminados exitosamente, registros eliminados: {}", registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.CLASIFICACIONCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(ClasificacionClienteError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE,  e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE, e);
+            logeador.error(Constantes.CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Encuentra un ClasificacionCliente por Clave.
+     *
      * @param id la clave ClasificacionCliente a encontrar.
      * @return el ClasificacionCliente DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si ClasificacionCliente no es encontrado.
      */
     public ClasificacionClienteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -213,18 +249,21 @@ public class ClasificacionClienteService {
                 logeador.info("clasificacioncliente encontrado por clave : {}", id);
             } else {
                 logeador.info("clasificacioncliente clave:{} no encontrado", id);
-                throw new RecursoNoEncontradoException(Constantes.CLASIFICACIONCLIENTE_NO_ENCONTRADO_MENSAGE);
+                throw new RecursoNoEncontradoException(ClasificacionClienteError.NO_ENCONTRADO.getCodigoError(),
+                        Constantes.CLASIFICACIONCLIENTE_NO_ENCONTRADO_MENSAGE);
             }
 
             return clasificacionclienteDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
     /**
      * Obtiene todos los ClasificacionClientes.
+     *
      * @return una lista de todos ClasificacionCliente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
@@ -237,7 +276,8 @@ public class ClasificacionClienteService {
             return clasificacionclienteLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.CLASIFICACIONCLIENTE_OBTENER_TODOS_MENSAJE, e);
-            throw new BaseDatosException(Constantes.CLASIFICACIONCLIENTE_OBTENER_TODOS_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLASIFICACIONCLIENTE_OBTENER_TODOS_MENSAJE, e);
         }
     }
 }

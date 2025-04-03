@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.ClasificacionClienteMapper;
 import com.elitsoft.servicampo.mapstruct.ClasificacionClienteMapStruct;
@@ -34,9 +35,10 @@ public class ClasificacionClienteMobileService {
 
     /**
      * Agrega un nuevo ClasificacionCliente.
+     *
      * @param clasificacionClienteDTO el ClasificacionCliente DTO.
      * @return el ClasificacionCliente DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
      */
@@ -48,8 +50,9 @@ public class ClasificacionClienteMobileService {
 
     /**
      * Agrega Lote nuevos ClasificacionCliente.
+     *
      * @param clasificacionClienteLoteDTO lista de ClasificacionCliente DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      * @throws RecursoDuplicadoException si el recurso ClasificacionCliente ya existe.
      */
@@ -61,13 +64,14 @@ public class ClasificacionClienteMobileService {
 
     /**
      * Actualiza un ClasificacionCliente existente.
-     * @param id la Clave de ClasificacionCliente a actualizar.
+     *
+     * @param id                      la Clave de ClasificacionCliente a actualizar.
      * @param clasificacionClienteDTO el ClasificacionCliente DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si ClasificacionCliente no es encontrado.
-     * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
+     * @throws EntradaInvalidadException    si la entrada ClasificacionCliente tiene errores.
      */
-    public void actualizar(Long id, ClasificacionClienteDTO clasificacionClienteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, ClasificacionClienteDTO clasificacionClienteDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() clasificacioncliente");
 
         clasificacionclienteService.actualizar(id, clasificacionClienteDTO);
@@ -75,11 +79,12 @@ public class ClasificacionClienteMobileService {
 
     /**
      * Actualiza Lote de ClasificacionCliente existentes.
+     *
      * @param clasificacionClienteLoteDTO lista de ClasificacionCliente DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada ClasificacionCliente tiene errores.
      */
-    public void actualizarLote(List<ClasificacionClienteDTO> clasificacionClienteLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<ClasificacionClienteDTO> clasificacionClienteLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() clasificacioncliente");
 
         clasificacionclienteService.actualizarLote(clasificacionClienteLoteDTO);
@@ -87,32 +92,36 @@ public class ClasificacionClienteMobileService {
 
     /**
      * Elimina ClasificacionCliente por Clave.
+     *
      * @param id la clave de ClasificacionCliente a eliminar.
      * @throws RecursoNoEncontradoException si el ClasificacionCliente no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si ClasificacionCliente esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() clasificacioncliente: {}", id);
         clasificacionclienteService.eliminar(id);
     }
 
     /**
      * Elimina Lote ClasificacionCliente por Clave.
+     *
      * @param idLote lista de claves de ClasificacionCliente a eliminar.
      * @throws EntradaInvalidadException si la lista  ClasificacionCliente esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si ClasificacionCliente esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
-
         clasificacionclienteService.eliminarLote(idLote);
     }
 
     /**
      * Encuentra un ClasificacionCliente por Clave.
+     *
      * @param id la clave ClasificacionCliente a encontrar.
      * @return el ClasificacionCliente DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si ClasificacionCliente no es encontrado.
      */
     public ClasificacionClienteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -122,6 +131,7 @@ public class ClasificacionClienteMobileService {
 
     /**
      * Obtiene todos los ClasificacionClientes.
+     *
      * @return lista de todos ClasificacionCliente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
