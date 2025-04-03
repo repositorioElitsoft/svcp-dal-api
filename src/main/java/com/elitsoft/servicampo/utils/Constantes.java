@@ -54,6 +54,7 @@ public class Constantes {
 
     public static final String ROLE_ENTRADA_INVALIDA_MENSAGE = "Entrada de ROLE invalida.";
     public static final String ROLE_DUPLICADO_MENSAGE = "Recurso  ROLE ya existe.";
+    public static final String ROLE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ROLE viola Integridad. ";
     public static final String ROLE_NO_ENCONTRADO_MENSAGE = "Recurso ROLE no  encontrado";
     public static final String ROLE_AGREGAR_MENSAJE = "Error Interno agregando Recurso ROLE";
     public static final String ROLE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ROLE";
