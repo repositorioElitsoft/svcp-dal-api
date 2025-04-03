@@ -94,12 +94,18 @@ public class Constantes {
     public static final String MENU_ELIMINAR_EXECPTION = "Error eliminando MENU";
     public static final String MENU_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando MENU por clave :";
     public static final String MENU_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los MENU";
-    public static final String PERMISO_NO_ENCONTRADO_MENSAGE = "PERMISO no  encontrado";
-    public static final String PERMISO_AGREGAR_EXECPTION = "Error agregando PERMISO";
-    public static final String PERMISO_ACTUALIZAR_EXECPTION = "Error actualizando PERMISO";
-    public static final String PERMISO_ELIMINAR_EXECPTION = "Error eliminando PERMISO";
-    public static final String PERMISO_ENCONTRAR_POR_CLAVE_EXECPTION = "Error encontrando PERMISO por clave :";
-    public static final String PERMISO_OBTENER_TODOS_EXECPTION = "Error obteniendo todos los PERMISO";
+
+    public static final String PERMISO_ENTRADA_INVALIDA_MENSAGE = "Entrada de PERMISO invalida.";
+    public static final String PERMISO_DUPLICADO_MENSAGE = "Recurso  PERMISO ya existe.";
+    public static final String PERMISO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  PERMISO viola Integridad. ";
+    public static final String PERMISO_NO_ENCONTRADO_MENSAGE = "Recurso PERMISO no  encontrado";
+    public static final String PERMISO_AGREGAR_MENSAJE = "Error Interno agregando Recurso PERMISO";
+    public static final String PERMISO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos PERMISO";
+    public static final String PERMISO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso PERMISO";
+    public static final String PERMISO_ELIMINAR_MENSAJE = "Error eliminando Recurso PERMISO";
+    public static final String PERMISO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso PERMISO por clave :";
+    public static final String PERMISO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos PERMISO";
+    public static final String PERMISO_FILTRAR_MENSAJE = "Error filtrando PERMISO";
 
     public static final String ESTRUCTURAFORMULARIO_NO_ENCONTRADO_MENSAGE = "ESTRUCTURAFORMULARIO no  encontrado";
     public static final String ESTRUCTURAFORMULARIO_AGREGAR_EXECPTION = "Error agregando ESTRUCTURAFORMULARIO";
@@ -567,5 +573,6 @@ public class Constantes {
     public static final String CONTRATODETALLEPRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATODETALLEPRODUCTO:";
     public static final String CONTRATODETALLEPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATODETALLEPRODUCTO";
     public static final String CONTRATODETALLEPRODUCTO_FILTRAR_MENSAJE = "Error filtrando CONTRATODETALLEPRODUCTO";
+
 }
 

@@ -1,9 +1,12 @@
 package com.elitsoft.servicampo.controller.mobile;
 
+import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.PermisoDTO;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.service.mobile.PermisoMobileService;
-import com.elitsoft.servicampo.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -34,40 +37,41 @@ public class PermisoMobileController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Permiso agregado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<String> agregar(@RequestBody PermisoDTO permisoDto) {
+    public ResponseEntity<ApiEnityResponse<String>> agregar(@RequestBody PermisoDTO permisoDTO) {
         logeador.debug("agregar() permiso");
 
         try {
-            permisoMobileService.agregar(permisoDto);
+            permisoMobileService.agregar(permisoDTO);
             return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 400 Bad Request
         } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 500 Internal Server Error
         }
-
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Actualiza un permiso", description = "Actualiza un permiso")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Permiso actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
             @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody PermisoDTO permisoDto) {
+    public ResponseEntity<ApiEnityResponse<String>> actualizar(@PathVariable Long id, @RequestBody PermisoDTO permisoDTO) {
         logeador.debug("actualizar() permiso");
 
         try {
-            permisoMobileService.actualizar(id, permisoDto);
+            permisoMobileService.actualizar(id, permisoDTO);
             return ResponseEntity.noContent().build();
-        } catch (PermisoNoEncontradoException e) {
-            logeador.error(Constantes.PERMISO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.PERMISO_NO_ENCONTRADO_MENSAGE);
+        } catch (EntradaInvalidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 400 Bad Request
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 404 Not Found
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 500 Internal Server Error
         }
     }
 
@@ -75,22 +79,23 @@ public class PermisoMobileController {
     @Operation(summary = "Elimina un permiso", description = "Elimina un permiso")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Permiso eliminado exitosamente"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+            @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
+            @ApiResponse(responseCode = "460", description = "Permiso Viola integridad referencial"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<String> eliminar(@PathVariable Long id) {
+    public ResponseEntity<ApiEnityResponse<String>> eliminar(@PathVariable Long id) {
         logeador.debug("eliminar() permiso: {}", id);
 
         try {
             permisoMobileService.eliminar(id);
-        } catch (PermisoNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.PERMISO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Constantes.PERMISO_NO_ENCONTRADO_MENSAGE);
+            return ResponseEntity.noContent().build(); // Retorna 204 No Content
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 404 Not Found
+        } catch (RecursoEliminarException e) {
+            return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 460 Integridad Violada
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 500 Internal Server Error
         }
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -98,46 +103,33 @@ public class PermisoMobileController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Permiso encontrado exitosamente"),
             @ApiResponse(responseCode = "404", description = "Permiso no encontrado"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<PermisoDTO> encontrarPorClave(@PathVariable Long id) {
+    public ResponseEntity<ApiEnityResponse<PermisoDTO>> encontrarPorClave(@PathVariable Long id) {
         logeador.debug("encontrarPorClave(): {}", id);
 
         try {
-            PermisoDTO permisoDto = permisoMobileService.encontrarPorClave(id);
-            if (permisoDto != null) {
-                return ResponseEntity.ok(permisoDto);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(permisoMobileService.encontrarPorClave(id))); // Retorna 200 OK
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 404 Not Found
         } catch (BaseDatosException e) {
-            logeador.error("id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
-        } catch (PermisoNoEncontradoException e) { // Corrected Exception Name
-            logeador.error(Constantes.PERMISO_NO_ENCONTRADO_MENSAGE + ": {}", id);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 500 Internal Server Error
         }
-
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Obtiene todos  los permiso", description = "Obtiene todos los permiso")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Permisos obtenidos exitosamente"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    public ResponseEntity<List<PermisoDTO>> obtenerTodos() {
+    public ResponseEntity<ApiEnityResponse<List<PermisoDTO>>> obtenerTodos() {
         logeador.debug("obtenerTodos()");
 
-        List<PermisoDTO> permisos = null;
-
         try {
-            permisos = permisoMobileService.obtenerTodos();
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(permisoMobileService.obtenerTodos())); // Retorna 200 OK
         } catch (BaseDatosException e) {
-            logeador.error("{}: ", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna 500 Internal Server Error
         }
-
-        return ResponseEntity.ok(permisos);
     }
 }
