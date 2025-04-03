@@ -334,6 +334,7 @@ public class Constantes {
     public static final String DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE = "Entrada de DOCUMENTOIDENTIFICACION requiere numero.";
     public static final String DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_DIGITO_VERIFICADOR_MENSAGE = "Entrada de DOCUMENTOIDENTIFICACION requiere digito vericador.";
     public static final String DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE = "Recurso  DOCUMENTOIDENTIFICACION ya existe. ";
+    public static final String DOCUMENTOIDENTIFICACION_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  DOCUMENTOIDENTIFICACION viola Integridad. ";
     public static final String DOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE = "Recurso DOCUMENTOIDENTIFICACION no  encontrado";
     public static final String DOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE = "Error Interno agregando Recurso DOCUMENTOIDENTIFICACION";
     public static final String DOCUMENTOIDENTIFICACION_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos DOCUMENTOIDENTIFICACION";
@@ -533,7 +534,6 @@ public class Constantes {
     public static final String CONTRATO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTRATO";
     public static final String CONTRATO_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTRATO";
     public static final String CONTRATO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTRATO por clave :";
-    public static final String CONTRATO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATO:";
     public static final String CONTRATO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATO";
     public static final String CONTRATO_FILTRAR_MENSAJE = "Error filtrando CONTRATO";
 
@@ -546,7 +546,6 @@ public class Constantes {
     public static final String CONTRATODETALLE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTRATODETALLE";
     public static final String CONTRATODETALLE_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTRATODETALLE";
     public static final String CONTRATODETALLE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTRATODETALLE por clave :";
-    public static final String CONTRATODETALLE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATODETALLE:";
     public static final String CONTRATODETALLE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATODETALLE";
     public static final String CONTRATODETALLE_FILTRAR_MENSAJE = "Error filtrando CONTRATODETALLE";
 
@@ -559,7 +558,6 @@ public class Constantes {
     public static final String CONTRATODETALLETIPOPRODUCTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTRATODETALLETIPOPRODUCTO";
     public static final String CONTRATODETALLETIPOPRODUCTO_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTRATODETALLETIPOPRODUCTO";
     public static final String CONTRATODETALLETIPOPRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTRATODETALLETIPOPRODUCTO por clave :";
-    public static final String CONTRATODETALLETIPOPRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATODETALLETIPOPRODUCTO:";
     public static final String CONTRATODETALLETIPOPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATODETALLETIPOPRODUCTO";
     public static final String CONTRATODETALLETIPOPRODUCTO_FILTRAR_MENSAJE = "Error filtrando CONTRATODETALLETIPOPRODUCTO";
 
@@ -572,7 +570,6 @@ public class Constantes {
     public static final String CONTRATODETALLEPRODUCTO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso CONTRATODETALLEPRODUCTO";
     public static final String CONTRATODETALLEPRODUCTO_ELIMINAR_MENSAJE = "Error eliminando Recurso CONTRATODETALLEPRODUCTO";
     public static final String CONTRATODETALLEPRODUCTO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso CONTRATODETALLEPRODUCTO por clave :";
-    public static final String CONTRATODETALLEPRODUCTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTRATODETALLEPRODUCTO:";
     public static final String CONTRATODETALLEPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATODETALLEPRODUCTO";
     public static final String CONTRATODETALLEPRODUCTO_FILTRAR_MENSAJE = "Error filtrando CONTRATODETALLEPRODUCTO";
 

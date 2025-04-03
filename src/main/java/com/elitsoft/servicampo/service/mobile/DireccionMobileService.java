@@ -5,6 +5,7 @@ import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.DireccionMapper;
 import com.elitsoft.servicampo.mapstruct.DireccionMapStruct;
@@ -143,8 +144,9 @@ public class DireccionMobileService {
      * @param contactoId La clave de Contacto a eliminar.
      * @throws RecursoNoEncontradoException si el Direccion no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Direccion o Contacto esta asociado a otro recurso
      */
-    public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminarContacto() direccion: {}", id);
         direccionService.eliminarContacto(clienteId, id, contactoId);
     }

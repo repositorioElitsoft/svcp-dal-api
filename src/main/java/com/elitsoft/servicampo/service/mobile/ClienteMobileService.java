@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.ClienteMapper;
 import com.elitsoft.servicampo.mapstruct.ClienteMapStruct;
@@ -91,8 +92,9 @@ public class ClienteMobileService {
      * @param id la clave de Cliente a eliminar.
      * @throws RecursoNoEncontradoException si el Cliente no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Cliente o DocumentoIdentificacion esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() cliente: {}", id);
         clienteService.eliminar(id);
     }

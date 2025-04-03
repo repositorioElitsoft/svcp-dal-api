@@ -3,10 +3,15 @@ package com.elitsoft.servicampo.service.core;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.dto.core.TipoDocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.service.error.DocumentoIdentificacionError;
+import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.service.error.TipoDocumentoIdentificacionError;
 import com.elitsoft.servicampo.utils.Constantes;
 import org.apache.ibatis.binding.BindingException;
@@ -14,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +46,10 @@ public class DocumentoIdentificacionService {
 
     /**
      * Agrega un nuevo DocumentoIdentificacion.
+     *
      * @param documentoidentificacionDTO el DocumentoIdentificacion DTO.
      * @return el DocumentoIdentificacion DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso DocumentoIdentificacion ya existe.
      */
@@ -53,16 +60,16 @@ public class DocumentoIdentificacionService {
         this.valiacionesEntrada(documentoidentificacionDTO);
 
         //Verifica Identificacion Duplicada.
-        DocumentoIdentificacion documentoIdentificacionExiste =  encontrarPorIndentificacion(
+        DocumentoIdentificacion documentoIdentificacionExiste = encontrarPorIndentificacion(
                 documentoidentificacionDTO.getNumero(),
                 documentoidentificacionDTO.getDigitoVerificador());
 
         if (documentoIdentificacionExiste != null) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {} , {}",
-                           documentoidentificacionDTO.getNumero(),
-                           documentoidentificacionDTO.getDigitoVerificador());
-            throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError() ,
-                                                Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
+                    documentoidentificacionDTO.getNumero(),
+                    documentoidentificacionDTO.getDigitoVerificador());
+            throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
         }
 
         try {
@@ -71,21 +78,22 @@ public class DocumentoIdentificacionService {
             documentoIdentificacion = documentoIdentificacionMapper.encontrarPorClave(documentoIdentificacion.getId());
             logeador.info("DocumentoIdentificacion agregado exitosamente id: {}", documentoIdentificacion.getId());
             return mapper.toDTO(documentoIdentificacion);
-        }
-        catch (DuplicateKeyException e) {
+        } catch (DuplicateKeyException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {}", documentoidentificacionDTO.getId());
-            throw new RecursoDuplicadoException(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
-        }
-        catch (DataAccessException e) {
+            throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
+        } catch (DataAccessException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE + ": {}", documentoidentificacionDTO.toString(), e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos DocumentoIdentificacion.
+     *
      * @param documentoidentificacionLoteDTO lista de DocumentoIdentificacion DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso documentoidentificacion ya existe.
      */
@@ -95,43 +103,49 @@ public class DocumentoIdentificacionService {
         //  Valida Entrada
         if (documentoidentificacionLoteDTO.isEmpty()) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(DocumentoIdentificacionError.REQUERIDO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
             List<DocumentoIdentificacion> documentoidentificacionLote = mapper.toEntityList(documentoidentificacionLoteDTO);
 
-            int registrosAgregados =  documentoIdentificacionMapper.agregarLote(documentoidentificacionLote);
+            int registrosAgregados = documentoIdentificacionMapper.agregarLote(documentoidentificacionLote);
             logeador.info("Lote DocumentoIdentificacion agregados exitosamente,  registros agregados: {}", registrosAgregados);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
-            throw new RecursoDuplicadoException(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
+            throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_AGREGAR_LOTE_MENSAJE, e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_AGREGAR_LOTE_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_AGREGAR_LOTE_MENSAJE, e);
         }
     }
 
     /**
      * Actualiza un DocumentoIdentificacion existente.
-     * @param id la clave de DocumentoIdentificacion a actualizar.
+     *
+     * @param id                         la clave de DocumentoIdentificacion a actualizar.
      * @param documentoidentificacionDTO el DocumentoIdentificacion DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si DocumentoIdentificacion no es encontrado.
-     * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
+     * @throws EntradaInvalidadException    si la entrada DocumentoIdentificacion tiene errores.
      */
-    public void actualizar(Long id, DocumentoIdentificacionDTO documentoidentificacionDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, DocumentoIdentificacionDTO documentoidentificacionDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() documentoidentificacion");
 
         //  Valida Entrada
         if (id == null || documentoidentificacionDTO == null || documentoidentificacionDTO.getId() == null) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}", ((documentoidentificacionDTO != null) ? documentoidentificacionDTO.toString() : null  ));
-            throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}", ((documentoidentificacionDTO != null) ? documentoidentificacionDTO.toString() : null));
+            throw new EntradaInvalidadException(DocumentoIdentificacionError.REQUERIDO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
         if (!id.equals(documentoidentificacionDTO.getId())) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id,  documentoidentificacionDTO.toString());
-            throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE + ": {}, {}", id, documentoidentificacionDTO.toString());
+            throw new EntradaInvalidadException(DocumentoIdentificacionError.ID_INVALIDO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida Entrada
@@ -143,17 +157,17 @@ public class DocumentoIdentificacionService {
 
             //Verifica Documento actual vs Documento a Actualizar
             if (!documentoidentificacionDTOEncontrado.getNumero().equals(documentoidentificacionDTO.getNumero()) ||
-                    !documentoidentificacionDTOEncontrado.getDigitoVerificador().equals(documentoidentificacionDTO.getDigitoVerificador()) ){
+                    !documentoidentificacionDTOEncontrado.getDigitoVerificador().equals(documentoidentificacionDTO.getDigitoVerificador())) {
 
                 //El Documento nuevo es distinto al anterior, se procede a actualizarlo:
 
                 //Se verifica que el nuevo documento a actualizar no exista
-                DocumentoIdentificacion documentoIdentificacionExiste =  encontrarPorIndentificacion(
+                DocumentoIdentificacion documentoIdentificacionExiste = encontrarPorIndentificacion(
                         documentoidentificacionDTO.getNumero(),
                         documentoidentificacionDTO.getDigitoVerificador());
 
                 //Documento no existe
-                if (documentoIdentificacionExiste == null){
+                if (documentoIdentificacionExiste == null) {
                     DocumentoIdentificacion documentoidentificacion = mapper.toEntity(documentoidentificacionDTO);
                     documentoidentificacion.setId(id);
                     int registrosActualizados = documentoIdentificacionMapper.actualizar(documentoidentificacion);
@@ -163,7 +177,7 @@ public class DocumentoIdentificacionService {
                     logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {} , {}",
                             documentoidentificacionDTO.getNumero(),
                             documentoidentificacionDTO.getDigitoVerificador());
-                    throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError() ,
+                    throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError(),
                             Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
                 }
             } else {
@@ -171,23 +185,26 @@ public class DocumentoIdentificacionService {
             }
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE + ": id={} {}", id, documentoidentificacionDTO.toString(), e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE, e);
         }
     }
 
-   /**
+    /**
      * Actualiza Lote de DocumentoIdentificacion existentes.
+     *
      * @param documentoidentificacionLoteDTO lista de DocumentoIdentificacion DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      */
-    public void actualizarLote(List<DocumentoIdentificacionDTO> documentoidentificacionLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<DocumentoIdentificacionDTO> documentoidentificacionLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() documentoidentificacion");
 
         //  Valida Entrada
         if (documentoidentificacionLoteDTO.isEmpty()) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(DocumentoIdentificacionError.REQUERIDO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -196,58 +213,75 @@ public class DocumentoIdentificacionService {
             logeador.info("Lote documentoidentificacion actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE, e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ACTUALIZAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina DocumentoIdentificacion por Clave.
+     *
      * @param id la clave de DocumentoIdentificacion a eliminar.
      * @throws RecursoNoEncontradoException si el DocumentoIdentificacion no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si DocumentoIdentificacion esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() documentoidentificacion: {}", id);
 
         try {
             DocumentoIdentificacionDTO documentoidentificacionDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = documentoIdentificacionMapper.eliminar(id);
             logeador.info("documentoidentificacion eliminado: {}, registros eliminados: {}", id, registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(DocumentoIdentificacionError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE + ": {}", id, e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina Lote DocumentoIdentificacion por Clave.
+     *
      * @param idLote lista de claves de DocumentoIdentificacion a eliminar.
      * @throws EntradaInvalidadException si la lista  DocumentoIdentificacion esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si DocumentoIdentificacion esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         //  Valida Entrada
         if (idLote.isEmpty()) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
-            throw new EntradaInvalidadException(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
+            throw new EntradaInvalidadException(DocumentoIdentificacionError.REQUERIDO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
             int registrosEliminados = documentoIdentificacionMapper.eliminarLote(idLote);
             logeador.info("Lote documentoidentificacion eliminados exitosamente, registros eliminados: {}", registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(DocumentoIdentificacionError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException | BindingException e) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE,  e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE, e);
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Encuentra un DocumentoIdentificacion por Clave.
+     *
      * @param id la clave DocumentoIdentificacion a encontrar.
      * @return el DocumentoIdentificacion DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si DocumentoIdentificacion no es encontrado.
      */
     public DocumentoIdentificacionDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -260,19 +294,22 @@ public class DocumentoIdentificacionService {
                 logeador.info("documentoidentificacion encontrado por clave : {}", id);
             } else {
                 logeador.info("documentoidentificacion clave:{} no encontrado", id);
-                throw new RecursoNoEncontradoException(Constantes.DOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE);
+                throw new RecursoNoEncontradoException(DocumentoIdentificacionError.NO_ENCONTRADO.getCodigoError(),
+                        Constantes.DOCUMENTOIDENTIFICACION_NO_ENCONTRADO_MENSAGE);
             }
 
             return documentoidentificacionDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
     /**
      * Encuentra un DocumentoIdentificacion por su numero y opcional digitoVerificador.
-     * @param numero documento de identificacion.
+     *
+     * @param numero            documento de identificacion.
      * @param digitoVerificador digito verificador.
      * @return el DocumentoIdentificacion DTO encontrado.
      * @throws BaseDatosException si Ocurre un error de base de datos.
@@ -284,12 +321,14 @@ public class DocumentoIdentificacionService {
             return documentoIdentificacionMapper.encontrarPorIndentificacion(numero, digitoVerificador);
         } catch (DataAccessException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_IDENTIFICACION_MENSAGE + " {} , {}", numero, digitoVerificador, e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_IDENTIFICACION_MENSAGE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_IDENTIFICACION_MENSAGE, e);
         }
     }
 
     /**
      * Obtiene todos los DocumentoIdentificacions.
+     *
      * @return una lista de todos DocumentoIdentificacion DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
@@ -302,12 +341,14 @@ public class DocumentoIdentificacionService {
             return documentoidentificacionLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE, e);
-            throw new BaseDatosException(Constantes.DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.DOCUMENTOIDENTIFICACION_OBTENER_TODOS_MENSAJE, e);
         }
     }
 
     /**
      * Verifica campoa requeridos
+     *
      * @param documentoIdentificacionDTO el DocumentoIdentificacion DTO.
      * @throws EntradaInvalidadException si el recurso Empleado ya existe.
      */
@@ -316,10 +357,10 @@ public class DocumentoIdentificacionService {
 
 
         //Valida Numero de identificacion
-        if (documentoIdentificacionDTO == null || documentoIdentificacionDTO.getNumero() == null || documentoIdentificacionDTO.getNumero().isEmpty() ) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE );
+        if (documentoIdentificacionDTO == null || documentoIdentificacionDTO.getNumero() == null || documentoIdentificacionDTO.getNumero().isEmpty()) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE);
             throw new EntradaInvalidadException(DocumentoIdentificacionError.NUMERO_REQUERIDO.getCodigoError(),
-                                                Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE);
+                    Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE);
         }
 
         TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTO = documentoIdentificacionDTO.getTipoDocumentoIdentificacion();
@@ -327,8 +368,8 @@ public class DocumentoIdentificacionService {
 
         //Valida Id Tipo Documento Identificacion
         if (tipoDocumentoIdentificacionDTO == null || tipoDocumentoIdentificacionDTO.getId() == null
-                                                   || tipoDocumentoIdentificacionDTO.getId().toString().isEmpty()){
-            logeador.error(Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE );
+                || tipoDocumentoIdentificacionDTO.getId().toString().isEmpty()) {
+            logeador.error(Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE);
             throw new EntradaInvalidadException(TipoDocumentoIdentificacionError.ID_REQUERIDO.getCodigoError(),
                     Constantes.TIPODOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_ID_MENSAGE);
 
@@ -336,13 +377,13 @@ public class DocumentoIdentificacionService {
 
         //Verifica Existencia Tipo Documento Identificacion
         TipoDocumentoIdentificacionDTO tipoDocumentoIdentificacionDTOEncontrado =
-                         tipoDocumentoIdentificacionService.encontrarPorClave(tipoDocumentoIdentificacionDTO.getId());
+                tipoDocumentoIdentificacionService.encontrarPorClave(tipoDocumentoIdentificacionDTO.getId());
 
         //Valida Digito Verificador
         if (tipoDocumentoIdentificacionDTO.getId().equals(Constantes.TIPO_DOCUMENTO_INDENTIFICACION_RUT)
-                                                && (documentoIdentificacionDTO.getDigitoVerificador () == null
-                                                || documentoIdentificacionDTO.getDigitoVerificador() == ' ') ) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE );
+                && (documentoIdentificacionDTO.getDigitoVerificador() == null
+                || documentoIdentificacionDTO.getDigitoVerificador() == ' ')) {
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_CONTRASENA_MENSAGE);
             throw new EntradaInvalidadException(DocumentoIdentificacionError.DIGITO_VERIFICADOR_REQUERIDO.getCodigoError(),
                     Constantes.DOCUMENTOIDENTIFICACION_ENTRADA_INVALIDA_DIGITO_VERIFICADOR_MENSAGE);
         }

@@ -10,7 +10,8 @@ public enum DocumentoIdentificacionError {
     REQUERIDO("DOID_002", 400),
     DUPLICADO("DOID_003", 409),
     NUMERO_REQUERIDO("DOID_004", 400),
-    DIGITO_VERIFICADOR_REQUERIDO("DOID_005", 400);
+    DIGITO_VERIFICADOR_REQUERIDO("DOID_005", 400),
+    ID_INVALIDO("DOID_006", 400) ;
 
     private final String codigoError;
     private final Integer httpCodigoRespuesta;

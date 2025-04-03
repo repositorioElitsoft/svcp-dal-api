@@ -188,9 +188,10 @@ public class ContactoService {
      * @param id la clave de Contacto a eliminar.
      * @throws RecursoNoEncontradoException si el Contacto no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Contacto o DocumentoIdentificacion esta asociado a otro recurso
      */
     @Transactional
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() contacto: {}", id);
         
         try {

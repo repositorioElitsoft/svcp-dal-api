@@ -187,9 +187,10 @@ public class ClienteService {
      * @param id la clave de Cliente a eliminar.
      * @throws RecursoNoEncontradoException si el Cliente no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Cliente o DocumentoIdentificacion esta asociado a otro recurso
      */
     @Transactional
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() cliente: {}", id);
         
         try {

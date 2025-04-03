@@ -5,6 +5,7 @@ import com.elitsoft.servicampo.domain.entity.Empleado;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.EmpleadoMapper;
 import com.elitsoft.servicampo.mapstruct.EmpleadoMapStruct;
@@ -81,8 +82,9 @@ public class EmpleadoMobileService {
      * @param id la clave de Empleado a eliminar.
      * @throws RecursoNoEncontradoException si el Empleado no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Empleado  o DocumentoIdentificacion esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() empleado: {}", id);
         empleadoService.eliminar(id);
     }

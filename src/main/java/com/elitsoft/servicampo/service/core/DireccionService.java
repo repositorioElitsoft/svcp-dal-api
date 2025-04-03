@@ -364,9 +364,10 @@ public class DireccionService {
      * @param contactoId La clave de Contacto a eliminar.
      * @throws RecursoNoEncontradoException si el Direccion no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Direccion o Contacto esta asociado a otro recurso
      */
     @Transactional
-    public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminarContacto() direccion contacto: {}, {}, {}}", id, clienteId,  contactoId );
 
         //Verifica integridad referencial

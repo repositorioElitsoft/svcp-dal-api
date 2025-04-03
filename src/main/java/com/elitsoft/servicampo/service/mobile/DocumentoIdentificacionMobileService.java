@@ -2,7 +2,12 @@ package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.DocumentoIdentificacion;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.DocumentoIdentificacionNoEncontradoException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper;
 import com.elitsoft.servicampo.mapstruct.DocumentoIdentificacionMapStruct;
 import com.elitsoft.servicampo.service.core.DocumentoIdentificacionService;
@@ -33,9 +38,10 @@ public class DocumentoIdentificacionMobileService {
 
     /**
      * Agrega un nuevo DocumentoIdentificacion.
+     *
      * @param documentoIdentificacionDTO el DocumentoIdentificacion DTO.
      * @return el DocumentoIdentificacion DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso DocumentoIdentificacion ya existe.
      */
@@ -47,8 +53,9 @@ public class DocumentoIdentificacionMobileService {
 
     /**
      * Agrega Lote nuevos DocumentoIdentificacion.
+     *
      * @param documentoIdentificacionLoteDTO lista de DocumentoIdentificacion DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      * @throws RecursoDuplicadoException si el recurso DocumentoIdentificacion ya existe.
      */
@@ -60,13 +67,14 @@ public class DocumentoIdentificacionMobileService {
 
     /**
      * Actualiza un DocumentoIdentificacion existente.
-     * @param id la Clave de DocumentoIdentificacion a actualizar.
+     *
+     * @param id                         la Clave de DocumentoIdentificacion a actualizar.
      * @param documentoIdentificacionDTO el DocumentoIdentificacion DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si DocumentoIdentificacion no es encontrado.
-     * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
+     * @throws EntradaInvalidadException    si la entrada DocumentoIdentificacion tiene errores.
      */
-    public void actualizar(Long id, DocumentoIdentificacionDTO documentoIdentificacionDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, DocumentoIdentificacionDTO documentoIdentificacionDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() documentoidentificacion");
 
         documentoIdentificacionService.actualizar(id, documentoIdentificacionDTO);
@@ -74,11 +82,12 @@ public class DocumentoIdentificacionMobileService {
 
     /**
      * Actualiza Lote de DocumentoIdentificacion existentes.
+     *
      * @param documentoIdentificacionLoteDTO lista de DocumentoIdentificacion DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada DocumentoIdentificacion tiene errores.
      */
-    public void actualizarLote(List<DocumentoIdentificacionDTO> documentoIdentificacionLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<DocumentoIdentificacionDTO> documentoIdentificacionLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() documentoidentificacion");
 
         documentoIdentificacionService.actualizarLote(documentoIdentificacionLoteDTO);
@@ -86,22 +95,26 @@ public class DocumentoIdentificacionMobileService {
 
     /**
      * Elimina DocumentoIdentificacion por Clave.
+     *
      * @param id la clave de DocumentoIdentificacion a eliminar.
      * @throws RecursoNoEncontradoException si el DocumentoIdentificacion no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si DocumentoIdentificacion esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() documentoidentificacion: {}", id);
         documentoIdentificacionService.eliminar(id);
     }
 
     /**
      * Elimina Lote DocumentoIdentificacion por Clave.
+     *
      * @param idLote lista de claves de DocumentoIdentificacion a eliminar.
      * @throws EntradaInvalidadException si la lista  DocumentoIdentificacion esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si DocumentoIdentificacion esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         documentoIdentificacionService.eliminarLote(idLote);
@@ -109,9 +122,10 @@ public class DocumentoIdentificacionMobileService {
 
     /**
      * Encuentra un DocumentoIdentificacion por Clave.
+     *
      * @param id la clave DocumentoIdentificacion a encontrar.
      * @return el DocumentoIdentificacion DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si DocumentoIdentificacion no es encontrado.
      */
     public DocumentoIdentificacionDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -121,19 +135,21 @@ public class DocumentoIdentificacionMobileService {
 
     /**
      * Encuentra un DocumentoIdentificacion por su numero y opcional digitoVerificador.
-     * @param numero documento de identificacion.
+     *
+     * @param numero            documento de identificacion.
      * @param digitoVerificador digito verificador.
      * @return el DocumentoIdentificacion DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException                           si Ocurre un error de base de datos.
      * @throws DocumentoIdentificacionNoEncontradoException si DocumentoIdentificacion no es encontrado.
      */
     public DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador) throws BaseDatosException, DocumentoIdentificacionNoEncontradoException {
         logeador.debug("encontrarPorIndentificacion(): {} , {}", numero, digitoVerificador);
-        return documentoIdentificacionService.encontrarPorIndentificacion(numero,digitoVerificador );
+        return documentoIdentificacionService.encontrarPorIndentificacion(numero, digitoVerificador);
     }
 
     /**
      * Obtiene todos los DocumentoIdentificacion.
+     *
      * @return lista de todos DocumentoIdentificacion DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */

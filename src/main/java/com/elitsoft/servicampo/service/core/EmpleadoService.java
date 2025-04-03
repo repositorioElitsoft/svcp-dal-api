@@ -182,9 +182,10 @@ public class EmpleadoService {
      * @param id la clave de Empleado a eliminar.
      * @throws RecursoNoEncontradoException si el Empleado no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Empleado  o DocumentoIdentificacion esta asociado a otro recurso
      */
     @Transactional
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() empleado: {}", id);
 
         try {
