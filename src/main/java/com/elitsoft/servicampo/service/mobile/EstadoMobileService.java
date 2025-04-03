@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.EstadoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.EstadoMapper;
 import com.elitsoft.servicampo.mapstruct.EstadoMapStruct;
@@ -35,9 +36,10 @@ public class EstadoMobileService {
 
     /**
      * Agrega un nuevo Estado.
+     *
      * @param estadoDTO el Estado DTO.
      * @return el Estado DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Estado tiene errores.
      * @throws RecursoDuplicadoException si el recurso Estado ya existe.
      */
@@ -49,8 +51,9 @@ public class EstadoMobileService {
 
     /**
      * Agrega Lote nuevos Estado.
+     *
      * @param estadoLoteDTO lista de Estado DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Estado tiene errores.
      * @throws RecursoDuplicadoException si el recurso Estado ya existe.
      */
@@ -62,13 +65,14 @@ public class EstadoMobileService {
 
     /**
      * Actualiza un Estado existente.
-     * @param id la Clave de Estado a actualizar.
+     *
+     * @param id        la Clave de Estado a actualizar.
      * @param estadoDTO el Estado DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Estado no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Estado tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Estado tiene errores.
      */
-    public void actualizar(Long id, EstadoDTO estadoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, EstadoDTO estadoDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() estado");
 
         estadoService.actualizar(id, estadoDTO);
@@ -76,11 +80,12 @@ public class EstadoMobileService {
 
     /**
      * Actualiza Lote de Estado existentes.
+     *
      * @param estadoLoteDTO lista de Estado DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Estado tiene errores.
      */
-    public void actualizarLote(List<EstadoDTO> estadoLoteDTO) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<EstadoDTO> estadoLoteDTO) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() estado");
 
         estadoService.actualizarLote(estadoLoteDTO);
@@ -88,22 +93,26 @@ public class EstadoMobileService {
 
     /**
      * Elimina Estado por Clave.
+     *
      * @param id la clave de Estado a eliminar.
      * @throws RecursoNoEncontradoException si el Estado no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si Estado esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() estado: {}", id);
         estadoService.eliminar(id);
     }
 
     /**
      * Elimina Lote Estado por Clave.
+     *
      * @param idLote lista de claves de Estado a eliminar.
      * @throws EntradaInvalidadException si la lista  Estado esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si Estado esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         estadoService.eliminarLote(idLote);
@@ -111,9 +120,10 @@ public class EstadoMobileService {
 
     /**
      * Encuentra un Estado por Clave.
+     *
      * @param id la clave Estado a encontrar.
      * @return el Estado DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Estado no es encontrado.
      */
     public EstadoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -123,6 +133,7 @@ public class EstadoMobileService {
 
     /**
      * Obtiene todos los Estados.
+     *
      * @return lista de todos Estado DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */

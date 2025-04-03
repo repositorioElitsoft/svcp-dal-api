@@ -65,6 +65,7 @@ public class Constantes {
 
     public static final String ESTADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de ESTADO invalida.";
     public static final String ESTADO_DUPLICADO_MENSAGE = "Recurso  ESTADO ya existe.";
+    public static final String ESTADO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ESTADO viola Integridad. ";
     public static final String ESTADO_NO_ENCONTRADO_MENSAGE = "Recurso ESTADO no  encontrado";
     public static final String ESTADO_AGREGAR_MENSAJE = "Error Interno agregando Recurso ESTADO";
     public static final String ESTADO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ESTADO";
