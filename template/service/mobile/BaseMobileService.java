@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Clase de Servicio Movil para la entidad  #Base#.
  */
-@Component
+@Service
 public class #Base#MobileService {
 
     @Autowired
