@@ -1,7 +1,11 @@
 package com.elitsoft.servicampo.service.core;
 
+import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
+import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
+import com.elitsoft.servicampo.domain.dto.core.SegmentacionClienteDTO;
+import com.elitsoft.servicampo.domain.dto.core.TipoClienteDTO;
 import com.elitsoft.servicampo.domain.entity.Cliente;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.file.ImagenArchivoService;
@@ -71,6 +75,30 @@ public class ClienteService {
 
             // Asocia el documento de Identificacion creado al empleado
             clienteDTO.setDocumentoIdentificacion(documentoIdentificacionDTO);
+
+            if (clienteDTO.getTipoCliente() == null ) {
+                TipoClienteDTO tipoClienteDTO = new TipoClienteDTO();
+                tipoClienteDTO.setId(Constantes.TIPO_CLIENTE_NO_INFORMADO);
+                clienteDTO.setTipoCliente(tipoClienteDTO);
+            }
+
+            if (clienteDTO.getClasificacionCliente() == null ) {
+                ClasificacionClienteDTO clasificacionClienteDTO  = new ClasificacionClienteDTO();
+                clasificacionClienteDTO.setId(Constantes.CLASIFICACION_CLIENTE_NO_INFORMADO);
+                clienteDTO.setClasificacionCliente(clasificacionClienteDTO);
+            }
+
+            if (clienteDTO.getAgrupacionComercial() == null ) {
+                AgrupacionComercialDTO agrupacionComercialDTO  = new AgrupacionComercialDTO();
+                agrupacionComercialDTO.setId(Constantes.AGRUPACION_COMERCIAL_NO_INFORMADO);
+                clienteDTO.setAgrupacionComercial(agrupacionComercialDTO);
+            }
+
+            if (clienteDTO.getSegmentacionCliente() == null ) {
+                SegmentacionClienteDTO segmentacionClienteDTO   = new SegmentacionClienteDTO();
+                segmentacionClienteDTO.setId(Constantes.SEGMENTACION_CLIENTE_NO_INFORMADO);
+                clienteDTO.setSegmentacionCliente(segmentacionClienteDTO);
+            }
 
             Cliente cliente = mapper.toEntity(clienteDTO);
             cliente = clienteMapper.agregar(cliente);
