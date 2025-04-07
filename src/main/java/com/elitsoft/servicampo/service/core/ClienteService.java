@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.Cliente;
 import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.file.ImagenArchivoService;
 import com.elitsoft.servicampo.mapper.ClienteMapper;
 import com.elitsoft.servicampo.mapstruct.ClienteMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
@@ -13,11 +14,14 @@ import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -34,6 +38,10 @@ public class ClienteService {
 
     @Autowired
     private ClienteMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
+
+    @Autowired
+    @Qualifier("imagenArchivoClienteService")
+    ImagenArchivoService imagenArchivoService;
 
     private static final Logger logeador = LoggerFactory.getLogger(ClienteService.class); //Logback
 
@@ -281,5 +289,50 @@ public class ClienteService {
         }
     }
 
+    /**
+     * Sube imagen de Cliente a una carpeta.
+     * @param id la clave Cliente a encontrar.
+     * @param archivo imagen de Cliente.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al subir imagen.
+     * @throws RecursoNoEncontradoException si no es encontrado el Cliente
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    public void subirImagen(Long id, MultipartFile archivo) throws  ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("subirImagen():");
+
+        try {
+            ClienteDTO clienteDTO  =  this.encontrarPorClave(id);
+            imagenArchivoService.subir(archivo.getBytes(), id.toString().concat(".jpeg"));
+            clienteDTO.setImagenPerfil(id.toString().concat(".jpeg"));
+            this.actualizar(id, clienteDTO);
+
+        } catch (IOException e) {
+            logeador.error(Constantes.EMPLEADO_IMAGEN_SUBIR_MENSAJE, e);
+            throw new ArchivoEntradaSalidaException(ClienteError.IMAGEN_SUBIR.getCodigoError(), Constantes.CLIENTE_IMAGEN_SUBIR_MENSAJE, e);
+        }
+    }
+
+
+    /**
+     * Baja imagen de Cliente.
+     * @param id la clave Cliente a encontrar.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al bajar imagen.
+     * @throws RecursoNoEncontradoException si no es encontrado el Cliente
+     * @throws BaseDatosException si ocurre un error de base de datos.
+     */
+    public byte[]  bajarImagen(Long id) throws  ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException  {
+        logeador.debug("bajarImagen():");
+
+        try {
+            ClienteDTO clienteDTO  =  this.encontrarPorClave(id);
+            byte[]  imagen =   imagenArchivoService.bajar (clienteDTO.getImagenPerfil());
+            if (imagen==null) {  throw new RecursoNoEncontradoException(ClienteError.IMAGEN_BAJAR_NO_ENCONTRADO.getCodigoError(),
+                                                                        Constantes.CLIENTE_IMAGEN_NO_ENCONTRADO_MENSAGE); }
+            return imagen;
+        } catch (RuntimeException e) {
+            logeador.error(Constantes.EMPLEADO_IMAGEN_SUBIR_MENSAJE, e);
+            throw new ArchivoEntradaSalidaException(ClienteError.IMAGEN_BAJAR.getCodigoError(), Constantes.CLIENTE_IMAGEN_BAJAR_MENSAJE, e);
+        }
+    }
 
 }

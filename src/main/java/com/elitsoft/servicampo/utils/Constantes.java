@@ -394,6 +394,9 @@ public class Constantes {
     public static final String CLIENTE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CLIENTE:";
     public static final String CLIENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CLIENTE";
     public static final String CLIENTE_FILTRAR_MENSAJE = "Error filtrando CLIENTE";
+    public static final String CLIENTE_IMAGEN_SUBIR_MENSAJE = "Error subiendo imagen de CLIENTE";
+    public static final String CLIENTE_IMAGEN_BAJAR_MENSAJE = "Error bajando imagen de CLIENTE";
+    public static final String CLIENTE_IMAGEN_NO_ENCONTRADO_MENSAGE = "Imagen CLIENTE no  encontrado";
 
     public static final String DIRECCION_ENTRADA_INVALIDA_MENSAGE = "Entrada de DIRECCION invalida.";
     public static final String DIRECCION_DUPLICADO_MENSAGE = "Recurso  DIRECCION ya existe.";

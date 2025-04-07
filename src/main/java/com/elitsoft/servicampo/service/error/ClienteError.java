@@ -14,7 +14,10 @@ public enum ClienteError {
     CORREO_REQUERIDO("CLNT_006", 400),
     CORREO_NO_ENCONTRADO("CLNT_007", 404),
     ID_REQUERIDO("CLNT_008", 400) ,
-    ID_INVALIDO("CLNT_009", 400) ;
+    ID_INVALIDO("CLNT_009", 400) ,
+    IMAGEN_SUBIR("CLNT_010", 500),
+    IMAGEN_BAJAR("CLNT_011", 500),
+    IMAGEN_BAJAR_NO_ENCONTRADO("CLNT_012", 404);
 
 
     private final String codigoError;

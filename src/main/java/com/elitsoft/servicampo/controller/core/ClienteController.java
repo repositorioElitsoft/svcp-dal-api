@@ -10,11 +10,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.ContentDisposition;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -231,4 +237,65 @@ public class ClienteController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
         }
     }
+
+    @PostMapping(value = "/{id}/imagen", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Sube imagen de empleado", description = "Sube imagen de empleado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Imagen Empleados subida exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<ApiEnityResponse<String>> subirImagen(@PathVariable Long id, @RequestParam(value = "file") MultipartFile archivo) {
+        logeador.debug("subirImagen()");
+
+        try {
+            clienteService.subirImagen(id, archivo);
+            return ResponseEntity.ok().build(); // Retorna  200 OK
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage()));  // Retorna  500 Internal Server Error
+        }
+        catch (ArchivoEntradaSalidaException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @GetMapping(value = "/{id}/imagen", produces = MediaType.IMAGE_JPEG_VALUE)
+    @Operation(summary = "Baja imagen de cliente", description = "Baja imagen de cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Imagen Cliente Baja exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Imagen Cliente no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<?> bajarImagen(@PathVariable Long id) {
+        logeador.debug("bajarImagen()");
+
+        try {
+            byte[] imageData = clienteService.bajarImagen(id);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
+            InputStreamResource resource = new InputStreamResource(bis);
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentLength(imageData.length);
+            headers.setContentDisposition(ContentDisposition.builder("inline").filename(id.toString().concat(".jpeg")).build());
+
+            return ResponseEntity.ok().headers(headers).body(resource);
+                
+        } catch (RecursoNoEncontradoException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(headers).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));
+        } catch (BaseDatosException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));
+        } catch (ArchivoEntradaSalidaException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));
+        }
+    }
+
+
 }
