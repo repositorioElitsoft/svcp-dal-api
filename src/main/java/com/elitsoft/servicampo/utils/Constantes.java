@@ -8,6 +8,10 @@ public class Constantes {
 
 
     public static final Long ESTADO_HABILITADO = 1L;
+    public static final Long TIPO_CLIENTE_NO_INFORMADO = -1L;
+    public static final Long CLASIFICACION_CLIENTE_NO_INFORMADO = -1L;
+    public static final Long AGRUPACION_COMERCIAL_NO_INFORMADO = -1L;
+    public static final Long SEGMENTACION_CLIENTE_NO_INFORMADO = -1L;
     public static final Long TIPO_DOCUMENTO_INDENTIFICACION_RUT = 1L;
     public static final String MONEDA = "CLP";
     public static final int CARRITO_ARTICULO_MAXIMO = 15;
