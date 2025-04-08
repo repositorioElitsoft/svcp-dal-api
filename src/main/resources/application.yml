@@ -11,6 +11,41 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none # Important: Use a proper DDL strategy for production! (e.g., validate, update)
+  servlet:
+      multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
+  cloud:
+    gcp:
+      enabled: true # Enable GCP Storage auto-configuration
+      project-id: servicampo-dev
+      credentials:
+        location: classpath:credentials.json # Path to your service account JSON file
+
+#    azure:
+#      storage:
+#        account-name: your-azure-storage-account-name # Replace with your Azure Storage account name
+#        account-key: your-azure-storage-account-key # Replace with your Azure Storage account key
+#cloud:
+#  aws:
+#    region: your-aws-region # Replace with your AWS region (e.g., us-east-1)
+#    credentials:
+#      access-key: your-access-key # Replace with your AWS access key ID
+#      secret-key: your-secret-access-key # Replace with your AWS secret access key
+
+file:
+  storage:
+    platform: gcp # Set to gcp, aws, azure, or local
+    buckets:
+      main: servicampo-bucket-dev
+    folders:
+      imagenes: Imagenes
+      imagenes.clientes: Clientes
+      imagenes.empleados: Empleados
+      imagenes.productos: Productos
+      evidencias: Evidencias
+      evidencias.imagenes: imagenes
+      evidencias.audios: audio
 
 mybatis:
   schema: dev_v2
@@ -23,4 +58,4 @@ server:
   servlet:
     context-path: /api/v1
 
-  port: 8080 # Choose your port
+  port: 8080

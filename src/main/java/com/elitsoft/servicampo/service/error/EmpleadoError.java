@@ -16,7 +16,10 @@ public enum EmpleadoError {
     ID_REQUERIDO("EMPL_008", 400),
     ID_INVALIDO("EMPL_009", 400),
     NO_AUTORIZADO("EMPL_010", 200),
-    DESABILITADO("EMPL_011", 401);
+    DESABILITADO("EMPL_011", 401),
+    IMAGEN_SUBIR("EMPL_012", 500),
+    IMAGEN_BAJAR("EMPL_013", 500),
+    IMAGEN_NO_ENCONTRADO("EMPL_014", 404);
 
 
     private final String codigoError;

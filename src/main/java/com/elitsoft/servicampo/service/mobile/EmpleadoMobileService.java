@@ -2,6 +2,7 @@ package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.EmpleadoDTO;
 import com.elitsoft.servicampo.domain.entity.Empleado;
+import com.elitsoft.servicampo.exceptions.ArchivoEntradaSalidaException;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,9 +38,10 @@ public class EmpleadoMobileService {
 
     /**
      * Agrega un nuevo Empleado.
+     *
      * @param empleadoDTO el Empleado DTO.
      * @return el Empleado DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
      * @throws RecursoDuplicadoException si el recurso Empleado ya existe.
      */
@@ -51,13 +54,14 @@ public class EmpleadoMobileService {
 
     /**
      * Actualiza la clave de Empleado existente.
-     * @param id la Clave de Empleado a actualizar.
+     *
+     * @param id          la Clave de Empleado a actualizar.
      * @param empleadoDTO el Empleado DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Empleado no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Empleado tiene errores.
      */
-    public void actualizar(Long id, EmpleadoDTO empleadoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, EmpleadoDTO empleadoDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() empleado");
 
         empleadoService.actualizar(id, empleadoDTO);
@@ -65,13 +69,14 @@ public class EmpleadoMobileService {
 
     /**
      * Actualiza un Empleado existente.
-     * @param id la Clave de Empleado a actualizar.
+     *
+     * @param id         la Clave de Empleado a actualizar.
      * @param contrasena La clave Empleado a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Empleado no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Empleado tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Empleado tiene errores.
      */
-    public void actualizarClave(Long id, String contrasena) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizarClave(Long id, String contrasena) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizarClave() empleado");
 
         empleadoService.actualizarClave(id, contrasena);
@@ -79,9 +84,10 @@ public class EmpleadoMobileService {
 
     /**
      * Elimina Empleado por Clave.
+     *
      * @param id la clave de Empleado a eliminar.
      * @throws RecursoNoEncontradoException si el Empleado no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoEliminarException     si Empleado  o DocumentoIdentificacion esta asociado a otro recurso
      */
     public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
@@ -92,9 +98,10 @@ public class EmpleadoMobileService {
 
     /**
      * Encuentra un Empleado por Clave.
+     *
      * @param id la clave Empleado a encontrar.
      * @return el Empleado DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Empleado no es encontrado.
      */
     public EmpleadoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -104,6 +111,7 @@ public class EmpleadoMobileService {
 
     /**
      * Encuentra un Empleado por correo.
+     *
      * @param email correo de Empleado a encontrar.
      * @return el Empleado encontrado.
      * @throws BaseDatosException si Ocurre un error de base de datos.
@@ -115,11 +123,39 @@ public class EmpleadoMobileService {
 
     /**
      * Obtiene todos los Empleados.
+     *
      * @return lista de todos Empleado DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
     public List<EmpleadoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return empleadoService.obtenerTodos();
+    }
+
+    /**
+     * Sube imagen de Empleado a una carpeta.
+     *
+     * @param id      la clave Empleado a encontrar.
+     * @param archivo imagen de Empleado.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al subir imagen.
+     * @throws RecursoNoEncontradoException  si no es encontrado el Empleado
+     * @throws BaseDatosException            si ocurre un error de base de datos.
+     */
+    public void subirImagen(Long id, MultipartFile archivo) throws ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("subirImagen():");
+        empleadoService.subirImagen(id, archivo);
+    }
+
+    /**
+     * Baja imagen de Empleado.
+     *
+     * @param id la clave Empleado a encontrar.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al bajar imagen.
+     * @throws RecursoNoEncontradoException  si no es encontrado el Empleado
+     * @throws BaseDatosException            si ocurre un error de base de datos.
+     */
+    public byte[] bajarImagen(Long id) throws ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("bajarImagen():");
+        return empleadoService.bajarImagen(id);
     }
 }

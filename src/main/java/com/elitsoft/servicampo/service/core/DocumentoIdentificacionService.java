@@ -60,14 +60,21 @@ public class DocumentoIdentificacionService {
         this.valiacionesEntrada(documentoidentificacionDTO);
 
         //Verifica Identificacion Duplicada.
-        DocumentoIdentificacion documentoIdentificacionExiste = encontrarPorIndentificacion(
+        Character digitoVerificador = null;
+        if (documentoidentificacionDTO.getTipoDocumentoIdentificacion().getId().equals(Constantes.TIPO_DOCUMENTO_INDENTIFICACION_RUT)){
+            digitoVerificador =  documentoidentificacionDTO.getDigitoVerificador();
+        }
+
+        DocumentoIdentificacion documentoIdentificacionExiste  = encontrarPorIndentificacion(
                 documentoidentificacionDTO.getNumero(),
-                documentoidentificacionDTO.getDigitoVerificador());
+                digitoVerificador,
+                documentoidentificacionDTO.getTipoDocumentoIdentificacion().getId());
 
         if (documentoIdentificacionExiste != null) {
-            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {} , {}",
+            logeador.error(Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE + ": {} , {}, {}",
                     documentoidentificacionDTO.getNumero(),
-                    documentoidentificacionDTO.getDigitoVerificador());
+                    documentoidentificacionDTO.getDigitoVerificador(),
+                    documentoidentificacionDTO.getTipoDocumentoIdentificacion().getId());
             throw new RecursoDuplicadoException(DocumentoIdentificacionError.DUPLICADO.getCodigoError(),
                     Constantes.DOCUMENTOIDENTIFICACION_DUPLICADO_MENSAGE);
         }
@@ -154,17 +161,36 @@ public class DocumentoIdentificacionService {
         DocumentoIdentificacionDTO documentoidentificacionDTOEncontrado = this.encontrarPorClave(id); // Verifica si existe el recurso
 
         try {
+            boolean actualiza = false;
 
             //Verifica Documento actual vs Documento a Actualizar
-            if (!documentoidentificacionDTOEncontrado.getNumero().equals(documentoidentificacionDTO.getNumero()) ||
-                    !documentoidentificacionDTOEncontrado.getDigitoVerificador().equals(documentoidentificacionDTO.getDigitoVerificador())) {
 
-                //El Documento nuevo es distinto al anterior, se procede a actualizarlo:
+            //Evalua Tipo Documento y Numero  Documento
+            if (!documentoidentificacionDTOEncontrado.getTipoDocumentoIdentificacion().getId().equals(documentoidentificacionDTO.getTipoDocumentoIdentificacion().getId())
+                || !documentoidentificacionDTOEncontrado.getNumero().equals(documentoidentificacionDTO.getNumero()) ){
+                actualiza = true;
+            }
 
+            //Tipo Documento
+            if (documentoidentificacionDTOEncontrado.getTipoDocumentoIdentificacion().getId().equals(Constantes.TIPO_DOCUMENTO_INDENTIFICACION_RUT)){
+                if (!documentoidentificacionDTOEncontrado.getNumero().equals(documentoidentificacionDTO.getNumero())) {
+                    actualiza = true;
+                }
+            }
+
+            //El Documento nuevo es distinto al anterior, se procede a actualizarlo:
+            if (actualiza) {
+
+                Character digitoVerificador =  null;
                 //Se verifica que el nuevo documento a actualizar no exista
+                if (documentoidentificacionDTOEncontrado.getTipoDocumentoIdentificacion().getId().equals(Constantes.TIPO_DOCUMENTO_INDENTIFICACION_RUT)){
+                    digitoVerificador =  documentoidentificacionDTO.getDigitoVerificador();
+                }
+
                 DocumentoIdentificacion documentoIdentificacionExiste = encontrarPorIndentificacion(
                         documentoidentificacionDTO.getNumero(),
-                        documentoidentificacionDTO.getDigitoVerificador());
+                        digitoVerificador,
+                        documentoidentificacionDTOEncontrado.getTipoDocumentoIdentificacion().getId());
 
                 //Documento no existe
                 if (documentoIdentificacionExiste == null) {
@@ -311,14 +337,15 @@ public class DocumentoIdentificacionService {
      *
      * @param numero            documento de identificacion.
      * @param digitoVerificador digito verificador.
+     * @param tipoDocumentoIdentificacionId TipoDocumentoIdentificacion a encontrar.
      * @return el DocumentoIdentificacion DTO encontrado.
      * @throws BaseDatosException si Ocurre un error de base de datos.
      */
-    public DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador) throws BaseDatosException {
+    public DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador, Long tipoDocumentoIdentificacionId) throws BaseDatosException {
         logeador.debug("encontrarPorIndentificacion(): {} , {}", numero, digitoVerificador);
 
         try {
-            return documentoIdentificacionMapper.encontrarPorIndentificacion(numero, digitoVerificador);
+            return documentoIdentificacionMapper.encontrarPorIndentificacion(numero, digitoVerificador, tipoDocumentoIdentificacionId);
         } catch (DataAccessException e) {
             logeador.error(Constantes.DOCUMENTOIDENTIFICACION_ENCONTRAR_POR_IDENTIFICACION_MENSAGE + " {} , {}", numero, digitoVerificador, e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),

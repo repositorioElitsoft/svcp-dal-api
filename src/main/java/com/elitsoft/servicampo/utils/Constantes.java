@@ -7,12 +7,18 @@ package com.elitsoft.servicampo.utils;
 public class Constantes {
 
 
+    public static final Long ESTADO_NO_INFORMADO = -1L;
     public static final Long ESTADO_HABILITADO = 1L;
+
     public static final Long TIPO_CLIENTE_NO_INFORMADO = -1L;
     public static final Long CLASIFICACION_CLIENTE_NO_INFORMADO = -1L;
     public static final Long AGRUPACION_COMERCIAL_NO_INFORMADO = -1L;
     public static final Long SEGMENTACION_CLIENTE_NO_INFORMADO = -1L;
     public static final Long TIPO_DOCUMENTO_INDENTIFICACION_RUT = 1L;
+
+    public static final Long TIPO_EMPLEADO_NO_INFORMADO = -1L;
+    public static final Long ROLE_NO_INFORMADO = -1L;
+    
     public static final String MONEDA = "CLP";
     public static final int CARRITO_ARTICULO_MAXIMO = 15;
     public static final double TASA_ENTREGA = 5.00; // Example
@@ -42,6 +48,9 @@ public class Constantes {
     public static final String EMPLEADO_FILTRAR_MENSAJE = "Error filtrando EMPLEADO";
     public static final String EMPLEADO_NO_AUTORIZADO_MENSAJE = "Error EMPLEADO no esta autorizado para hacer login";
     public static final String EMPLEADO_NO_HABILITADO_MENSAJE = "Error EMPLEADO no esta habilitado para hacer login";
+    public static final String EMPLEADO_IMAGEN_SUBIR_MENSAJE = "Error subiendo imagen de EMPLEADO";
+    public static final String EMPLEADO_IMAGEN_BAJAR_MENSAJE = "Error bajando imagen de EMPLEADO";
+    public static final String EMPLEADO_IMAGEN_NO_ENCONTRADO_MENSAGE = "Imagen EMPLEADO no  encontrado";
 
     public static final String TIPOEMPLEADO_ENTRADA_INVALIDA_MENSAGE = "Entrada de TIPOEMPLEADO invalida.";
     public static final String TIPOEMPLEADO_DUPLICADO_MENSAGE = "Recurso  TIPOEMPLEADO ya existe.";

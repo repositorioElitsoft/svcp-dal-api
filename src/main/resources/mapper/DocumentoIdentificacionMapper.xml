@@ -41,6 +41,7 @@
         <if test="digitoVerificador != null and digitoVerificador != ''">
             AND identificacion.doid_dv =#{digitoVerificador}
         </if>
+        AND identificacion.tpdi_id = {#tipoDocumentoIdentificacionId}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->

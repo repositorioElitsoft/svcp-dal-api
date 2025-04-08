@@ -136,15 +136,16 @@ public class DocumentoIdentificacionMobileService {
     /**
      * Encuentra un DocumentoIdentificacion por su numero y opcional digitoVerificador.
      *
-     * @param numero            documento de identificacion.
-     * @param digitoVerificador digito verificador.
+     * @param numero                        documento de identificacion.
+     * @param digitoVerificador             digito verificador.
+     * @param tipoDocumentoIdentificacionId TipoDocumentoIdentificacion a encontrar.
      * @return el DocumentoIdentificacion DTO encontrado.
      * @throws BaseDatosException                           si Ocurre un error de base de datos.
      * @throws DocumentoIdentificacionNoEncontradoException si DocumentoIdentificacion no es encontrado.
      */
-    public DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador) throws BaseDatosException, DocumentoIdentificacionNoEncontradoException {
+    public DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador, Long tipoDocumentoIdentificacionId) throws BaseDatosException, DocumentoIdentificacionNoEncontradoException {
         logeador.debug("encontrarPorIndentificacion(): {} , {}", numero, digitoVerificador);
-        return documentoIdentificacionService.encontrarPorIndentificacion(numero, digitoVerificador);
+        return documentoIdentificacionService.encontrarPorIndentificacion(numero, digitoVerificador, tipoDocumentoIdentificacionId);
     }
 
     /**

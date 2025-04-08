@@ -70,12 +70,13 @@ public interface DocumentoIdentificacionMapper {
      */
 
     /**
-     * Encuentra un DocumentoIdentificacion en la base de datos por su numero y opcional digitoVerificador.
+     * Encuentra un DocumentoIdentificacion en la base de datos por su numero, opcional digitoVerificador y TipoDocumentoIdentificacion
      * @param numero documento de identificacion.
      * @param digitoVerificador digito verificador.
+     * @param tipoDocumentoIdentificacionId TipoDocumentoIdentificacion a encontrar.
      * @return La entidad DocumentoIdentificacion encontrado, o null si no es encontrado.
      */
-    DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador);
+    DocumentoIdentificacion encontrarPorIndentificacion(String numero, Character digitoVerificador, Long tipoDocumentoIdentificacionId);
 
 
 
