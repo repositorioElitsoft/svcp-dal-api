@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.TipoComponenteDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TipoComponenteMapper;
 import com.elitsoft.servicampo.mapstruct.TipoComponenteMapStruct;
@@ -34,9 +35,10 @@ public class TipoComponenteMobileService {
 
     /**
      * Agrega un nuevo TipoComponente.
+     *
      * @param tipocomponenteDTO el TipoComponente DTO.
      * @return el TipoComponente DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoComponente ya existe.
      */
@@ -48,8 +50,9 @@ public class TipoComponenteMobileService {
 
     /**
      * Agrega Lote nuevos TipoComponente.
+     *
      * @param tipocomponenteDTOLote lista de TipoComponente DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoComponente ya existe.
      */
@@ -61,13 +64,14 @@ public class TipoComponenteMobileService {
 
     /**
      * Actualiza un TipoComponente existente.
-     * @param id la Clave de TipoComponente a actualizar.
+     *
+     * @param id                la Clave de TipoComponente a actualizar.
      * @param tipocomponenteDTO el TipoComponente DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoComponente no es encontrado.
-     * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
+     * @throws EntradaInvalidadException    si la entrada TipoComponente tiene errores.
      */
-    public void actualizar(Long id, TipoComponenteDTO tipocomponenteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long id, TipoComponenteDTO tipocomponenteDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() tipocomponente");
 
         tipocomponenteService.actualizar(id, tipocomponenteDTO);
@@ -75,11 +79,12 @@ public class TipoComponenteMobileService {
 
     /**
      * Actualiza Lote de TipoComponente existentes.
+     *
      * @param tipocomponenteDTOLote lista de TipoComponente DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
      */
-    public void actualizarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tipocomponente");
 
         tipocomponenteService.actualizarLote(tipocomponenteDTOLote);
@@ -87,22 +92,26 @@ public class TipoComponenteMobileService {
 
     /**
      * Elimina TipoComponente por Clave.
+     *
      * @param id la clave de TipoComponente a eliminar.
      * @throws RecursoNoEncontradoException si el TipoComponente no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si TipoComponente esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() tipocomponente: {}", id);
         tipocomponenteService.eliminar(id);
     }
 
     /**
      * Elimina Lote TipoComponente por Clave.
+     *
      * @param tipocomponenteDTOLote lista de claves de TipoComponente a eliminar.
      * @throws EntradaInvalidadException si la lista  TipoComponente esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si TipoComponente esta asociado a otro recurso
      */
-    public void eliminarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         tipocomponenteService.eliminarLote(tipocomponenteDTOLote);
@@ -110,9 +119,10 @@ public class TipoComponenteMobileService {
 
     /**
      * Encuentra un TipoComponente por Clave.
+     *
      * @param id la clave TipoComponente a encontrar.
      * @return el TipoComponente DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoComponente no es encontrado.
      */
     public TipoComponenteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -122,6 +132,7 @@ public class TipoComponenteMobileService {
 
     /**
      * Obtiene todos los TipoComponentes.
+     *
      * @return lista de todos TipoComponente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */

@@ -2,17 +2,22 @@ package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.TipoComponenteDTO;
 import com.elitsoft.servicampo.domain.entity.TipoComponente;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.TipoComponenteMapper;
 import com.elitsoft.servicampo.mapstruct.TipoComponenteMapStruct;
-import com.elitsoft.servicampo.utils.Constantes;
 import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.service.error.TipoComponenteError;
+import com.elitsoft.servicampo.utils.Constantes;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +39,10 @@ public class TipoComponenteService {
 
     /**
      * Agrega un nuevo TipoComponente.
+     *
      * @param tipocomponenteDTO el TipoComponente DTO.
      * @return el TipoComponente DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
      * @throws RecursoDuplicadoException si el recurso TipoComponente ya existe.
      */
@@ -46,9 +52,9 @@ public class TipoComponenteService {
         //  Valida Entrada
         if (tipocomponenteDTO == null) {
             logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ",
-                           TipoComponenteError.REQUERIDO.getCodigoError());
+                    TipoComponenteError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(TipoComponenteError.REQUERIDO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -56,25 +62,24 @@ public class TipoComponenteService {
             tipocomponente = tipocomponenteMapper.agregar(tipocomponente);
             logeador.info("TipoComponente agregado exitosamente id: {}", tipocomponente.getId());
             return mapper.toDTO(tipocomponente);
-        }
-        catch (DuplicateKeyException e) {
+        } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_DUPLICADO_MENSAGE + ": {}, codigoError:{}", tipocomponenteDTO.getId(),
-                           TipoComponenteError.DUPLICADO.getCodigoError());
+                    TipoComponenteError.DUPLICADO.getCodigoError());
             throw new RecursoDuplicadoException(TipoComponenteError.DUPLICADO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_DUPLICADO_MENSAGE);
-        }
-        catch (DataAccessException e) {
+                    Constantes.TIPOCOMPONENTE_DUPLICADO_MENSAGE);
+        } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_AGREGAR_MENSAJE + ": {}, codigoError:{}", tipocomponenteDTO.toString(),
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOCOMPONENTE_AGREGAR_MENSAJE, e);
+                    Constantes.TIPOCOMPONENTE_AGREGAR_MENSAJE, e);
         }
     }
 
     /**
      * Agrega Lote nuevos TipoComponente.
+     *
      * @param tipocomponenteDTOLote lista de TipoComponente DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
      * @throws RecursoDuplicadoException si el recurso tipocomponente ya existe.
      */
@@ -84,53 +89,54 @@ public class TipoComponenteService {
         //  Valida Entrada
         if (tipocomponenteDTOLote.isEmpty()) {
             logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + " codigoError:{}",
-                          TipoComponenteError.REQUERIDO.getCodigoError());
+                    TipoComponenteError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(TipoComponenteError.REQUERIDO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
         try {
             List<TipoComponente> tipocomponenteLote = mapper.toEntityList(tipocomponenteDTOLote);
 
-            int registrosAgregados =  tipocomponenteMapper.agregarLote(tipocomponenteLote);
+            int registrosAgregados = tipocomponenteMapper.agregarLote(tipocomponenteLote);
             logeador.info("Lote TipoComponente agregados exitosamente,  registros agregados: {}", registrosAgregados);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_DUPLICADO_MENSAGE + " codigoError:{}",
-                          TipoComponenteError.DUPLICADO.getCodigoError());
+                    TipoComponenteError.DUPLICADO.getCodigoError());
             throw new RecursoDuplicadoException(TipoComponenteError.DUPLICADO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_DUPLICADO_MENSAGE);
+                    Constantes.TIPOCOMPONENTE_DUPLICADO_MENSAGE);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_AGREGAR_LOTE_MENSAJE + " codigoError:{}",
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                        Constantes.TIPOCOMPONENTE_AGREGAR_LOTE_MENSAJE, e);
+                    Constantes.TIPOCOMPONENTE_AGREGAR_LOTE_MENSAJE, e);
         }
     }
 
     /**
      * Actualiza un TipoComponente existente.
-     * @param id la clave de TipoComponente a actualizar.
+     *
+     * @param id                la clave de TipoComponente a actualizar.
      * @param tipocomponenteDTO el TipoComponente DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoComponente no es encontrado.
-     * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
+     * @throws EntradaInvalidadException    si la entrada TipoComponente tiene errores.
      */
-    public void actualizar(Long id, TipoComponenteDTO tipocomponenteDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException {
+    public void actualizar(Long id, TipoComponenteDTO tipocomponenteDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() tipocomponente");
 
         //  Valida Entrada
         if (id == null || tipocomponenteDTO == null || tipocomponenteDTO.getId() == null) {
-            logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}", ((tipocomponenteDTO != null) ? tipocomponenteDTO.toString() : null  ),
-                           TipoComponenteError.REQUERIDO.getCodigoError());
+            logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}", ((tipocomponenteDTO != null) ? tipocomponenteDTO.toString() : null),
+                    TipoComponenteError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(TipoComponenteError.REQUERIDO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         //  Valida id
         if (!id.equals(tipocomponenteDTO.getId())) {
-            logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}",  tipocomponenteDTO.toString(),
-                           TipoComponenteError.ID_INVALIDO.getCodigoError());
+            logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + ": {}, codigoError:{}", tipocomponenteDTO.toString(),
+                    TipoComponenteError.ID_INVALIDO.getCodigoError());
             throw new EntradaInvalidadException(TipoComponenteError.ID_INVALIDO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -141,27 +147,28 @@ public class TipoComponenteService {
             logeador.info("tipocomponente actualizado exitosamente: {}, registros actualizados: {}", id, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_ACTUALIZAR_MENSAJE + ": id={} {} codigoError:{}", id, tipocomponenteDTO.toString(),
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOCOMPONENTE_ACTUALIZAR_MENSAJE, e);
+                    Constantes.TIPOCOMPONENTE_ACTUALIZAR_MENSAJE, e);
         }
     }
 
-   /**
+    /**
      * Actualiza Lote de TipoComponente existentes.
+     *
      * @param tipocomponenteDTOLote lista de TipoComponente DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada TipoComponente tiene errores.
      */
-    public void actualizarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() tipocomponente");
 
         //  Valida Entrada
         if (tipocomponenteDTOLote.isEmpty()) {
-            logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ", 
-                           TipoComponenteError.REQUERIDO.getCodigoError());
+            logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + " codigoError:{} ",
+                    TipoComponenteError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(TipoComponenteError.REQUERIDO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
@@ -170,68 +177,81 @@ public class TipoComponenteService {
             logeador.info("Lote tipocomponente actualizados exitosamente, registros actualizados: {}", registrosActualizados);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_ACTUALIZAR_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOCOMPONENTE_ACTUALIZAR_MENSAJE, e);
+                    Constantes.TIPOCOMPONENTE_ACTUALIZAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina TipoComponente por Clave.
+     *
      * @param id la clave de TipoComponente a eliminar.
      * @throws RecursoNoEncontradoException si el TipoComponente no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoEliminarException     si TipoComponente esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() tipocomponente: {}", id);
 
         try {
             TipoComponenteDTO tipocomponenteDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = tipocomponenteMapper.eliminar(id);
             logeador.info("tipocomponente eliminado: {}, registros eliminados: {}", id, registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(TipoComponenteError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(),  e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE, e);
+                    Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Elimina Lote TipoComponente por Clave.
+     *
      * @param tipocomponenteDTOLote lista de claves de TipoComponente a eliminar.
      * @throws EntradaInvalidadException si la lista  TipoComponente esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
+     * @throws RecursoEliminarException  si TipoComponente esta asociado a otro recurso
      */
-    public void eliminarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<TipoComponenteDTO> tipocomponenteDTOLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
 
         //  Valida Entrada
         if (tipocomponenteDTOLote.isEmpty()) {
             logeador.error(Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE + " codigoError:{}",
-                           TipoComponenteError.REQUERIDO.getCodigoError());
+                    TipoComponenteError.REQUERIDO.getCodigoError());
             throw new EntradaInvalidadException(TipoComponenteError.REQUERIDO.getCodigoError(),
-                                                Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
+                    Constantes.TIPOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE);
         }
 
 
         try {
             int registrosEliminados = tipocomponenteMapper.eliminarLote(mapper.toEntityList(tipocomponenteDTOLote));
             logeador.info("Lote tipocomponente eliminados exitosamente, registros eliminados: {}", registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(TipoComponenteError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.TIPOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError(),  e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                        Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE, e);
+                    Constantes.TIPOCOMPONENTE_ELIMINAR_MENSAJE, e);
         }
     }
 
     /**
      * Encuentra un TipoComponente por Clave.
+     *
      * @param id la clave TipoComponente a encontrar.
      * @return el TipoComponente DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si TipoComponente no es encontrado.
      */
     public TipoComponenteDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -244,22 +264,23 @@ public class TipoComponenteService {
                 logeador.info("tipocomponente encontrado por clave : {}", id);
             } else {
                 logeador.info("tipocomponente clave:{} no encontrado codigoError:{}", id,
-                              TipoComponenteError.NO_ENCONTRADO.getCodigoError());
+                        TipoComponenteError.NO_ENCONTRADO.getCodigoError());
                 throw new RecursoNoEncontradoException(TipoComponenteError.NO_ENCONTRADO.getCodigoError(),
-                                                       Constantes.TIPOCOMPONENTE_NO_ENCONTRADO_MENSAGE);
+                        Constantes.TIPOCOMPONENTE_NO_ENCONTRADO_MENSAGE);
             }
 
             return tipocomponenteDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE + " {}, codigoError:{}", id,
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                         Constantes.TIPOCOMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+                    Constantes.TIPOCOMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
     /**
      * Obtiene todos los TipoComponentes.
+     *
      * @return una lista de todos TipoComponente DTOs.
      * @throws BaseDatosException si ocurre un error de base de datos.
      */
@@ -272,9 +293,9 @@ public class TipoComponenteService {
             return tipocomponenteLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOCOMPONENTE_OBTENER_TODOS_MENSAJE + " codigoError:{} ",
-                           GeneralError.ERROR_INTERNO.getCodigoError(), e);
+                    GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
-                                        Constantes.TIPOCOMPONENTE_OBTENER_TODOS_MENSAJE, e);
+                    Constantes.TIPOCOMPONENTE_OBTENER_TODOS_MENSAJE, e);
         }
     }
 
