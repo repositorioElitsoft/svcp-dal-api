@@ -17,9 +17,7 @@ public class TrabajoTareaDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = -7072626042145555893L;
 
-    private Long trabajoId;
-    private Long tareaId;
-    private Integer ordenEjecucionTarea;
     private TrabajoDTO trabajo;
     private TareaDTO tarea;
+    private Integer ordenEjecucionTarea;
 }

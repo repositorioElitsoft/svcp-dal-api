@@ -1,5 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
+import com.elitsoft.servicampo.domain.entity.TrabajoTarea;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
@@ -18,5 +20,6 @@ public class TrabajoMobileDTO implements Serializable {
 
     private Long id;
     private String descripcionTrabajo;
+    private List<TrabajoTareaMobileDTO> trabajoTareas;
 
 }

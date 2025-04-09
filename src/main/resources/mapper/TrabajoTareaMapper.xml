@@ -3,35 +3,45 @@
 <mapper namespace="com.elitsoft.servicampo.mapper.TrabajoTareaMapper">
 
     <resultMap id="trabajoTareaResultMap" type="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
-        <id property="trabajoId" column="trbj_id"/>
-        <id property="tareaId" column="tras_id"/>
         <result property="ordenEjecucionTarea" column="trtr_secuencia"/>
-        <association property="trabajo" fetchType="lazy" column="trbj_id" javaType="com.elitsoft.servicampo.domain.entity.Trabajo" select="com.elitsoft.servicampo.mapper.TrabajoMapper.encontrarPorClave"/>
-        <association property="tarea" fetchType="lazy" column="tras_id" javaType="com.elitsoft.servicampo.domain.entity.Tarea" select="com.elitsoft.servicampo.mapper.TareaMapper.encontrarPorClave"/>
+        <association property="trabajo"  resultMap="com.elitsoft.servicampo.mapper.TrabajoMapper.trabajoResultMapSimple"/>
+        <association property="tarea"  resultMap="com.elitsoft.servicampo.mapper.TareaMapper.tareaResultMap"/>
     </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT trbj_id, tras_id, trtr_secuencia
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}trabajos_tareas
+    </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorTrabajo" parameterType="long" resultMap="trabajoTareaResultMap">
-        SELECT trbj_id, tras_id, trtr_secuencia
-        FROM ${schema}trabajos_tareas
+        <include refid="select"/>
+        <include refid="from"/>
         WHERE trbj_id = #{trabajoId}
     </select>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="trabajoTareaResultMap">
-        SELECT trbj_id, tras_id, trtr_secuencia
-        FROM ${schema}trabajos_tareas
+        <include refid="select"/>
+        <include refid="from"/>
         WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="trabajoTareaResultMap">
-        SELECT trbj_id, tras_id, trtr_secuencia FROM ${schema}trabajos_tareas
+        <include refid="select"/>
+        <include refid="from"/>
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="trabajoTareaResultMap">
-        SELECT * FROM ${schema}trabajos_tareas
+        <include refid="select"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.trabajoId != null">
@@ -60,7 +70,8 @@
 
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
-        SELECT COUNT(*) FROM ${schema}trabajos_tareas
+        SELECT COUNT(*)
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.trabajoId != null">
@@ -78,14 +89,15 @@
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
-        INSERT INTO ${schema}trabajos_tareas (trbj_id, tras_id, trtr_secuencia) VALUES (#{trabajoId}, #{tareaId}, #{ordenEjecucionTarea})
+        INSERT INTO ${schema}trabajos_tareas (trbj_id, tras_id, trtr_secuencia) 
+        VALUES (#{trabajo.id}, #{tarea.id}, #{ordenEjecucionTarea})
     </insert>
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
         UPDATE ${schema}trabajos_tareas
         SET trtr_secuencia = #{ordenEjecucionTarea}
-        WHERE trbj_id = #{trabajoId} AND tras_id = #{tareaId}
+        WHERE trbj_id = #{trabajo.id} AND tras_id = #{tarea.id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
@@ -95,27 +107,28 @@
     </delete>
 
     <!-- Sentencia SQL de Insertar LOTE-->
-    <insert id="agregarLote" parameterType="java.util.List" >
+    <insert id="agregarLote" parameterType="java.util.List">
         INSERT INTO ${schema}trabajos_tareas (trbj_id, tras_id, trtr_secuencia) VALUES
         <foreach item="trabajoTarea" collection="trabajoTareaLote" separator=",">
-            (#{trabajoTarea.trabajoId}, #{trabajoTarea.tareaId}, #{trabajoTarea.ordenEjecucionTarea},)
+            (#{trabajoTarea.trabajo.id}, #{trabajoTarea.tarea.id}, #{trabajoTarea.ordenEjecucionTarea})
         </foreach>
     </insert>
 
     <!-- Sentencia SQL de Actualizar LOTE-->
-    <update id="actualizarLote" parameterType="java.util.List" >
+    <update id="actualizarLote" parameterType="java.util.List">
         <foreach item='trabajoTarea' collection='trabajoTareaLote' separator=';'>
             UPDATE ${schema}trabajos_tareas
             SET trtr_secuencia = #{trabajoTarea.ordenEjecucionTarea}
-            WHERE trbj_id = #{trabajoTarea.trabajoId} AND tras_id = #{trabajoTarea.tareaId} 
+            WHERE trbj_id = #{trabajoTarea.trabajo.id} AND tras_id = #{trabajoTarea.tarea.id} 
         </foreach>
     </update>
 
     <!-- Sentencia SQL de Eliminar LOTE-->
-    <delete id="eliminarLote" parameterType="java.util.List" >
-        DELETE FROM ${schema}trabajos_tareas WHERE trbj_id IN
-        <foreach item='id' collection='idLote' open='(' separator=',' close=')'>
-            #{id}
+    <delete id="eliminarLote" parameterType="java.util.List">
+        DELETE FROM ${schema}trabajos_tareas 
+        WHERE (trbj_id, tras_id) IN
+        <foreach item='trabajoTarea' collection='trabajoTareaLote' open='(' separator=',' close=')'>
+            (#{trabajoTarea.trabajo.id}, #{trabajoTarea.tarea.id})
         </foreach>
     </delete>
 </mapper>

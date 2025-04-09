@@ -5,40 +5,66 @@
     <resultMap id="trabajoResultMap" type="com.elitsoft.servicampo.domain.entity.Trabajo">
         <id property="id" column="trbj_id"/>
         <result property="descripcionTrabajo" column="trbj_dsc"/>
-        <collection property="trabajoTareas" column="trbj_id" fetchType="lazy" ofType="com.elitsoft.servicampo.domain.entity.TrabajoTarea"  select="com.elitsoft.servicampo.mapper.TrabajoTareaMapper.encontrarPorTrabajo"/>
+        <collection property="trabajoTareas" ofType="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
+            <result property="ordenEjecucionTarea" column="trtr_secuencia"/>
+            <association property="tarea"  resultMap="com.elitsoft.servicampo.mapper.TareaMapper.tareaResultMap"/>
+        </collection>
     </resultMap>
 
+    <resultMap id="trabajoResultMapSimple" type="com.elitsoft.servicampo.domain.entity.Trabajo">
+        <id property="id" column="trbj_id"/>
+        <result property="descripcionTrabajo" column="trbj_dsc"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT trbj.trbj_id, trbj.trbj_dsc, tras.tras_id, tras.tras_dsc, trtr.trtr_secuencia
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}trabajos as trbj
+        LEFT JOIN ${schema}trabajos_tareas as trtr ON  trbj.trbj_id = trtr.trbj_id
+        LEFT JOIN ${schema}tareas          as tras ON  trtr.tras_id = tras.tras_id
+    </sql>
+
     <!-- Sentencia SQL de Encontrar por Clave -->
-    <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMap">
-        SELECT trbj_id, trbj_dsc
-        FROM ${schema}trabajos
-        WHERE trbj_id = #{id}
+    <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMapSimple">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE trbj.trbj_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
-    <select id="obtenerTodos" resultMap="trabajoResultMap">
+    <select id="obtenerTodos" resultMap="trabajoResultMapSimple">
         SELECT trbj_id, trbj_dsc
         FROM ${schema}trabajos
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="trabajoResultMap">
-        SELECT trbj_id, trbj_dsc FROM ${schema}trabajos
+        <include refid="select"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND trbj_id = #{filtro.id}
+                    AND trtr.trbj_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
-                    AND LOWER(trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                    AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                </if>
+                <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
+                    AND LOWER(tras.tras_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
                 </if>
             </if>
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY trbj_id ${direccionOrden}</when>
-                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trbj_dsc ${direccionOrden}</when>
-                <otherwise>ORDER BY trbj_id ASC</otherwise>
+                <when test="campoOrden == 'id'">ORDER BY trtr.trbj_id, trtr.trtr_secuencia  ${direccionOrden}</when>
+                <when test="campoOrden == 'ordenEjecucionTarea'">ORDER BY trtr.trtr_secuencia ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trbj.trbj_dsc, trtr.trtr_secuencia  ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY tras.tras_dsc,  trtr.trtr_secuencia  ${direccionOrden}</when>
+                <otherwise>ORDER BY trbj.trbj_id, trtr.trtr_secuencia ASC</otherwise>
             </choose>
         </if>
         <if test="limite != null and desplazamiento != null">
@@ -48,14 +74,18 @@
 
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
-        SELECT COUNT(*) FROM ${schema}trabajos
+        SELECT COUNT(*)
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND trbj_id = #{filtro.id}
+                    AND trtr.trbj_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
-                    AND LOWER(trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                    AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                </if>
+                <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
+                    AND LOWER(tras.tras_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
                 </if>
             </if>
         </where>

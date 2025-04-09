@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.TrabajoTareaDTO;
+import com.elitsoft.servicampo.domain.entity.TrabajoTarea;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -102,15 +103,15 @@ public class TrabajoTareaMobileService {
 
     /**
      * Elimina Lote TrabajoTarea por Clave.
-     * @param idLote lista de claves de TrabajoTarea a eliminar.
+     * @param trabajoTareaLote lista de  TrabajoTarea a eliminar.
      * @throws EntradaInvalidadException si la lista  TrabajoTarea esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
      * @throws RecursoEliminarException  si TrabajoTarea esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
+    public void eliminarLote(List<TrabajoTarea> trabajoTareaLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
-        trabajoTareaService.eliminarLote(idLote);
+        trabajoTareaService.eliminarLote(trabajoTareaLote);
     }
 
     /**

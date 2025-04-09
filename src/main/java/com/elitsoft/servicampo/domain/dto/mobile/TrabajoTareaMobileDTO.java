@@ -17,9 +17,7 @@ public class TrabajoTareaMobileDTO implements Serializable  {
     @Serial
     private static final long serialVersionUID = 2184582570213676636L;
 
-    private Long trabajoId;
-    private Long tareaId;
-    private Integer ordenEjecucionTarea;
     private TrabajoMobileDTO trabajo;
     private TareaMobileDTO tarea;
+    private Integer ordenEjecucionTarea;
 }

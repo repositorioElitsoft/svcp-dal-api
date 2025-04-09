@@ -2,6 +2,7 @@ package com.elitsoft.servicampo.controller.core;
 
 import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.TrabajoTareaDTO;
+import com.elitsoft.servicampo.domain.entity.TrabajoTarea;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.TrabajoTareaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -152,11 +153,11 @@ public class TrabajoTareaController {
             @ApiResponse(responseCode = "460", description = "TrabajoTarea Violación de integridad referencial"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<String>> eliminarLote(@RequestBody List<Long> idLote) {
+    public ResponseEntity<ApiEnityResponse<String>> eliminarLote(@RequestBody List<TrabajoTarea> trabajoTareaLote) {
         logeador.debug("eliminarLote() trabajotarea");
 
         try {
-            trabajoTareaService.eliminarLote(idLote);
+            trabajoTareaService.eliminarLote(trabajoTareaLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         } catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request

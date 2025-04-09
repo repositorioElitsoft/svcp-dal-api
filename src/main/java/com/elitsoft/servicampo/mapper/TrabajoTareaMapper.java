@@ -52,10 +52,10 @@ public interface TrabajoTareaMapper {
 
     /**
      * Elimina Lote TrabajoTarea en la base de datos.
-     * @param idLote Lista de claves de entidad TrabajoTarea a eliminar.
+     * @param trabajoTareaLote Lista entidad TrabajoTarea a eliminar.
      * @return int cantidad de registros eliminados.
      */
-    int eliminarLote(List<Long> idLote);
+    int eliminarLote(List<TrabajoTarea> trabajoTareaLote);
 
     /**
      * Encuentra un TrabajoTarea en la base de datos por su clave.

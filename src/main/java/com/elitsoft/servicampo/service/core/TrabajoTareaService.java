@@ -49,7 +49,8 @@ public class TrabajoTareaService {
         logeador.debug("agregar() trabajotarea");
 
         //  Valida Entrada
-        if (trabajoTareaDTO == null || trabajoTareaDTO.getTrabajoId() == null || trabajoTareaDTO.getTareaId() == null) {
+        if (trabajoTareaDTO == null || trabajoTareaDTO.getTrabajo() == null || trabajoTareaDTO.getTrabajo().getId() == null
+                || trabajoTareaDTO.getTarea()== null || trabajoTareaDTO.getTarea().getId() == null) {
             logeador.error(Constantes.TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((trabajoTareaDTO != null) ? trabajoTareaDTO.toString() : null));
             throw new EntradaInvalidadException(TrabajoTareaError.REQUERIDO.getCodigoError(),
                     Constantes.TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE);
@@ -60,7 +61,7 @@ public class TrabajoTareaService {
             Long nuevoId = trabajoTareaMapper.agregar(trabajotarea);
             logeador.info("TrabajoTarea agregado exitosamente id: {}", nuevoId);
         } catch (DuplicateKeyException e) {
-            logeador.error(Constantes.TRABAJOTAREA_DUPLICADO_MENSAGE + ": {}, {}", trabajoTareaDTO.getTrabajoId(), trabajoTareaDTO.getTrabajoId());
+            logeador.error(Constantes.TRABAJOTAREA_DUPLICADO_MENSAGE + ": {}, {}", trabajoTareaDTO.getTrabajo().getId(), trabajoTareaDTO.getTarea().getId());
             throw new RecursoDuplicadoException(TrabajoTareaError.DUPLICADO.getCodigoError(),
                     Constantes.TRABAJOTAREA_DUPLICADO_MENSAGE);
         } catch (DataAccessException e) {
@@ -118,7 +119,8 @@ public class TrabajoTareaService {
         logeador.debug("actualizar() trabajotarea");
 
         //  Valida Entrada
-        if (trabajoId == null || tareaId == null || trabajoTareaDTO == null || trabajoTareaDTO.getTrabajoId() == null || trabajoTareaDTO.getTareaId() == null) {
+        if (trabajoId == null || tareaId == null || trabajoTareaDTO == null || trabajoTareaDTO.getTrabajo() == null
+                || trabajoTareaDTO.getTrabajo().getId() == null || trabajoTareaDTO.getTarea()== null || trabajoTareaDTO.getTarea().getId() == null) {
             logeador.error(Constantes.TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE + ": {}", ((trabajoTareaDTO != null) ? trabajoTareaDTO.toString() : null));
             throw new EntradaInvalidadException(TrabajoTareaError.REQUERIDO.getCodigoError(),
                     Constantes.TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE);
@@ -127,8 +129,6 @@ public class TrabajoTareaService {
         try {
             TrabajoTareaDTO trabajoTareaDTOEncontrado = this.encontrarPorClave(trabajoId, tareaId); // Verifica si existe el recurso
             TrabajoTarea trabajoTarea = mapper.toEntity(trabajoTareaDTO);
-            trabajoTarea.setTrabajoId(trabajoId);
-            trabajoTarea.setTareaId(tareaId);
             int registrosActualizados = trabajoTareaMapper.actualizar(trabajoTarea);
             logeador.info("trabajotarea actualizado exitosamente: {}, registros actualizados: {}, {} ", trabajoId, tareaId, registrosActualizados);
         } catch (DataAccessException | BindingException e) {
@@ -196,23 +196,23 @@ public class TrabajoTareaService {
     /**
      * Elimina Lote TrabajoTarea por Clave.
      *
-     * @param idLote lista de claves de TrabajoTarea a eliminar.
+     * @param trabajoTareaLote lista de  TrabajoTarea a eliminar.
      * @throws EntradaInvalidadException si la lista  TrabajoTarea esta vacia.
      * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws RecursoEliminarException  si TrabajoTarea esta asociado a otro recurso
      */
-    public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
+    public void eliminarLote(List<TrabajoTarea> trabajoTareaLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         //  Valida Entrada
-        if (idLote.isEmpty()) {
+        if (trabajoTareaLote.isEmpty()) {
             logeador.error(Constantes.TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(TrabajoTareaError.REQUERIDO.getCodigoError(),
                     Constantes.TRABAJOTAREA_ENTRADA_INVALIDA_MENSAGE);
         }
 
         try {
-            int registrosEliminados = trabajoTareaMapper.eliminarLote(idLote);
+            int registrosEliminados = trabajoTareaMapper.eliminarLote(trabajoTareaLote);
             logeador.info("Lote trabajotarea eliminados exitosamente, registros eliminados: {}", registrosEliminados);
         } catch (DataIntegrityViolationException e) {
             logeador.error(Constantes.TRABAJOTAREA_VIOLACION_INTEGRIDAD_MENSAGE);
