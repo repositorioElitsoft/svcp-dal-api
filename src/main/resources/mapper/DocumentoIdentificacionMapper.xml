@@ -39,9 +39,9 @@
         <include refid="from"/>
         AND identificacion.doid_num = #{numero}
         <if test="digitoVerificador != null and digitoVerificador != ''">
-            AND identificacion.doid_dv =#{digitoVerificador}
+            AND identificacion.doid_dv = #{digitoVerificador}
         </if>
-        AND identificacion.tpdi_id = {#tipoDocumentoIdentificacionId}
+        AND identificacion.tpdi_id = #{tipoDocumentoIdentificacionId}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
@@ -63,7 +63,7 @@
                     AND identificacion.doid_num = #{filtro.numero}
                 </if>
                 <if test="filtro.digitoVerificador != null and filtro.digitoVerificador != ''">
-                    AND identificacion.doid_dv =#{filtro.digitoVerificador}
+                    AND identificacion.doid_dv = #{filtro.digitoVerificador}
                 </if>
                 <if test="filtro.tipoDocumentoIdentificacionId != null">
                     AND identificacion.tpdi_id = #{filtro.tipoDocumentoIdentificacionId}
@@ -97,7 +97,7 @@
                     AND identificacion.doid_num = #{filtro.numero}
                 </if>
                 <if test="filtro.digitoVerificador != null and filtro.digitoVerificador != ''">
-                    AND identificacion.doid_dv =#{filtro.digitoVerificador}
+                    AND identificacion.doid_dv = #{filtro.digitoVerificador}
                 </if>
                 <if test="filtro.tipoDocumentoIdentificacionId != null">
                     AND identificacion.tpdi_id = #{filtro.tipoDocumentoIdentificacionId}

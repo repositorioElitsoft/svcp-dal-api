@@ -28,15 +28,15 @@ public interface #Base#MapStruct {
 
     /**
      * Convierte una lista de entidades #Base# a una lista de #Base#DTOs.
-     * @param entities La lista de entidades #Base#.
-     * @return The list of #Base#DTOs.
+     * @param entities lista de entidades #Base#.
+     * @return lista de #Base#DTOs.
      */
     List<#Base#DTO> toDTOList(List<#Base#> entities);
 
     /**
-     * Convierte una lista de #Base#DTOs a una lista de entidades #Base# entities.
-     * @param dto The list of #Base#DTOs.
-     * @return The list of #Base# entities.
+     * Convierte una lista de #Base#DTOs a una lista de entidades #Base#.
+     * @param dto lista de #Base#DTOs.
+     * @return lista de entidades #Base#.
      */
     List<#Base#> toEntityList(List<#Base#DTO> dto);
 }
