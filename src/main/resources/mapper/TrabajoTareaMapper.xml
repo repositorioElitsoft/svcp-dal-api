@@ -4,7 +4,7 @@
 
     <resultMap id="trabajoTareaResultMap" type="com.elitsoft.servicampo.domain.entity.TrabajoTarea">
         <result property="ordenEjecucionTarea" column="trtr_secuencia"/>
-        <association property="trabajo"  resultMap="com.elitsoft.servicampo.mapper.TrabajoMapper.trabajoResultMapSimple"/>
+        <association property="trabajo"  resultMap="com.elitsoft.servicampo.mapper.TrabajoMapper.trabajoResultMap"/>
         <association property="tarea"  resultMap="com.elitsoft.servicampo.mapper.TareaMapper.tareaResultMap"/>
     </resultMap>
 
