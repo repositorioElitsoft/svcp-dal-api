@@ -29,9 +29,10 @@ public class ClienteMobileDTO implements Serializable {
     private TipoClienteMobileDTO tipoCliente;
     private ClasificacionCliente clasificacionCliente;
     private EstadoMobileDTO estado;
-    //private List<Direccion> direcciones;
+    //private List<DireccionMobileDTO> direcciones;
     private AgrupacionComercialMobileDTO agrupacionComercial;
     private SegmentacionClienteMobileDTO segmentacionCliente;
     private DocumentoIdentificacionMobileDTO documentoIdentificacion;
+    //private List<ContactoMobileDTO> contactos;
 
 }

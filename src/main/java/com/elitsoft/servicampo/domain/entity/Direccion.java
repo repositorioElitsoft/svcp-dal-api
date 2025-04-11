@@ -25,14 +25,13 @@ public class Direccion implements Serializable {
     private String referencia;
     private Comuna comuna;
     private Sector sector;
-    private List<Contacto> contactos;
     private TipoDireccion tipoDireccion;
     private String imagenPerfil;
     private Double latitud;
     private Double longitud;
     private Estado estado;
     private String flagEvidencia;
-    private List<ContactoDireccion> contactoDireccion;
     private Ruta ruta;
+    private List<ContactoDireccion> contactoDireccion;
 
 }

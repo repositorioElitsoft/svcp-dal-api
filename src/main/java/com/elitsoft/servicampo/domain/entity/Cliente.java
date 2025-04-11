@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -38,6 +39,7 @@ public class Cliente implements Serializable {
     private AgrupacionComercial agrupacionComercial;
     private SegmentacionCliente segmentacionCliente;
     private DocumentoIdentificacion documentoIdentificacion;
+    //private List<Contacto> contactos;
 
 
 

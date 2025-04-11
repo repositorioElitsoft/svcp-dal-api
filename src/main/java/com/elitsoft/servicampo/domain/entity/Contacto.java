@@ -27,5 +27,6 @@ public class Contacto implements Serializable {
     private Long telefonoFijo;
     private Long telefonoMovil;
     private DocumentoIdentificacion documentoIdentificacion;
+    private Cliente cliente;
 
 }

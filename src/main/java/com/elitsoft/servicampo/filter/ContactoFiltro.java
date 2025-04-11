@@ -18,5 +18,6 @@ public class ContactoFiltro implements Serializable {
     private String apellidoMaterno;
     private String rut;
     private Character dv;
+    private Long cliente;
 
 }

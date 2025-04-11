@@ -13,13 +13,14 @@
         <result property="telefonoFijo" column="cntc_fono_fijo" />
         <result property="telefonoMovil" column="cntc_fono_movil" />
         <association property="documentoIdentificacion"  resultMap="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.documentoIdentificacionResultMap" />
+        <association property="cliente"                  resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap" />
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
         SELECT cntc.cntc_id ,           cntc.cntc_nombre , cntc.cntc_apellido_paterno, cntc.cntc_apellido_materno,
                cntc.cntc_imagen_perfil, cntc.cntc_email  , cntc.cntc_fono_fijo       , cntc.cntc_fono_movil      ,
-               cntc.cntc_fecha_nacimiento,
+               cntc.cntc_fecha_nacimiento, cntc.clnt_id  ,
                doid.doid_id ,           doid.doid_num    , doid.doid_dv              ,
                tpdi.tpdi_id ,           tpdi.tpdi_nombre , tpdi.tpdi_dsc
     </sql>
@@ -53,6 +54,9 @@
                 <if test="filtro.id != null">
                     AND cntc.cntc_id = #{filtro.id}
                 </if>
+                <if test="filtro.cliente != null">
+                    AND cntc.clnt_id = #{filtro.cliente}
+                </if>
                 <if test="filtro.nombre != null and filtro.nombre != ''">
                     AND LOWER(cntc.cntc_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
                 </if>
@@ -70,6 +74,7 @@
                 <when test="campoOrden == 'nombre'">ORDER BY cntc.cntc_nombre ${direccionOrden}</when>
                 <when test="campoOrden == 'apellidoPaterno'">ORDER BY cntc.cntc_apellido_paterno ${direccionOrden}</when>
                 <when test="campoOrden == 'apellidoMaterno'">ORDER BY cntc.cntc_apellido_materno ${direccionOrden}</when>
+                <when test="campoOrden == 'cliente'">ORDER BY cntc.clnt_id  ${direccionOrden}</when>
                 <otherwise>ORDER BY cntc.cntc_id ASC</otherwise>
             </choose>
         </if>
@@ -86,6 +91,9 @@
             <if test="filtro != null">
                 <if test="filtro.id != null">
                     AND cntc.cntc_id = #{filtro.id}
+                </if>
+                <if test="filtro.cliente != null">
+                    AND cntc.clnt_id = #{filtro.cliente}
                 </if>
                 <if test="filtro.nombre != null and filtro.nombre != ''">
                     AND LOWER(cntc.cntc_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
@@ -105,11 +113,11 @@
       <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Contacto" affectData="true" flushCache="true">
         INSERT INTO ${schema}contactos (cntc_nombre       , cntc_apellido_paterno, cntc_apellido_materno,  cntc_imagen_perfil    ,
                                         cntc_email        , cntc_fono_fijo       , cntc_fono_movil       , cntc_fecha_nacimiento ,
-                                        doid_id
+                                        doid_id           , clnt_id
                                         )
                                 VALUES (#{nombre}         , #{apellidoPaterno}    , #{apellidoMaterno}   , #{imagenPerfil}       ,
                                        #{correoElectronico} , #{telefonoFijo}     , #{telefonoMovil}     , #{fechaNacimiento}    ,
-                                       #{documentoIdentificacion.id} )
+                                       #{documentoIdentificacion.id}, #{cliente.id} )
         returning cntc_id as id, cntc_nombre as nombre, cntc_apellido_paterno as apellidoPaterno, cntc_apellido_materno as apellidoMaterno,
           cntc_imagen_perfil as imagenPerfil, cntc_email as correoElectronico, cntc_fono_fijo as telefonoFijo,
                   cntc_fono_movil as telefonoMovil, cntc_fecha_nacimiento as fechaNacimiento
@@ -135,12 +143,12 @@
         INSERT INTO ${schema}contactos
                               (cntc_nombre       , cntc_apellido_paterno, cntc_apellido_materno , cntc_imagen_perfil    ,
                                cntc_email        , cntc_fono_fijo       , cntc_fono_movil       , cntc_fecha_nacimiento ,
-                               doid_id
+                               doid_id           , clnt_id
                               ) VALUES
         <foreach item="contacto" collection="contactoLote" separator=",">
                              (#{contacto.nombre}       , #{contacto.apellidoPaterno}   , #{contacto.apellidoMaterno} , #{contacto.imagenPerfil} ,
                               #{contacto.correoElectronico} , #{contacto.telefonoFijo} , #{contacto.telefonoMovil}   , #{contacto.fechaNacimiento},
-                              #{contacto.documentoIdentificacion.id}
+                              #{contacto.documentoIdentificacion.id} , #{contacto.cliente.id}
                              )
         </foreach>
     </insert>

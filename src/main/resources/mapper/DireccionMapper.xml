@@ -18,66 +18,21 @@
         <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
         <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
         <association property="ruta" resultMap="com.elitsoft.servicampo.mapper.RutaMapper.rutaResultMap"/>
+        <collection property="contactoDireccion" ofType="com.elitsoft.servicampo.domain.entity.ContactoDireccion" notNullColumn="cntc_id">
+            <result property="rol" column="ctdr_rol" />
+            <association property="direccion" javaType="com.elitsoft.servicampo.domain.entity.Direccion">
+                <id property="id" column="drcc_id" />
+            </association>
+            <association property="cliente" javaType="com.elitsoft.servicampo.domain.entity.Cliente">
+                <id property="id" column="clnt_id" />
+            </association>
+            <association property="contacto"  resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+        </collection>
     </resultMap>
 
-    <resultMap id="direccionPorClienteResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
-        <id property="id" column="drcc_id" />
-        <result property="descripcion" column="drcc_dsc" />
-        <result property="calle" column="drcc_calle" />
-        <result property="numeracion" column="drcc_numeracion" />
-        <result property="referencia" column="drcc_referencia" />
-        <result property="imagenPerfil" column="drcc_imagen_perfil" />
-        <result property="latitud" column="drcc_latitud" />
-        <result property="longitud" column="drcc_longitud" />
-        <result property="flagEvidencia" column="drcc_flag_evidencia" />
-        <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
-        <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
-        <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
-        <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
-        <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
-        <association property="ruta" resultMap="com.elitsoft.servicampo.mapper.RutaMapper.rutaResultMap"/>
-    </resultMap>
-
-    <resultMap id="direccionPorClienteConContactosResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
-        <id property="id" column="drcc_id" />
-        <result property="descripcion" column="drcc_dsc" />
-        <result property="calle" column="drcc_calle" />
-        <result property="numeracion" column="drcc_numeracion" />
-        <result property="referencia" column="drcc_referencia" />
-        <result property="imagenPerfil" column="drcc_imagen_perfil" />
-        <result property="latitud" column="drcc_latitud" />
-        <result property="longitud" column="drcc_longitud" />
-        <result property="flagEvidencia" column="drcc_flag_evidencia" />
-        <association property="cliente" resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap" columnPrefix="clnt_"/>
-        <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
-        <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
-        <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
-        <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
-        <association property="ruta" resultMap="com.elitsoft.servicampo.mapper.RutaMapper.rutaResultMap"/>
-        <collection  property="contactos" resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
-    </resultMap>
-
-
-    <resultMap id="direccionLazyResultMap" type="com.elitsoft.servicampo.domain.entity.Direccion">
-        <id property="id" column="drcc_id" />
-        <result property="descripcion" column="drcc_dsc" />
-        <result property="calle" column="drcc_calle" />
-        <result property="numeracion" column="drcc_numeracion" />
-        <result property="referencia" column="drcc_referencia" />
-        <result property="imagenPerfil" column="drcc_imagen_perfil" />
-        <result property="latitud" column="drcc_latitud" />
-        <result property="longitud" column="drcc_longitud" />
-        <result property="flagEvidencia" column="drcc_flag_evidencia" />
-        <association property="cliente" column="clnt_id" javaType="com.elitsoft.servicampo.domain.entity.Cliente" select="com.elitsoft.servicampo.mapper.ClienteMapper.encontrarPorClave"/>
-        <association property="comuna" column="cmna_id" javaType="com.elitsoft.servicampo.domain.entity.Comuna" select="com.elitsoft.servicampo.mapper.ComunaMapper.encontrarPorClave"/>
-        <association property="sector" column="sctr_id" javaType="com.elitsoft.servicampo.domain.entity.Sector" select="com.elitsoft.servicampo.mapper.SectorMapper.encontrarPorClave"/>
-        <association property="contacto" column="cntc_id" javaType="com.elitsoft.servicampo.domain.entity.Contacto" select="com.elitsoft.servicampo.mapper.ContactoMapper.encontrarPorClave"/>
-        <association property="tipoDireccion" column="tpdr_id" javaType="com.elitsoft.servicampo.domain.entity.TipoDireccion" select="com.elitsoft.servicampo.mapper.TipoDireccionMapper.encontrarPorClave"/>
-        <association property="estado" column="estd_id" javaType="com.elitsoft.servicampo.domain.entity.Estado" select="com.elitsoft.servicampo.mapper.EstadoMapper.encontrarPorClave"/>
-    </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
-    <sql id="select">
+    <sql id="selectX">
         SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
                drcc.drcc_imagen_perfil, drcc.drcc_latitud   , drcc.drcc_longitud     , drcc.drcc_flag_evidencia ,
                clnt.clnt_id , clnt.clnt_nombre ,
@@ -89,7 +44,7 @@
     </sql>
 
     <!-- Sentencia SQL de Columnas, incluye detalle de  Provincia, Region, Pais, Zona -->
-    <sql id="selectDetallado">
+    <sql id="select">
         SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
         drcc.drcc_imagen_perfil,  drcc.drcc_latitud   , drcc.drcc_longitud     , drcc.drcc_flag_evidencia ,
         clnt.clnt_id , clnt.clnt_nombre ,
@@ -101,28 +56,30 @@
         znas.znas_id , znas.znas_dsc    ,
         tpdr.tpdr_id , tpdr.tpdr_dsc    ,
         estd.estd_id , estd.estd_dsc    ,
-        ruta.ruta_id , ruta.ruta_dsc
+        ruta.ruta_id , ruta.ruta_dsc    ,
+        null as cntc_id
     </sql>
 
     <!-- Sentencia SQL de Columnas -->
     <sql id="selectClienteConContacto">
-        SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
+        SELECT drcc.drcc_id , drcc.drcc_dsc , drcc.drcc_calle      , drcc.drcc_numeracion     , drcc.drcc_referencia ,
         drcc.drcc_imagen_perfil, drcc.drcc_latitud   , drcc.drcc_longitud      , drcc.drcc_flag_evidencia ,
-        clnt.clnt_id as clnt_clnt_id    , clnt.clnt_nombre as clnt_clnt_nombre ,
+        clnt.clnt_id , clnt.clnt_nombre ,
         cmna.cmna_id , cmna.cmna_dsc    ,
         sctr.sctr_id , sctr.sctr_dsc    ,
         cntc.cntc_id , cntc.cntc_nombre , cntc.cntc_apellido_paterno, cntc.cntc_apellido_materno,
-        cntc.cntc_imagen_perfil         , cntc.cntc_email           , cntc.cntc_fono_fijo       , cntc.cntc_fono_movil      ,
-        cntc.cntc_fecha_nacimiento      ,
+        cntc.cntc_imagen_perfil         , cntc.cntc_email           , cntc.cntc_fono_fijo       ,
+        cntc.cntc_fono_movil            , cntc.cntc_fecha_nacimiento,
         doid.doid_id , doid.doid_num    , doid.doid_dv              ,
         tpdi.tpdi_id , tpdi.tpdi_nombre , tpdi.tpdi_dsc             ,
         tpdr.tpdr_id , tpdr.tpdr_dsc    ,
         estd.estd_id , estd.estd_dsc    ,
-        ruta.ruta_id , ruta.ruta_dsc
+        ruta.ruta_id , ruta.ruta_dsc    ,
+        cntc_drcc.ctdr_rol
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
-    <sql id="from">
+    <sql id="fromX">
         FROM ${schema}direcciones     as drcc
         INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
         INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
@@ -133,7 +90,7 @@
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
-    <sql id="fromDetallado">
+    <sql id="from">
         FROM ${schema}direcciones     as drcc
         INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
         INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
@@ -165,39 +122,20 @@
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="direccionResultMap">
-        <include refid="selectDetallado"/>
-        <include refid="fromDetallado"/>
+        <include refid="select"/>
+        <include refid="from"/>
         WHERE drcc.clnt_id = #{clientId}
           AND drcc.drcc_id = #{id}
     </select>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
-    <select id="encontrarPorClaveConContactos" parameterType="long" resultMap="direccionPorClienteConContactosResultMap">
+    <select id="encontrarContactos" parameterType="long" resultMap="direccionResultMap">
         <include refid="selectClienteConContacto"/>
         <include refid="fromClienteConContacto"/>
         WHERE drcc.clnt_id = #{clientId}
         AND drcc.drcc_id = #{id}
     </select>
 
-   <!-- Sentencia SQL de Obtener todos-->
-    <select id="obtenerTodos" resultMap="direccionResultMap">
-        <include refid="select"/>
-        <include refid="from"/>
-    </select>
-
-    <!-- Sentencia SQL de Obtener todos Por Cliente-->
-    <select id="obtenerTodosPorCliente" resultMap="direccionPorClienteResultMap">
-        <include refid="select"/>
-        <include refid="from"/>
-        WHERE drcc.clnt_id = #{clientId}
-    </select>
-
-    <!-- Sentencia SQL de Obtener todos Por Cliente con Lista de Contacto-->
-    <select id="obtenerTodosPorClienteConContactos" resultMap="direccionPorClienteConContactosResultMap">
-        <include refid="selectClienteConContacto"/>
-        <include refid="fromClienteConContacto"/>
-        WHERE drcc.clnt_id = #{clientId}
-    </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="direccionResultMap">

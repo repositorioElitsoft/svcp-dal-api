@@ -2,53 +2,77 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.elitsoft.servicampo.mapper.ContactoDireccionMapper">
 
-    <!--
     <resultMap id="contactoDireccionResultMap" type="com.elitsoft.servicampo.domain.entity.ContactoDireccion">
-        <result property="contacto" column="cntc_id" />
-        <result property="cliente" column="clnt_id" />
-        <result property="direccion" column="drcc_id" />
+        <result property="rol" column="ctdr_rol" />
+        <association property="contacto"  resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+        <association property="cliente"   resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap"/>
+        <association property="direccion" resultMap="com.elitsoft.servicampo.mapper.DireccionMapper.direccionResultMap"/>
     </resultMap>
 
 
-    <sql id="select">
-        SELECT cntc_id, clnt_id, drcc_id
+    <!-- Todos los contactos asociados a una direccion -->
+    <sql id="selectDireccionContacto">
+        SELECT cntc_drcc.drcc_id          , cntc_drcc.clnt_id    ,
+               cntc.cntc_id               , cntc.cntc_nombre     , cntc.cntc_apellido_paterno ,
+               cntc.cntc_apellido_materno , cntc.cntc_fono_movil , cntc.cntc_email            ,
+               cntc_drcc.ctdr_rol
     </sql>
 
-
-    <sql id="from">
-        FROM ${schema}contatos_direcciones
+    <!-- Todos lss direcciones asociadas a una contacto -->
+    <sql id="selectContactoDireccion">
+        SELECT drcc.drcc_id             , drcc.drcc_dsc          , drcc.drcc_calle   , drcc.drcc_numeracion ,
+               drcc.drcc_referencia     , drcc.drcc_imagen_perfil, drcc.drcc_latitud , drcc.drcc_longitud ,
+               drcc.drcc_flag_evidencia ,
+               cntc_drcc.ctdr_rol
     </sql>
 
+    <!-- Todos los contactos asociados a una direccion -->
+    <sql id="fromDireccionContacto">
+        FROM ${schema}contatos_direcciones as cntc_drcc
+        INNER  JOIN ${schema}contactos     as cntc      ON cntc_drcc.cntc_id = cntc.cntc_id
+    </sql>
 
-    <select id="encontrarPorClave" parameterType="long" resultMap="contactodireccionResultMap">
-        <include refid="select"/>
-        <include refid="from"/>
-        AND cntc_id = #{contacto}
+    <!-- Todos lss direcciones asociadas a una contacto -->
+    <sql id="fromContactoDireccion">
+        FROM ${schema}contatos_direcciones as cntc_drcc
+        INNER JOIN ${schema}direcciones    as drcc      ON cntc_drcc.clnt_id = drcc.clnt_id
+    </sql>
+
+    <!-- Todos los contactos asociados a una direccion -->
+    <select id="encontrarDireccionContacto"  resultMap="contactoDireccionResultMap">
+        <include refid="selectDireccionContacto"/>
+        <include refid="fromDireccionContacto"/>
+        WHERE cntc_drcc.drcc_id = #{direccionId}
+        AND   cntc_drcc.clnt_id = #{clienteId}
+    </select>
+
+    <!-- Todos lss direcciones asociadas a una contacto -->
+    <select id="encontrarContactoDireccion"  resultMap="contactoDireccionResultMap">
+        <include refid="selectContactoDireccion"/>
+        <include refid="fromContactoDireccion"/>
+        WHERE cntc_drcc.cntc_id= #{contactoId}
     </select>
 
 
-    <select id="obtenerTodos" resultMap="contactodireccionResultMap">
-        <include refid="select"/>
-        <include refid="from"/>
-    </select>
--->
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.ContactoDireccion">
-        INSERT INTO ${schema}contatos_direcciones (cntc_id, clnt_id, drcc_id )  VALUES 
-                                                 (#{contacto.id}, #{cliente.id}, #{direccion.id})
+        INSERT INTO ${schema}contatos_direcciones (cntc_id, clnt_id, drcc_id, ctdr_rol )  VALUES
+                                                 (#{contacto.id}, #{cliente.id}, #{direccion.id}, #{rol})
     </insert>
 
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.ContactoDireccion">
         UPDATE ${schema}contatos_direcciones
-        SET  clnt_id = #{cliente.id}, drcc_id = #{direccion.id}
+        SET   ctdr_rol = #{rol}
         WHERE cntc_id = #{contacto.id}
+          AND clnt_id = #{cliente.id}
+          AND drcc_id = #{direccion.id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
-    <delete id="eliminar" parameterType="long">
+    <delete id="eliminar" parameterType="com.elitsoft.servicampo.domain.entity.ContactoDireccion">
         DELETE FROM ${schema}contatos_direcciones
         WHERE cntc_id = #{contacto.id}
           AND clnt_id = #{cliente.id}

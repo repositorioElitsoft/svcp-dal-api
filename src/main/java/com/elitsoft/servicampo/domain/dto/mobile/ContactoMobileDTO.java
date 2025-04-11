@@ -1,5 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
+import com.elitsoft.servicampo.domain.entity.Cliente;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,5 +25,5 @@ public class ContactoMobileDTO implements Serializable {
     private Long telefonoFijo;
     private Long telefonoMovil;
     private DocumentoIdentificacionMobileDTO documentoIdentificacion;
-
+    private ClienteMobileDTO cliente;
 }

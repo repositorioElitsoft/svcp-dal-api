@@ -37,18 +37,20 @@ public interface ContactoDireccionMapper {
 
 
     /**
-     * Encuentra un ContactoDireccion en la base de datos por su clave.
-     * @param id La clave de ContactoDireccion a encontrar.
-     * @return La entidad ContactoDireccion encontrado, o null si no es encontrado.
+     * Encuentra los Contactos asociados a Direccion en la base de datos por su clave.
+     * @param direccionId La clave de Direccion a encontrar.
+     * @param clienteId La clave de Cliente a encontrar.
+     * @return lista entidad ContactoDireccion encontrado, o null si no es encontrado.
      */
-    ContactoDireccion encontrarPorClave(Long id);
-
+    ContactoDireccion encontrarDireccionContacto(Long direccionId, Long clienteId);
 
     /**
-     * Obtiene todos los ContactoDireccion desde la base de datos.
-     * @return List<ContactoDireccion> Una lista de todos los entidades ContactoDireccion.
+     * Encuentra las Direccion asociados a Contactos en la base de datos por su clave.
+     * @param contactoId La clave de Contacto a encontrar.
+     * @return lista entidad ContactoDireccion encontrado, o null si no es encontrado.
      */
-    List<ContactoDireccion> obtenerTodos();
+    ContactoDireccion encontrarContactoDireccion(Long contactoId);
+
 
 
 }

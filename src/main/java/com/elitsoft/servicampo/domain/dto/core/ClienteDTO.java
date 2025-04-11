@@ -28,9 +28,10 @@ public class ClienteDTO implements Serializable {
     private TipoClienteDTO tipoCliente;
     private ClasificacionClienteDTO clasificacionCliente;
     private EstadoDTO estado;
-    //private List<Direccion> direcciones;
+    //private List<DireccionDTO> direcciones;
     private AgrupacionComercialDTO agrupacionComercial;
     private SegmentacionClienteDTO segmentacionCliente;
     private DocumentoIdentificacionDTO documentoIdentificacion;
+    //private List<ContactoDTO> contactos;
 
 }

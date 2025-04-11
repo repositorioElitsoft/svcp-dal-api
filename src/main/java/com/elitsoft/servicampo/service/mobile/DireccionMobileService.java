@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.service.mobile;
 
-import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
+import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
@@ -10,12 +10,9 @@ import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.DireccionMapper;
 import com.elitsoft.servicampo.mapstruct.DireccionMapStruct;
 import com.elitsoft.servicampo.service.core.DireccionService;
-import com.elitsoft.servicampo.service.error.GeneralError;
-import com.elitsoft.servicampo.utils.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,9 +37,10 @@ public class DireccionMobileService {
 
     /**
      * Agrega un nuevo Direccion.
+     *
      * @param direccionDTO el Direccion DTO.
      * @return el Direccion DTO agregado con campo auto generado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
      * @throws RecursoDuplicadoException si el recurso Direccion ya existe.
      */
@@ -54,24 +52,26 @@ public class DireccionMobileService {
 
     /**
      * Agrega un nuevo Contacto a una Direccion existente.
-     * @param  id clave de Direccion a eliminar.
-     * @param clienteId La clave de Cliente a eliminar.
-     * @param contactoDTO el Contacto DTO.
+     *
+     * @param id                   clave de Direccion a eliminar.
+     * @param clienteId            La clave de Cliente a eliminar.
+     * @param contactoDireccionDTO el ContactoDireccion DTO.
      * @return el Direccion DTO existente con Contacto DTO agregado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
      * @throws RecursoDuplicadoException si el recurso Direccion ya existe.
      */
-    public ContactoDTO agregarContacto(Long id, Long clienteId, ContactoDTO contactoDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
+    public ContactoDireccionDTO agregarContacto(Long id, Long clienteId, ContactoDireccionDTO contactoDireccionDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
         logeador.debug("agregarContacto() direccion contacto");
 
-        return direccionService.agregarContacto(id, clienteId, contactoDTO);
+        return direccionService.agregarContacto(id, clienteId, contactoDireccionDTO);
     }
 
     /**
      * Agrega Lote nuevos Direccion.
+     *
      * @param direccionDTOLote lista de Direccion DTO a agregar.
-     * @throws BaseDatosException  si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
      * @throws RecursoDuplicadoException si el recurso Direccion ya existe.
      */
@@ -83,14 +83,15 @@ public class DireccionMobileService {
 
     /**
      * Actualiza un Direccion existente.
-     * @param clienteId La clave de Cliente a actualizar.
-     * @param id la Clave de Direccion a actualizar.
+     *
+     * @param clienteId    La clave de Cliente a actualizar.
+     * @param id           la Clave de Direccion a actualizar.
      * @param direccionDTO el Direccion DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Direccion tiene errores.
      */
-    public void actualizar(Long clienteId, Long id, DireccionDTO direccionDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizar(Long clienteId, Long id, DireccionDTO direccionDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() direccion");
 
         direccionService.actualizar(clienteId, id, direccionDTO);
@@ -98,27 +99,29 @@ public class DireccionMobileService {
 
     /**
      * Actualiza un Contact existente asociado a Direccion
-     * @param clienteId La clave de Cliente a actualizar.
-     * @param id la clave de Direccion a actualizar.
-     * @param contactoId la clave de Contacto a actualizar.
-     * @param contactoDTO el Contacto DTO con informacion actualizada.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     *
+     * @param id                   la clave de Direccion a actualizar.
+     * @param clienteId            La clave de Cliente a actualizar.
+     * @param contactoId           la clave de Contacto a actualizar.
+     * @param contactoDireccionDTO el ContactoDireccion DTO con informacion actualizada.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
-     * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
+     * @throws EntradaInvalidadException    si la entrada Direccion tiene errores.
      */
-    public void actualizarContacto(Long clienteId, Long id, Long contactoId, ContactoDTO contactoDTO) throws BaseDatosException, RecursoNoEncontradoException , EntradaInvalidadException  {
+    public void actualizarContacto(Long id, Long clienteId, Long contactoId, ContactoDireccionDTO contactoDireccionDTO) throws BaseDatosException, RecursoNoEncontradoException, EntradaInvalidadException {
         logeador.debug("actualizar() direccion");
 
-        direccionService.actualizarContacto(clienteId, id, contactoId, contactoDTO);
+        direccionService.actualizarContacto(clienteId, id, contactoId, contactoDireccionDTO);
     }
 
     /**
      * Actualiza Lote de Direccion existentes.
+     *
      * @param direccionDTOLote lista de Direccion DTO con datos a actualizar.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      * @throws EntradaInvalidadException si la entrada Direccion tiene errores.
      */
-    public void actualizarLote(List<DireccionDTO> direccionDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void actualizarLote(List<DireccionDTO> direccionDTOLote) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("actualizarLote() direccion");
 
         direccionService.actualizarLote(direccionDTOLote);
@@ -126,10 +129,11 @@ public class DireccionMobileService {
 
     /**
      * Elimina Direccion por Clave.
+     *
      * @param clienteId La clave de Cliente a eliminar.
-     * @param  id clave de Direccion a eliminar.
+     * @param id        clave de Direccion a eliminar.
      * @throws RecursoNoEncontradoException si el Direccion no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      */
     public void eliminar(Long id, Long clienteId) throws RecursoNoEncontradoException, BaseDatosException {
         logeador.debug("eliminar() direccion: {}", id);
@@ -139,11 +143,12 @@ public class DireccionMobileService {
 
     /**
      * Elimina Contacto asociado a Direccion por Clave.
-     * @param  id clave de Direccion a eliminar.
-     * @param clienteId La clave de Cliente a eliminar.
+     *
+     * @param id         clave de Direccion a eliminar.
+     * @param clienteId  La clave de Cliente a eliminar.
      * @param contactoId La clave de Contacto a eliminar.
      * @throws RecursoNoEncontradoException si el Direccion no es encontrado.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
      * @throws RecursoEliminarException     si Direccion o Contacto esta asociado a otro recurso
      */
     public void eliminarContacto(Long id, Long clienteId, Long contactoId) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
@@ -153,11 +158,12 @@ public class DireccionMobileService {
 
     /**
      * Elimina Lote Direccion por Clave.
+     *
      * @param direccionDTOLote lista de claves de Direccion a eliminar.
      * @throws EntradaInvalidadException si la lista  Direccion esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException        si ocurre un error de base de datos.
      */
-    public void eliminarLote(List<DireccionDTO> direccionDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<DireccionDTO> direccionDTOLote) throws BaseDatosException, EntradaInvalidadException {
         logeador.debug("eliminarLote()");
 
         direccionService.eliminarLote(direccionDTOLote);
@@ -165,10 +171,11 @@ public class DireccionMobileService {
 
     /**
      * Encuentra un Direccion por Clave.
+     *
      * @param clientId La clave de Cliente a encontrar.
-     * @param id La clave de Direccion a encontrar.
+     * @param id       La clave de Direccion a encontrar.
      * @return el Direccion DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */
     public DireccionDTO encontrarPorClave(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
@@ -178,39 +185,17 @@ public class DireccionMobileService {
 
     /**
      * Encuentra un Direccion en la base de datos por su clave con Lista de Contacto
+     *
      * @param clientId La clave de Cliente a encontrar.
-     * @param id La clave de Direccion a encontrar.
+     * @param id       La clave de Direccion a encontrar.
      * @return el Direccion DTO encontrado.
-     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */
-    public DireccionDTO encontrarPorClaveConContactos(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
-        logeador.debug("encontrarPorClaveConContactos(): {}, {}", clientId, id);
-        return direccionService.encontrarPorClaveConContactos(clientId, id);
+    public List<ContactoDireccionDTO> encontrarContactos(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("encontrarContactos(): {}, {}", clientId, id);
+        return direccionService.encontrarContactos(clientId, id);
     }
 
-    /**
-     * Obtiene todos los Direccion desde la base de datos filtrado por Cliente
-     * @param clientId clave Cliente a filtrar
-     * @return una lista de todos Direccion DTOs.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     */
-    public List<DireccionDTO> obtenerTodosPorCliente(Long clientId) throws BaseDatosException {
-        logeador.debug("obtenerTodosPorCliente() {}",clientId);
-
-        return direccionService.obtenerTodosPorCliente(clientId);
-    }
-
-    /**
-     * Obtiene todos los Direccion desde la base de datos filtrado por Cliente con Lista de Contacto
-     * @param clientId clave Cliente a filtrar
-     * @return una lista de todos Direccion DTOs.
-     * @throws BaseDatosException si ocurre un error de base de datos.
-     */
-    public List<DireccionDTO> obtenerTodosPorClienteConContactos(Long clientId) throws BaseDatosException {
-        logeador.debug("obtenerTodosPorClienteConContactos()");
-
-        return direccionService.obtenerTodosPorClienteConContactos(clientId);
-    }
 
 }

@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.domain.dto.core;
 
 
+import com.elitsoft.servicampo.domain.entity.ContactoDireccion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +24,6 @@ public class DireccionDTO implements Serializable {
     private String referencia;
     private ComunaDTO comuna;
     private SectorDTO sector;
-    private List<ContactoDTO> contactos;
     private TipoDireccionDTO tipoDireccion;
     private String imagenPerfil;
     private Double latitud;
@@ -31,4 +31,5 @@ public class DireccionDTO implements Serializable {
     private EstadoDTO estado;
     private String flagEvidencia;
     private RutaDTO ruta;
+    private List<ContactoDireccionDTO> contactoDireccion;
 }

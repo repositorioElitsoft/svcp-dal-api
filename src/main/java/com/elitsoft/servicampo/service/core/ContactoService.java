@@ -52,7 +52,8 @@ public class ContactoService {
         logeador.debug("agregar() Contacto");
 
         //  Valida Entrada
-        if (contactoDTO == null) {
+        if (contactoDTO == null || contactoDTO.getCliente() == null || contactoDTO.getCliente().getId() == null
+             || contactoDTO.getDocumentoIdentificacion() == null ) {
             logeador.error(Constantes.CONTACTO_ENTRADA_INVALIDA_MENSAGE);
             throw new EntradaInvalidadException(ContactoError.REQUERIDO.getCodigoError(),
                                                 Constantes.CONTACTO_ENTRADA_INVALIDA_MENSAGE);
@@ -128,7 +129,8 @@ public class ContactoService {
         logeador.debug("actualizar() contacto");
 
         //  Valida Entrada
-        if (id == null || contactoDTO == null || contactoDTO.getId() == null) {
+        if (id == null || contactoDTO == null || contactoDTO.getId() == null || contactoDTO.getCliente().getId() == null
+                || contactoDTO.getDocumentoIdentificacion() == null || contactoDTO.getDocumentoIdentificacion().getId() ==  null) {
             logeador.error(Constantes.CONTACTO_ENTRADA_INVALIDA_MENSAGE + ": {}", ((contactoDTO != null) ? contactoDTO.toString() : null  ));
             throw new EntradaInvalidadException(ContactoError.REQUERIDO.getCodigoError(),
                                                 Constantes.CONTACTO_ENTRADA_INVALIDA_MENSAGE);

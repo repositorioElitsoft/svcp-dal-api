@@ -25,7 +25,6 @@ public class DireccionMobileDTO implements Serializable {
     private String referencia;
     private ComunaMobileDTO comuna;
     private SectorMobileDTO sector;
-    private List<ContactoMobileDTO> contactos;
     private TipoDireccionMobileDTO tipoDireccion;
     private String imagenPerfil;
     private Double latitud;
@@ -33,5 +32,6 @@ public class DireccionMobileDTO implements Serializable {
     private EstadoMobileDTO estado;
     private String flagEvidencia;
     private RutaMobileDTO ruta;
+    private List<ContactoDireccionMobileDTO> contactoDireccion;
 
 }

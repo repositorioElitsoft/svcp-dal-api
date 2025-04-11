@@ -2,6 +2,7 @@ package com.elitsoft.servicampo.controller.mobile;
 
 import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
+import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.mobile.DireccionMobileService;
@@ -60,25 +61,25 @@ public class DireccionMobileController {
 
     }
 
-    @PostMapping(value = "/{id}/clientes/{clienteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Agrega un direccion", description = "Agrega un nuevo direccion")
+    @PostMapping(value = "/{id}/clientes/{clienteId}/contactos", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Agrega un contacto a direccion", description = "Agrega un contacto a direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Direccion agregado exitosamente"),
+            @ApiResponse(responseCode = "201", description = "Contacto agregado exitosamente a Direccion"),
             @ApiResponse(responseCode = "400", description = "Mala Peticion - Entrada datos Invalida"),
-            @ApiResponse(responseCode = "409", description = "Direccion ya Existe"),
+            @ApiResponse(responseCode = "409", description = "Contacto ya Existe en Direccion"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<ContactoDTO>> agregarContacto(@PathVariable Long id, @PathVariable Long clienteId, @RequestBody ContactoDTO contactoDTO) {
+    public ResponseEntity<ApiEnityResponse<ContactoDireccionDTO>> agregarContacto(@PathVariable Long id, @PathVariable Long clienteId, @RequestBody ContactoDireccionDTO contactoDireccionDTO) {
         logeador.debug("agregar() direccion contacto");
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(direccionMobileService.agregarContacto(id, clienteId, contactoDTO))); // Retorna  201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(direccionMobileService.agregarContacto(id, clienteId, contactoDireccionDTO))); // Retorna  201 Created
         }
         catch (EntradaInvalidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(contactoDTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(contactoDireccionDTO, e.getErrorCode(),  e.getMessage())); // Retorna  400 Bad Request
         }
         catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(contactoDTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(contactoDireccionDTO, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         }
         catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  409 Conflict
@@ -154,11 +155,11 @@ public class DireccionMobileController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
     public ResponseEntity<ApiEnityResponse<String>> actualizarContacto(@PathVariable Long id, @PathVariable Long clienteId,
-                                                                       @PathVariable Long contactoId, @RequestBody ContactoDTO contactoDTO) {
+                                                                       @PathVariable Long contactoId, @RequestBody ContactoDireccionDTO contactoDireccionDTO) {
         logeador.debug("actualizarContacto() direccion");
 
         try {
-            direccionMobileService.actualizarContacto(clienteId, id,contactoId, contactoDTO);
+            direccionMobileService.actualizarContacto(id, clienteId,  contactoId, contactoDireccionDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
         }
         catch (EntradaInvalidadException e) {
@@ -307,37 +308,27 @@ public class DireccionMobileController {
         }
     }
 
-    @GetMapping(value = "/clientes/{clienteId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Obtiene todos  los direccion por cliente", description = "Obtiene todos los direccion por cliente")
+    @GetMapping(value = "/{id}/clientes/{clienteId}/contactos", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Encuentra lista Contactos asociados a direccion", description = "Encuentra lista Contactos asociados a direccion")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Direccions obtenidos exitosamente"),
+            @ApiResponse(responseCode = "200", description = "Contactos encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Direccion no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<List<DireccionDTO>>> obtenerTodosPorCliente(@PathVariable Long clienteId) {
-        logeador.debug("obtenerTodosPorCliente()");
+    public ResponseEntity<ApiEnityResponse<List<ContactoDireccionDTO>>> encontrarContactos(@PathVariable Long id, @PathVariable Long clienteId) {
+        logeador.debug("encontrarContactos(): {}", id);
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(direccionMobileService.obtenerTodosPorCliente(clienteId))); // Retorna  200 OK
-        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(direccionMobileService.encontrarContactos(clienteId, id))); // Retorna  200 OK
+        }
+        catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
+        }
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
         }
     }
 
-    @GetMapping(value = "/clientes/{clienteId}/contactos", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Obtiene todos  los direccion por cliente con lista contactos", description = "Obtiene todos los direccion por cliente con lista contactos")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Direccion obtenidos exitosamente"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
-    })
-    public ResponseEntity<ApiEnityResponse<List<DireccionDTO>>> obtenerTodosPorClienteConContactos(@PathVariable Long clienteId) {
-        logeador.debug("obtenerTodosPorClienteConContactos()");
-
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(direccionMobileService.obtenerTodosPorClienteConContactos(clienteId))); // Retorna  200 OK
-        } catch (BaseDatosException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
-        }
-    }
 
 
 }
