@@ -15,9 +15,11 @@ public class TrabajoFiltro implements Serializable {
     private Long id;
     private String descripcionTrabajo;
     private String descripcionTarea;
+    private Long tarea;
 
     //ordenamiento
     private Integer ordenEjecucionTarea;
+
 
 
 }

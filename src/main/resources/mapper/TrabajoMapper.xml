@@ -10,45 +10,53 @@
             <association property="tarea"  resultMap="com.elitsoft.servicampo.mapper.TareaMapper.tareaResultMap"/>
         </collection>
     </resultMap>
-
-    <resultMap id="trabajoResultMapSimple" type="com.elitsoft.servicampo.domain.entity.Trabajo">
-        <id property="id" column="trbj_id"/>
-        <result property="descripcionTrabajo" column="trbj_dsc"/>
-    </resultMap>
-
+    
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
-        SELECT trbj.trbj_id, trbj.trbj_dsc, tras.tras_id, tras.tras_dsc, trtr.trtr_secuencia
+        SELECT trbj_id, trbj_dsc
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
+        FROM ${schema}trabajos
+    </sql>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="selectFiltrar">
+        SELECT trbj.trbj_id, trbj.trbj_dsc, tras.tras_id, tras.tras_dsc, trtr.trtr_secuencia
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="fromFiltrar">
         FROM ${schema}trabajos as trbj
         LEFT JOIN ${schema}trabajos_tareas as trtr ON  trbj.trbj_id = trtr.trbj_id
         LEFT JOIN ${schema}tareas          as tras ON  trtr.tras_id = tras.tras_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
-    <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMapSimple">
+    <select id="encontrarPorClave" parameterType="long" resultMap="trabajoResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE trbj.trbj_id = #{id}
+        WHERE trbj_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
-    <select id="obtenerTodos" resultMap="trabajoResultMapSimple">
-        SELECT trbj_id, trbj_dsc
-        FROM ${schema}trabajos
+    <select id="obtenerTodos" resultMap="trabajoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="trabajoResultMap">
-        <include refid="select"/>
-        <include refid="from"/>
+        <include refid="selectFiltrar"/>
+        <include refid="fromFiltrar"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
                     AND trtr.trbj_id = #{filtro.id}
+                </if>
+                <if test="filtro.tarea != null">
+                    AND trtr.tras_id = #{filtro.tarea}
                 </if>
                 <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
                     AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
@@ -60,10 +68,10 @@
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY trtr.trbj_id, trtr.trtr_secuencia  ${direccionOrden}</when>
-                <when test="campoOrden == 'ordenEjecucionTarea'">ORDER BY trtr.trtr_secuencia ${direccionOrden}</when>
-                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trbj.trbj_dsc, trtr.trtr_secuencia  ${direccionOrden}</when>
-                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY tras.tras_dsc,  trtr.trtr_secuencia  ${direccionOrden}</when>
+                <when test="campoOrden == 'id'">ORDER BY trtr.trbj_id  ${direccionOrden}, tras.tras_id, trtr.trtr_secuencia</when>
+                <when test="campoOrden == 'tarea'">ORDER BY trtr.trbj_id, tras.tras_id ${direccionOrden}, trtr.trtr_secuencia</when>
+                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trtr.trbj_id  ${direccionOrden}, tras.tras_id, trtr.trtr_secuencia</when>
+                <when test="campoOrden == 'descripcionTarea'">ORDER BY trtr.trbj_id, tras.tras_id ${direccionOrden}, trtr.trtr_secuencia</when>
                 <otherwise>ORDER BY trbj.trbj_id, trtr.trtr_secuencia ASC</otherwise>
             </choose>
         </if>
@@ -75,11 +83,14 @@
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
         SELECT COUNT(*)
-        <include refid="from"/>
+        <include refid="fromFiltrar"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
                     AND trtr.trbj_id = #{filtro.id}
+                </if>
+                <if test="filtro.tarea != null">
+                    AND trtr.tras_id = #{filtro.tarea}
                 </if>
                 <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
                     AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
