@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
+import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -121,6 +122,19 @@ public class ContactoMobileService {
     public ContactoDTO encontrarPorClave(Long id) throws BaseDatosException, RecursoNoEncontradoException {
         logeador.debug("encontrarPorClave(): {}", id);
         return contactoService.encontrarPorClave(id);
+    }
+
+    /**
+     * Obtiene Lista de Direccion de un Contacto
+     * @param clienteId La clave de Cliente a encontrar.
+     * @param id la clave Contacto a encontrar.
+     * @return el Contacto DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Contacto no es encontrado.
+     */
+    public List<ContactoDireccionDTO> obtenerDireccionesPorContacto(Long clienteId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("obtenerDireccionesPorContacto(): {}, {}", clienteId, id);
+        return contactoService.obtenerDireccionesPorContacto(clienteId, id);
     }
 
     /**

@@ -315,11 +315,11 @@ public class DireccionController {
             @ApiResponse(responseCode = "404", description = "Direccion no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<ApiEnityResponse<List<ContactoDireccionDTO>>> encontrarContactos(@PathVariable Long id, @PathVariable Long clienteId) {
+    public ResponseEntity<ApiEnityResponse<List<ContactoDireccionDTO>>> obtenerContactosPorDireccion(@PathVariable Long id, @PathVariable Long clienteId) {
         logeador.debug("encontrarContactos(): {}", id);
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(direccionService.encontrarContactos(clienteId, id))); // Retorna  200 OK
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(direccionService.obtenerContactosPorDireccion(clienteId, id))); // Retorna  200 OK
         }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error

@@ -66,12 +66,12 @@ public interface DireccionMapper {
     Direccion encontrarPorClave(Long clientId, Long id);
 
     /**
-     * Encuentra un Direccion en la base de datos por su clave con Lista de Contacto
-     * @param clientId La clave de Cliente a encontrar.
+     * Obtiene Lista de Contactos de una Direccion en la base de datos por su clave
+     * @param clienteId La clave de Cliente a encontrar.
      * @param id La clave de Direccion a encontrar.
      * @return entidad Direccion con lista Contactos (ContactoDireccion) asociados encontrados, o null si no es encontrado.
      */
-    Direccion encontrarContactos(Long clientId, Long id);
+    Direccion obtenerContactosPorDireccion(Long clienteId, Long id);
 
 
     /**

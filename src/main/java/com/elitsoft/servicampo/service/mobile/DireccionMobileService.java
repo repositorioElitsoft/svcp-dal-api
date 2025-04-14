@@ -172,29 +172,29 @@ public class DireccionMobileService {
     /**
      * Encuentra un Direccion por Clave.
      *
-     * @param clientId La clave de Cliente a encontrar.
+     * @param clienteId La clave de Cliente a encontrar.
      * @param id       La clave de Direccion a encontrar.
      * @return el Direccion DTO encontrado.
      * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */
-    public DireccionDTO encontrarPorClave(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
-        logeador.debug("encontrarPorClave(): {}, {}", clientId, id);
-        return direccionService.encontrarPorClave(clientId, id);
+    public DireccionDTO encontrarPorClave(Long clienteId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("encontrarPorClave(): {}, {}", clienteId, id);
+        return direccionService.encontrarPorClave(clienteId, id);
     }
 
     /**
-     * Encuentra un Direccion en la base de datos por su clave con Lista de Contacto
+     * Obtiene Lista de Contactos de una Direccion
      *
-     * @param clientId La clave de Cliente a encontrar.
+     * @param clienteId La clave de Cliente a encontrar.
      * @param id       La clave de Direccion a encontrar.
      * @return el Direccion DTO encontrado.
      * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */
-    public List<ContactoDireccionDTO> encontrarContactos(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
-        logeador.debug("encontrarContactos(): {}, {}", clientId, id);
-        return direccionService.encontrarContactos(clientId, id);
+    public List<ContactoDireccionDTO> obtenerContactosPorDireccion(Long clienteId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("encontrarContactos(): {}, {}", clienteId, id);
+        return direccionService.obtenerContactosPorDireccion(clienteId, id);
     }
 
 

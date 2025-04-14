@@ -64,6 +64,14 @@ public interface ContactoMapper {
     Contacto encontrarPorClave(Long id);
 
     /**
+     * Obtiene Lista de Direcciones de un Contacto  en la base de datos por su clave
+     * @param clienteId La clave de Cliente a encontrar.
+     * @param id La clave de Contacto a encontrar.
+     * @return La entidad Contacto encontrado, o null si no es encontrado.
+     */
+    Contacto obtenerDireccionesPorContacto(Long clienteId, Long id);
+
+    /**
      * Obtiene todos los Contacto desde la base de datos.
      * @return List<Contacto> Una lista de todos los entidades Contacto.
      */

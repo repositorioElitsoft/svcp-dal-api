@@ -26,22 +26,22 @@
             <association property="cliente" javaType="com.elitsoft.servicampo.domain.entity.Cliente">
                 <id property="id" column="clnt_id" />
             </association>
-            <association property="contacto"  resultMap="com.elitsoft.servicampo.mapper.ContactoMapper.contactoResultMap"/>
+            <association property="contacto"  javaType="com.elitsoft.servicampo.domain.entity.Contacto">
+                <id property="id" column="cntc_id" />
+                <result property="nombre" column="cntc_nombre" />
+                <result property="apellidoPaterno" column="cntc_apellido_paterno" />
+                <result property="apellidoMaterno" column="cntc_apellido_materno" />
+                <result property="fechaNacimiento" column="cntc_fecha_nacimiento" />
+                <result property="imagenPerfil" column="cntc_imagen_perfil" />
+                <result property="correoElectronico" column="cntc_email" />
+                <result property="telefonoFijo" column="cntc_fono_fijo" />
+                <result property="telefonoMovil" column="cntc_fono_movil" />
+                <association property="documentoIdentificacion"  resultMap="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.documentoIdentificacionResultMap" />
+                <association property="cliente"                  resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap" />
+            </association>
+
         </collection>
     </resultMap>
-
-
-    <!-- Sentencia SQL de Columnas -->
-    <sql id="selectX">
-        SELECT drcc.drcc_id ,     drcc.drcc_dsc ,  drcc.drcc_calle     , drcc.drcc_numeracion   , drcc.drcc_referencia     ,
-               drcc.drcc_imagen_perfil, drcc.drcc_latitud   , drcc.drcc_longitud     , drcc.drcc_flag_evidencia ,
-               clnt.clnt_id , clnt.clnt_nombre ,
-               cmna.cmna_id , cmna.cmna_dsc    ,
-               sctr.sctr_id , sctr.sctr_dsc    ,
-               tpdr.tpdr_id , tpdr.tpdr_dsc    ,
-               estd.estd_id , estd.estd_dsc    ,
-               ruta.ruta_id , ruta.ruta_dsc
-    </sql>
 
     <!-- Sentencia SQL de Columnas, incluye detalle de  Provincia, Region, Pais, Zona -->
     <sql id="select">
@@ -60,35 +60,6 @@
         null as cntc_id
     </sql>
 
-    <!-- Sentencia SQL de Columnas -->
-    <sql id="selectClienteConContacto">
-        SELECT drcc.drcc_id , drcc.drcc_dsc , drcc.drcc_calle      , drcc.drcc_numeracion     , drcc.drcc_referencia ,
-        drcc.drcc_imagen_perfil, drcc.drcc_latitud   , drcc.drcc_longitud      , drcc.drcc_flag_evidencia ,
-        clnt.clnt_id , clnt.clnt_nombre ,
-        cmna.cmna_id , cmna.cmna_dsc    ,
-        sctr.sctr_id , sctr.sctr_dsc    ,
-        cntc.cntc_id , cntc.cntc_nombre , cntc.cntc_apellido_paterno, cntc.cntc_apellido_materno,
-        cntc.cntc_imagen_perfil         , cntc.cntc_email           , cntc.cntc_fono_fijo       ,
-        cntc.cntc_fono_movil            , cntc.cntc_fecha_nacimiento,
-        doid.doid_id , doid.doid_num    , doid.doid_dv              ,
-        tpdi.tpdi_id , tpdi.tpdi_nombre , tpdi.tpdi_dsc             ,
-        tpdr.tpdr_id , tpdr.tpdr_dsc    ,
-        estd.estd_id , estd.estd_dsc    ,
-        ruta.ruta_id , ruta.ruta_dsc    ,
-        cntc_drcc.ctdr_rol
-    </sql>
-
-    <!-- Sentencia SQL para el FROM -->
-    <sql id="fromX">
-        FROM ${schema}direcciones     as drcc
-        INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
-        INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
-        INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
-        INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
-        INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
-        INNER JOIN ${schema}rutas     as ruta ON drcc.ruta_id = ruta.ruta_id
-    </sql>
-
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
         FROM ${schema}direcciones     as drcc
@@ -104,36 +75,30 @@
         INNER JOIN ${schema}rutas     as ruta ON drcc.ruta_id = ruta.ruta_id
     </sql>
 
-    <!-- Sentencia SQL para el FROM -->
-    <sql id="fromClienteConContacto">
-        FROM ${schema}direcciones     as drcc
-        INNER JOIN ${schema}clientes  as clnt ON drcc.clnt_id = clnt.clnt_id
-        INNER JOIN ${schema}comunas   as cmna ON drcc.cmna_id = cmna.cmna_id
-        INNER JOIN ${schema}sectores  as sctr ON drcc.sctr_id = sctr.sctr_id
-        LEFT  JOIN ${schema}contatos_direcciones as cntc_drcc ON drcc.clnt_id = cntc_drcc.clnt_id
-          AND  drcc.drcc_id = cntc_drcc.drcc_id
-        LEFT  JOIN ${schema}contactos as cntc ON cntc_drcc.cntc_id = cntc.cntc_id
-        INNER JOIN ${schema}documentos_identificacion as doid ON cntc.doid_id = doid.doid_id
-        INNER JOIN ${schema}tipos_documentos_identificacion as tpdi ON doid.tpdi_id = tpdi.tpdi_id
-        INNER JOIN ${schema}tipos_direcciones as tpdr ON drcc.tpdr_id = tpdr.tpdr_id
-        INNER JOIN ${schema}estados   as estd ON drcc.estd_id = estd.estd_id
-        INNER JOIN ${schema}rutas     as ruta ON drcc.ruta_id = ruta.ruta_id
-    </sql>
-
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="direccionResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE drcc.clnt_id = #{clientId}
-          AND drcc.drcc_id = #{id}
+        WHERE drcc.clnt_id = #{clienteId}
+        AND drcc.drcc_id = #{id}
     </select>
 
-    <!-- Sentencia SQL de Encontrar por Clave -->
-    <select id="encontrarContactos" parameterType="long" resultMap="direccionResultMap">
-        <include refid="selectClienteConContacto"/>
-        <include refid="fromClienteConContacto"/>
-        WHERE drcc.clnt_id = #{clientId}
-        AND drcc.drcc_id = #{id}
+    <!-- Sentencia SQL  (Direcciones -→ Contactos   via ContactoDireccion) -->
+    <select id="obtenerContactosPorDireccion" parameterType="long" resultMap="direccionResultMap">
+
+        SELECT  ctdr.drcc_id , ctdr.clnt_id     , ctdr.ctdr_rol             ,
+                cntc.cntc_id , cntc.cntc_nombre , cntc.cntc_apellido_paterno, cntc.cntc_apellido_materno,
+                cntc.cntc_imagen_perfil         , cntc.cntc_email           , cntc.cntc_fono_fijo       ,
+                cntc.cntc_fono_movil            , cntc.cntc_fecha_nacimiento,
+                doid.doid_id , doid.doid_num    , doid.doid_dv              ,
+                tpdi.tpdi_id , tpdi.tpdi_nombre , tpdi.tpdi_dsc
+        FROM ${schema}contatos_direcciones as ctdr
+        INNER JOIN ${schema}contactos as cntc ON ctdr.cntc_id = cntc.cntc_id
+        INNER JOIN ${schema}documentos_identificacion as doid ON cntc.doid_id = doid.doid_id
+        INNER JOIN ${schema}tipos_documentos_identificacion as tpdi ON doid.tpdi_id = tpdi.tpdi_id
+        WHERE ctdr.clnt_id = #{clienteId}
+          AND ctdr.drcc_id = #{id}
+        ORDER BY cntc.cntc_nombre
     </select>
 
 

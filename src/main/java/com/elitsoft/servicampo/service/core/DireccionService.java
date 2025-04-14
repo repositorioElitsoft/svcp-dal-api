@@ -313,22 +313,22 @@ public class DireccionService {
     /**
      * Encuentra un Direccion por Clave.
      *
-     * @param clientId La clave de Cliente a encontrar.
+     * @param clienteId La clave de Cliente a encontrar.
      * @param id       La clave de Direccion a encontrar.
      * @return el Direccion DTO encontrado sin ContactosDTO.
      * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */
-    public DireccionDTO encontrarPorClave(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
-        logeador.debug("obtenerPorClave(): {}, {}", clientId, id);
+    public DireccionDTO encontrarPorClave(Long clienteId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("obtenerPorClave(): {}, {}", clienteId, id);
 
         try {
-            DireccionDTO direccionDTO = mapper.toDTO(direccionMapper.encontrarPorClave(clientId, id));
+            DireccionDTO direccionDTO = mapper.toDTO(direccionMapper.encontrarPorClave(clienteId, id));
 
             if (direccionDTO != null) {
-                logeador.info("direccion encontrado por clave cliente: {}, id: {}", clientId, id);
+                logeador.info("direccion encontrado por clave cliente: {}, id: {}", clienteId, id);
             } else {
-                logeador.info("direccion clave:{}, {} no encontrado codigoError:{}", clientId, id,
+                logeador.info("direccion clave:{}, {} no encontrado codigoError:{}", clienteId, id,
                         DireccionError.NO_ENCONTRADO.getCodigoError());
                 throw new RecursoNoEncontradoException(DireccionError.NO_ENCONTRADO.getCodigoError(),
                         Constantes.DIRECCION_NO_ENCONTRADO_MENSAGE);
@@ -336,7 +336,7 @@ public class DireccionService {
 
             return direccionDTO;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE + " cliente: {}, id: {}, codigoError:{} ", clientId, id,
+            logeador.error(Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE + " cliente: {}, id: {}, codigoError:{} ", clienteId, id,
                     GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                     Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE, e);
@@ -344,27 +344,27 @@ public class DireccionService {
     }
 
     /**
-     * Encuentra un Direccion en la base de datos por su clave con Lista de Contacto
+     * Obtiene Lista de Contactos de una Direccion
      *
-     * @param clientId La clave de Cliente a encontrar.
+     * @param clienteId La clave de Cliente a encontrar.
      * @param id       La clave de Direccion a encontrar.
      * @return el Direccion DTO encontrado.
      * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */
-    public List<ContactoDireccionDTO> encontrarContactos(Long clientId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
-        logeador.debug("encontrarContactos(): {}, {}", clientId, id);
+    public List<ContactoDireccionDTO> obtenerContactosPorDireccion(Long clienteId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("encontrarContactos(): {}, {}", clienteId, id);
 
         List<ContactoDireccionDTO> contactoDireccionDTOLista = new ArrayList<>();
         try {
-            DireccionDTO direccionDTO = mapper.toDTO(direccionMapper.encontrarContactos(clientId, id));
+            DireccionDTO direccionDTO = mapper.toDTO(direccionMapper.obtenerContactosPorDireccion(clienteId, id));
 
 
             if (direccionDTO.getContactoDireccion() != null) {
                 contactoDireccionDTOLista = direccionDTO.getContactoDireccion();
-                logeador.info("direccion encontrado por clave cliente: {}, id: {}", clientId, id);
+                logeador.info("direccion encontrado por clave cliente: {}, id: {}", clienteId, id);
             } else {
-                logeador.info("direccion clave:{}, {} no encontrado codigoError:{}", clientId, id,
+                logeador.info("direccion clave:{}, {} no encontrado codigoError:{}", clienteId, id,
                         DireccionError.NO_ENCONTRADO.getCodigoError());
                 throw new RecursoNoEncontradoException(DireccionError.NO_ENCONTRADO.getCodigoError(),
                         Constantes.DIRECCION_NO_ENCONTRADO_MENSAGE);
@@ -372,7 +372,7 @@ public class DireccionService {
 
             return contactoDireccionDTOLista;
         } catch (DataAccessException e) {
-            logeador.error(Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE + " cliente: {}, id: {}, codigoError:{} ", clientId, id,
+            logeador.error(Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE + " cliente: {}, id: {}, codigoError:{} ", clienteId, id,
                     GeneralError.ERROR_INTERNO.getCodigoError(), e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                     Constantes.DIRECCION_ENCONTRAR_POR_CLAVE_MENSAGE, e);

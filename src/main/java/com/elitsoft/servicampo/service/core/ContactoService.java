@@ -2,6 +2,7 @@ package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
+import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.Contacto;
 import com.elitsoft.servicampo.exceptions.*;
@@ -19,6 +20,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -261,6 +263,41 @@ public class ContactoService {
             return contactoDTO;
         } catch (DataAccessException e) {
             logeador.error(Constantes.CONTACTO_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                                         Constantes.CONTACTO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
+        }
+    }
+
+    /**
+     * Obtiene Lista de Direccion de un Contacto
+     * @param clienteId La clave de Cliente a encontrar.
+     * @param id la clave Contacto a encontrar.
+     * @return el Contacto DTO encontrado.
+     * @throws BaseDatosException si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Contacto no es encontrado.
+     */
+    public List<ContactoDireccionDTO> obtenerDireccionesPorContacto(Long clienteId, Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("obtenerDireccionesPorContacto(): {}",clienteId, id);
+
+        List<ContactoDireccionDTO> contactoDireccionDTOLista = new ArrayList<>();
+        
+        try {
+            Contacto contacto = contactoMapper.obtenerDireccionesPorContacto(clienteId, id);
+
+            ContactoDTO contactoDTO = mapper.toDTO(contactoMapper.obtenerDireccionesPorContacto(clienteId, id));
+
+            if (contactoDTO.getContactoDireccion() != null) {
+                contactoDireccionDTOLista = contactoDTO.getContactoDireccion();
+                logeador.info("direcciones de contacto encontrado por clave : clienteId: {}, contactoId : {}", clienteId, id);
+            } else {
+                logeador.info("direcciones de contacto clave: clienteId: {}, contactoId : {} no encontrado", clienteId, id);
+                throw new RecursoNoEncontradoException(ContactoError.NO_ENCONTRADO.getCodigoError(),
+                                                       Constantes.CONTACTO_NO_ENCONTRADO_MENSAGE);
+            }
+
+            return contactoDireccionDTOLista;
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.CONTACTO_ENCONTRAR_POR_CLAVE_MENSAGE + "  clienteId: {}, contactoId : {}", clienteId,  id, e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                          Constantes.CONTACTO_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }

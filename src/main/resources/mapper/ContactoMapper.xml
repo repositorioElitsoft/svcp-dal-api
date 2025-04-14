@@ -14,6 +14,26 @@
         <result property="telefonoMovil" column="cntc_fono_movil" />
         <association property="documentoIdentificacion"  resultMap="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.documentoIdentificacionResultMap" />
         <association property="cliente"                  resultMap="com.elitsoft.servicampo.mapper.ClienteMapper.clienteResultMap" />
+        <collection property="contactoDireccion" ofType="com.elitsoft.servicampo.domain.entity.ContactoDireccion" >
+            <result property="rol" column="ctdr_rol" />
+            <association property="direccion" javaType="com.elitsoft.servicampo.domain.entity.Direccion">
+                <id property="id" column="drcc_id" />
+                <result property="descripcion" column="drcc_dsc" />
+                <result property="calle" column="drcc_calle" />
+                <result property="numeracion" column="drcc_numeracion" />
+                <result property="referencia" column="drcc_referencia" />
+                <result property="imagenPerfil" column="drcc_imagen_perfil" />
+                <result property="latitud" column="drcc_latitud" />
+                <result property="longitud" column="drcc_longitud" />
+                <result property="flagEvidencia" column="drcc_flag_evidencia" />
+            </association>
+            <association property="cliente" javaType="com.elitsoft.servicampo.domain.entity.Cliente">
+                <id property="id" column="clnt_id" />
+            </association>
+            <association property="contacto"  javaType="com.elitsoft.servicampo.domain.entity.Contacto">
+                <id property="id" column="cntc_id" />
+            </association>
+        </collection>
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
@@ -43,6 +63,18 @@
     <select id="obtenerTodos" resultMap="contactoResultMap">
         <include refid="select"/>
         <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL  (Contactos -→ Direcciones via ContactoDireccion) -->
+    <select id="obtenerDireccionesPorContacto" parameterType="long" resultMap="contactoResultMap">
+         SELECT ctdr.drcc_id         , ctdr.clnt_id           , ctdr.cntc_id         ,  ctdr.ctdr_rol        ,
+                drcc.drcc_dsc        , drcc.drcc_calle        , drcc.drcc_numeracion ,  drcc.drcc_referencia ,
+                drcc.drcc_imagen_perfil, drcc.drcc_latitud    , drcc.drcc_longitud   , drcc.drcc_flag_evidencia
+        FROM ${schema}contatos_direcciones as ctdr
+        INNER JOIN ${schema}direcciones as drcc ON ctdr.drcc_id = drcc.drcc_id
+        WHERE ctdr.clnt_id = #{clienteId}
+          AND ctdr.cntc_id = #{id}
+        ORDER by drcc.drcc_dsc
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->

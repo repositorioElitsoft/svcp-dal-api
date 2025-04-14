@@ -2,6 +2,7 @@ package com.elitsoft.servicampo.controller.core;
 
 import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
+import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.ContactoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -206,6 +207,27 @@ public class ContactoController {
 
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(contactoService.encontrarPorClave(id))); // Retorna  200 OK
+        }
+        catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
+        } 
+        catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  404 Not Found
+        }
+    }
+
+    @GetMapping(value = "/{id}/clientes/{clienteId}/direcciones", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Encuentra un lista de direcciones de un contacto", description = "Encuentra un lista de direcciones de un contacto por su clave")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Direcciones de contacto encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Direcciones de contacto no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<ApiEnityResponse<List<ContactoDireccionDTO>>> obtenerDireccionesPorContacto(@PathVariable Long id, @PathVariable Long clienteId) {
+        logeador.debug("obtenerDireccionesPorContacto(): {}, {}", id, clienteId);      
+
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(contactoService.obtenerDireccionesPorContacto(clienteId, id))); // Retorna  200 OK
         }
         catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error

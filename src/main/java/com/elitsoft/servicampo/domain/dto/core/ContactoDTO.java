@@ -1,12 +1,12 @@
 package com.elitsoft.servicampo.domain.dto.core;
 
-import com.elitsoft.servicampo.domain.entity.Cliente;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +26,6 @@ public class ContactoDTO implements Serializable {
     private Long telefonoMovil;
     private DocumentoIdentificacionDTO documentoIdentificacion;
     private ClienteDTO cliente;
+    private List<ContactoDireccionDTO> contactoDireccion;
 
 }
