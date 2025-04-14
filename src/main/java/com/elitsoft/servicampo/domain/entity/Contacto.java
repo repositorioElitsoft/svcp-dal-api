@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -28,5 +29,6 @@ public class Contacto implements Serializable {
     private Long telefonoMovil;
     private DocumentoIdentificacion documentoIdentificacion;
     private Cliente cliente;
+    private List<ContactoDireccion> contactoDireccion;
 
 }
