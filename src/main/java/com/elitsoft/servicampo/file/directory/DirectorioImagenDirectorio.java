@@ -17,6 +17,9 @@ public class DirectorioImagenDirectorio {
     @Value("${file.storage.folders.imagenes.clientes}")
     private String cliente;
 
+    @Value("${file.storage.folders.imagenes.clientes.contactos}")
+    private String contactoCliente;
+
     @Value("${file.storage.folders.imagenes.empleados}")
     private String empleado;
 

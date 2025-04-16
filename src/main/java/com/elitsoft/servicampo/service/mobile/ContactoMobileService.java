@@ -2,6 +2,7 @@ package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
 import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
+import com.elitsoft.servicampo.exceptions.ArchivoEntradaSalidaException;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -145,5 +147,33 @@ public class ContactoMobileService {
     public List<ContactoDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return contactoService.obtenerTodos();
+    }
+
+    /**
+     * Sube imagen de Contacto a una carpeta.
+     *
+     * @param id      la clave Contacto a encontrar.
+     * @param archivo imagen de Contacto.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al subir imagen.
+     * @throws RecursoNoEncontradoException  si no es encontrado el Contacto
+     * @throws BaseDatosException            si ocurre un error de base de datos.
+     */
+    public void subirImagen(Long id, MultipartFile archivo) throws ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("subirImagen():");
+        contactoService.subirImagen(id, archivo);
+    }
+
+
+    /**
+     * Baja imagen de Contacto.
+     *
+     * @param id la clave Contacto a encontrar.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al bajar imagen.
+     * @throws RecursoNoEncontradoException  si no es encontrado el Contacto
+     * @throws BaseDatosException            si ocurre un error de base de datos.
+     */
+    public byte[] bajarImagen(Long id) throws ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("bajarImagen():");
+        return contactoService.bajarImagen(id);
     }
 }

@@ -369,10 +369,9 @@ public class ClienteService {
 
         try {
             ClienteDTO clienteDTO = this.encontrarPorClave(id);
+            if (clienteDTO.getImagenPerfil() == null) { return null;}
             byte[] imagen = imagenArchivoService.bajar(clienteDTO.getImagenPerfil());
-            if (clienteDTO.getImagenPerfil() == null) {
-                return null;
-            }
+
             if (imagen == null) {
                 throw new RecursoNoEncontradoException(ClienteError.IMAGEN_NO_ENCONTRADO.getCodigoError(),
                         Constantes.CLIENTE_IMAGEN_NO_ENCONTRADO_MENSAGE);

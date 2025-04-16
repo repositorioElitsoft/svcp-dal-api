@@ -6,20 +6,26 @@ import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.entity.Contacto;
 import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.file.ImagenArchivoService;
 import com.elitsoft.servicampo.mapper.ContactoMapper;
 import com.elitsoft.servicampo.mapstruct.ContactoMapStruct;
 import com.elitsoft.servicampo.utils.Constantes;
+import com.elitsoft.servicampo.utils.ImagenUtils;
 import com.elitsoft.servicampo.service.error.GeneralError;
 import com.elitsoft.servicampo.service.error.ContactoError;
 import org.apache.ibatis.binding.BindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +43,10 @@ public class ContactoService {
 
     @Autowired
     private ContactoMapStruct mapper; // MapStruct Mapper (ToEntity(), ToDTO())
+
+    @Autowired
+    @Qualifier("ImagenArchivoContactoClienteService")
+    ImagenArchivoService imagenArchivoService;
 
     private static final Logger logeador = LoggerFactory.getLogger(ContactoService.class); //Logback
 
@@ -319,6 +329,59 @@ public class ContactoService {
             logeador.error(Constantes.CONTACTO_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                                         Constantes.CONTACTO_OBTENER_TODOS_MENSAJE, e);
+        }
+    }
+
+     /**
+     * Sube imagen de Contacto a una carpeta.
+     *
+     * @param id      la clave Contacto a encontrar.
+     * @param archivo imagen de Contacto.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al subir imagen.
+     * @throws RecursoNoEncontradoException  si no es encontrado el Contacto
+     * @throws BaseDatosException            si ocurre un error de base de datos.
+     */
+    public void subirImagen(Long id, MultipartFile archivo) throws ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("subirImagen():");
+
+        try {
+            ContactoDTO contactoDTO = this.encontrarPorClave(id);
+            MediaType mediaType = ImagenUtils.determinarTipoFormato(archivo.getBytes());
+            imagenArchivoService.subir(archivo.getBytes(), id.toString() + ImagenUtils.extensionArchivo(mediaType));
+            contactoDTO.setImagenPerfil(id.toString() + ImagenUtils.extensionArchivo(mediaType));
+            this.actualizar(id, contactoDTO);
+
+        } catch (IOException e) {
+            logeador.error(Constantes.EMPLEADO_IMAGEN_SUBIR_MENSAJE, e);
+            throw new ArchivoEntradaSalidaException(ContactoError.IMAGEN_SUBIR.getCodigoError(), Constantes.CONTACTO_IMAGEN_SUBIR_MENSAJE, e);
+        }
+    }
+
+
+    /**
+     * Baja imagen de Contacto.
+     *
+     * @param id la clave Contacto a encontrar.
+     * @throws ArchivoEntradaSalidaException si Ocurre un error al bajar imagen.
+     * @throws RecursoNoEncontradoException  si no es encontrado el Contacto
+     * @throws BaseDatosException            si ocurre un error de base de datos.
+     */
+    public byte[] bajarImagen(Long id) throws ArchivoEntradaSalidaException, RecursoNoEncontradoException, BaseDatosException {
+        logeador.debug("bajarImagen():");
+
+        try {
+            ContactoDTO contactoDTO = this.encontrarPorClave(id);
+            if (contactoDTO.getImagenPerfil() == null) {return null;}
+            byte[] imagen = imagenArchivoService.bajar(contactoDTO.getImagenPerfil());
+
+            if (imagen == null) {
+                throw new RecursoNoEncontradoException(ContactoError.IMAGEN_NO_ENCONTRADO.getCodigoError(),
+                        Constantes.CONTACTO_IMAGEN_NO_ENCONTRADO_MENSAGE);
+            }
+            return imagen;
+        } catch (RuntimeException e) {
+            logeador.error(Constantes.CONTACTO_IMAGEN_BAJAR_MENSAJE, e);
+            throw new ArchivoEntradaSalidaException(ContactoError.IMAGEN_BAJAR.getCodigoError(), Constantes.CONTACTO_IMAGEN_BAJAR_MENSAJE, e);
         }
     }
 

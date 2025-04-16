@@ -394,6 +394,9 @@ public class Constantes {
     public static final String CONTACTO_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave CONTACTO:";
     public static final String CONTACTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTACTO";
     public static final String CONTACTO_FILTRAR_MENSAJE = "Error filtrando CONTACTO";
+    public static final String CONTACTO_IMAGEN_SUBIR_MENSAJE = "Error subiendo imagen de CONTACTO";
+    public static final String CONTACTO_IMAGEN_BAJAR_MENSAJE = "Error bajando imagen de CONTACTO";
+    public static final String CONTACTO_IMAGEN_NO_ENCONTRADO_MENSAGE = "Imagen CONTACTO no  encontrado";
 
     public static final String CLIENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de CLIENTE invalida.";
     public static final String CLIENTE_DUPLICADO_MENSAGE = "Recurso  CLIENTE ya existe.";

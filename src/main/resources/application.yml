@@ -41,6 +41,7 @@ file:
     folders:
       imagenes: Imagenes
       imagenes.clientes: Clientes
+      imagenes.clientes.contactos: Contactos
       imagenes.empleados: Empleados
       imagenes.productos: Productos
       evidencias: Evidencias

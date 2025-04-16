@@ -10,7 +10,10 @@ public enum ContactoError {
     REQUERIDO("CNTC_002", 400) ,
     DUPLICADO("CNTC_003", 409) ,
     ID_REQUERIDO("CNTC_004", 400) ,
-    ID_INVALIDO("CNTC_005", 400) ;
+    ID_INVALIDO("CNTC_005", 400) ,
+    IMAGEN_SUBIR("CNTC_006", 500),
+    IMAGEN_BAJAR("CNTC_007", 500),
+    IMAGEN_NO_ENCONTRADO("CNTC_008", 404);
 
 
     private final String codigoError;

@@ -1,21 +1,29 @@
 package com.elitsoft.servicampo.controller.core;
 
+
 import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.ContactoDTO;
 import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.exceptions.*;
 import com.elitsoft.servicampo.service.core.ContactoService;
+import com.elitsoft.servicampo.utils.ImagenUtils;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 /**
@@ -250,6 +258,70 @@ public class ContactoController {
             return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(contactoService.obtenerTodos())); // Retorna  200 OK
         } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(),  e.getMessage())); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @PostMapping(value = "/{id}/imagen", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Sube imagen de contacto", description = "Sube imagen de contacto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Imagen Contacto subida exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<ApiEnityResponse<String>> subirImagen(@PathVariable Long id, @RequestParam(value = "file") MultipartFile archivo) {
+        logeador.debug("subirImagen()");
+
+        try {
+            contactoService.subirImagen(id, archivo);
+            return ResponseEntity.ok().build(); // Retorna  200 OK
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
+        } catch (ArchivoEntradaSalidaException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  500 Internal Server Error
+        }
+    }
+
+    @GetMapping(value = "/{id}/imagen")
+    @Operation(summary = "Baja imagen de contacto", description = "Baja imagen de contacto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Imagen Contacto Baja exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Imagen Contacto no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<?> bajarImagen(@PathVariable Long id) {
+        logeador.debug("bajarImagen()");
+
+        try {
+            byte[] imagen = contactoService.bajarImagen(id);
+
+            //Cuando contacto no tiene imagen en base de datos
+            if (imagen == null) {
+                return ResponseEntity.noContent().build();
+            } // Retorna  204 No Content
+
+            MediaType mediaType = ImagenUtils.determinarTipoFormato(imagen);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imagen);
+            InputStreamResource resource = new InputStreamResource(bis);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(mediaType);
+            headers.setContentLength(imagen.length);
+            headers.setContentDisposition(ContentDisposition.builder("inline").filename(id.toString() + ImagenUtils.extensionArchivo(mediaType)).build());
+            return ResponseEntity.ok().headers(headers).body(resource); // 200 OK
+
+        } catch (RecursoNoEncontradoException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(headers).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  404 Not Found
+        } catch (BaseDatosException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  500 Internal Server Error
+        } catch (ArchivoEntradaSalidaException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  500 Internal Server Error
         }
     }
 }
