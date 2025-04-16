@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -20,6 +21,6 @@ public class Servicio implements Serializable {
     private String descripcion;
     private Estado estado;
     private TipoServicio tipoServicio;
-    //private List<ServicioTrabajo> servicioTrabajos;
+    private List<ServicioTrabajo> servicioTrabajos;
 
 }

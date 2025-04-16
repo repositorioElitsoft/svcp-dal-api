@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +19,6 @@ public class ServicioMobileDTO implements Serializable {
     private String descripcion;
     private EstadoMobileDTO estado;
     private TipoServicioMobileDTO tipoServicio;
+    private List<ServicioTrabajoMobileDTO> servicioTrabajos;
 
 }

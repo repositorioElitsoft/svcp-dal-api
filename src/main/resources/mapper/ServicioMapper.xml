@@ -7,7 +7,10 @@
         <result property="descripcion" column="svcs_dsc" />
         <association property="estado"  resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
         <association property="tipoServicio"  resultMap="com.elitsoft.servicampo.mapper.TipoServicioMapper.tipoServicioResultMap"/>
-        <!-- <collection property="servicioTrabajos" ofType="com.elitsoft.servicampo.domain.entity.ServicioTrabajo" column="svcs_id" select="com.elitsoft.servicampo.mapper.ServicioTrabajoMapper.encontrarPorServicioId"/> -->
+        <collection property="servicioTrabajos" ofType="com.elitsoft.servicampo.domain.entity.ServicioTrabajo">
+            <result property="secuencia" column="svtr_secuencia"/>
+            <association property="trabajo"  resultMap="com.elitsoft.servicampo.mapper.TrabajoMapper.trabajoResultMap"/>
+        </collection>
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
@@ -22,6 +25,24 @@
         FROM ${schema}servicios as svcs
         INNER JOIN ${schema}estados         as estd  ON svcs.estd_id  = estd.estd_id
         INNER JOIN ${schema}tipos_servicios as tpsev ON svcs.tpsev_id = tpsev.tpsev_id
+    </sql>
+
+        <!-- Sentencia SQL de Columnas -->
+    <sql id="selectAsignacion">
+          SELECT svcs.svcs_id ,   svcs.svcs_dsc  ,
+               estd.estd_id   ,   estd.estd_dsc  ,
+               tpsev.tpsev_id ,   tpsev.tpsev_dsc,
+               trbj.trbj_id   ,   trbj.trbj_dsc  ,
+               svtr.svtr_secuencia
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="fromAsignacion">
+        FROM ${schema}servicios as svcs
+        INNER JOIN ${schema}estados            as estd  ON svcs.estd_id  = estd.estd_id
+        INNER JOIN ${schema}tipos_servicios    as tpsev ON svcs.tpsev_id = tpsev.tpsev_id
+        LEFT  JOIN ${schema}servicios_trabajos as svtr ON  svcs.svcs_id = svtr.svcs_id
+        LEFT  JOIN ${schema}trabajos           as trbj ON  svtr.trbj_id = trbj.trbj_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
@@ -75,6 +96,62 @@
     <select id="contarFiltrar" resultType="int">
         SELECT COUNT(*)        
         <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND svcs.svcs_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(svcs.svcs_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.estado != null">
+                    AND svcs.estd_id  = #{filtro.estado}
+                </if>
+                <if test="filtro.tipoServicio != null">
+                    AND svcs.tpsev_id  = #{filtro.tipoServicio}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrarAsignacion" resultMap="servicioResultMap">
+        <include refid="selectAsignacion"/>
+        <include refid="fromAsignacion"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND svcs.svcs_id = #{filtro.id}
+                </if>
+                <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                    AND LOWER(svcs.svcs_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                </if>
+                <if test="filtro.estado != null">
+                    AND svcs.estd_id  = #{filtro.estado}
+                </if>
+                <if test="filtro.tipoServicio != null">
+                    AND svcs.tpsev_id  = #{filtro.tipoServicio}
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY svcs.svcs_id ${direccionOrden}, svtr.svtr_secuencia ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">ORDER BY svcs.svcs_dsc ${direccionOrden}, svtr.svtr_secuencia</when>
+                <when test="campoOrden == 'estado'">ORDER BY svcs.estd_id ${direccionOrden}, svtr.svtr_secuencia</when>
+                <when test="campoOrden == 'tipoServicio'">ORDER BY svcs.tpsev_id ${direccionOrden}, svtr.svtr_secuencia </when>
+                <otherwise>ORDER BY svcs.svcs_id ASC, svtr.svtr_secuencia ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrarAsignacion" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="fromAsignacion"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">

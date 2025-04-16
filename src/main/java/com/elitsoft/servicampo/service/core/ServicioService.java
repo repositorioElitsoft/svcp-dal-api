@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -182,14 +183,19 @@ public class ServicioService {
      * @param id la clave de Servicio a eliminar.
      * @throws RecursoNoEncontradoException si el Servicio no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si Servicio esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() servicio: {}", id);
 
         try {
             ServicioDTO servicioDTO = this.encontrarPorClave(id); // Verifica si existe
             int registrosEliminados = servicioMapper.eliminar(id);
             logeador.info("servicio eliminado: {}, registros eliminados: {}", id, registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(ServicioError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException e) {
             logeador.error(Constantes.SERVICIO_ELIMINAR_MENSAJE + ": {}, codigoError:{}", id,
                            GeneralError.ERROR_INTERNO.getCodigoError(),  e);
@@ -202,9 +208,10 @@ public class ServicioService {
      * Elimina Lote Servicio por Clave.
      * @param servicioDTOLote lista de claves de Direccion a eliminar.
      * @throws EntradaInvalidadException si la lista  Servicio esta vacia.
-     * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws BaseDatosException si ocurre un error de base de datos.  
+     * @throws RecursoEliminarException si Servicio esta asociado a otro recurso
      */
-    public void eliminarLote(List<ServicioDTO> servicioDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<ServicioDTO> servicioDTOLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
 
@@ -221,6 +228,10 @@ public class ServicioService {
         try {
             int registrosEliminados = servicioMapper.eliminarLote(mapper.toEntityList(servicioDTOLote));
             logeador.info("Lote servicio eliminados exitosamente, registros eliminados: {}", registrosEliminados);
+        } catch (DataIntegrityViolationException e) {
+            logeador.error(Constantes.SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE);
+            throw new RecursoEliminarException(ServicioError.INTEGRIDAD_VIOLADA.getCodigoError(),
+                    Constantes.SERVICIO_VIOLACION_INTEGRIDAD_MENSAGE, e);
         } catch (DataAccessException | BindingException e) {
             logeador.error(Constantes.SERVICIO_ELIMINAR_MENSAJE + " codigoError:{} ",
                            GeneralError.ERROR_INTERNO.getCodigoError(),  e);

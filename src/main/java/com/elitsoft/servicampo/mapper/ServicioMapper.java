@@ -91,4 +91,25 @@ public interface ServicioMapper {
      */
     int contarFiltrar(@Param("filtro") ServicioFiltro filtro);
 
+    /**
+     * Hace filtro dinamico y paginacion para Servicios Asignados a Trabajados
+     * @param filtro clase que tiene los atributos a filtrar
+     * @param campoOrden atributo que define el ordern del filtro
+     * @param direccionOrden atributo que define la direccion del filtro
+     * @param limite atributo que define el limite de registros por pagina del filtro
+     * @param desplazamiento atributo que define la pagina del filtro
+     * @return List<Servicio> lista de entidades Servicio
+     */
+    List<Servicio> filtrarAsignacion(@Param("filtro") ServicioFiltro filtro,
+                              @Param("campoOrden") String campoOrden,
+                              @Param("direccionOrden") String direccionOrden,
+                              @Param("limite") int limite,
+                              @Param("desplazamiento") int desplazamiento);
+
+    /**
+     * Cuenta los registros que coinciden con el filtro dinamico de Servicios Asignados a Trabajados
+     * @param filtro clase que tiene los atributos a filtrar
+     * @return int cantidad de registros que retorna el filtro
+     */
+    int contarFiltrarAsignacion(@Param("filtro") ServicioFiltro filtro);
 }

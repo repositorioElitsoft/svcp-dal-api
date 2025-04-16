@@ -4,6 +4,7 @@ import com.elitsoft.servicampo.domain.dto.core.ServicioDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
 import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
 import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.mapper.ServicioMapper;
 import com.elitsoft.servicampo.mapstruct.ServicioMapStruct;
@@ -91,8 +92,9 @@ public class ServicioMobileService {
      * @param id la clave de Servicio a eliminar.
      * @throws RecursoNoEncontradoException si el Servicio no es encontrado.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si Servicio esta asociado a otro recurso
      */
-    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException {
+    public void eliminar(Long id) throws RecursoNoEncontradoException, BaseDatosException, RecursoEliminarException {
         logeador.debug("eliminar() servicio: {}", id);
         servicioService.eliminar(id);
     }
@@ -102,8 +104,9 @@ public class ServicioMobileService {
      * @param servicioDTOLote lista de claves de Direccion a eliminar.
      * @throws EntradaInvalidadException si la lista  Servicio esta vacia.
      * @throws BaseDatosException si ocurre un error de base de datos.
+     * @throws RecursoEliminarException si Servicio esta asociado a otro recurso
      */
-    public void eliminarLote(List<ServicioDTO> servicioDTOLote) throws  BaseDatosException, EntradaInvalidadException {
+    public void eliminarLote(List<ServicioDTO> servicioDTOLote) throws  BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
 
         servicioService.eliminarLote(servicioDTOLote);
