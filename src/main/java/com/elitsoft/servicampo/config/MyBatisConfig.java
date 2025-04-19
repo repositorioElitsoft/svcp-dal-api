@@ -1,6 +1,8 @@
 package com.elitsoft.servicampo.config;
 
+import com.elitsoft.servicampo.handler.ServicioTrabajoListTypeHandler;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +40,10 @@ public class MyBatisConfig {
         variables.setProperty("schema", schema + ".");
         configuration.setVariables(variables);
         configuration.setLogImpl(org.apache.ibatis.logging.slf4j.Slf4jImpl.class); // Or Log4j2Impl, etc.
+
+        // Register custom type handlers
+        TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+        typeHandlerRegistry.register(ServicioTrabajoListTypeHandler.class);
 
         factoryBean.setConfiguration(configuration);
 

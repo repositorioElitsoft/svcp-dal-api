@@ -54,17 +54,17 @@ public class ServicioFiltroController {
     }
 
     @GetMapping(value = "/servicios-trabajos-asignados", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Filtra un servicio", description = "Filtra y hace paginado de servicio por atributos")
+    @Operation(summary = "Filtra un servicio y sus asignaciones de trabajos", description = "Filtra y hace paginado de servicio y asignaciones de trabajos por atributos")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Servicio Filtrado exitosamente"),
+            @ApiResponse(responseCode = "200", description = "Servicio y Asignaciones de Trabajos Filtrado exitosamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
     })
-    public ResponseEntity<PagedResponse<ServicioDTO>> filtrarAsignacion(@ModelAttribute ServicioFiltro filtro, PagingAndSorting paginado) {
-        logeador.debug("filtrarAsignacion()");
+    public ResponseEntity<PagedResponse<ServicioDTO>> filtrarAsginacion(@ModelAttribute ServicioFiltro filtro, PagingAndSorting paginado) {
+        logeador.debug("filtrarAsginacion()");
 
         try {
-            List<ServicioDTO> servicioDTOLista = servicioFiltroService.filtrarAsignacion(filtro, paginado);
-            int totalFiltro = servicioFiltroService.contarFiltrarAsignacion(filtro);
+            List<ServicioDTO> servicioDTOLista = servicioFiltroService.filtrarAsginacion(filtro, paginado);
+            int totalFiltro = servicioFiltroService.contarFiltrarAsginacion(filtro);
 
             PagedResponse<ServicioDTO> response = PaginationUtils.createPagedResponse(servicioDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK

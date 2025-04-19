@@ -70,7 +70,7 @@
             <choose>
                 <when test="campoOrden == 'id'">ORDER BY trtr.trbj_id  ${direccionOrden},  trtr.trtr_secuencia</when>
                 <when test="campoOrden == 'tarea'">ORDER BY trtr.trbj_id, tras.tras_id ${direccionOrden}, trtr.trtr_secuencia</when>
-                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trtr.trbj_id  ${direccionOrden}, trtr.trtr_secuencia</when>
+                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trtr.tras_dsc  ${direccionOrden}, trtr.trtr_secuencia</when>
                 <otherwise>ORDER BY trbj.trbj_id, trtr.trtr_secuencia ASC</otherwise>
             </choose>
         </if>

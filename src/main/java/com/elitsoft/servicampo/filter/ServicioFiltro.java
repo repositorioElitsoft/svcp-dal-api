@@ -1,8 +1,5 @@
 package com.elitsoft.servicampo.filter;
 
-
-import com.elitsoft.servicampo.domain.entity.Estado;
-import com.elitsoft.servicampo.domain.entity.TipoServicio;
 import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,6 +15,8 @@ public class ServicioFiltro implements Serializable {
     private String descripcion;
     private Long estado;
     private Long tipoServicio;
-
+    private String descripcionTrabajo;
+    private String descripcionEstado;
+    private String descripcionTipoServicio;
 
 }

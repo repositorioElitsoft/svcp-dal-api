@@ -49,6 +49,26 @@ public class ServicioFiltroService {
     }
 
     /**
+     * Ejecuta filtro dinamico y paginacion para Servicio y Asignaciones de Trabajos
+     *
+     * @param filtro   clase que tiene los atributos a filtrar
+     * @param paginado clase que tiene los atributos de paginacion
+     * @return List<ServicioDTO> lista de DTOs Servicio
+     * @throws BaseDatosException si la entrada LotePaginado tiene errores.
+     */
+    public List<ServicioDTO> filtrarAsginacion(ServicioFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
+        logeador.debug("filtrarAsginacion()");
+
+        try {
+            int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
+            return servicioMapper.filtrarAsginacion(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento);
+        } catch (DataAccessException e) {
+            logeador.error("{}, {}, {}, {}", Constantes.SERVICIO_FILTRAR_MENSAJE, filtro.toString(), paginado.toString(), e, e);
+            throw new BaseDatosException(Constantes.SERVICIO_FILTRAR_MENSAJE, e);
+        }
+    }
+
+    /**
      * Cuenta los registros que coinciden con el filtro dinamico para Servicio
      *
      * @param filtro clase que tiene los atributos a filtrar
@@ -66,38 +86,16 @@ public class ServicioFiltroService {
     }
 
     /**
-     * Ejecuta filtro dinamico y paginacion para Servicios Asignados a Trabajados
-     *
-     * @param filtro   clase que tiene los atributos a filtrar
-     * @param paginado clase que tiene los atributos de paginacion
-     * @return List<ServicioDTO> lista de entidades Servicio
-     * @throws BaseDatosException si la entrada LotePaginado tiene errores.
-     */
-    public List<ServicioDTO> filtrarAsignacion(ServicioFiltro filtro, PagingAndSorting paginado) throws BaseDatosException {
-        logeador.debug("filtrarAsignacion()");
-
-        try {
-            int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
-
-            return mapper.toDTOList(servicioMapper.filtrarAsignacion(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
-        } catch (DataAccessException e) {
-            logeador.error("{}, {}, {}, {}", Constantes.SERVICIO_FILTRAR_MENSAJE, filtro.toString(), paginado.toString(), e, e);
-            throw new BaseDatosException(Constantes.SERVICIO_FILTRAR_MENSAJE, e);
-        }
-
-    }
-
-    /**
-     * Cuenta los registros que coinciden con el filtro dinamico para Servicios Asignados a Trabajados
+     * Cuenta los registros que coinciden con el filtro dinamico para Servicio y Asignaciones de Trabajos
      *
      * @param filtro clase que tiene los atributos a filtrar
      * @return int cantidad de registros que retorna el filtro
      */
-    public int contarFiltrarAsignacion(ServicioFiltro filtro) throws BaseDatosException {
-        logeador.debug("contarFiltrarAsignacion()");
+    public int contarFiltrarAsginacion(ServicioFiltro filtro) throws BaseDatosException {
+        logeador.debug("contarFiltrarAsginacion()");
 
         try {
-            return servicioMapper.contarFiltrarAsignacion(filtro);
+            return servicioMapper.contarFiltrarAsginacion(filtro);
         } catch (DataAccessException e) {
             logeador.error("{}, {}, {}", Constantes.SERVICIO_FILTRAR_MENSAJE, filtro.toString(), e, e);
             throw new BaseDatosException(Constantes.SERVICIO_FILTRAR_MENSAJE, e);

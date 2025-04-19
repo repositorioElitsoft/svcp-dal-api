@@ -8,9 +8,26 @@
         <association property="estado"  resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
         <association property="tipoServicio"  resultMap="com.elitsoft.servicampo.mapper.TipoServicioMapper.tipoServicioResultMap"/>
         <collection property="servicioTrabajos" ofType="com.elitsoft.servicampo.domain.entity.ServicioTrabajo">
-            <result property="secuencia" column="svtr_secuencia"/>
+            <association property="servicio"  javaType="com.elitsoft.servicampo.domain.entity.Servicio">
+                <id property="id" column="svcs_id" />
+            </association>
             <association property="trabajo"  resultMap="com.elitsoft.servicampo.mapper.TrabajoMapper.trabajoResultMap"/>
         </collection>
+    </resultMap>
+
+ 
+    <resultMap id="servicioAsginacionResultMap" type="com.elitsoft.servicampo.domain.dto.core.ServicioDTO">
+        <id property="id" column="svcs_id" />
+        <result property="descripcion" column="svcs_dsc" />
+        <result property="servicioTrabajos" column="servicioTrabajos" jdbcType="OTHER" javaType="java.util.List" typeHandler="com.elitsoft.servicampo.handler.ServicioTrabajoListTypeHandler"/>
+        <association property="estado" javaType="com.elitsoft.servicampo.domain.dto.core.EstadoDTO">
+            <id property="id" column="estd_id" />
+            <result property="descripcion" column="estd_dsc" />
+        </association>
+        <association property="tipoServicio" javaType="com.elitsoft.servicampo.domain.dto.core.TipoServicioDTO">
+            <id property="id" column="tpsev_id" />
+            <result property="descripcionTipoServicio" column="tpsev_dsc" />
+        </association>
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
@@ -25,24 +42,6 @@
         FROM ${schema}servicios as svcs
         INNER JOIN ${schema}estados         as estd  ON svcs.estd_id  = estd.estd_id
         INNER JOIN ${schema}tipos_servicios as tpsev ON svcs.tpsev_id = tpsev.tpsev_id
-    </sql>
-
-        <!-- Sentencia SQL de Columnas -->
-    <sql id="selectAsignacion">
-          SELECT svcs.svcs_id ,   svcs.svcs_dsc  ,
-               estd.estd_id   ,   estd.estd_dsc  ,
-               tpsev.tpsev_id ,   tpsev.tpsev_dsc,
-               trbj.trbj_id   ,   trbj.trbj_dsc  ,
-               svtr.svtr_secuencia
-    </sql>
-
-    <!-- Sentencia SQL para el FROM -->
-    <sql id="fromAsignacion">
-        FROM ${schema}servicios as svcs
-        INNER JOIN ${schema}estados            as estd  ON svcs.estd_id  = estd.estd_id
-        INNER JOIN ${schema}tipos_servicios    as tpsev ON svcs.tpsev_id = tpsev.tpsev_id
-        LEFT  JOIN ${schema}servicios_trabajos as svtr ON  svcs.svcs_id = svtr.svcs_id
-        LEFT  JOIN ${schema}trabajos           as trbj ON  svtr.trbj_id = trbj.trbj_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
@@ -114,44 +113,112 @@
         </where>
     </select>
 
-    <!-- Sentencia SQL de Filtrar y paginar -->
-    <select id="filtrarAsignacion" resultMap="servicioResultMap">
-        <include refid="selectAsignacion"/>
-        <include refid="fromAsignacion"/>
-        <where>
-            <if test="filtro != null">
-                <if test="filtro.id != null">
-                    AND svcs.svcs_id = #{filtro.id}
+    <!-- Sentencia SQL de Filtrar y paginar Asignaciones (Servicio -> Trabajos) -->
+    <select id="filtrarAsginacion" resultMap="servicioAsginacionResultMap">
+        WITH servicios_filtrados AS (
+            SELECT 
+                svcs.svcs_id,
+                svcs.svcs_dsc,
+                estd.estd_id,
+                estd.estd_dsc,
+                tpsev.tpsev_id,
+                tpsev.tpsev_dsc
+            FROM ${schema}servicios svcs
+            INNER JOIN ${schema}estados         as estd  ON svcs.estd_id  = estd.estd_id
+            INNER JOIN ${schema}tipos_servicios as tpsev ON svcs.tpsev_id = tpsev.tpsev_id
+            <where>
+                <if test="filtro != null">
+                    <if test="filtro.id != null">
+                        AND svcs.svcs_id = #{filtro.id}
+                    </if>
+                    <if test="filtro.descripcion != null and filtro.descripcion != ''">
+                        AND LOWER(svcs.svcs_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
+                    </if>
+                    <if test="filtro.estado != null">
+                        AND svcs.estd_id = #{filtro.estado}
+                    </if>
+                    <if test="filtro.descripcionEstado != null and filtro.descripcionEstado != ''">
+                        AND LOWER(estd.estd_dsc) LIKE '%' || LOWER(#{filtro.descripcionEstado}) || '%'
+                    </if>
+                    <if test="filtro.tipoServicio != null">
+                        AND svcs.tpsev_id = #{filtro.tipoServicio}
+                    </if>
+                    <if test="filtro.descripcionTipoServicio != null and filtro.descripcionTipoServicio != ''">
+                        AND LOWER(tpsev.tpsev_dsc) LIKE '%' || LOWER(#{filtro.descripcionTipoServicio}) || '%'
+                    </if>
+                    <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
+                        AND EXISTS (
+                            SELECT 1 FROM ${schema}servicios_trabajos st
+                            JOIN ${schema}trabajos t ON st.trbj_id = t.trbj_id
+                            WHERE st.svcs_id = svcs.svcs_id
+                            AND LOWER(t.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                        )
+                    </if>
                 </if>
-                <if test="filtro.descripcion != null and filtro.descripcion != ''">
-                    AND LOWER(svcs.svcs_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
-                </if>
-                <if test="filtro.estado != null">
-                    AND svcs.estd_id  = #{filtro.estado}
-                </if>
-                <if test="filtro.tipoServicio != null">
-                    AND svcs.tpsev_id  = #{filtro.tipoServicio}
-                </if>
+            </where>
+            <if test="campoOrden != null and campoOrden != ''">
+                <choose>
+                    <when test="campoOrden == 'id'">ORDER BY svcs.svcs_id ${direccionOrden}</when>
+                    <when test="campoOrden == 'descripcion'">ORDER BY svcs.svcs_dsc ${direccionOrden}</when>
+                    <otherwise>ORDER BY svcs.svcs_id ASC</otherwise>
+                </choose>
             </if>
-        </where>
+            <if test="campoOrden == null or campoOrden == ''">
+                ORDER BY svcs.svcs_id ASC
+            </if>
+            <if test="limite != null and desplazamiento != null">
+                LIMIT #{limite} OFFSET #{desplazamiento}
+            </if>
+        )
+        
+        SELECT 
+            sf.svcs_id,
+            sf.svcs_dsc,
+            sf.estd_id,
+            sf.estd_dsc,
+            sf.tpsev_id,
+            sf.tpsev_dsc,
+            COALESCE(
+                jsonb_agg(
+                    CASE WHEN t.trbj_id IS NOT NULL THEN
+                        jsonb_build_object(
+                            'trabajo', jsonb_build_object(
+                                'id', t.trbj_id,
+                                'descripcionTrabajo', t.trbj_dsc
+                            ),
+                            'servicio', jsonb_build_object(
+                                'id', sf.svcs_id
+                            ),
+                            'secuencia', st.svtr_secuencia
+                        )
+                    ELSE NULL
+                    END
+                ) FILTER (WHERE t.trbj_id IS NOT NULL),
+                '[]'
+            ) AS servicioTrabajos
+        FROM servicios_filtrados sf
+        LEFT JOIN ${schema}servicios_trabajos st ON sf.svcs_id = st.svcs_id
+        LEFT JOIN ${schema}trabajos t ON st.trbj_id = t.trbj_id
+        <if test="filtro != null and filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
+            AND LOWER(t.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+        </if>
+        GROUP BY sf.svcs_id, sf.svcs_dsc, sf.estd_id, sf.estd_dsc, sf.tpsev_id, sf.tpsev_dsc
+        ORDER BY 
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY svcs.svcs_id ${direccionOrden}, svtr.svtr_secuencia ${direccionOrden}</when>
-                <when test="campoOrden == 'descripcion'">ORDER BY svcs.svcs_dsc ${direccionOrden}, svtr.svtr_secuencia</when>
-                <when test="campoOrden == 'estado'">ORDER BY svcs.estd_id ${direccionOrden}, svtr.svtr_secuencia</when>
-                <when test="campoOrden == 'tipoServicio'">ORDER BY svcs.tpsev_id ${direccionOrden}, svtr.svtr_secuencia </when>
-                <otherwise>ORDER BY svcs.svcs_id ASC, svtr.svtr_secuencia ASC</otherwise>
+                <when test="campoOrden == 'id'">sf.svcs_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcion'">sf.svcs_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionEstado'">sf.estd_dsc ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTipoServicio'">sf.tpsev_dsc ${direccionOrden}</when>
+                <otherwise>sf.svcs_id ASC</otherwise>
             </choose>
-        </if>
-        <if test="limite != null and desplazamiento != null">
-            LIMIT #{limite} OFFSET #{desplazamiento}
         </if>
     </select>
 
-    <!-- Sentencia SQL de contar el Filtro para paginacion -->
-    <select id="contarFiltrarAsignacion" resultType="int">
-        SELECT COUNT(*)        
-        <include refid="fromAsignacion"/>
+    <!-- Sentencia SQL de contar el Filtro para paginacion Asignaciones (Servicio -> Trabajos) -->
+    <select id="contarFiltrarAsginacion" resultType="int">
+        SELECT COUNT(DISTINCT svcs.svcs_id)        
+        FROM ${schema}servicios svcs
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
@@ -161,10 +228,24 @@
                     AND LOWER(svcs.svcs_dsc) LIKE '%' || LOWER(#{filtro.descripcion}) || '%'
                 </if>
                 <if test="filtro.estado != null">
-                    AND svcs.estd_id  = #{filtro.estado}
+                    AND svcs.estd_id = #{filtro.estado}
+                </if>
+                <if test="filtro.descripcionEstado != null and filtro.descripcionEstado != ''">
+                    AND LOWER(estd.estd_dsc) LIKE '%' || LOWER(#{filtro.descripcionEstado}) || '%'
                 </if>
                 <if test="filtro.tipoServicio != null">
-                    AND svcs.tpsev_id  = #{filtro.tipoServicio}
+                    AND svcs.tpsev_id = #{filtro.tipoServicio}
+                </if>
+                <if test="filtro.descripcionTipoServicio != null and filtro.descripcionTipoServicio != ''">
+                    AND LOWER(tpsev.tpsev_dsc) LIKE '%' || LOWER(#{filtro.descripcionTipoServicio}) || '%'
+                </if>
+                <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
+                    AND EXISTS (
+                        SELECT 1 FROM ${schema}servicios_trabajos st
+                        JOIN ${schema}trabajos t ON st.trbj_id = t.trbj_id
+                        WHERE st.svcs_id = svcs.svcs_id
+                        AND LOWER(t.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                    )
                 </if>
             </if>
         </where>
