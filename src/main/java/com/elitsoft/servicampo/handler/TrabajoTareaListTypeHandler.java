@@ -1,6 +1,6 @@
 package com.elitsoft.servicampo.handler;
 
-import com.elitsoft.servicampo.domain.dto.core.ServicioTrabajoDTO;
+import com.elitsoft.servicampo.domain.dto.core.TrabajoTareaDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,16 +20,16 @@ import java.util.List;
 /**
  * Custom MyBatis TypeHandler to convert between PostgreSQL JSON arrays and Java Lists
  */
-@MappedTypes(ServicioTrabajoDTO.class)
-public class ServicioTrabajoListTypeHandler extends BaseTypeHandler<List<ServicioTrabajoDTO>> {
+@MappedTypes(TrabajoTareaDTO.class)
+public class TrabajoTareaListTypeHandler extends BaseTypeHandler<List<TrabajoTareaDTO>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ServicioTrabajoListTypeHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(TrabajoTareaListTypeHandler.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final JavaType javaType = objectMapper.getTypeFactory()
-            .constructCollectionType(List.class, ServicioTrabajoDTO.class);
+            .constructCollectionType(List.class, TrabajoTareaDTO.class);
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, List<ServicioTrabajoDTO> parameter, JdbcType jdbcType)
+    public void setNonNullParameter(PreparedStatement ps, int i, List<TrabajoTareaDTO> parameter, JdbcType jdbcType)
             throws SQLException {
         try {
             String json = objectMapper.writeValueAsString(parameter);
@@ -41,27 +41,27 @@ public class ServicioTrabajoListTypeHandler extends BaseTypeHandler<List<Servici
     }
 
     @Override
-    public List<ServicioTrabajoDTO> getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    public List<TrabajoTareaDTO> getNullableResult(ResultSet rs, String columnName) throws SQLException {
         String jsonString = rs.getString(columnName);
         logger.debug("getNullableResult by column name: {}, value: {}", columnName, jsonString);
         return parseJson(jsonString);
     }
 
     @Override
-    public List<ServicioTrabajoDTO> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    public List<TrabajoTareaDTO> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         String jsonString = rs.getString(columnIndex);
         logger.debug("getNullableResult by index: {}, value: {}", columnIndex, jsonString);
         return parseJson(jsonString);
     }
 
     @Override
-    public List<ServicioTrabajoDTO> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public List<TrabajoTareaDTO> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         String jsonString = cs.getString(columnIndex);
         logger.debug("getNullableResult (CallableStatement): {}, value: {}", columnIndex, jsonString);
         return parseJson(jsonString);
     }
 
-    private List<ServicioTrabajoDTO> parseJson(String json) {
+    private List<TrabajoTareaDTO> parseJson(String json) {
         if (json == null || json.isEmpty() || json.equals("null")) {
             logger.debug("Empty JSON string, returning empty list");
             return Collections.emptyList();
@@ -74,7 +74,7 @@ public class ServicioTrabajoListTypeHandler extends BaseTypeHandler<List<Servici
 
         try {
             logger.debug("Parsing JSON: {}", json);
-            List<ServicioTrabajoDTO> result = objectMapper.readValue(json, javaType);
+            List<TrabajoTareaDTO> result = objectMapper.readValue(json, javaType);
             logger.debug("Parsed JSON to {} items", result.size());
             return result;
         } catch (JsonProcessingException e) {

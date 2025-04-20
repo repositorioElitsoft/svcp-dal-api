@@ -1,10 +1,10 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
+import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import com.elitsoft.servicampo.domain.dto.core.TrabajoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.TrabajoFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.TrabajoFiltroService;
-import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import com.elitsoft.servicampo.utils.PaginationUtils;
 import com.elitsoft.servicampo.utils.PagingAndSorting;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +47,29 @@ public class TrabajoFiltroController {
             PagedResponse<TrabajoDTO> response = PaginationUtils.createPagedResponse(trabajoDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
-        }  catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
+    @GetMapping(value = "/trabajos-tareas-asignados", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Filtra un trabajo y sus asignaciones de tareas", description = "Filtra y hace paginado de trabajo y asignaciones de tareas por atributos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Trabajo y Asignaciones de Tareas  Filtrado exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<PagedResponse<TrabajoDTO>> filtrarAsginacion(@ModelAttribute TrabajoFiltro filtro, PagingAndSorting paginado) {
+        logeador.debug("filtrarAsginacion()");
+
+        try {
+            List<TrabajoDTO> trabajoDTOLista = trabajoFiltroService.filtrarAsignacion(filtro, paginado);
+            int totalFiltro = trabajoFiltroService.contarFiltrarAsignacion(filtro);
+
+            PagedResponse<TrabajoDTO> response = PaginationUtils.createPagedResponse(trabajoDTOLista, totalFiltro, paginado);
+            return ResponseEntity.ok(response); // Retorna  200 OK
+
+        } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
 

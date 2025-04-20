@@ -10,6 +10,13 @@
             <association property="tarea"  resultMap="com.elitsoft.servicampo.mapper.TareaMapper.tareaResultMap"/>
         </collection>
     </resultMap>
+
+    <resultMap id="trabajoAsginacionResultMap" type="com.elitsoft.servicampo.domain.dto.core.TrabajoDTO">
+        <id property="id" column="trbj_id" />
+        <result property="descripcionTrabajo" column="trbj_dsc"/>
+        <result property="trabajoTareas" column="trabajoTareas" jdbcType="OTHER" javaType="java.util.List" typeHandler="com.elitsoft.servicampo.handler.TrabajoTareaListTypeHandler"/>
+    </resultMap>
+
     
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
@@ -19,18 +26,6 @@
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
         FROM ${schema}trabajos
-    </sql>
-
-    <!-- Sentencia SQL de Columnas -->
-    <sql id="selectFiltrar">
-        SELECT trbj.trbj_id, trbj.trbj_dsc, tras.tras_id, tras.tras_dsc, trtr.trtr_secuencia
-    </sql>
-
-    <!-- Sentencia SQL para el FROM -->
-    <sql id="fromFiltrar">
-        FROM ${schema}trabajos as trbj
-        LEFT JOIN ${schema}trabajos_tareas as trtr ON  trbj.trbj_id = trtr.trbj_id
-        LEFT JOIN ${schema}tareas          as tras ON  trtr.tras_id = tras.tras_id
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
@@ -48,30 +43,23 @@
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="trabajoResultMap">
-        <include refid="selectFiltrar"/>
-        <include refid="fromFiltrar"/>
+        <include refid="select"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND trtr.trbj_id = #{filtro.id}
-                </if>
-                <if test="filtro.tarea != null">
-                    AND trtr.tras_id = #{filtro.tarea}
+                    AND trbj_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
-                    AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
-                </if>
-                <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
-                    AND LOWER(tras.tras_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
+                    AND LOWER(trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
                 </if>
             </if>
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY trtr.trbj_id  ${direccionOrden},  trtr.trtr_secuencia</when>
-                <when test="campoOrden == 'tarea'">ORDER BY trtr.trbj_id, tras.tras_id ${direccionOrden}, trtr.trtr_secuencia</when>
-                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trtr.tras_dsc  ${direccionOrden}, trtr.trtr_secuencia</when>
-                <otherwise>ORDER BY trbj.trbj_id, trtr.trtr_secuencia ASC</otherwise>
+                <when test="campoOrden == 'id'">ORDER BY trbj_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trbj_dsc ${direccionOrden}</when>
+                <otherwise>ORDER BY trbj_id ASC</otherwise>
             </choose>
         </if>
         <if test="limite != null and desplazamiento != null">
@@ -79,25 +67,120 @@
         </if>
     </select>
 
-    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <!-- Sentencia SQL de contar el Filtro para paginacion-->
     <select id="contarFiltrar" resultType="int">
-        SELECT COUNT(*)
-        <include refid="fromFiltrar"/>
+        SELECT COUNT(*)        
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
-                    AND trtr.trbj_id = #{filtro.id}
-                </if>
-                <if test="filtro.tarea != null">
-                    AND trtr.tras_id = #{filtro.tarea}
+                    AND trbj_id = #{filtro.id}
                 </if>
                 <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
-                    AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
-                </if>
-                <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
-                    AND LOWER(tras.tras_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
+                    AND LOWER(trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
                 </if>
             </if>
+        </where>
+    </select>
+    
+    <!-- Sentencia SQL de Filtrar y paginar Asignaciones (Trabajos -> Tareas) -->
+    <select id="filtrarAsignacion" resultMap="trabajoAsginacionResultMap">
+        WITH trabajos_filtrados AS (
+            SELECT trbj.trbj_id, trbj.trbj_dsc
+            FROM ${schema}trabajos as trbj
+            <where>
+                <if test="filtro != null">
+                    <if test="filtro.id != null">
+                        AND trbj.trbj_id = #{filtro.id}
+                   </if>
+                   <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
+                        AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                    </if>
+                    <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
+                        AND EXISTS (
+                            SELECT 1 
+                            FROM ${schema}trabajos_tareas as trtr
+                            JOIN ${schema}tareas          as tras ON trtr.tras_id = tras.tras_id
+                            WHERE trtr.trbj_id = trbj.trbj_id
+                            AND LOWER(tras.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
+                        )
+                    </if>
+                </if>
+            </where>
+            <if test="campoOrden != null and campoOrden != ''">
+                <choose>
+                    <when test="campoOrden == 'id'">ORDER BY trbj.trbj_id ${direccionOrden}</when>
+                    <when test="campoOrden == 'descripcionTrabajo'">ORDER BY trbj.trbj_dsc ${direccionOrden}</when>
+                    <otherwise>ORDER BY trbj.trbj_id ASC</otherwise>
+                </choose>
+            </if>
+            <if test="limite != null and desplazamiento != null">
+                LIMIT #{limite} OFFSET #{desplazamiento}
+            </if>
+        )
+        
+        SELECT 
+            tf.trbj_id,
+            tf.trbj_dsc,
+            COALESCE(
+                jsonb_agg(
+                    CASE WHEN tras.tras_id IS NOT NULL THEN
+                        jsonb_build_object(
+                            'trabajo', jsonb_build_object(
+                                'id', tf.trbj_id,
+                                'descripcionTrabajo', tf.trbj_dsc
+                            ),
+                            'tarea', jsonb_build_object(
+                                'id', tras.tras_id,
+                                'descripcionTarea', tras.tras_dsc
+                            ),
+                            'ordenEjecucionTarea', trtr.trtr_secuencia
+                        )
+                    ELSE NULL
+                    END
+                    ORDER BY trtr.trtr_secuencia NULLS LAST
+                ) FILTER (WHERE tras.tras_id IS NOT NULL),
+                '[]'
+            ) AS trabajoTareas
+        FROM trabajos_filtrados tf
+        LEFT JOIN ${schema}trabajos_tareas as trtr ON tf.trbj_id = trtr.trbj_id
+        LEFT JOIN ${schema}tareas          as tras ON trtr.tras_id = tras.tras_id
+        <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
+            AND LOWER(tras.tras_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
+        </if>
+        GROUP BY tf.trbj_id, tf.trbj_dsc
+        ORDER BY 
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">tf.trbj_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTrabajo'">tf.trbj_dsc ${direccionOrden}</when>
+                <otherwise>tf.trbj_id ASC</otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion Asignaciones (Trabajos -> Tareas) -->
+<select id="contarFiltrarAsignacion" resultType="int">
+        SELECT COUNT(DISTINCT trbj.trbj_id)        
+        FROM ${schema}trabajos as trbj
+        <where>
+                <if test="filtro != null">
+                    <if test="filtro.id != null">
+                        AND trbj.trbj_id = #{filtro.id}
+                   </if>
+                   <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
+                        AND LOWER(trbj.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
+                    </if>
+                    <if test="filtro.descripcionTarea != null and filtro.descripcionTarea != ''">
+                        AND EXISTS (
+                            SELECT 1 
+                            FROM ${schema}trabajos_tareas as trtr
+                            JOIN ${schema}tareas          as tras ON trtr.tras_id = tras.tras_id
+                            WHERE trtr.trbj_id = trbj.trbj_id
+                            AND LOWER(tras.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTarea}) || '%'
+                        )
+                    </if>
+                </if>
         </where>
     </select>
 

@@ -148,7 +148,8 @@
                     </if>
                     <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
                         AND EXISTS (
-                            SELECT 1 FROM ${schema}servicios_trabajos st
+                            SELECT 1
+                            FROM ${schema}servicios_trabajos st
                             JOIN ${schema}trabajos t ON st.trbj_id = t.trbj_id
                             WHERE st.svcs_id = svcs.svcs_id
                             AND LOWER(t.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
@@ -162,9 +163,6 @@
                     <when test="campoOrden == 'descripcion'">ORDER BY svcs.svcs_dsc ${direccionOrden}</when>
                     <otherwise>ORDER BY svcs.svcs_id ASC</otherwise>
                 </choose>
-            </if>
-            <if test="campoOrden == null or campoOrden == ''">
-                ORDER BY svcs.svcs_id ASC
             </if>
             <if test="limite != null and desplazamiento != null">
                 LIMIT #{limite} OFFSET #{desplazamiento}
@@ -193,6 +191,7 @@
                         )
                     ELSE NULL
                     END
+                    ORDER BY st.svtr_secuencia NULLS LAST
                 ) FILTER (WHERE t.trbj_id IS NOT NULL),
                 '[]'
             ) AS servicioTrabajos
@@ -241,7 +240,8 @@
                 </if>
                 <if test="filtro.descripcionTrabajo != null and filtro.descripcionTrabajo != ''">
                     AND EXISTS (
-                        SELECT 1 FROM ${schema}servicios_trabajos st
+                        SELECT 1 
+                        FROM ${schema}servicios_trabajos st
                         JOIN ${schema}trabajos t ON st.trbj_id = t.trbj_id
                         WHERE st.svcs_id = svcs.svcs_id
                         AND LOWER(t.trbj_dsc) LIKE '%' || LOWER(#{filtro.descripcionTrabajo}) || '%'
