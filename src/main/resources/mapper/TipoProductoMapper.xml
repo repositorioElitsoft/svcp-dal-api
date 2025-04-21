@@ -7,6 +7,12 @@
         <result property="descripcionTipoProducto" column="tppr_dsc"/>
     </resultMap>
 
+    <resultMap id="tipoProductoAsginacionResultMap" type="com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO">
+        <id property="id" column="tppr_id"/>
+        <result property="descripcionTipoProducto" column="tppr_dsc"/>
+        <result property="tipoProductoTipoComponentes" column="tipoProductoTipoComponentes" jdbcType="OTHER" javaType="java.util.List" typeHandler="com.elitsoft.servicampo.handler.TipoProductoTipoComponenteListTypeHandler"/>
+    </resultMap>
+
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="tipoProductoResultMap">
         SELECT tppr_id, tppr_dsc FROM ${schema}tipos_productos WHERE tppr_id = #{id}
@@ -54,6 +60,107 @@
                     AND LOWER(tppr_dsc) LIKE '%' || LOWER(#{filtro.descripcionTipoProducto}) || '%'
                 </if>
             </if>
+        </where>
+    </select>
+
+        <!-- Sentencia SQL de Filtrar y paginar Asignaciones (Tipos Productos -> Tipos Componentes) -->
+    <select id="filtrarAsignacion" resultMap="tipoProductoAsginacionResultMap">
+        WITH tipo_producto_filtrados AS (
+            SELECT tppr.tppr_id, tppr.tppr_dsc
+            FROM ${schema}tipos_productos as tppr
+            <where>
+                <if test="filtro != null">
+                    <if test="filtro.id != null">
+                        AND tppr.tppr_id = #{filtro.id}
+                   </if>
+                   <if test="filtro.descripcionTipoProducto != null and filtro.descripcionTipoProducto != ''">
+                        AND LOWER(tppr.tppr_dsc) LIKE '%' || LOWER(#{filtro.descripcionTipoProducto}) || '%'
+                    </if>
+                    <if test="filtro.nombreTipoComponente != null and filtro.nombreTipoComponente != ''">
+                        AND EXISTS (
+                            SELECT 1 
+                            FROM ${schema}tipos_productos_tipos_componentes as tptc
+                            JOIN ${schema}tipos_componentes                 as tpcm ON tptc.tpcm_id = tpcm.tpcm_id
+                            WHERE tptc.tppr_id = tppr.tppr_id
+                            AND LOWER(tpcm.tpcm_nombre) LIKE '%' || LOWER(#{filtro.nombreTipoComponente}) || '%'
+                        )
+                    </if>
+                </if>
+            </where>
+            <if test="campoOrden != null and campoOrden != ''">
+                <choose>
+                    <when test="campoOrden == 'id'">ORDER BY tppr.tppr_id ${direccionOrden}</when>
+                    <when test="campoOrden == 'descripcionTipoProducto'">ORDER BY tppr.tppr_dsc ${direccionOrden}</when>
+                    <otherwise>ORDER BY tppr.tppr_id ASC</otherwise>
+                </choose>
+            </if>
+            <if test="limite != null and desplazamiento != null">
+                LIMIT #{limite} OFFSET #{desplazamiento}
+            </if>
+        )
+        
+        SELECT 
+            tpf.tppr_id,
+            tpf.tppr_dsc,
+            COALESCE(
+                jsonb_agg(
+                    CASE WHEN tpcm.tpcm_id IS NOT NULL THEN
+                        jsonb_build_object(
+                            'tipoProducto', jsonb_build_object(
+                                'id', tpf.tppr_id
+                            ),
+                            'tipoComponente', jsonb_build_object(
+                                'id', tpcm.tpcm_id,
+                                'nombre', tpcm.tpcm_nombre,
+                                'descripcion', tpcm.tpcm_dsc
+                            ),
+                            'cantidad', tptc.tptc_cant
+                        )
+                    ELSE NULL
+                    END
+                    ORDER BY tpf.tppr_id, tpcm.tpcm_id NULLS LAST
+                ) FILTER (WHERE tpcm.tpcm_id IS NOT NULL),
+                '[]'
+            ) AS tipoProductoTipoComponentes
+        FROM tipo_producto_filtrados tpf
+        LEFT JOIN ${schema}tipos_productos_tipos_componentes as tptc ON tpf.tppr_id = tptc.tppr_id
+        LEFT JOIN ${schema}tipos_componentes                 as tpcm ON tptc.tpcm_id = tpcm.tpcm_id
+        <if test="filtro.nombreTipoComponente != null and filtro.nombreTipoComponente != ''">
+            AND LOWER(tpcm.tpcm_nombre) LIKE '%' || LOWER(#{filtro.nombreTipoComponente}) || '%'
+        </if>
+        GROUP BY tpf.tppr_id, tpf.tppr_dsc
+        ORDER BY 
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">tpf.tppr_id ${direccionOrden}</when>
+                <when test="campoOrden == 'descripcionTipoProducto'">tpf.tppr_dsc ${direccionOrden}</when>
+                <otherwise>tpf.tppr_id ASC</otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion Asignaciones (Tipos Productos -> Tipos Componentes) -->
+    <select id="contarFiltrarAsignacion" resultType="int">
+        SELECT COUNT(DISTINCT tppr.tppr_id)        
+         FROM ${schema}tipos_productos as tppr
+        <where>
+                <if test="filtro != null">
+                    <if test="filtro.id != null">
+                        AND tppr.tppr_id = #{filtro.id}
+                   </if>
+                   <if test="filtro.descripcionTipoProducto != null and filtro.descripcionTipoProducto != ''">
+                        AND LOWER(tppr.tppr_dsc) LIKE '%' || LOWER(#{filtro.descripcionTipoProducto}) || '%'
+                    </if>
+                    <if test="filtro.nombreTipoComponente != null and filtro.nombreTipoComponente != ''">
+                        AND EXISTS (
+                            SELECT 1 
+                            FROM ${schema}tipos_productos_tipos_componentes as tptc
+                            JOIN ${schema}tipos_componentes                 as tpcm ON tptc.tpcm_id = tpcm.tpcm_id
+                            WHERE tptc.tppr_id = tppr.tppr_id
+                            AND LOWER(tpcm.tpcm_nombre) LIKE '%' || LOWER(#{filtro.nombreTipoComponente}) || '%'
+                        )
+                    </if>
+                </if>
         </where>
     </select>
 

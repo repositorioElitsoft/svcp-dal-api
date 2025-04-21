@@ -1,5 +1,6 @@
 package com.elitsoft.servicampo.domain.dto.mobile;
 
+import com.elitsoft.servicampo.domain.dto.core.TipoProductoTipoComponenteDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
@@ -19,4 +21,5 @@ public class TipoProductoMobileDTO implements Serializable {
 
     private Long id;
     private String descripcionTipoProducto;
+    private List<TipoProductoTipoComponenteMobileDTO> tipoProductoTipoComponentes;
 }

@@ -1,10 +1,10 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
+import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.TipoProductoFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.TipoProductoFiltroService;
-import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import com.elitsoft.servicampo.utils.PaginationUtils;
 import com.elitsoft.servicampo.utils.PagingAndSorting;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +47,29 @@ public class TipoProductoFiltroController {
             PagedResponse<TipoProductoDTO> response = PaginationUtils.createPagedResponse(tipoProductoDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
-        }  catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
+            return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
+        }
+
+    }
+
+    @GetMapping(value = "/tipos-productos-tipos-componentes-asginacion", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Filtra un tipop roducto y asignacion de tipos componentes", description = "Filtra y hace paginado de tipo producto y asignacion de tipos componentes por atributos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "TipoProducto Filtrado exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<PagedResponse<TipoProductoDTO>> filtrarAsignacion(@ModelAttribute TipoProductoFiltro filtro, PagingAndSorting paginado) {
+        logeador.debug("filtrarAsignacion()");
+
+        try {
+            List<TipoProductoDTO> tipoProductoDTOLista = tipoProductoFiltroService.filtrarAsignacion(filtro, paginado);
+            int totalFiltro = tipoProductoFiltroService.contarFiltrarAsignacion(filtro);
+
+            PagedResponse<TipoProductoDTO> response = PaginationUtils.createPagedResponse(tipoProductoDTOLista, totalFiltro, paginado);
+            return ResponseEntity.ok(response); // Retorna  200 OK
+
+        } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
 

@@ -13,5 +13,6 @@ public class TipoProductoFiltro implements Serializable {
 
     private Long id;
     private String descripcionTipoProducto;
+    private String nombreTipoComponente;
 
 }

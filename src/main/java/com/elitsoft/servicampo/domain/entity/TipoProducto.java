@@ -1,14 +1,12 @@
 package com.elitsoft.servicampo.domain.entity;
 
-import lombok.Data;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -22,4 +20,5 @@ public class TipoProducto implements Serializable {
 
     private Long id;
     private String descripcionTipoProducto;
+    private List<TipoProductoTipoComponente> tipoProductoTipoComponentes;
 }
