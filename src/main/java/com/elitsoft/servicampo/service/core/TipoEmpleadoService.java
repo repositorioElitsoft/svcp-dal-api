@@ -65,7 +65,7 @@ public class TipoEmpleadoService {
             TipoEmpleado tipoempleado = mapper.toEntity(tipoEmpleadoDTO);
             tipoempleado = tipoEmpleadoMapper.agregar(tipoempleado);
             logeador.info("TipoEmpleado agregado exitosamente id: {}", tipoempleado.getId());
-            return mapper.toDto(tipoempleado);
+            return mapper.toDTO(tipoempleado);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOEMPLEADO_DUPLICADO_MENSAGE + ": {}", tipoEmpleadoDTO.getId());
             throw new RecursoDuplicadoException(TipoEmpleadoError.DUPLICADO.getCodigoError(),
@@ -249,7 +249,7 @@ public class TipoEmpleadoService {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            TipoEmpleadoDTO tipoEmpleadoDTO = mapper.toDto(tipoEmpleadoMapper.encontrarPorClave(id));
+            TipoEmpleadoDTO tipoEmpleadoDTO = mapper.toDTO(tipoEmpleadoMapper.encontrarPorClave(id));
 
             if (tipoEmpleadoDTO != null) {
                 logeador.info("tipoempleado encontrado por clave : {}", id);
@@ -277,7 +277,7 @@ public class TipoEmpleadoService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TipoEmpleadoDTO> tipoEmpleadoDTOLista = mapper.toDtoList(tipoEmpleadoMapper.obtenerTodos());
+            List<TipoEmpleadoDTO> tipoEmpleadoDTOLista = mapper.toDTOList(tipoEmpleadoMapper.obtenerTodos());
             logeador.info("tipoempleados obtenidos");
             return tipoEmpleadoDTOLista;
         } catch (DataAccessException e) {

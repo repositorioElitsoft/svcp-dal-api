@@ -238,7 +238,7 @@ public class TrabajoTareaService {
         logeador.debug("obtenerPorClave(): {}, {} ", trabajoId, tareaId);
 
         try {
-            TrabajoTareaDTO trabajoTareaDTO = mapper.toDto(trabajoTareaMapper.encontrarPorClave(trabajoId, tareaId));
+            TrabajoTareaDTO trabajoTareaDTO = mapper.toDTO(trabajoTareaMapper.encontrarPorClave(trabajoId, tareaId));
 
             if (trabajoTareaDTO != null) {
                 logeador.info("trabajotarea encontrado por clave : {}, {}", trabajoId, tareaId);
@@ -266,7 +266,7 @@ public class TrabajoTareaService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TrabajoTareaDTO> trabajoTareaLista = mapper.toDtoList(trabajoTareaMapper.obtenerTodos());
+            List<TrabajoTareaDTO> trabajoTareaLista = mapper.toDTOList(trabajoTareaMapper.obtenerTodos());
             logeador.info("trabajotareas obtenidos");
             return trabajoTareaLista;
         } catch (DataAccessException e) {

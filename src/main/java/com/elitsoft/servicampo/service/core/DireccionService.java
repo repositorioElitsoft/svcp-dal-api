@@ -348,7 +348,7 @@ public class DireccionService {
      *
      * @param clienteId La clave de Cliente a encontrar.
      * @param id       La clave de Direccion a encontrar.
-     * @return el Direccion DTO encontrado.
+     * @return lista Direccion DTO.
      * @throws BaseDatosException           si Ocurre un error de base de datos.
      * @throws RecursoNoEncontradoException si Direccion no es encontrado.
      */

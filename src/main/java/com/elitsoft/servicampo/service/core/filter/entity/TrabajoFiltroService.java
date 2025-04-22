@@ -40,7 +40,7 @@ public class TrabajoFiltroService {
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
 
-            return mapper.toDtoList(trabajoMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
+            return mapper.toDTOList(trabajoMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
         } catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}", Constantes.TRABAJO_FILTRAR_MENSAJE, filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.TRABAJO_FILTRAR_MENSAJE, e);

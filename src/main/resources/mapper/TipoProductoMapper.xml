@@ -5,6 +5,17 @@
     <resultMap id="tipoProductoResultMap" type="com.elitsoft.servicampo.domain.entity.TipoProducto">
         <id property="id" column="tppr_id"/>
         <result property="descripcionTipoProducto" column="tppr_dsc"/>
+        <collection property="tipoProductoTipoComponentes" ofType="com.elitsoft.servicampo.domain.entity.TipoProductoTipoComponente" notNullColumn="tpcm_id">
+            <result property="cantidad" column="tptc_cant" />
+            <association property="tipoComponente" javaType="com.elitsoft.servicampo.domain.entity.TipoComponente">
+                <id property="id" column="tpcm_id" />
+                <result property="nombre" column="tpcm_nombre" />
+                <result property="descripcion" column="tppr_dsc" />
+            </association>
+            <association property="tipoProducto" javaType="com.elitsoft.servicampo.domain.entity.TipoProducto">
+                <id property="id" column="tppr_id"/>
+            </association>
+        </collection>
     </resultMap>
 
     <resultMap id="tipoProductoAsginacionResultMap" type="com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO">
@@ -13,19 +24,41 @@
         <result property="tipoProductoTipoComponentes" column="tipoProductoTipoComponentes" jdbcType="OTHER" javaType="java.util.List" typeHandler="com.elitsoft.servicampo.handler.TipoProductoTipoComponenteListTypeHandler"/>
     </resultMap>
 
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT tppr_id, tppr_dsc, null as tpcm_id 
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}tipos_productos 
+    </sql>
+
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="tipoProductoResultMap">
-        SELECT tppr_id, tppr_dsc FROM ${schema}tipos_productos WHERE tppr_id = #{id}
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE tppr_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
     <select id="obtenerTodos" resultMap="tipoProductoResultMap">
-        SELECT tppr_id, tppr_dsc FROM ${schema}tipos_productos
+       <include refid="select"/>
+       <include refid="from"/>
+    </select>
+
+       <!-- Sentencia SQL  (Tipos Productos -→ Tipos Componentes) -->
+    <select id="obtenerTipoComponentesPorTipoProducto" resultMap="tipoProductoResultMap">
+        SELECT tptc.tppr_id, tptc.tpcm_id, tpcm.tpcm_nombre, tpcm.tpcm_dsc , tptc.tptc_cant
+        FROM ${schema}tipos_productos_tipos_componentes as tptc 
+        JOIN ${schema}tipos_componentes  as tpcm ON tptc.tpcm_id = tpcm.tpcm_id
+        WHERE tptc.tppr_id = #{id}
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->
     <select id="filtrar" resultMap="tipoProductoResultMap">
-        SELECT * FROM ${schema}tipos_productos
+        <include refid="select"/>
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">
@@ -50,7 +83,8 @@
 
     <!-- Sentencia SQL de contar el Filtro para paginacion -->
     <select id="contarFiltrar" resultType="int">
-        SELECT COUNT(*) FROM ${schema}tipos_productos
+        SELECT COUNT(*) 
+        <include refid="from"/>
         <where>
             <if test="filtro != null">
                 <if test="filtro.id != null">

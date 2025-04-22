@@ -2,7 +2,12 @@ package com.elitsoft.servicampo.controller.core;
 
 import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
-import com.elitsoft.servicampo.exceptions.*;
+import com.elitsoft.servicampo.domain.dto.core.TipoProductoTipoComponenteDTO;
+import com.elitsoft.servicampo.exceptions.BaseDatosException;
+import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
+import com.elitsoft.servicampo.exceptions.RecursoDuplicadoException;
+import com.elitsoft.servicampo.exceptions.RecursoEliminarException;
+import com.elitsoft.servicampo.exceptions.RecursoNoEncontradoException;
 import com.elitsoft.servicampo.service.core.TipoProductoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,7 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -43,20 +55,17 @@ public class TipoProductoController {
 
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(new ApiEnityResponse<>(tipoProductoService.agregar(tipoProductoDTO))); // Retorna  201 Created
-        }
-        catch (EntradaInvalidadException e) {
+        } catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
-        }
-        catch (RecursoDuplicadoException e) {
+        } catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  409 Conflict
-        }
-        catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  500 Internal Server Error
         }
 
     }
 
-    @PostMapping(value = "/lote",  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/lote", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Agrega lista de tipoproducto", description = "Agrega una lista de nuevos tipoproducto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Lista TipoProducto agregados exitosamente"),
@@ -68,16 +77,13 @@ public class TipoProductoController {
         logeador.debug("agregarLote() tipoproducto");
 
         try {
-            tipoProductoService.agregarLote (tipoproductoDTOLote);
+            tipoProductoService.agregarLote(tipoproductoDTOLote);
             return ResponseEntity.status(HttpStatus.CREATED).build(); // Retorna  201 Created
-        }
-        catch (EntradaInvalidadException e) {
+        } catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
-        }
-        catch (RecursoDuplicadoException e) {
+        } catch (RecursoDuplicadoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  409 Conflict
-        }
-        catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  500 Internal Server Error
         }
 
@@ -97,11 +103,9 @@ public class TipoProductoController {
         try {
             tipoProductoService.actualizar(id, tipoProductoDTO);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
-        }
-        catch (EntradaInvalidadException e) {
+        } catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
-        }
-        catch (RecursoNoEncontradoException e) {
+        } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
@@ -121,11 +125,9 @@ public class TipoProductoController {
         try {
             tipoProductoService.actualizarLote(tipoproductoDTOLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
-        }
-        catch (EntradaInvalidadException e) {
+        } catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
-        }
-        catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }
@@ -145,14 +147,11 @@ public class TipoProductoController {
         try {
             tipoProductoService.eliminar(id);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
-        }
-        catch (EntradaInvalidadException e) {
+        } catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
-        }
-        catch (RecursoEliminarException e) {
+        } catch (RecursoEliminarException e) {
             return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  460 Integridad Violada
-        }
-        catch (RecursoNoEncontradoException e) {
+        } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  404 Not Found
         } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
@@ -173,14 +172,11 @@ public class TipoProductoController {
         try {
             tipoProductoService.eliminarLote(idLote);
             return ResponseEntity.noContent().build(); // Retorna  204 No Content
-        }
-        catch (RecursoEliminarException e) {
+        } catch (RecursoEliminarException e) {
             return ResponseEntity.status(460).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  460 Integridad Violada
-        }
-        catch (EntradaInvalidadException e) {
+        } catch (EntradaInvalidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  400 Bad Request
-        }
-        catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }
@@ -197,8 +193,7 @@ public class TipoProductoController {
 
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(tipoProductoService.encontrarPorClave(id))); // Retorna  200 OK
-        }
-        catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
         } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  404 Not Found
@@ -220,4 +215,24 @@ public class TipoProductoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
         }
     }
+
+    @GetMapping(value = "/{id}/tipos-componentes", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Obtiene una lista de Tipos de Componentes asociados a tipoproducto", description = "Obtiene una lista de Tipos de Componentes asociados a tipoproducto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tipos de Componentes  encontrados exitosamente"),
+            @ApiResponse(responseCode = "404", description = "TipoProducto no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<ApiEnityResponse<List<TipoProductoTipoComponenteDTO>>> obtenerTipoComponentesPorTipoProducto(@PathVariable Long id) {
+        logeador.debug("obtenerTipoComponentesPorTipoProducto(): {}", id);
+
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(tipoProductoService.obtenerTipoComponentesPorTipoProducto(id))); // Retorna  200 OK
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage()));  // Retorna  500 Internal Server Error
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  404 Not Found
+        }
+    }
+
 }

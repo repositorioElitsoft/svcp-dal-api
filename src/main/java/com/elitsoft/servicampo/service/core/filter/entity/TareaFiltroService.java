@@ -38,7 +38,7 @@ public class TareaFiltroService {
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
             
-            return mapper.toDtoList(tareaMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
+            return mapper.toDTOList(tareaMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
         }  catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}",Constantes.TAREA_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.TAREA_FILTRAR_MENSAJE, e);

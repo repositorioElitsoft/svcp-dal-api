@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.service.core;
 
 import com.elitsoft.servicampo.domain.dto.core.TipoProductoDTO;
+import com.elitsoft.servicampo.domain.dto.core.TipoProductoTipoComponenteDTO;
 import com.elitsoft.servicampo.domain.entity.TipoProducto;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
@@ -21,6 +22,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,7 +62,7 @@ public class TipoProductoService {
             TipoProducto tipoProducto = mapper.toEntity(tipoproductoDto);
             tipoProducto = tipoProductoMapper.agregar(tipoProducto);
             logeador.info("TipoProducto agregado exitosamente id: {}", tipoProducto.getId());
-            return mapper.toDto(tipoProducto);
+            return mapper.toDTO(tipoProducto);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOPRODUCTO_DUPLICADO_MENSAGE + ": {}", tipoproductoDto.getId());
             throw new RecursoDuplicadoException(TipoProductoError.DUPLICADO.getCodigoError(),
@@ -204,7 +206,7 @@ public class TipoProductoService {
      * @param idLote lista de claves de TipoProducto a eliminar.
      * @throws EntradaInvalidadException si la lista  TipoProducto esta vacia.
      * @throws BaseDatosException        si ocurre un error de base de datos.
-     * @throws RecursoEliminarException     si TipoProducto esta asociado a otro recurso
+     * @throws RecursoEliminarException  si TipoProducto esta asociado a otro recurso
      */
     public void eliminarLote(List<Long> idLote) throws BaseDatosException, EntradaInvalidadException, RecursoEliminarException {
         logeador.debug("eliminarLote()");
@@ -242,7 +244,7 @@ public class TipoProductoService {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            TipoProductoDTO tipoProductoDTO = mapper.toDto(tipoProductoMapper.encontrarPorClave(id));
+            TipoProductoDTO tipoProductoDTO = mapper.toDTO(tipoProductoMapper.encontrarPorClave(id));
 
             if (tipoProductoDTO != null) {
                 logeador.info("tipoproducto encontrado por clave : {}", id);
@@ -270,9 +272,43 @@ public class TipoProductoService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TipoProductoDTO> tipoProductoDTOLista = mapper.toDtoList(tipoProductoMapper.obtenerTodos());
+            List<TipoProductoDTO> tipoProductoDTOLista = mapper.toDTOList(tipoProductoMapper.obtenerTodos());
             logeador.info("tipoproductos obtenidos");
             return tipoProductoDTOLista;
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.TIPOPRODUCTO_OBTENER_TODOS_MENSAJE, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.TIPOPRODUCTO_OBTENER_TODOS_MENSAJE, e);
+        }
+    }
+
+    /**
+     * Obtiene lista de Tipos Componentes de un TipoProducto.
+     *
+     * @param id la clave TipoProducto a encontrar.
+     * @return una lista de TipoProductoTipoComponenteDTO.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si TipoProducto no es encontrado.
+     */
+    public List<TipoProductoTipoComponenteDTO> obtenerTipoComponentesPorTipoProducto(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("obtenerTipoComponentesPorTipoProducto()");
+
+        List<TipoProductoTipoComponenteDTO> tipoProductoTipoComponenteDTOLista = new ArrayList<>();
+
+        try {
+            TipoProductoDTO tipoProductoDTO = mapper.toDTO(tipoProductoMapper.obtenerTipoComponentesPorTipoProducto(id));
+
+            if (tipoProductoDTO != null) {
+                tipoProductoTipoComponenteDTOLista = tipoProductoDTO.getTipoProductoTipoComponentes();
+                logeador.info("tipoproducto encontrado por clave : {}", id);
+            } else {
+                logeador.info("tipoproducto clave:{} no encontrado", id);
+                throw new RecursoNoEncontradoException(TipoProductoError.NO_ENCONTRADO.getCodigoError(),
+                        Constantes.TIPOPRODUCTO_NO_ENCONTRADO_MENSAGE);
+            }
+
+            logeador.info("tipoproductos obtenidos");
+            return tipoProductoTipoComponenteDTOLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.TIPOPRODUCTO_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),

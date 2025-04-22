@@ -17,7 +17,7 @@ public interface TipoProductoMapStruct {
      * @param entity La entidad TipoProducto.
      * @return El TipoProductoDto.
      */
-    TipoProductoDTO toDto(TipoProducto entity);
+    TipoProductoDTO toDTO(TipoProducto entity);
 
     /**
      * Convierte un TipoProductoDto a entidad TipoProducto.
@@ -31,7 +31,7 @@ public interface TipoProductoMapStruct {
      * @param entities La lista de entidades TipoProducto.
      * @return The list of TipoProductoDtos.
      */
-    List<TipoProductoDTO> toDtoList(List<TipoProducto> entities);
+    List<TipoProductoDTO> toDTOList(List<TipoProducto> entities);
 
     /**
      * Convierte una lista de TipoProductoDtos a una lista de entidades TipoProducto entities.

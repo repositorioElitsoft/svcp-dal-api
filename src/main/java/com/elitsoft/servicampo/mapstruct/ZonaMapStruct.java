@@ -17,7 +17,7 @@ public interface ZonaMapStruct {
      * @param entity La entidad Zona.
      * @return El ZonaDTO.
      */
-    ZonaDTO toDto(Zona entity);
+    ZonaDTO toDTO(Zona entity);
 
     /**
      * Convierte un ZonaDTO a entidad Zona.
@@ -31,7 +31,7 @@ public interface ZonaMapStruct {
      * @param entities La lista de entidades Zona.
      * @return The list of ZonaDtos.
      */
-    List<ZonaDTO> toDtoList(List<Zona> entities);
+    List<ZonaDTO> toDTOList(List<Zona> entities);
 
     /**
      * Convierte una lista de ZonaDtos a una lista de entidades Zona entities.

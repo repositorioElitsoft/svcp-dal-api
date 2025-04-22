@@ -17,7 +17,7 @@ public interface TareaMapStruct {
      * @param entity La entidad Tarea.
      * @return El TareaDTO.
      */
-    TareaDTO toDto(Tarea entity);
+    TareaDTO toDTO(Tarea entity);
 
     /**
      * Convierte un TareaDTO a entidad Tarea.
@@ -31,7 +31,7 @@ public interface TareaMapStruct {
      * @param entities La lista de entidades Tarea.
      * @return The list of TareaDtos.
      */
-    List<TareaDTO> toDtoList(List<Tarea> entities);
+    List<TareaDTO> toDTOList(List<Tarea> entities);
 
     /**
      * Convierte una lista de TareaDtos a una lista de entidades Tarea entities.

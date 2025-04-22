@@ -65,7 +65,7 @@ public class ZonaService {
             Zona zona = mapper.toEntity(zonaDTO);
             zona = zonaMapper.agregar(zona);
             logeador.info("Zona agregado exitosamente id: {}", zona.getId());
-            return mapper.toDto(zona);
+            return mapper.toDTO(zona);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.ZONA_DUPLICADO_MENSAGE + ": {}", zonaDTO.getId());
             throw new RecursoDuplicadoException(ZonaError.DUPLICADO.getCodigoError(),
@@ -247,7 +247,7 @@ public class ZonaService {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            ZonaDTO zonaDTO = mapper.toDto(zonaMapper.encontrarPorClave(id));
+            ZonaDTO zonaDTO = mapper.toDTO(zonaMapper.encontrarPorClave(id));
 
             if (zonaDTO != null) {
                 logeador.info("zona encontrado por clave : {}", id);
@@ -275,7 +275,7 @@ public class ZonaService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<ZonaDTO> zonaLista = mapper.toDtoList(zonaMapper.obtenerTodos());
+            List<ZonaDTO> zonaLista = mapper.toDTOList(zonaMapper.obtenerTodos());
             logeador.info("zonas obtenidos");
             return zonaLista;
         } catch (DataAccessException e) {

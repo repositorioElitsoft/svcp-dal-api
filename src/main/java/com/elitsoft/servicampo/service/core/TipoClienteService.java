@@ -60,7 +60,7 @@ public class TipoClienteService {
             TipoCliente tipocliente = mapper.toEntity(tipoClienteDTO);
             tipocliente = tipoClienteMapper.agregar(tipocliente);
             logeador.info("TipoCliente agregado exitosamente id: {}", tipocliente.getId());
-            return mapper.toDto(tipocliente);
+            return mapper.toDTO(tipocliente);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TIPOCLIENTE_DUPLICADO_MENSAGE + ": {}", tipoClienteDTO.getId());
             throw new RecursoDuplicadoException(TipoClienteError.DUPLICADO.getCodigoError(),
@@ -243,7 +243,7 @@ public class TipoClienteService {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            TipoClienteDTO tipoClienteDTO = mapper.toDto(tipoClienteMapper.encontrarPorClave(id));
+            TipoClienteDTO tipoClienteDTO = mapper.toDTO(tipoClienteMapper.encontrarPorClave(id));
 
             if (tipoClienteDTO != null) {
                 logeador.info("tipocliente encontrado por clave : {}", id);
@@ -271,7 +271,7 @@ public class TipoClienteService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TipoClienteDTO> tipoClienteLista = mapper.toDtoList(tipoClienteMapper.obtenerTodos());
+            List<TipoClienteDTO> tipoClienteLista = mapper.toDTOList(tipoClienteMapper.obtenerTodos());
             logeador.info("tipoclientes obtenidos");
             return tipoClienteLista;
         } catch (DataAccessException e) {

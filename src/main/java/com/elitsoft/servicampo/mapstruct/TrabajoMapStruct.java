@@ -17,7 +17,7 @@ public interface TrabajoMapStruct {
      * @param entity La entidad Trabajo.
      * @return El TrabajoDTO.
      */
-    TrabajoDTO toDto(Trabajo entity);
+    TrabajoDTO toDTO(Trabajo entity);
 
     /**
      * Convierte un TrabajoDTO a entidad Trabajo.
@@ -31,7 +31,7 @@ public interface TrabajoMapStruct {
      * @param entities La lista de entidades Trabajo.
      * @return The list of TrabajoDtos.
      */
-    List<TrabajoDTO> toDtoList(List<Trabajo> entities);
+    List<TrabajoDTO> toDTOList(List<Trabajo> entities);
 
     /**
      * Convierte una lista de TrabajoDtos a una lista de entidades Trabajo entities.

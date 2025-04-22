@@ -60,7 +60,7 @@ public class TrabajoService {
             Trabajo trabajo = mapper.toEntity(trabajoDTO);
             trabajo = trabajoMapper.agregar(trabajo);
             logeador.info("Trabajo agregado exitosamente id: {}", trabajo.getId());
-            return mapper.toDto(trabajo);
+            return mapper.toDTO(trabajo);
         } catch (DuplicateKeyException e) {
             logeador.error(Constantes.TRABAJO_DUPLICADO_MENSAGE + ": {}", trabajoDTO.getId());
             throw new RecursoDuplicadoException(TrabajoError.DUPLICADO.getCodigoError(),
@@ -242,7 +242,7 @@ public class TrabajoService {
         logeador.debug("obtenerPorClave(): {}", id);
 
         try {
-            TrabajoDTO trabajoDTO = mapper.toDto(trabajoMapper.encontrarPorClave(id));
+            TrabajoDTO trabajoDTO = mapper.toDTO(trabajoMapper.encontrarPorClave(id));
 
             if (trabajoDTO != null) {
                 logeador.info("trabajo encontrado por clave : {}", id);
@@ -270,7 +270,7 @@ public class TrabajoService {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<TrabajoDTO> trabajoLista = mapper.toDtoList(trabajoMapper.obtenerTodos());
+            List<TrabajoDTO> trabajoLista = mapper.toDTOList(trabajoMapper.obtenerTodos());
             logeador.info("trabajos obtenidos");
             return trabajoLista;
         } catch (DataAccessException e) {

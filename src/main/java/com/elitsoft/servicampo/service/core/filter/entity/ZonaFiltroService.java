@@ -38,7 +38,7 @@ public class ZonaFiltroService {
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
             
-            return mapper.toDtoList(zonaMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
+            return mapper.toDTOList(zonaMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
         }  catch (DataAccessException e) {
             logeador.error("{}, {}, {}, {}",Constantes.ZONA_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.ZONA_FILTRAR_MENSAJE, e);

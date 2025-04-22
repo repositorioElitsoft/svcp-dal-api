@@ -78,6 +78,14 @@ public interface TipoProductoMapper {
     List<TipoProducto> obtenerTodos();
 
     /**
+     * Obtiene lista de Tipos Componentes de un TipoProducto en la base de datos por su clave.
+     *
+     * @param id La clave de TipoProducto a encontrar.
+     * @return La entidad TipoProducto encontrado, o null si no es encontrado.
+     */
+    TipoProducto obtenerTipoComponentesPorTipoProducto(Long id);
+
+    /**
      * Hace filtro dinamico y paginacion para TipoProducto
      *
      * @param filtro         clase que tiene los atributos a filtrar
