@@ -16,6 +16,7 @@ public interface ClienteMapper {
 
     /**
      * Agrega un Cliente a la base de datos.
+     *
      * @param cliente La entidad Cliente a agregar.
      * @return Cliente con campo autogenerado.
      */
@@ -23,6 +24,7 @@ public interface ClienteMapper {
 
     /**
      * Agrega Lote Cliente a la base de datos.
+     *
      * @param clienteLote Lista entidad Cliente a agregar.
      * @return int cantidad de registros agregados
      */
@@ -30,6 +32,7 @@ public interface ClienteMapper {
 
     /**
      * Actualiza un Cliente en la base de datos.
+     *
      * @param cliente La entidad Cliente a actualizar.
      * @return El numero de registro actualizados.
      */
@@ -37,6 +40,7 @@ public interface ClienteMapper {
 
     /**
      * Actualiza Lote Cliente a la base de datos.
+     *
      * @param clienteLote Lista entidad Cliente a agregar.
      * @return int cantidad de registros actualizados.
      */
@@ -44,6 +48,7 @@ public interface ClienteMapper {
 
     /**
      * Elimina un Cliente en la base de datos por su clave.
+     *
      * @param id La clave de Cliente a eliminar.
      * @return El numero de registro eliminados.
      */
@@ -51,6 +56,7 @@ public interface ClienteMapper {
 
     /**
      * Elimina Lote Cliente en la base de datos.
+     *
      * @param idLote Lista de claves de entidad Cliente a eliminar.
      * @return int cantidad de registros eliminados.
      */
@@ -58,6 +64,7 @@ public interface ClienteMapper {
 
     /**
      * Encuentra un Cliente en la base de datos por su clave.
+     *
      * @param id La clave de Cliente a encontrar.
      * @return La entidad Cliente encontrado, o null si no es encontrado.
      */
@@ -65,27 +72,38 @@ public interface ClienteMapper {
 
     /**
      * Obtiene todos los Cliente desde la base de datos.
+     *
      * @return List<Cliente> Una lista de todos los entidades Cliente.
      */
     List<Cliente> obtenerTodos();
 
     /**
+     * Obtiene lista de Direccion de un Cliente en la base de datos por su clave.
+     *
+     * @param id La clave de Cliente a encontrar.
+     * @return La entidad Cliente encontrado, o null si no es encontrado.
+     */
+    Cliente obtenerDireccionesPorCliente(Long id);
+
+    /**
      * Hace filtro dinamico y paginacion para Cliente
-     * @param filtro clase que tiene los atributos a filtrar
-     * @param campoOrden atributo que define el ordern del filtro
+     *
+     * @param filtro         clase que tiene los atributos a filtrar
+     * @param campoOrden     atributo que define el ordern del filtro
      * @param direccionOrden atributo que define la direccion del filtro
-     * @param limite atributo que define el limite de registros por pagina del filtro
+     * @param limite         atributo que define el limite de registros por pagina del filtro
      * @param desplazamiento atributo que define la pagina del filtro
      * @return List<Cliente> lista de entidades Cliente
      */
     List<Cliente> filtrar(@Param("filtro") ClienteFiltro filtro,
-                              @Param("campoOrden") String campoOrden,
-                              @Param("direccionOrden") String direccionOrden,
-                              @Param("limite") int limite,
-                              @Param("desplazamiento") int desplazamiento);
+                          @Param("campoOrden") String campoOrden,
+                          @Param("direccionOrden") String direccionOrden,
+                          @Param("limite") int limite,
+                          @Param("desplazamiento") int desplazamiento);
 
     /**
      * Cuenta los registros que coinciden con el filtro dinamico de Cliente
+     *
      * @param filtro clase que tiene los atributos a filtrar
      * @return int cantidad de registros que retorna el filtro
      */

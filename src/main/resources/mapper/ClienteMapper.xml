@@ -19,10 +19,28 @@
         <association property="tipoCliente" resultMap="com.elitsoft.servicampo.mapper.TipoClienteMapper.tipoClienteResultMap"/>
         <association property="clasificacionCliente"  resultMap="com.elitsoft.servicampo.mapper.ClasificacionClienteMapper.clasificacionClienteResultMap"/>
         <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
-        <!-- <collection property="direcciones" ofType="com.elitsoft.servicampo.domain.entity.Direccion" column="clnt_id" select="com.elitsoft.servicampo.mapper.DireccionMapper.filtrarPorCliente"/> -->
         <association property="agrupacionComercial"  resultMap="com.elitsoft.servicampo.mapper.AgrupacionComercialMapper.agrupacionComercialResultMap"/>
         <association property="segmentacionCliente"  resultMap="com.elitsoft.servicampo.mapper.SegmentacionClienteMapper.segmentacionClienteResultMap"/>
         <association property="documentoIdentificacion"  resultMap="com.elitsoft.servicampo.mapper.DocumentoIdentificacionMapper.documentoIdentificacionResultMap" />
+        <collection property="direcciones" ofType="com.elitsoft.servicampo.domain.entity.Direccion" >
+            <id property="id" column="drcc_id" />
+            <result property="descripcion" column="drcc_dsc" />
+            <result property="calle" column="drcc_calle" />
+            <result property="numeracion" column="drcc_numeracion" />
+            <result property="referencia" column="drcc_referencia" />
+            <result property="imagenPerfil" column="drcc_imagen_perfil" />
+            <result property="latitud" column="drcc_latitud" />
+            <result property="longitud" column="drcc_longitud" />
+            <result property="flagEvidencia" column="drcc_flag_evidencia" />
+            <association property="cliente" javaType="com.elitsoft.servicampo.domain.entity.Cliente">
+                <id property="id" column="clnt_id" />
+            </association>
+            <association property="comuna" resultMap="com.elitsoft.servicampo.mapper.ComunaMapper.comunaResultMap"/>
+            <association property="sector" resultMap="com.elitsoft.servicampo.mapper.SectorMapper.sectorResultMap"/>
+            <association property="tipoDireccion" resultMap="com.elitsoft.servicampo.mapper.TipoDireccionMapper.tipoDireccionResultMap"/>
+            <association property="estado" resultMap="com.elitsoft.servicampo.mapper.EstadoMapper.estadoResultMap"/>
+            <association property="ruta" resultMap="com.elitsoft.servicampo.mapper.RutaMapper.rutaResultMap"/>
+        </collection>
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
@@ -61,6 +79,14 @@
     <select id="obtenerTodos" resultMap="clienteResultMap">
         <include refid="select"/>
         <include refid="from"/>
+    </select>
+
+
+    <!-- Sentencia SQL  (Clientes -→ Direcciones ) -->
+    <select id="obtenerDireccionesPorCliente" resultMap="clienteResultMap">
+        <include refid="com.elitsoft.servicampo.mapper.DireccionMapper.select"/>
+        <include refid="com.elitsoft.servicampo.mapper.DireccionMapper.from"/>
+        WHERE drcc.clnt_id = #{clienteId}
     </select>
 
     <!-- Sentencia SQL de Filtrar y paginar -->

@@ -2,6 +2,7 @@ package com.elitsoft.servicampo.controller.mobile;
 
 import com.elitsoft.servicampo.common.api.response.ApiEnityResponse;
 import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
+import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
 import com.elitsoft.servicampo.exceptions.ArchivoEntradaSalidaException;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
@@ -232,6 +233,25 @@ public class ClienteMobileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  500 Internal Server Error
         }
 
+    }
+
+    @GetMapping(value = "/{id}/direcciones", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Obtiene lista de direcciones asociados a cliente", description = "Obtiene lista de direcciones asociados a cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Direcciones de Cliente encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor ")
+    })
+    public ResponseEntity<ApiEnityResponse<List<DireccionDTO>>> obtenerDireccionesPorCliente(@PathVariable Long id) {
+        logeador.debug("obtenerDireccionesPorCliente(): {}", id);
+
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiEnityResponse<>(clienteMobileService.obtenerDireccionesPorCliente(id))); // Retorna  200 OK
+        } catch (BaseDatosException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  500 Internal Server Error
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiEnityResponse<>(null, e.getErrorCode(), e.getMessage())); // Retorna  404 Not Found
+        }
     }
 
     @PostMapping(value = "/{id}/imagen", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

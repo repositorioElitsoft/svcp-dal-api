@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,7 +30,7 @@ public class ClienteMobileDTO implements Serializable {
     private TipoClienteMobileDTO tipoCliente;
     private ClasificacionCliente clasificacionCliente;
     private EstadoMobileDTO estado;
-    //private List<DireccionMobileDTO> direcciones;
+    private List<DireccionMobileDTO> direcciones;
     private AgrupacionComercialMobileDTO agrupacionComercial;
     private SegmentacionClienteMobileDTO segmentacionCliente;
     private DocumentoIdentificacionMobileDTO documentoIdentificacion;

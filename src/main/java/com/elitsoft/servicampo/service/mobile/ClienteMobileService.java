@@ -1,6 +1,7 @@
 package com.elitsoft.servicampo.service.mobile;
 
 import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
+import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
 import com.elitsoft.servicampo.exceptions.ArchivoEntradaSalidaException;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
@@ -141,6 +142,19 @@ public class ClienteMobileService {
     public List<ClienteDTO> obtenerTodos() throws BaseDatosException {
         logeador.debug("obtenerTodos()");
         return clienteService.obtenerTodos();
+    }
+
+    /**
+     * Obtiene lista de Direccion de un Cliente.
+     *
+     * @param id la clave Cliente a encontrar.
+     * @return el Cliente DTO encontrado.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Cliente no es encontrado.
+     */
+    public List<DireccionDTO> obtenerDireccionesPorCliente(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("obtenerDireccionesPorCliente(): {}", id);
+        return clienteService.obtenerDireccionesPorCliente(id);
     }
 
     /**

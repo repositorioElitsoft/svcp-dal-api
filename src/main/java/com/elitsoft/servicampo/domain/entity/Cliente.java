@@ -35,7 +35,7 @@ public class Cliente implements Serializable {
     private TipoCliente tipoCliente;
     private ClasificacionCliente clasificacionCliente;
     private Estado estado;
-    //private List<Direccion> direcciones;
+    private List<Direccion> direcciones;
     private AgrupacionComercial agrupacionComercial;
     private SegmentacionCliente segmentacionCliente;
     private DocumentoIdentificacion documentoIdentificacion;

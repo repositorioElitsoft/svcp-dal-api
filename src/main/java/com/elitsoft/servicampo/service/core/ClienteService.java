@@ -3,10 +3,13 @@ package com.elitsoft.servicampo.service.core;
 import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
 import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
+import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
+import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.dto.core.SegmentacionClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.TipoClienteDTO;
 import com.elitsoft.servicampo.domain.entity.Cliente;
+import com.elitsoft.servicampo.domain.entity.Direccion;
 import com.elitsoft.servicampo.exceptions.ArchivoEntradaSalidaException;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
@@ -33,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -327,6 +331,39 @@ public class ClienteService {
             logeador.error(Constantes.CLIENTE_OBTENER_TODOS_MENSAJE, e);
             throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
                     Constantes.CLIENTE_OBTENER_TODOS_MENSAJE, e);
+        }
+    }
+
+    /**
+     * Obtiene lista de Direccion de un Cliente.
+     *
+     * @param id la clave Cliente a encontrar.
+     * @return el Cliente DTO encontrado.
+     * @throws BaseDatosException           si Ocurre un error de base de datos.
+     * @throws RecursoNoEncontradoException si Cliente no es encontrado.
+     */
+    public List<DireccionDTO> obtenerDireccionesPorCliente(Long id) throws BaseDatosException, RecursoNoEncontradoException {
+        logeador.debug("obtenerDireccionesPorCliente(): {}", id);
+
+        List<DireccionDTO> direccionDTOLista = new ArrayList<>();
+
+        try {
+            ClienteDTO clienteDTO = mapper.toDTO(clienteMapper.obtenerDireccionesPorCliente(id));
+
+            if (clienteDTO != null) {
+                direccionDTOLista = clienteDTO.getDirecciones();
+                logeador.info("cliente encontrado por clave : {}", id);
+            } else {
+                logeador.info("cliente clave:{} no encontrado", id);
+                throw new RecursoNoEncontradoException(ClienteError.NO_ENCONTRADO.getCodigoError(),
+                        Constantes.CLIENTE_NO_ENCONTRADO_MENSAGE);
+            }
+
+            return direccionDTOLista;
+        } catch (DataAccessException e) {
+            logeador.error(Constantes.CLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE + " {}", id, e);
+            throw new BaseDatosException(GeneralError.ERROR_INTERNO.getCodigoError(),
+                    Constantes.CLIENTE_ENCONTRAR_POR_CLAVE_MENSAGE, e);
         }
     }
 
