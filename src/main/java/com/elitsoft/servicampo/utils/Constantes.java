@@ -592,5 +592,17 @@ public class Constantes {
     public static final String CONTRATODETALLEPRODUCTO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos CONTRATODETALLEPRODUCTO";
     public static final String CONTRATODETALLEPRODUCTO_FILTRAR_MENSAJE = "Error filtrando CONTRATODETALLEPRODUCTO";
 
+    public static final String ESTADOCOMPONENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de ESTADOCOMPONENTE invalida.";
+    public static final String ESTADOCOMPONENTE_DUPLICADO_MENSAGE = "Recurso  ESTADOCOMPONENTE ya existe.";
+    public static final String ESTADOCOMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  ESTADOCOMPONENTE viola Integridad. ";
+    public static final String ESTADOCOMPONENTE_NO_ENCONTRADO_MENSAGE = "Recurso ESTADOCOMPONENTE no  encontrado";
+    public static final String ESTADOCOMPONENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso ESTADOCOMPONENTE";
+    public static final String ESTADOCOMPONENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos ESTADOCOMPONENTE";
+    public static final String ESTADOCOMPONENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso ESTADOCOMPONENTE";
+    public static final String ESTADOCOMPONENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso ESTADOCOMPONENTE";
+    public static final String ESTADOCOMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso ESTADOCOMPONENTE por clave :";
+    public static final String ESTADOCOMPONENTE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave ESTADOCOMPONENTE:";
+    public static final String ESTADOCOMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ESTADOCOMPONENTE";
+    public static final String ESTADOCOMPONENTE_FILTRAR_MENSAJE = "Error filtrando ESTADOCOMPONENTE";
 }
 

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.EstadoComponenteMapper">
+
+    <resultMap id="estadoComponenteResultMap" type="com.elitsoft.servicampo.domain.entity.EstadoComponente">
+        <id property="id" column="escm_id" />
+        <result property="nombre" column="escm_nombre" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT escm_id, escm_nombre
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}estados_componentes
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="estadoComponenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE escm_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="estadoComponenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="estadoComponenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND escm_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(escm_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY escm_id ${direccionOrden}</when>
+                <when test="campoOrden == 'nombre'">ORDER BY escm_nombre ${direccionOrden}</when>
+                <otherwise>ORDER BY escm_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND escm_id = #{filtro.id}
+                </if>
+                <if test="filtro.nombre != null and filtro.nombre != ''">
+                    AND LOWER(escm_nombre) LIKE '%' || LOWER(#{filtro.nombre}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar con campo Auto Incrementado-->
+      <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.EstadoComponente" affectData="true" flushCache="true">
+        INSERT INTO ${schema}estados_componentes (escm_nombre)
+        VALUES (#{nombre})
+        returning escm_id as id, escm_nombre as nombre
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.EstadoComponente">
+        UPDATE ${schema}estados_componentes
+        SET  escm_nombre = #{nombre}
+        WHERE escm_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}estados_componentes
+        WHERE escm_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}estados_componentes (escm_nombre ) VALUES
+        <foreach item="estadoComponente" collection="estadoComponenteLote" separator=",">
+            (#{estadoComponente.nombre} )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='estadoComponente' collection='estadoComponenteLote' separator=';'>
+            UPDATE ${schema}estados_componentes
+            SET escm_nombre = #{estadoComponente.nombre}
+            WHERE escm_id = #{estadoComponente.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}estados_componentes WHERE escm_id IN
+        <foreach item="estadoComponente" collection="estadoComponenteLote" open='(' separator=',' close=')'>
+            #{estadoComponente.id}
+        </foreach>
+    </delete>
+</mapper>

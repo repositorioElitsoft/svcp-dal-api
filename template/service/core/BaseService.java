@@ -315,9 +315,9 @@ public class #Base#Service {
         logeador.debug("obtenerTodos()");
 
         try {
-            List<#Base#DTO> #base#Lista = mapper.toDTOList(#base#Mapper.obtenerTodos());
+            List<#Base#DTO> #base#DTOLista = mapper.toDTOList(#base#Mapper.obtenerTodos());
             logeador.info("#base#s obtenidos");
-            return #base#Lista;
+            return #base#DTOLista;
         } catch (DataAccessException e) {
             logeador.error(Constantes.#BASE#_OBTENER_TODOS_MENSAJE + " codigoError:{} ",
                            GeneralError.ERROR_INTERNO.getCodigoError(), e);
