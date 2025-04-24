@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.ComponenteMapper">
+
+    <resultMap id="componenteResultMap" type="com.elitsoft.servicampo.domain.entity.Componente">
+        <id property="id" column="comp_id" />
+        <result property="codigo" column="comp_cod" />
+        <result property="fechaCambio" column="comp_fec_cambio_estado" />
+        <result property="proveedor" column="comp_proveedor" />
+        <result property="observacion" column="comp_obs" />
+        <result property="modelo" column="comp_modelo" />
+        <association property="tipoComponente" resultMap="com.elitsoft.servicampo.mapper.TipoComponenteMapper.tipoComponenteResultMap" />
+        <association property="estadoComponente" resultMap="com.elitsoft.servicampo.mapper.EstadoComponenteMapper.estadoComponenteResultMap"/>
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT comp.comp_id, comp.comp_cod, comp.comp_fec_cambio_estado, comp.comp_proveedor, comp.comp_obs, comp.comp_modelo,
+               tpcm.tpcm_id, tpcm.tpcm_nombre, tpcm.tpcm_dsc,
+               escm.escm_id, escm.escm_nombre
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}componentes comp
+        JOIN ${schema}tipos_componentes   as tpcm ON comp.tpcm_id = tpcm.tpcm_id
+        JOIN ${schema}estados_componentes as escm ON comp.escm_id = escm.escm_id
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="componenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE comp.comp_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="componenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        ORDER BY comp.comp_cod;
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="componenteResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND comp.comp_id = #{filtro.id}
+                </if>
+                <if test="filtro.codigo != null and filtro.codigo != ''">
+                    AND LOWER(comp.comp_cod) LIKE '%' || LOWER(#{filtro.codigo}) || '%'
+                </if>
+                <if test="filtro.tipoComponenteId != null and filtro.tipoComponenteId != null">
+                    AND tpcm.tpcm_id = #{filtro.tipoComponenteId}
+                </if>
+                <if test="filtro.estadoComponenteId != null and filtro.estadoComponenteId != null">
+                    AND escm.escm_id = #{filtro.estadoComponenteId}
+                </if>
+                <if test="filtro.tipoComponenteNombre != null and filtro.tipoComponenteNombre != ''">
+                    AND LOWER(tpcm.tpcm_nombre) LIKE '%' || LOWER(#{filtro.tipoComponenteNombre}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'id'">ORDER BY comp.comp_id ${direccionOrden}</when>
+                <when test="campoOrden == 'codigo'">ORDER BY comp.comp_cod ${direccionOrden}</when>
+                <when test="campoOrden == 'tipoComponenteNombre'">ORDER BY tpcm.tpcm_nombre ${direccionOrden}</when>
+                <when test="campoOrden == 'observacion'">ORDER BY comp.comp_obs ${direccionOrden}</when>
+                <when test="campoOrden == 'fechaCambio'">ORDER BY comp.comp_fec_cambio_estado ${direccionOrden}</when>
+                <otherwise>ORDER BY comp.comp_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.id != null">
+                    AND comp.comp_id = #{filtro.id}
+                </if>
+                <if test="filtro.codigo != null and filtro.codigo != ''">
+                    AND LOWER(comp.comp_cod) LIKE '%' || LOWER(#{filtro.codigo}) || '%'
+                </if>
+                <if test="filtro.tipoComponenteId != null and filtro.tipoComponenteId != null">
+                    AND tpcm.tpcm_id = #{filtro.tipoComponenteId}
+                </if>
+                <if test="filtro.estadoComponenteId != null and filtro.estadoComponenteId != null">
+                    AND escm.escm_id = #{filtro.estadoComponenteId}
+                </if>
+                <if test="filtro.tipoComponenteNombre != null and filtro.tipoComponenteNombre != ''">
+                    AND LOWER(tpcm.tpcm_nombre) LIKE '%' || LOWER(#{filtro.tipoComponenteNombre}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <select id="agregar" resultType="com.elitsoft.servicampo.domain.entity.Componente" affectData="true" flushCache="true">
+        INSERT INTO ${schema}componentes (
+            tpcm_id, 
+            escm_id, 
+            comp_fec_cambio_estado, 
+            comp_cod, 
+            comp_proveedor, 
+            comp_obs,
+            comp_modelo
+        ) VALUES (
+            #{tipoComponente.id}, 
+            #{estadoComponente.id}, 
+            #{fechaCambio}, 
+            #{codigo}, 
+            #{proveedor}, 
+            #{observacion},
+            #{modelo}
+        )
+        returning comp_id as id, comp_cod as codigo
+    </select>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Componente">
+        UPDATE ${schema}componentes
+        SET  
+            tpcm_id = #{tipoComponente.id}, 
+            escm_id = #{estadoComponente.id},
+            comp_fec_cambio_estado = #{fechaCambio},
+            comp_cod = #{codigo},
+            comp_proveedor = #{proveedor},
+            comp_obs = #{observacion},
+            comp_modelo = #{modelo}
+        WHERE comp_id = #{id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}componentes
+        WHERE comp_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List">
+        INSERT INTO ${schema}componentes (
+            tpcm_id, 
+            escm_id, 
+            comp_fec_cambio_estado, 
+            comp_cod, 
+            comp_proveedor, 
+            comp_obs,
+            comp_modelo
+        ) VALUES
+        <foreach item="componente" collection="list" separator=",">
+            (
+                #{componente.tipoComponente.id}, 
+                #{componente.estadoComponente.id}, 
+                #{componente.fechaCambio}, 
+                #{componente.codigo}, 
+                #{componente.proveedor}, 
+                #{componente.observacion},
+                #{componente.modelo}
+            )
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List">
+        <foreach item='componente' collection='list' separator=';'>
+            UPDATE ${schema}componentes
+            SET 
+                tpcm_id = #{componente.tipoComponente.id}, 
+                escm_id = #{componente.estadoComponente.id},
+                comp_fec_cambio_estado = #{componente.fechaCambio},
+                comp_cod = #{componente.codigo},
+                comp_proveedor = #{componente.proveedor},
+                comp_obs = #{componente.observacion},
+                comp_modelo = #{componente.modelo}
+            WHERE comp_id = #{componente.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List">
+        DELETE FROM ${schema}componentes WHERE comp_id IN
+        <foreach item="componente" collection="list" open='(' separator=',' close=')'>
+            #{componente.id}
+        </foreach>
+    </delete>
+</mapper>

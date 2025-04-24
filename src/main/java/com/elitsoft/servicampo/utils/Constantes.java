@@ -601,8 +601,19 @@ public class Constantes {
     public static final String ESTADOCOMPONENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso ESTADOCOMPONENTE";
     public static final String ESTADOCOMPONENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso ESTADOCOMPONENTE";
     public static final String ESTADOCOMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso ESTADOCOMPONENTE por clave :";
-    public static final String ESTADOCOMPONENTE_EntityRelacionado_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso EntityRelacionado por clave ESTADOCOMPONENTE:";
     public static final String ESTADOCOMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos ESTADOCOMPONENTE";
     public static final String ESTADOCOMPONENTE_FILTRAR_MENSAJE = "Error filtrando ESTADOCOMPONENTE";
+
+    public static final String COMPONENTE_ENTRADA_INVALIDA_MENSAGE = "Entrada de COMPONENTE invalida.";
+    public static final String COMPONENTE_DUPLICADO_MENSAGE = "Recurso  COMPONENTE ya existe.";
+    public static final String COMPONENTE_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  COMPONENTE viola Integridad. ";
+    public static final String COMPONENTE_NO_ENCONTRADO_MENSAGE = "Recurso COMPONENTE no  encontrado";
+    public static final String COMPONENTE_AGREGAR_MENSAJE = "Error Interno agregando Recurso COMPONENTE";
+    public static final String COMPONENTE_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos COMPONENTE";
+    public static final String COMPONENTE_ACTUALIZAR_MENSAJE = "Error actualizando Recurso COMPONENTE";
+    public static final String COMPONENTE_ELIMINAR_MENSAJE = "Error eliminando Recurso COMPONENTE";
+    public static final String COMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso COMPONENTE por clave :";
+    public static final String COMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos COMPONENTE";
+    public static final String COMPONENTE_FILTRAR_MENSAJE = "Error filtrando COMPONENTE";
 }
 

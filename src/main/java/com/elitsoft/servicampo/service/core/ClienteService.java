@@ -3,13 +3,11 @@ package com.elitsoft.servicampo.service.core;
 import com.elitsoft.servicampo.domain.dto.core.AgrupacionComercialDTO;
 import com.elitsoft.servicampo.domain.dto.core.ClasificacionClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.ClienteDTO;
-import com.elitsoft.servicampo.domain.dto.core.ContactoDireccionDTO;
 import com.elitsoft.servicampo.domain.dto.core.DireccionDTO;
 import com.elitsoft.servicampo.domain.dto.core.DocumentoIdentificacionDTO;
 import com.elitsoft.servicampo.domain.dto.core.SegmentacionClienteDTO;
 import com.elitsoft.servicampo.domain.dto.core.TipoClienteDTO;
 import com.elitsoft.servicampo.domain.entity.Cliente;
-import com.elitsoft.servicampo.domain.entity.Direccion;
 import com.elitsoft.servicampo.exceptions.ArchivoEntradaSalidaException;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.exceptions.EntradaInvalidadException;
@@ -66,9 +64,10 @@ public class ClienteService {
      *
      * @param clienteDTO el Cliente DTO.
      * @return el Cliente DTO agregado con campo auto generado.
-     * @throws BaseDatosException        si ocurre un error de base de datos.
-     * @throws EntradaInvalidadException si la entrada Cliente tiene errores.
-     * @throws RecursoDuplicadoException si el recurso Cliente ya existe.
+     * @throws BaseDatosException           si ocurre un error de base de datos.
+     * @throws EntradaInvalidadException    si la entrada Cliente tiene errores.
+     * @throws RecursoDuplicadoException    si el recurso Cliente ya existe.
+     * @throws RecursoNoEncontradoException si Cliente no es encontrado.
      */
     @Transactional
     public ClienteDTO agregar(ClienteDTO clienteDTO) throws BaseDatosException, EntradaInvalidadException, RecursoDuplicadoException, RecursoNoEncontradoException {
@@ -406,7 +405,9 @@ public class ClienteService {
 
         try {
             ClienteDTO clienteDTO = this.encontrarPorClave(id);
-            if (clienteDTO.getImagenPerfil() == null) { return null;}
+            if (clienteDTO.getImagenPerfil() == null) {
+                return null;
+            }
             byte[] imagen = imagenArchivoService.bajar(clienteDTO.getImagenPerfil());
 
             if (imagen == null) {

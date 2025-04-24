@@ -1,7 +1,7 @@
 package com.elitsoft.servicampo.filter;
 
 
-import com.elitsoft.servicampo.domain.entity.*;
+
 import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
