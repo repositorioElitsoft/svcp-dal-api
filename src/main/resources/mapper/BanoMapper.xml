@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elitsoft.servicampo.mapper.BanoMapper">
+
+    <resultMap id="banoResultMap" type="com.elitsoft.servicampo.domain.entity.Bano">
+        <id property="componente.id" column="comp_id" />
+        <result property="marca" column="bans_marca" />
+        <result property="colorPuerta" column="bans_color_puerta" />
+        <result property="colorPared" column="bans_color_pared" />
+    </resultMap>
+
+    <!-- Sentencia SQL de Columnas -->
+    <sql id="select">
+        SELECT bans.comp_id, bans.bans_marca, bans.bans_color_puerta, bans.bans_color_pared
+    </sql>
+
+    <!-- Sentencia SQL para el FROM -->
+    <sql id="from">
+        FROM ${schema}banos bans
+    </sql>
+
+    <!-- Sentencia SQL de Encontrar por Clave -->
+    <select id="encontrarPorClave" parameterType="long" resultMap="banoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        WHERE bans.comp_id = #{id}
+    </select>
+
+   <!-- Sentencia SQL de Obtener todos-->
+    <select id="obtenerTodos" resultMap="banoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+    </select>
+
+    <!-- Sentencia SQL de Filtrar y paginar -->
+    <select id="filtrar" resultMap="banoResultMap">
+        <include refid="select"/>
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.componenteId != null">
+                    AND bans.comp_id = #{filtro.componenteId}
+                </if>
+                <if test="filtro.marca != null and filtro.marca != ''">
+                    AND LOWER(bans.bans_marca) LIKE '%' || LOWER(#{filtro.marca}) || '%'
+                </if>
+                <if test="filtro.colorPuerta != null and filtro.colorPuerta != ''">
+                    AND LOWER(bans.bans_color_puerta) LIKE '%' || LOWER(#{filtro.colorPuerta}) || '%'
+                </if>
+                <if test="filtro.colorPared != null and filtro.colorPared != ''">
+                    AND LOWER(bans.bans_color_pared) LIKE '%' || LOWER(#{filtro.colorPared}) || '%'
+                </if>
+            </if>
+        </where>
+        <if test="campoOrden != null and campoOrden != ''">
+            <choose>
+                <when test="campoOrden == 'componenteId'">ORDER BY bans.comp_id ${direccionOrden}</when>
+                <when test="campoOrden == 'marca'">ORDER BY bans.bans_marca ${direccionOrden}</when>
+                <when test="campoOrden == 'colorPuerta'">ORDER BY bans.bans_color_puerta ${direccionOrden}</when>
+                <when test="campoOrden == 'colorPared'">ORDER BY bans.bans_color_pared ${direccionOrden}</when>
+                <otherwise>ORDER BY bans.comp_id ASC</otherwise>
+            </choose>
+        </if>
+        <if test="limite != null and desplazamiento != null">
+            LIMIT #{limite} OFFSET #{desplazamiento}
+        </if>
+    </select>
+
+    <!-- Sentencia SQL de contar el Filtro para paginacion -->
+    <select id="contarFiltrar" resultType="int">
+        SELECT COUNT(*)        
+        <include refid="from"/>
+        <where>
+            <if test="filtro != null">
+                <if test="filtro.componenteId != null">
+                    AND bans.comp_id = #{filtro.componenteId}
+                </if>
+                <if test="filtro.marca != null and filtro.marca != ''">
+                    AND LOWER(bans.bans_marca) LIKE '%' || LOWER(#{filtro.marca}) || '%'
+                </if>
+                <if test="filtro.colorPuerta != null and filtro.colorPuerta != ''">
+                    AND LOWER(bans.bans_color_puerta) LIKE '%' || LOWER(#{filtro.colorPuerta}) || '%'
+                </if>
+                <if test="filtro.colorPared != null and filtro.colorPared != ''">
+                    AND LOWER(bans.bans_color_pared) LIKE '%' || LOWER(#{filtro.colorPared}) || '%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- Sentencia SQL de Insertar-->
+    <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Bano">
+        INSERT INTO ${schema}banos (comp_id, bans_marca, bans_color_puerta, bans_color_pared)
+        VALUES (#{componente.id}, #{marca}, #{colorPuerta}, #{colorPared})
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar-->
+    <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Bano">
+        UPDATE ${schema}banos
+        SET bans_marca = #{marca}, bans_color_puerta = #{colorPuerta}, bans_color_pared = #{colorPared}
+        WHERE comp_id = #{componente.id}
+    </update>
+
+    <!-- Sentencia SQL de Eliminar-->
+    <delete id="eliminar" parameterType="long">
+        DELETE FROM ${schema}banos
+        WHERE comp_id = #{id}
+    </delete>
+
+    <!-- Sentencia SQL de Insertar LOTE-->
+    <insert id="agregarLote" parameterType="java.util.List" >
+        INSERT INTO ${schema}banos (comp_id, bans_marca, bans_color_puerta, bans_color_pared) VALUES
+        <foreach item="bano" collection="banoLote" separator=",">
+            (#{bano.componente.id}, #{bano.marca}, #{bano.colorPuerta}, #{bano.colorPared})
+        </foreach>
+    </insert>
+
+    <!-- Sentencia SQL de Actualizar LOTE-->
+    <update id="actualizarLote" parameterType="java.util.List" >
+        <foreach item='bano' collection='banoLote' separator=';'>
+            UPDATE ${schema}banos
+            SET bans_marca = #{bano.marca}, bans_color_puerta = #{bano.colorPuerta}, bans_color_pared = #{bano.colorPared}
+            WHERE comp_id = #{bano.componente.id}
+        </foreach>
+    </update>
+
+    <!-- Sentencia SQL de Eliminar LOTE-->
+    <delete id="eliminarLote" parameterType="java.util.List" >
+        DELETE FROM ${schema}banos WHERE comp_id IN
+        <foreach item="bano" collection="banoLote" open='(' separator=',' close=')'>
+            #{bano.componente.id}
+        </foreach>
+    </delete>
+</mapper>

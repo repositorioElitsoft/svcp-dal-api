@@ -1,7 +1,9 @@
 entity:AgrupacionComercial.java         , table_name:agrupaciones_comerciales           , table_script:agrupaciones_comerciales.sql
+entity:Bano .java                       , table_name:banos                              , table_script:banos.sql
 entity:Carro.java                       , table_name:carros                             , table_script:carros.sql
 entity:ClasificacionCliente.java        , table_name:clasificaciones_clientes           , table_script:clasificaciones_clientes.sql
 entity:Cliente.java                     , table_name:clientes                           , table_script:clientes.sql
+entity:Componente.java                  , table_name:componentes                        , table_script:componentes.sql
 entity:Comuna.java                      , table_name:comunas                            , table_script:comunas.sql
 entity:Contacto.java                    , table_name:contactos                          , table_script:contactos.sql
 entity:ContactoDireccion.java           , table_name:contatos_direcciones               , table_script:contatos_direcciones.sql
@@ -14,6 +16,7 @@ entity:DireccionEmpleado.java           , table_name:direcciones_empleados      
 entity:DocumentoIdentificacion.java     , table_name:documentos_identificacion          , table_script:documentos_identificacion.sql
 entity:Empleado.java                    , table_name:empleados                          , table_script:empleados.sql
 entity:Estado.java                      , table_name:estados                            , table_script:estados.sql
+entity:EstadoComponente.java            , table_name:estados_componentes                , table_script:estados_componentes.sql
 entity:EstadoProducto.java              , table_name:estados_productos                  , table_script:estados_productos.sql
 entity:EstructuraFormulario.java        , table_name:myTable                            , table_script:myTable.sql , ignore:true
 entity:Menu.java                        , table_name:myTable                            , table_script:myTable.sql , ignore:true

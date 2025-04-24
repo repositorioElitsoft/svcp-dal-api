@@ -615,5 +615,17 @@ public class Constantes {
     public static final String COMPONENTE_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso COMPONENTE por clave :";
     public static final String COMPONENTE_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos COMPONENTE";
     public static final String COMPONENTE_FILTRAR_MENSAJE = "Error filtrando COMPONENTE";
+
+    public static final String BANO_ENTRADA_INVALIDA_MENSAGE = "Entrada de BANO invalida.";
+    public static final String BANO_DUPLICADO_MENSAGE = "Recurso  BANO ya existe.";
+    public static final String BANO_VIOLACION_INTEGRIDAD_MENSAGE = "Recurso  BANO viola Integridad. ";
+    public static final String BANO_NO_ENCONTRADO_MENSAGE = "Recurso BANO no  encontrado";
+    public static final String BANO_AGREGAR_MENSAJE = "Error Interno agregando Recurso BANO";
+    public static final String BANO_AGREGAR_LOTE_MENSAJE = "Error Interno agregando lote de Recursos BANO";
+    public static final String BANO_ACTUALIZAR_MENSAJE = "Error actualizando Recurso BANO";
+    public static final String BANO_ELIMINAR_MENSAJE = "Error eliminando Recurso BANO";
+    public static final String BANO_ENCONTRAR_POR_CLAVE_MENSAGE = "Error encontrando Recurso BANO por clave :";
+    public static final String BANO_OBTENER_TODOS_MENSAJE = "Error obteniendo todos los Recursos BANO";
+    public static final String BANO_FILTRAR_MENSAJE = "Error filtrando BANO";
 }
 
