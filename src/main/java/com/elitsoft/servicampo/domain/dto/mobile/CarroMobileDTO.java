@@ -13,9 +13,7 @@ public class CarroMobileDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 5397101279620639595L;
 
-    private Long id;
-    private String numero;
-    private String modelo;
-    private String caracteristica;
-    private String proveedor;
+    private ComponenteMobileDTO componente;
+    private String patente;
+    private String color;
 }

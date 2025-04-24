@@ -13,9 +13,7 @@ public class CarroDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = -2003954866464336760L;
 
-    private Long id;
-    private String numero;
-    private String modelo;
-    private String caracteristica;
-    private String proveedor;
+    private ComponenteDTO componente;
+    private String patente;
+    private String color;
 }

@@ -26,8 +26,10 @@ public class CarroFiltroService {
 
     private static final Logger logeador = LoggerFactory.getLogger(CarroFiltroService.class); //Logback
 
-    /** Ejecuta filtro dinamico y paginacion para Carro
-     * @param filtro clase que tiene los atributos a filtrar
+    /**
+     * Ejecuta filtro dinamico y paginacion para Carro
+     *
+     * @param filtro   clase que tiene los atributos a filtrar
      * @param paginado clase que tiene los atributos de paginacion
      * @return List<CarroDTO> lista de entidades Carro
      * @throws BaseDatosException si la entrada LotePaginado tiene errores.
@@ -37,10 +39,10 @@ public class CarroFiltroService {
 
         try {
             int desplazamiento = paginado.getPageNumber() * paginado.getPageSize();
-            
+
             return mapper.toDTOList(carroMapper.filtrar(filtro, paginado.getSortField(), paginado.getSortDirection(), paginado.getPageSize(), desplazamiento));
-        }  catch (DataAccessException e) {
-            logeador.error("{}, {}, {}, {}",Constantes.CARRO_FILTRAR_MENSAJE,  filtro.toString(), paginado.toString(), e, e);
+        } catch (DataAccessException e) {
+            logeador.error("{}, {}, {}, {}", Constantes.CARRO_FILTRAR_MENSAJE, filtro.toString(), paginado.toString(), e, e);
             throw new BaseDatosException(Constantes.CARRO_FILTRAR_MENSAJE, e);
         }
 
@@ -48,6 +50,7 @@ public class CarroFiltroService {
 
     /**
      * Cuenta los registros que coinciden con el filtro dinamico para Carro
+     *
      * @param filtro clase que tiene los atributos a filtrar
      * @return int cantidad de registros que retorna el filtro
      */
@@ -56,8 +59,8 @@ public class CarroFiltroService {
 
         try {
             return carroMapper.contarFiltrar(filtro);
-        }  catch (DataAccessException e) {
-            logeador.error("{}, {}, {}",Constantes.CARRO_FILTRAR_MENSAJE,  filtro.toString(), e, e);
+        } catch (DataAccessException e) {
+            logeador.error("{}, {}, {}", Constantes.CARRO_FILTRAR_MENSAJE, filtro.toString(), e, e);
             throw new BaseDatosException(Constantes.CARRO_FILTRAR_MENSAJE, e);
         }
     }

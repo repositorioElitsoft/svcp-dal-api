@@ -1,10 +1,10 @@
 package com.elitsoft.servicampo.controller.core.filter.entity;
 
+import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import com.elitsoft.servicampo.domain.dto.core.CarroDTO;
 import com.elitsoft.servicampo.exceptions.BaseDatosException;
 import com.elitsoft.servicampo.filter.CarroFiltro;
 import com.elitsoft.servicampo.service.core.filter.entity.CarroFiltroService;
-import com.elitsoft.servicampo.common.api.response.PagedResponse;
 import com.elitsoft.servicampo.utils.PaginationUtils;
 import com.elitsoft.servicampo.utils.PagingAndSorting;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +47,7 @@ public class CarroFiltroController {
             PagedResponse<CarroDTO> response = PaginationUtils.createPagedResponse(carroDTOLista, totalFiltro, paginado);
             return ResponseEntity.ok(response); // Retorna  200 OK
 
-        }  catch (BaseDatosException e) {
+        } catch (BaseDatosException e) {
             return ResponseEntity.internalServerError().build(); // Retorna  500 Internal Server Error
         }
 

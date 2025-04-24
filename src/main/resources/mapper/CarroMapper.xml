@@ -3,28 +3,26 @@
 <mapper namespace="com.elitsoft.servicampo.mapper.CarroMapper">
 
     <resultMap id="carroResultMap" type="com.elitsoft.servicampo.domain.entity.Carro">
-        <id property="id" column="prod_id" />
-        <result property="numero" column="carr_num" />
-        <result property="modelo" column="carr_modelo" />
-        <result property="caracteristica" column="carr_caracteristica" />
-        <result property="proveedor" column="carr_proveedor" />
+        <id property="componente.id" column="comp_id" />
+        <result property="patente" column="carr_patente" />
+        <result property="color" column="carr_color" />
     </resultMap>
 
     <!-- Sentencia SQL de Columnas -->
     <sql id="select">
-        SELECT carr.prod_id, carr.carr_num, carr.carr_modelo, carr.carr_caracteristica, carr.carr_proveedor
+        SELECT carr.comp_id, carr.carr_patente, carr.carr_color
     </sql>
 
     <!-- Sentencia SQL para el FROM -->
     <sql id="from">
-        FROM ${schema}carros
+        FROM ${schema}carros carr
     </sql>
 
     <!-- Sentencia SQL de Encontrar por Clave -->
     <select id="encontrarPorClave" parameterType="long" resultMap="carroResultMap">
         <include refid="select"/>
         <include refid="from"/>
-        WHERE carr.prod_id = #{id}
+        WHERE carr.comp_id = #{id}
     </select>
 
    <!-- Sentencia SQL de Obtener todos-->
@@ -39,25 +37,23 @@
         <include refid="from"/>
         <where>
             <if test="filtro != null">
-                <if test="filtro.id != null">
-                    AND carr.prod_id = #{filtro.id}
+                <if test="filtro.componenteId != null">
+                    AND carr.comp_id = #{filtro.componenteId}
                 </if>
-                <if test="filtro.numero != null and filtro.numero != ''">
-                    AND LOWER(carr.carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
+                <if test="filtro.patente != null and filtro.patente != ''">
+                    AND LOWER(carr.carr_patente) LIKE '%' || LOWER(#{filtro.patente}) || '%'
                 </if>
-                <if test="filtro.modelo != null and filtro.modelo != ''">
-                    AND LOWER(carr.carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
+                <if test="filtro.color != null and filtro.color != ''">
+                    AND LOWER(carr.carr_color) LIKE '%' || LOWER(#{filtro.color}) || '%'
                 </if>
             </if>
         </where>
         <if test="campoOrden != null and campoOrden != ''">
             <choose>
-                <when test="campoOrden == 'id'">ORDER BY carr.prod_id ${direccionOrden}</when>
-                <when test="campoOrden == 'numero'">ORDER BY carr.carr_num ${direccionOrden}</when>
-                <when test="campoOrden == 'modelo'">ORDER BY carr.carr_modelo ${direccionOrden}</when>
-                <when test="campoOrden == 'caracteristica'">ORDER BY carr.carr_caracteristica ${direccionOrden}</when>
-                <when test="campoOrden == 'proveedor'">ORDER BY carr.carr_proveedor ${direccionOrden}</when>
-                <otherwise>ORDER BY carr.prod_id ASC</otherwise>
+                <when test="campoOrden == 'componenteId'">ORDER BY carr.comp_id ${direccionOrden}</when>
+                <when test="campoOrden == 'patente'">ORDER BY carr.carr_patente ${direccionOrden}</when>
+                <when test="campoOrden == 'color'">ORDER BY carr.carr_color ${direccionOrden}</when>
+                <otherwise>ORDER BY carr.comp_id ASC</otherwise>
             </choose>
         </if>
         <if test="limite != null and desplazamiento != null">
@@ -71,14 +67,14 @@
         <include refid="from"/>
         <where>
             <if test="filtro != null">
-                <if test="filtro.id != null">
-                    AND carr.prod_id = #{filtro.id}
+                <if test="filtro.componenteId != null">
+                    AND carr.comp_id = #{filtro.componenteId}
                 </if>
-                <if test="filtro.numero != null and filtro.numero != ''">
-                    AND LOWER(carr.carr_num) LIKE '%' || LOWER(#{filtro.numero}) || '%'
+                <if test="filtro.patente != null and filtro.patente != ''">
+                    AND LOWER(carr.carr_patente) LIKE '%' || LOWER(#{filtro.patente}) || '%'
                 </if>
-                <if test="filtro.modelo != null and filtro.modelo != ''">
-                    AND LOWER(carr.carr_modelo) LIKE '%' || LOWER(#{filtro.modelo}) || '%'
+                <if test="filtro.color != null and filtro.color != ''">
+                    AND LOWER(carr.carr_color) LIKE '%' || LOWER(#{filtro.color}) || '%'
                 </if>
             </if>
         </where>
@@ -86,30 +82,29 @@
 
     <!-- Sentencia SQL de Insertar-->
     <insert id="agregar" parameterType="com.elitsoft.servicampo.domain.entity.Carro">
-        INSERT INTO ${schema}carros (prod_id, carr_num, carr_modelo, carr_caracteristica, carr_proveedor )
-                             VALUES (#{id}, #{numero}, #{modelo}, #{caracteristica}, #{proveedor} )
+        INSERT INTO ${schema}carros (comp_id, carr_patente, carr_color)
+                             VALUES (#{componente.id}, #{patente}, #{color})
     </insert>
 
 
     <!-- Sentencia SQL de Actualizar-->
     <update id="actualizar" parameterType="com.elitsoft.servicampo.domain.entity.Carro">
         UPDATE ${schema}carros
-        SET  carr_num = #{numero} , carr_modelo = #{modelo} ,
-             carr_caracteristica = #{caracteristica} , carr_proveedor = #{proveedor}
-        WHERE prod_id = #{id}
+        SET carr_patente = #{patente}, carr_color = #{color}
+        WHERE comp_id = #{componente.id}
     </update>
 
     <!-- Sentencia SQL de Eliminar-->
     <delete id="eliminar" parameterType="long">
         DELETE FROM ${schema}carros
-        WHERE prod_id = #{id}
+        WHERE comp_id = #{id}
     </delete>
 
     <!-- Sentencia SQL de Insertar LOTE-->
     <insert id="agregarLote" parameterType="java.util.List" >
-        INSERT INTO ${schema}carros (prod_id, carr_num, carr_modelo, carr_caracteristica, carr_proveedor ) VALUES
+        INSERT INTO ${schema}carros (comp_id, carr_patente, carr_color) VALUES
         <foreach item="carro" collection="carroLote" separator=",">
-            (#{carro.id}, #{carro.numero}, #{carro.modelo}, #{carro.caracteristica}, #{carro.proveedor} )
+            (#{carro.componente.id}, #{carro.patente}, #{carro.color})
         </foreach>
     </insert>
 
@@ -117,17 +112,16 @@
     <update id="actualizarLote" parameterType="java.util.List" >
         <foreach item='carro' collection='carroLote' separator=';'>
             UPDATE ${schema}carros
-            SET carr_num = #{carro.numero}, carr_modelo = #{carro.modelo},
-                carr_caracteristica =  #{carro.caracteristica}, carr_proveedor = #{carro.proveedor}
-            WHERE prod_id = #{carro.id}
+            SET carr_patente = #{carro.patente}, carr_color = #{carro.color}
+            WHERE comp_id = #{carro.componente.id}
         </foreach>
     </update>
 
     <!-- Sentencia SQL de Eliminar LOTE-->
     <delete id="eliminarLote" parameterType="java.util.List" >
-        DELETE FROM ${schema}carros WHERE prod_id IN
+        DELETE FROM ${schema}carros WHERE comp_id IN
         <foreach item="carro" collection="carroLote" open='(' separator=',' close=')'>
-            #{carro.id}
+            #{carro.componente.id}
         </foreach>
     </delete>
 </mapper>
